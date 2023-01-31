@@ -5,7 +5,7 @@ using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Control
 {
-    public class BoardController : IBoardController
+    public class BoardController : IBoardController //todo - determine if things should be called something else than "xxxController"
     {
         private readonly ApiRequestController _requestController;
 
