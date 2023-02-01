@@ -7,27 +7,54 @@ namespace TrelloDotNet.Control
 {
     public class BoardController : IBoardController //todo - determine if things should be called something else than "xxxController"
     {
-        private readonly ApiRequestController _requestController;
+        private readonly ApiRequestController _apiRequestController;
 
-        internal BoardController(ApiRequestController requestController)
+        internal BoardController(ApiRequestController apiRequestController)
         {
-            _requestController = requestController;
+            _apiRequestController = apiRequestController;
         }
 
-        public async Task<Board> GetAsync(string boardId)
+        public async Task<Board> GetAsync(string longOrShortBoardId)
         {
-            return await _requestController.GetResponse<Board>($"{Constants.UrlSuffixGroup.Boards}/{boardId}");
+            return await _apiRequestController.GetResponse<Board>($"{Constants.UrlSuffixGroup.Boards}/{longOrShortBoardId}");
+        }
+        
+        /// <inheritdoc />
+        public async Task<ListWithRawJsonIncluded<List>> GetListsAsync(string longOrShortBoardId, ListFilter filter = ListFilter.Open)
+        {
+            var parameters = new []
+            {
+                new UriParameter("filter", filter.GetJsonPropertyName())
+            };
+            return await _apiRequestController.GetResponse<ListWithRawJsonIncluded<List>>($"{Constants.UrlSuffixGroup.Boards}/{longOrShortBoardId}/lists", parameters);
         }
 
-        public async Task<List<List>> GetListsAsync(string boardId)
+        public async Task<ListWithRawJsonIncluded<Label>> GetLabelsAsync(string longOrShortBoardId)
         {
-            return await _requestController.GetResponse<List<List>>($"{Constants.UrlSuffixGroup.Boards}/{boardId}/lists");
+            return await _apiRequestController.GetResponse<ListWithRawJsonIncluded<Label>>($"{Constants.UrlSuffixGroup.Boards}/{longOrShortBoardId}/labels");
         }
 
-        public async Task<List<Label>> GetLabelsAsync(string boardId)
+        /// <summary>
+        /// Get all open cards on un-archived lists
+        /// </summary>
+        /// <param name="longOrShortBoardId">Id of the board (short or long version)</param>
+        /// <returns>TODO</returns>
+        public async Task<ListWithRawJsonIncluded<Card>> GetCardsAsync(string longOrShortBoardId)
         {
-            return await _requestController.GetResponse<List<Label>>($"{Constants.UrlSuffixGroup.Boards}/{boardId}/labels");
+            return await _apiRequestController.GetResponse<ListWithRawJsonIncluded<Card>>($"{Constants.UrlSuffixGroup.Boards}/{longOrShortBoardId}/cards/");
         }
+
+        /// <summary>
+        /// The cards on list based on their status regardless if they are on archived lists
+        /// </summary>
+        /// <param name="longOrShortBoardId">TODO</param>
+        /// <param name="filter">TODO</param>
+        /// <returns>TODO</returns>
+        public async Task<ListWithRawJsonIncluded<Card>> GetCardsFilteredAsync(string longOrShortBoardId, CardsFilter filter)
+        {
+            return await _apiRequestController.GetResponse<ListWithRawJsonIncluded<Card>>($"{Constants.UrlSuffixGroup.Boards}/{longOrShortBoardId}/cards/{filter.GetJsonPropertyName()}");
+        }
+
 
         //todo: Get Memberships of a Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-memberships-get)
         //todo: Update a board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-put)
@@ -37,8 +64,6 @@ namespace TrelloDotNet.Control
         //todo: Get a Card on a Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-cards-idcard-get)
         //todo: Get boardStars on a Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-boardid-boardstars-get)
         //todo: Get Checklists on a board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-checklists-get)
-        //todo: Get Cards on a Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-cards-get)
-        //todo: Get Filtered Cards on a Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-cards-filter-get)
         //todo: Get Custom Fields for Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-customfields-get)
         //todo: Create Label on a Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-labels-post)
         //todo: Create a list on a Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-lists-post)

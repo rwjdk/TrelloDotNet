@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using TrelloDotNet.Interface;
 using TrelloDotNet.Model;
 
@@ -6,16 +7,16 @@ namespace TrelloDotNet.Control
 {
     public class CardController : ICardController
     {
-        private readonly ApiRequestController _requestController;
+        private readonly ApiRequestController _apiRequestController;
 
-        internal CardController(ApiRequestController requestController)
+        internal CardController(ApiRequestController apiRequestController)
         {
-            _requestController = requestController;
+            _apiRequestController = apiRequestController;
         }
 
         public async Task<Card> GetAsync(string cardId)
         {
-            return await _requestController.GetResponse<Card>($"{Constants.UrlSuffixGroup.Cards}/{cardId}");
+            return await _apiRequestController.GetResponse<Card>($"{Constants.UrlSuffixGroup.Cards}/{cardId}");
         }
     }
 }

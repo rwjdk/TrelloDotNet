@@ -8,8 +8,9 @@ namespace TrelloDotNet.Interface
         IBoardController Boards { get; }
         IListController Lists { get; }
         ICardController Cards { get; }
-        Task<T> GetAsync<T>(string suffix);
-        Task<string> GetAsync(string suffix);
+        ICustomFieldController CustomFields { get; }
+        Task<T> GetAsync<T>(string suffix, params UriParameter[] parameters);
+        Task<string> GetAsync(string suffix, params UriParameter[] parameters);
         Task<T> Post<T>(string suffix, params UriParameter[] parameters);
         Task<string> Post(string suffix, params UriParameter[] parameters);
 

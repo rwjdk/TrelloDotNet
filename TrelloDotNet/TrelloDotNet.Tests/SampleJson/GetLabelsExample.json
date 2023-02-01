@@ -1,0 +1,44 @@
+[
+  {
+    "id": "63d128782f36f2348afaf01d",
+    "idBoard": "63d128787441d05619f44dbe",
+    "name": "Hello",
+    "color": "green"
+  },
+  {
+    "id": "63d128782f36f2348afaf01f",
+    "idBoard": "63d128787441d05619f44dbe",
+    "name": "World",
+    "color": "yellow_light"
+  },
+  {
+    "id": "63da8bfd53f1561554e42bb6",
+    "idBoard": "63d128787441d05619f44dbe",
+    "name": "Custom",
+    "color": "yellow_light"
+  },
+  {
+    "id": "63d128782f36f2348afaf022",
+    "idBoard": "63d128787441d05619f44dbe",
+    "name": "",
+    "color": "purple"
+  },
+  {
+    "id": "63d128782f36f2348afaf025",
+    "idBoard": "63d128787441d05619f44dbe",
+    "name": "",
+    "color": "orange"
+  },
+  {
+    "id": "63d128782f36f2348afaf026",
+    "idBoard": "63d128787441d05619f44dbe",
+    "name": "",
+    "color": "red"
+  },
+  {
+    "id": "63d128782f36f2348afaf029",
+    "idBoard": "63d128787441d05619f44dbe",
+    "name": "",
+    "color": "blue"
+  }
+]

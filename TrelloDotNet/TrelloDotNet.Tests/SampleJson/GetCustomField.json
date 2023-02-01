@@ -1,0 +1,43 @@
+{
+  "id": "63da6e4df46172832ddbde14",
+  "idModel": "63d128787441d05619f44dbe",
+  "modelType": "board",
+  "fieldGroup": "37ca43fbcbb0255c3936a08dc6dc095967d4da8b895ec155311a86afa3aacef1",
+  "display": { "cardFront": true },
+  "name": "TestCF",
+  "pos": 16384,
+  "options": [
+    {
+      "id": "63da6e4df46172832ddbde15",
+      "idCustomField": "63da6e4df46172832ddbde14",
+      "value": { "text": "Option1" },
+      "color": "none",
+      "pos": 16384
+    },
+    {
+      "id": "63da6e4df46172832ddbde16",
+      "idCustomField": "63da6e4df46172832ddbde14",
+      "value": { "text": "Option2" },
+      "color": "none",
+      "pos": 32768
+    },
+    {
+      "id": "63da6e648e4777fda514c432",
+      "idCustomField": "63da6e4df46172832ddbde14",
+      "value": { "text": "Option 3 Space" },
+      "color": "none",
+      "pos": 49152
+    }
+  ],
+  "type": "list",
+  "limits": {
+    "customFieldOptions": {
+      "perField": {
+        "status": "ok",
+        "disableAt": 50,
+        "warnAt": 40
+      }
+    }
+  },
+  "isSuggestedField": false
+}

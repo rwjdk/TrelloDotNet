@@ -1,4 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Globalization;
+using System;
+using System.Text.Json.Serialization;
+using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model
 {
@@ -10,6 +13,17 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        //todo - add more properties
+        [JsonPropertyName("color")]
+        public string Color { get; set; }
+
+        [JsonPropertyName("idBoard")]
+        public string LongBoardId { get; set; }
+
+        [JsonIgnore] public DateTimeOffset Created => IdToCreatedHelper.GetCreatedFromId(Id);
+        
+        public override string ToString()
+        {
+            return $"{Name} (Id: {Id})";
+        }
     }
 }

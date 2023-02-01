@@ -112,10 +112,10 @@
     "backgroundBrightness": "dark",
     "backgroundBottomColor": "#0a232b",
     "backgroundTopColor": "#9db0bf",
-    "canBePublic": true,
-    "canBeEnterprise": true,
-    "canBeOrg": true,
-    "canBePrivate": true,
+    "canBePublic": false,
+    "canBeEnterprise": false,
+    "canBeOrg": false,
+    "canBePrivate": false,
     "canInvite": true
   },
   "labelNames": {
