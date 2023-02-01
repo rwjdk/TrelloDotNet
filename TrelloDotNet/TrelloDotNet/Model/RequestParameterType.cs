@@ -3,5 +3,8 @@
     public enum RequestParameterType
     {
         String,
+        Boolean,
+        Integer,
+        DateTimeOffset
     }
 }

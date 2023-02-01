@@ -40,13 +40,13 @@ namespace TrelloDotNet.Control
         
         internal async Task<string> GetResponse(string suffix, params UriParameter[] parameters)
         {
-            var uri = BuildGetUri(suffix, parameters);
+            var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.GetAsync(uri);
             //todo - check response
             return await response.Content.ReadAsStringAsync();
         }
 
-        private Uri BuildGetUri(string suffix, UriParameter[] parameters)
+        private Uri BuildUri(string suffix, UriParameter[] parameters)
         {
             suffix = RemoveStartSlashIfGiven(suffix);
             return new Uri($@"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
@@ -65,30 +65,18 @@ namespace TrelloDotNet.Control
 
         public async Task<string> Post(string suffix, params UriParameter[] parameters)
         {
-            var uri = BuildPostUri(suffix, parameters);
+            var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PostAsync(uri, null);
             //todo - check response
             return await response.Content.ReadAsStringAsync();
         }
-
-        private Uri BuildPostUri(string suffix, UriParameter[] parameters)
-        {
-            suffix = RemoveStartSlashIfGiven(suffix);
-
-            return new Uri($@"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
-        }
-
+        
         private static StringBuilder GetParametersAsString(UriParameter[] parameters)
         {
             StringBuilder parameterString = new StringBuilder();
             foreach (var parameter in parameters)
             {
-                switch (parameter.Type)
-                {
-                    case RequestParameterType.String:
-                        parameterString.Append($"&{parameter.Name}={parameter.GetValueAsString()}");
-                        break;
-                }
+                parameterString.Append($"&{parameter.Name}={parameter.GetValueAsApiFormattedString()}");
             }
 
             return parameterString;
@@ -102,6 +90,25 @@ namespace TrelloDotNet.Control
             }
 
             return suffix;
+        }
+
+        public async Task<T> Put<T>(string suffix, params UriParameter[] parameters)
+        {
+            string json = await Put(suffix, parameters);
+            var @object = JsonSerializer.Deserialize<T>(json);
+            if (@object is RawJsonObject baseTrelloObject) //todo should it be an option (bigger objects)
+            {
+                baseTrelloObject.RawJson = json;
+            }
+            return @object;
+        }
+
+        public async Task<string> Put(string suffix, params UriParameter[] parameters)
+        {
+            var uri = BuildUri(suffix, parameters);
+            var response = await _httpClient.PutAsync(uri, null);
+            //todo - check response
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

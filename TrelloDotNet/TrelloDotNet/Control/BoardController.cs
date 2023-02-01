@@ -55,6 +55,11 @@ namespace TrelloDotNet.Control
             return await _apiRequestController.GetResponse<ListWithRawJsonIncluded<Card>>($"{Constants.UrlSuffixGroup.Boards}/{longOrShortBoardId}/cards/{filter.GetJsonPropertyName()}");
         }
 
+        public async Task<ListWithRawJsonIncluded<Member>> GetMembersAsync(string longOrShortBoardId)
+        {
+            return await _apiRequestController.GetResponse<ListWithRawJsonIncluded<Member>>($"{Constants.UrlSuffixGroup.Boards}/{longOrShortBoardId}/members/");
+        }
+
 
         //todo: Get Memberships of a Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-memberships-get)
         //todo: Update a board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-put)

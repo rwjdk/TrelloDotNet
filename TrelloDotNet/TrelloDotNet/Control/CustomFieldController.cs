@@ -36,10 +36,9 @@ namespace TrelloDotNet.Control
                 new UriParameter("idModel", longBoardId),
                 new UriParameter("modelType", "board"),
                 new UriParameter("name", name),
-
                 new UriParameter("type", type.GetJsonPropertyName()),
                 new UriParameter("pos", position.GetJsonPropertyName()), //todo - this seems a bit buggy (does not always end up the right place)
-                new UriParameter("display_cardFront", displayOnTheFrontOfCard.ToString().ToLowerInvariant())
+                new UriParameter("display_cardFront", displayOnTheFrontOfCard)
             };
 
             //todo - options for Custom fields does not work and should be removed (Not even their own sample works: https://developer.atlassian.com/cloud/trello/guides/rest-api/getting-started-with-custom-fields/)

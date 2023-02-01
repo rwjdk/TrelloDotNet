@@ -17,5 +17,6 @@ namespace TrelloDotNet.Interface
         Task<ListWithRawJsonIncluded<Label>> GetLabelsAsync(string longOrShortBoardId);
         Task<ListWithRawJsonIncluded<Card>> GetCardsAsync(string longOrShortBoardId);
         Task<ListWithRawJsonIncluded<Card>> GetCardsFilteredAsync(string longOrShortBoardId, CardsFilter filter = CardsFilter.Open);
+        Task<ListWithRawJsonIncluded<Member>> GetMembersAsync(string longOrShortBoardId);
     }
 }

@@ -17,7 +17,7 @@ namespace TrelloDotNet.Model
         public string Color { get; set; }
 
         [JsonPropertyName("idBoard")]
-        public string LongBoardId { get; set; }
+        public string BoardId { get; set; }
 
         [JsonIgnore] public DateTimeOffset Created => IdToCreatedHelper.GetCreatedFromId(Id);
         

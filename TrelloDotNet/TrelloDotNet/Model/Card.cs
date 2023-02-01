@@ -15,7 +15,7 @@ namespace TrelloDotNet.Model
         public int IdShort { get; set; }
 
         [JsonPropertyName("idBoard")]
-        public string LongBoardId { get; set; }
+        public string BoardId { get; set; }
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
