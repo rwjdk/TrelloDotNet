@@ -17,7 +17,14 @@ namespace TrelloDotNet.Tests
         public async Task GetBoard()
         {
             var trelloClient = TestHelper.GetClient();
-            var result = await trelloClient.Boards.GetAsync("63d128787441d05619f44dbe");
+            var result = await trelloClient.Boards.GetBoardAsync("63d128787441d05619f44dbe");
+        }
+        
+        [Fact]
+        public async Task GetBoardChecklists()
+        {
+            var trelloClient = TestHelper.GetClient();
+            var result = await trelloClient.Checklists.GetChecklistsOnCardAsync("63d128787441d05619f44dbe");
         }
     }
 }

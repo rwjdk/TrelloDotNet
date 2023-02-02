@@ -4,19 +4,28 @@ using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Interface
 {
+    /// <summary>
+    /// Controller of Board-specific Methods
+    /// </summary>
     public interface IBoardController
     {
-        Task<Board> GetAsync(string longOrShortBoardId);
+        //todo - Need to Have
+        //- Get Actions on Board (perhaps its own controller)
+
+        //todo - Nice to Have
+        //- Create Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-post)
+        //- Update Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-put)
+        //- Manage Custom Fields on board (CRUD)
+        //- Get Board Membership (Aka what roles the Token user have on the board) [https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-memberships-get]
+        //- Invite members by mail or userId [https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-put + https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-idmember-put]
+        //- Remove Members (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-idmember-delete)
+        //- Update Membership (make admin as an example)
+
         /// <summary>
-        /// Get Lists on a Board
+        /// Get a Board by its Id
         /// </summary>
-        /// <param name="longOrShortBoardId">Id of the Board (in its long or short version)</param>
-        /// <param name="filter">Filter Lists based on status</param>
-        /// <returns>List of Trello Lists</returns>
-        Task<ListWithRawJsonIncluded<List>> GetListsAsync(string longOrShortBoardId, ListFilter filter = ListFilter.Open);
-        Task<ListWithRawJsonIncluded<Label>> GetLabelsAsync(string longOrShortBoardId);
-        Task<ListWithRawJsonIncluded<Card>> GetCardsAsync(string longOrShortBoardId);
-        Task<ListWithRawJsonIncluded<Card>> GetCardsFilteredAsync(string longOrShortBoardId, CardsFilter filter = CardsFilter.Open);
-        Task<ListWithRawJsonIncluded<Member>> GetMembersAsync(string longOrShortBoardId);
+        /// <param name="id">Id of the Board (in its long or short version)</param>
+        /// <returns>The Board</returns>
+        Task<Board> GetBoardAsync(string id);
     }
 }

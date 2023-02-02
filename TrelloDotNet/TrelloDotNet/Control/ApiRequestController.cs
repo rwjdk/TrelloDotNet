@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using TrelloDotNet.Interface;
 using TrelloDotNet.Model;
-using static System.Net.WebRequestMethods;
 
 namespace TrelloDotNet.Control
 {
@@ -19,7 +16,7 @@ namespace TrelloDotNet.Control
         private readonly string _apiKey;
         private readonly string _token;
 
-        public ApiRequestController(HttpClient httpClient, string apiKey, string token)
+        internal ApiRequestController(HttpClient httpClient, string apiKey, string token)
         {
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -27,50 +24,63 @@ namespace TrelloDotNet.Control
             _token = token;
         }
 
-        public async Task<T> GetResponse<T>(string suffix, params UriParameter[] parameters)
+        internal async Task<T> Get<T>(string suffix, params UriParameter[] parameters)
         {
-            string json = await GetResponse(suffix, parameters);
+            string json = await Get(suffix, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
-            if (@object is IRawJsonObject rawJsonObject) //todo should it be an option (bigger objects)
-            {
-                rawJsonObject.RawJson = json;
-            }
             return @object;
         }
         
-        internal async Task<string> GetResponse(string suffix, params UriParameter[] parameters)
+        internal async Task<string> Get(string suffix, params UriParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.GetAsync(uri);
-            //todo - check response
-            return await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new TrelloApiException(content, uri.AbsoluteUri); //Content is assumed Error Message
+            }
+            return content; //Content is assumed JSON
         }
-
-        private Uri BuildUri(string suffix, UriParameter[] parameters)
-        {
-            suffix = RemoveStartSlashIfGiven(suffix);
-            return new Uri($@"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
-        }
-
-        public async Task<T> Post<T>(string suffix, params UriParameter[] parameters)
+        
+        internal async Task<T> Post<T>(string suffix, params UriParameter[] parameters)
         {
             string json = await Post(suffix, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
-            if (@object is RawJsonObject baseTrelloObject) //todo should it be an option (bigger objects)
-            {
-                baseTrelloObject.RawJson = json;
-            }
             return @object;
         }
 
-        public async Task<string> Post(string suffix, params UriParameter[] parameters)
+        internal async Task<string> Post(string suffix, params UriParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PostAsync(uri, null);
-            //todo - check response
-            return await response.Content.ReadAsStringAsync();
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new TrelloApiException(content, uri.AbsoluteUri); //Content is assumed Error Message
+            }
+            return content; //Content is assumed JSON
         }
         
+        public async Task<T> Put<T>(string suffix, params UriParameter[] parameters)
+        {
+            string json = await Put(suffix, parameters);
+            var @object = JsonSerializer.Deserialize<T>(json);
+            return @object;
+        }
+
+        public async Task<string> Put(string suffix, params UriParameter[] parameters)
+        {
+            var uri = BuildUri(suffix, parameters);
+            var response = await _httpClient.PutAsync(uri, null);
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new TrelloApiException(content, uri.AbsoluteUri); //Content is assumed Error Message
+            }
+            return content; //Content is assumed JSON
+        }
+
         private static StringBuilder GetParametersAsString(UriParameter[] parameters)
         {
             StringBuilder parameterString = new StringBuilder();
@@ -82,33 +92,9 @@ namespace TrelloDotNet.Control
             return parameterString;
         }
 
-        private static string RemoveStartSlashIfGiven(string suffix)
+        private Uri BuildUri(string suffix, UriParameter[] parameters)
         {
-            if (suffix.StartsWith("/"))
-            {
-                suffix = suffix.Substring(1);
-            }
-
-            return suffix;
-        }
-
-        public async Task<T> Put<T>(string suffix, params UriParameter[] parameters)
-        {
-            string json = await Put(suffix, parameters);
-            var @object = JsonSerializer.Deserialize<T>(json);
-            if (@object is RawJsonObject baseTrelloObject) //todo should it be an option (bigger objects)
-            {
-                baseTrelloObject.RawJson = json;
-            }
-            return @object;
-        }
-
-        public async Task<string> Put(string suffix, params UriParameter[] parameters)
-        {
-            var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.PutAsync(uri, null);
-            //todo - check response
-            return await response.Content.ReadAsStringAsync();
+            return new Uri($@"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
         }
     }
 }

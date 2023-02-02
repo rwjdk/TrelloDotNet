@@ -1,4 +1,5 @@
-﻿using TrelloDotNet.Interface;
+﻿using Microsoft.Extensions.Configuration;
+using TrelloDotNet.Interface;
 
 namespace TrelloDotNet.Tests;
 
@@ -6,7 +7,17 @@ public static class TestHelper
 {
     public static ITrelloClient GetClient()
     {
-        ITrelloClient trelloClient = new TrelloClient("8000d9bde07ef82025e9e070c7ea82d8", "ATTA8a75349a982325c7b874caf6e2f174d78ddb39d38e4aff22064703d509142db45E058BAB");
-        return trelloClient;
+        try
+        {
+            //todo - add better system that also work in pipelines (added this for now)
+            var config = new ConfigurationBuilder().AddJsonFile("client-secrets.json").Build();
+            var apiKey = config["ApiKey"];
+            var token = config["Token"];
+            return new TrelloClient(apiKey, token);
+        }
+        catch (Exception)
+        {
+            throw new Exception("In order to run Unit-tests you need to add a client-secrets.json in the root of the Test-project, mark it as 'Copy if Newer' and add the following content: { \"ApiKey\": \"xyz\", \"Token\": \"xyz\" }");
+        }
     }
 }

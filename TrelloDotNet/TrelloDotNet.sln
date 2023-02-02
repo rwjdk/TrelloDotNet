@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrelloDotNet", "TrelloDotNet\TrelloDotNet.csproj", "{FB9A3F5A-32B2-43E8-9861-C360F0E45225}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrelloDotNet", "TrelloDotNet\TrelloDotNet.csproj", "{FB9A3F5A-32B2-43E8-9861-C360F0E45225}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrelloDotNet.Tests", "TrelloDotNet.Tests\TrelloDotNet.Tests.csproj", "{11E1A1B9-6626-4ACD-A149-75BE5FBE0097}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrelloDotNet.Tests", "TrelloDotNet.Tests\TrelloDotNet.Tests.csproj", "{11E1A1B9-6626-4ACD-A149-75BE5FBE0097}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

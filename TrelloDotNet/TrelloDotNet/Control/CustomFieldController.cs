@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using TrelloDotNet.Interface;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Control
 {
+    /// <inheritdoc />
     public class CustomFieldController : ICustomFieldController
     {
         private readonly ApiRequestController _apiRequestController;
@@ -19,25 +16,27 @@ namespace TrelloDotNet.Control
             _apiRequestController = apiRequestController;
         }
 
-        public async Task<CustomField> GetAsync(string customFieldId)
+        /// <inheritdoc />
+        public async Task<CustomField> GetCustomFieldAsync(string customFieldId)
         {
-            return await _apiRequestController.GetResponse<CustomField>($"{Constants.UrlSuffixGroup.CustomFields}/{customFieldId}");
+            return await _apiRequestController.Get<CustomField>($"{Constants.UrlSuffixGroup.CustomFields}/{customFieldId}");
         }
 
-        public async Task<CustomField> AddAsync(Board board, string name, CustomFieldType type, CustomFieldPosition position, bool displayOnTheFrontOfCard = true, List<CustomFieldOption> options = null)
+        /// <inheritdoc />
+        public async Task<CustomField> AddCustomFieldAsync(Board board, string name, CustomFieldType type, bool displayOnTheFrontOfCard = true, List<CustomFieldOption> options = null)
         {
-            return await AddAsync(board.Id, name, type, position, displayOnTheFrontOfCard, options);
+            return await AddCustomFieldAsync(board.Id, name, type, displayOnTheFrontOfCard, options);
         }
 
-        public async Task<CustomField> AddAsync(string longBoardId, string name, CustomFieldType type, CustomFieldPosition position, bool displayOnTheFrontOfCard = true, List<CustomFieldOption> options = null)
+        /// <inheritdoc />
+        public async Task<CustomField> AddCustomFieldAsync(string boardId, string name, CustomFieldType type, bool displayOnTheFrontOfCard = true, List<CustomFieldOption> options = null)
         {
             List<UriParameter> parameters = new List<UriParameter>
             {
-                new UriParameter("idModel", longBoardId),
+                new UriParameter("idModel", boardId),
                 new UriParameter("modelType", "board"),
                 new UriParameter("name", name),
                 new UriParameter("type", type.GetJsonPropertyName()),
-                new UriParameter("pos", position.GetJsonPropertyName()), //todo - this seems a bit buggy (does not always end up the right place)
                 new UriParameter("display_cardFront", displayOnTheFrontOfCard)
             };
 
@@ -46,12 +45,10 @@ namespace TrelloDotNet.Control
             {
                 StringBuilder optionsArray = new StringBuilder();
                 optionsArray.Append("[");
-                int postion = 0;
                 foreach (var customFieldOption in options)
                 {
-                    string optionAsString = $"{{ color:\"{customFieldOption.Color}\", value: {{ text: \"{customFieldOption.Name}\" }}, pos:{position} }}";
+                    string optionAsString = $"{{ color:\"{customFieldOption.Color}\", value: {{ text: \"{customFieldOption.Name}\" }} }}";
                     optionsArray.Append(optionAsString);
-                    position++;
                 }
                 optionsArray.Append("]");
                 parameters.Add(new UriParameter("options", optionsArray.ToString()));

@@ -8,6 +8,7 @@
             public const string Cards = "cards";
             public const string Lists = "lists";
             public const string CustomFields = "customFields";
+            public const string Checklists = "checklists";
         }
     }
 }

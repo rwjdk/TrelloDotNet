@@ -9,6 +9,6 @@ public class UnitTestLabels
     public async Task GetLabels()
     {
         var trelloClient = TestHelper.GetClient();
-        var result = await trelloClient.Boards.GetLabelsAsync(Constants.SampleBoardId);
+        var result = await trelloClient.Labels.GetLabelsOfBoardAsync(Constants.SampleBoardId);
     }
 }

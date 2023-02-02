@@ -5,33 +5,42 @@ using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Control
 {
+    /// <inheritdoc />
     public class ListController : IListController
     {
         private readonly ApiRequestController _apiRequestController;
+        // ReSharper disable once NotAccessedField.Local
+        private TrelloClient _parent;
+        private readonly UriParameterBuilder _uriParameterBuilder;
 
-        internal ListController(ApiRequestController apiRequestController)
+        internal ListController(ApiRequestController apiRequestController, TrelloClient parent)
         {
+            _parent = parent;
             _apiRequestController = apiRequestController;
+            _uriParameterBuilder = new UriParameterBuilder();
         }
 
-        public async Task<List> GetAsync(string listId)
+        /// <inheritdoc />
+        public async Task<List> GetListAsync(string listId)
         {
-            return await _apiRequestController.GetResponse<List>($"{Constants.UrlSuffixGroup.Lists}/{listId}");
+            return await _apiRequestController.Get<List>($"{Constants.UrlSuffixGroup.Lists}/{listId}");
         }
 
-        public async Task<List> AddAsync(Board board, string name)
+        /// <inheritdoc />
+        public async Task<List> AddListAsync(List list)
         {
-            return await AddAsync(board.Id, name);
+            var parameters = _uriParameterBuilder.GetViaUriParameterAttribute(list);
+            return await _apiRequestController.Post<List>($"{Constants.UrlSuffixGroup.Lists}", parameters.ToArray());
         }
 
-        public async Task<List> AddAsync(string longBoardId, string name)
+        /// <inheritdoc />
+        public async Task<List<List>> GetListsOnBoardAsync(string boardId, ListFilter filter = ListFilter.Open)
         {
-            var parameters = new []
+            var parameters = new[]
             {
-                new UriParameter("name", name),
-                new UriParameter("idBoard", longBoardId)
+                new UriParameter("filter", filter.GetJsonPropertyName())
             };
-            return await _apiRequestController.Post<List>($"{Constants.UrlSuffixGroup.Lists}", parameters);
+            return await _apiRequestController.Get<List<List>>($"{Constants.UrlSuffixGroup.Boards}/{boardId}/lists", parameters);
         }
     }
 }

@@ -1,4 +1,3 @@
-using TrelloDotNet.Interface;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests;
@@ -9,8 +8,7 @@ public class UnitTestLists
     public async Task GetBoardLists()
     {
         var trelloClient = TestHelper.GetClient();
-
-        var list = await trelloClient.Boards.GetListsAsync(Constants.SampleBoardId);
+        var list = await trelloClient.Lists.GetListsOnBoardAsync(Constants.SampleBoardId);
     }
 
     [Fact]
@@ -18,7 +16,7 @@ public class UnitTestLists
     {
         var trelloClient = TestHelper.GetClient();
 
-        var result = await trelloClient.Lists.AddAsync(Constants.SampleBoardLongId, "My New List!!!");
+        var result = await trelloClient.Lists.AddListAsync(new List("XList", Constants.SampleBoardLongId));
     }
         
     [Fact]
@@ -26,7 +24,7 @@ public class UnitTestLists
     {
         var trelloClient = TestHelper.GetClient();
 
-        var result = await trelloClient.Lists.GetAsync(Constants.SampleListId);
+        var result = await trelloClient.Lists.GetListAsync(Constants.SampleListId);
     }
 
     
