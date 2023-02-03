@@ -15,7 +15,7 @@ namespace TrelloDotNet.Interface
         //- Actions
         //- Check other APIs for features that I might have missed
         //- Web-hooks (+ reaction to it)
-        //- Internal Set or Private set???
+        //- Use Branches, lock master and get github actions fully automated for push of nuget packages
 
         //todo - Nice To Have (Not needed for v1)
         //- Common Scenario/Actions List (aka things that is not a one to one API call... Example: "Move Card to List with name" so user do not need to set everything up themselves)
