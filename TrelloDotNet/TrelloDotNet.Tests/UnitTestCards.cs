@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests
@@ -9,6 +10,7 @@ namespace TrelloDotNet.Tests
         {
             var trelloClient = TestHelper.GetClient();
             var result = await trelloClient.Cards.GetCardsOnBoardAsync(Constants.SampleBoardLongId);
+            
         }
 
         [Fact]
@@ -16,7 +18,9 @@ namespace TrelloDotNet.Tests
         {
             var trelloClient = TestHelper.GetClient();
 
-            var result = await trelloClient.Cards.GetCardAsync(Constants.SampleCardId);
+            var result = await trelloClient.Cards.GetCardAsync("63da9fdc0156601dbbe1563c");
+            result.Name = "new name";
+            await trelloClient.Cards.UpdateCardAsync(result);
         }
         
         [Fact]
@@ -75,7 +79,6 @@ namespace TrelloDotNet.Tests
             //var allLists = await trelloClient.Boards.GetListsOnBoardAsync(Constants.SampleBoardId);
             //card.ListId = allLists.First(x=> x.Name == "Done").Id;
             card.ListId = null;
-            card.ChecklistIds = new List<string>();
             try
             {
                 await trelloClient.Cards.UpdateCardAsync(card);
