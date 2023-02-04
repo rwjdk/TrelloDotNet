@@ -57,7 +57,7 @@ namespace TrelloDotNet.Model
         /// State of the item (incomplete or complete)
         /// </summary>
         [JsonPropertyName("state")]
-        public string State { get; set; } //bug - enum?
+        public string State { get; set; } //todo - enum?
 
         /// <summary>
         /// Constructor
