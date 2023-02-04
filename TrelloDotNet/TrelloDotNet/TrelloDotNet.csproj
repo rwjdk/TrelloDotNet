@@ -13,7 +13,7 @@
 		<PackageProjectUrl>https://github.com/rwjdk/TrelloDotNet</PackageProjectUrl>
 		<PackageIcon>trello.png</PackageIcon>
 		<PackageTags>trello;api;rest;trello api</PackageTags>
-		<Version>0.9.3-alpha</Version>
+		<Version>0.9.4-alpha</Version>
 		<Company>RWJDK</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
