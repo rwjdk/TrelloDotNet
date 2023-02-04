@@ -18,7 +18,7 @@ namespace TrelloDotNet.Model
         /// Name of the Checklist
         /// </summary>
         [JsonPropertyName("name")]
-        [UriParameter]
+        [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace TrelloDotNet.Model
         //todo - Add Support for position (research in order to understand)
         /*
         [JsonPropertyName("pos")]
-        [UriParameter]
+        [QueryParameter]
         public int Position { get; set; }
         */
 

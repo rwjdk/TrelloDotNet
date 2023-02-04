@@ -29,28 +29,28 @@ namespace TrelloDotNet.Model
         /// If you move board make sure ListId, MemberIds and LabelsId are valid for the new board
         /// </remarks>
         [JsonPropertyName("idBoard")]
-        [UriParameter]
+        [QueryParameter]
         public string BoardId { get; set; }
 
         /// <summary>
         /// Name of the card [UPDATEABLE]
         /// </summary>
         [JsonPropertyName("name")]
-        [UriParameter]
+        [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of the card [UPDATEABLE]
         /// </summary>
         [JsonPropertyName("desc")]
-        [UriParameter]
+        [QueryParameter]
         public string Description { get; set; }
 
         /// <summary>
         /// If the card is Archived (closed) [UPDATEABLE]
         /// </summary>
         [JsonPropertyName("closed")]
-        [UriParameter]
+        [QueryParameter]
         public bool Closed { get; set; }
 
         //todo - Add Support for position (research in order to understand)
@@ -59,7 +59,7 @@ namespace TrelloDotNet.Model
         /// The position of the card in the current list [UPDATEABLE] 
         /// </summary>
         [JsonPropertyName("pos")]
-        [UriParameter]
+        [QueryParameter]
         public int Position { get; set; }
         */
 
@@ -67,7 +67,7 @@ namespace TrelloDotNet.Model
         /// If the card is Watched (subscribed) by the owner of the Token used against the API [UPDATEABLE]
         /// </summary>
         [JsonPropertyName("subscribed")]
-        [UriParameter]
+        [QueryParameter]
         public bool Subscribed { get; set; }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace TrelloDotNet.Model
         /// NB: If you move the card to another board set this to null (aka first column of new board) or a valid listId on the new board
         /// </remarks>
         [JsonPropertyName("idList")]
-        [UriParameter(false)]
+        [QueryParameter(false)]
         public string ListId { get; set; }
 
         /// <summary>
@@ -95,21 +95,21 @@ namespace TrelloDotNet.Model
         /// The Start-date of the work on the card (not to be confused with Created property as this can be null) [stored in UTC] [UPDATEABLE]
         /// </summary>
         [JsonPropertyName("start")]
-        [UriParameter]
+        [QueryParameter]
         public DateTimeOffset? Start { get; set; }
 
         /// <summary>
         /// The Due-date of the work on the card should be finished [stored in UTC] [UPDATEABLE]
         /// </summary>
         [JsonPropertyName("due")]
-        [UriParameter]
+        [QueryParameter]
         public DateTimeOffset? Due { get; set; }
 
         /// <summary>
         /// If the due work is completed [UPDATEABLE]
         /// </summary>
         [JsonPropertyName("dueComplete")]
-        [UriParameter]
+        [QueryParameter]
         public bool DueComplete { get; set; }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace TrelloDotNet.Model
         /// Ids of the Labels that are on the Card [UPDATEABLE]
         /// </summary>
         [JsonPropertyName("idLabels")]
-        [UriParameter]
+        [QueryParameter]
         public List<string> LabelIds { get; set; }
 
         /// <summary>
@@ -141,13 +141,13 @@ namespace TrelloDotNet.Model
         /// Ids of members that should be assigned to the card [UPDATEABLE]
         /// </summary>
         [JsonPropertyName("idMembers")]
-        [UriParameter]
+        [QueryParameter]
         public List<string> MemberIds { get; set; }
 
         //todo - find out what this is???
         /*
         [JsonPropertyName("idAttachmentCover")]
-        [UriParameter]
+        [QueryParameter]
         public string AttachmentCover { get; set; } 
         */
 

@@ -18,7 +18,7 @@ namespace TrelloDotNet.Model
         /// Name of the Item
         /// </summary>
         [JsonPropertyName("name")]
-        [UriParameter]
+        [QueryParameter]
         public string Name { get; set; }
 
         //todo - support Name-data field?
@@ -33,7 +33,7 @@ namespace TrelloDotNet.Model
         /// Due Date of the Item [Stored in UTC]
         /// </summary>
         [JsonPropertyName("due")]
-        [UriParameter]
+        [QueryParameter]
         public DateTimeOffset? Due { get; set; }
 
         //todo - support dueReminder??
@@ -42,7 +42,7 @@ namespace TrelloDotNet.Model
         /// Member (user) assigned to the Item
         /// </summary>
         [JsonPropertyName("idMember")]
-        [UriParameter]
+        [QueryParameter]
         public string MemberId { get; set; }
 
         /// <summary>

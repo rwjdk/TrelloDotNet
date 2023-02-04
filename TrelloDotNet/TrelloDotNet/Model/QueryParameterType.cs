@@ -1,9 +1,9 @@
 ﻿namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// Type of the Uri Parameter
+    /// Type of the Query Parameter
     /// </summary>
-    public enum UriParameterType
+    public enum QueryParameterType
     {
         /// <summary>
         /// String

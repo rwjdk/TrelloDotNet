@@ -8,7 +8,7 @@ namespace TrelloDotNet.Tests
         public async Task GetBoardCards()
         {
             var trelloClient = TestHelper.GetClient();
-            var result = await trelloClient.Cards.GetCardsOnBoardAsync(Constants.SampleBoardLongId);
+            var result = await trelloClient.GetCardsOnBoardAsync(Constants.SampleBoardLongId);
         }
 
         [Fact]
@@ -16,7 +16,7 @@ namespace TrelloDotNet.Tests
         {
             var trelloClient = TestHelper.GetClient();
 
-            var result = await trelloClient.Cards.GetCardAsync(Constants.SampleCardId);
+            var result = await trelloClient.GetCardAsync(Constants.SampleCardId);
         }
         
         [Fact]
@@ -24,8 +24,8 @@ namespace TrelloDotNet.Tests
         {
             var trelloClient = TestHelper.GetClient();
 
-            var result = await trelloClient.Checklists.GetChecklistsOnCardAsync("63d387ea95b02878fec0b6c0");
-            var membersAsync = await trelloClient.Members.GetMembersOfBoardAsync(Constants.SampleBoardId);
+            var result = await trelloClient.GetChecklistsOnCardAsync("63d387ea95b02878fec0b6c0");
+            var membersAsync = await trelloClient.GetMembersOfBoardAsync(Constants.SampleBoardId);
         }
         
         [Fact]
@@ -38,14 +38,14 @@ namespace TrelloDotNet.Tests
                 new("Item 2", DateTimeOffset.Now),
                 new("Item 3", DateTimeOffset.Now)
             };
-            var addChecklist = await trelloClient.Checklists.AddChecklistAsync("63d387ea95b02878fec0b6c0", new Checklist("My_Cool_list with items 3", checklistItems), true);
+            var addChecklist = await trelloClient.AddChecklistAsync("63d387ea95b02878fec0b6c0", new Checklist("My_Cool_list with items 3", checklistItems), true);
         }
         
         [Fact]
         public async Task CreateChecklistFromSource()
         {
             var trelloClient = TestHelper.GetClient();
-            var addChecklist = await trelloClient.Checklists.AddChecklistAsync("63da9fdc0156601dbbe1563c", "63dbd5d5841dc8223cb67aeb");
+            var addChecklist = await trelloClient.AddChecklistAsync("63da9fdc0156601dbbe1563c", "63dbd5d5841dc8223cb67aeb");
         }
         
         [Fact]
@@ -53,7 +53,7 @@ namespace TrelloDotNet.Tests
         {
             var trelloClient = TestHelper.GetClient();
 
-            var card = await trelloClient.Cards.GetCardAsync("63d387ea95b02878fec0b6c0");
+            var card = await trelloClient.GetCardAsync("63d387ea95b02878fec0b6c0");
 
             /*
             var result = await trelloClient.Cards.UpdateCardAsync("63d387ea95b02878fec0b6c0", 
@@ -78,7 +78,7 @@ namespace TrelloDotNet.Tests
             card.ChecklistIds = new List<string>();
             try
             {
-                await trelloClient.Cards.UpdateCardAsync(card);
+                await trelloClient.UpdateCardAsync(card);
             }
             catch (Exception e)
             {

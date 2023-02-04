@@ -19,21 +19,21 @@ namespace TrelloDotNet.Model
         /// Name of the List
         /// </summary>
         [JsonPropertyName("name")]
-        [UriParameter]
+        [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// If the list is archived (closed)
         /// </summary>
         [JsonPropertyName("closed")]
-        [UriParameter]
+        [QueryParameter]
         public bool Closed { get; set; }
 
         /// <summary>
         /// Id of the Board the list belong to
         /// </summary>
         [JsonPropertyName("idBoard")]
-        [UriParameter]
+        [QueryParameter]
         public string BoardId { get; set; }
 
         //todo - Add Support for position (research in order to understand)
@@ -46,14 +46,14 @@ namespace TrelloDotNet.Model
         /// Indicate if the owner of the Token has subscribed (watching) the list
         /// </summary>
         [JsonPropertyName("subscribed")]
-        [UriParameter]
+        [QueryParameter]
         public bool Subscribed { get; set; }
 
         /// <summary>
         /// If there is a Soft Limit to number of cards in the list (Provided by PowerUp 'List Limits' from Trello)
         /// </summary>
         [JsonPropertyName("softLimit")]
-        [UriParameter]
+        [QueryParameter]
         public int? SoftLimit { get; set; }
 
         /// <summary>

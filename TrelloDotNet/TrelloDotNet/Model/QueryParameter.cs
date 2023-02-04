@@ -6,7 +6,7 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// URI Parameter to build the URL
     /// </summary>
-    public class UriParameter
+    public class QueryParameter
     {
         private readonly object _valueAsObject;
         /// <summary>
@@ -16,17 +16,17 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Type of the parameter
         /// </summary>
-        public UriParameterType Type { get; }
+        public QueryParameterType Type { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the Parameter</param>
         /// <param name="value">Value of the Parameter</param>
-        public UriParameter(string name, string value)
+        public QueryParameter(string name, string value)
         {
             Name = name;
-            Type = UriParameterType.String;
+            Type = QueryParameterType.String;
             _valueAsObject = value;
         }
 
@@ -35,10 +35,10 @@ namespace TrelloDotNet.Model
         /// </summary>
         /// <param name="name">Name of the Parameter</param>
         /// <param name="value">Value of the Parameter</param>
-        public UriParameter(string name, bool? value)
+        public QueryParameter(string name, bool? value)
         {
             Name = name;
-            Type = UriParameterType.Boolean;
+            Type = QueryParameterType.Boolean;
             _valueAsObject = value;
         }
 
@@ -47,10 +47,10 @@ namespace TrelloDotNet.Model
         /// </summary>
         /// <param name="name">Name of the Parameter</param>
         /// <param name="value">Value of the Parameter</param>
-        public UriParameter(string name, int? value)
+        public QueryParameter(string name, int? value)
         {
             Name = name;
-            Type = UriParameterType.Integer;
+            Type = QueryParameterType.Integer;
             _valueAsObject = value;
         }
 
@@ -59,10 +59,10 @@ namespace TrelloDotNet.Model
         /// </summary>
         /// <param name="name">Name of the Parameter</param>
         /// <param name="value">Value of the Parameter</param>
-        public UriParameter(string name, DateTimeOffset? value)
+        public QueryParameter(string name, DateTimeOffset? value)
         {
             Name = name;
-            Type = UriParameterType.DateTimeOffset;
+            Type = QueryParameterType.DateTimeOffset;
             _valueAsObject = value;
         }
 
@@ -79,13 +79,13 @@ namespace TrelloDotNet.Model
             }
             switch (Type)
             {
-                case UriParameterType.String:
+                case QueryParameterType.String:
                     return (string)_valueAsObject;
-                case UriParameterType.Boolean:
+                case QueryParameterType.Boolean:
                     return ((bool)_valueAsObject).ToString().ToLowerInvariant();
-                case UriParameterType.Integer:
+                case QueryParameterType.Integer:
                     return ((int)_valueAsObject).ToString(CultureInfo.InvariantCulture);
-                case UriParameterType.DateTimeOffset:
+                case QueryParameterType.DateTimeOffset:
                     return ((DateTimeOffset)_valueAsObject).ToString("yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using TrelloDotNet.Interface;
 
 namespace TrelloDotNet.Tests;
 

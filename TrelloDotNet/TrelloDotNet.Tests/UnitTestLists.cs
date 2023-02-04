@@ -8,7 +8,7 @@ public class UnitTestLists
     public async Task GetBoardLists()
     {
         var trelloClient = TestHelper.GetClient();
-        var list = await trelloClient.Lists.GetListsOnBoardAsync(Constants.SampleBoardId);
+        var list = await trelloClient.GetListsOnBoardAsync(Constants.SampleBoardId);
     }
 
     [Fact]
@@ -16,7 +16,7 @@ public class UnitTestLists
     {
         var trelloClient = TestHelper.GetClient();
 
-        var result = await trelloClient.Lists.AddListAsync(new List("XList", Constants.SampleBoardLongId));
+        var result = await trelloClient.AddListAsync(new List("XList", Constants.SampleBoardLongId));
     }
         
     [Fact]
@@ -24,7 +24,7 @@ public class UnitTestLists
     {
         var trelloClient = TestHelper.GetClient();
 
-        var result = await trelloClient.Lists.GetListAsync(Constants.SampleListId);
+        var result = await trelloClient.GetListAsync(Constants.SampleListId);
     }
 
     

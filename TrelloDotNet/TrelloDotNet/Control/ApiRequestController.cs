@@ -24,14 +24,14 @@ namespace TrelloDotNet.Control
             _token = token;
         }
 
-        internal async Task<T> Get<T>(string suffix, params UriParameter[] parameters)
+        internal async Task<T> Get<T>(string suffix, params QueryParameter[] parameters)
         {
             string json = await Get(suffix, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
         
-        internal async Task<string> Get(string suffix, params UriParameter[] parameters)
+        internal async Task<string> Get(string suffix, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.GetAsync(uri);
@@ -43,14 +43,14 @@ namespace TrelloDotNet.Control
             return content; //Content is assumed JSON
         }
         
-        internal async Task<T> Post<T>(string suffix, params UriParameter[] parameters)
+        internal async Task<T> Post<T>(string suffix, params QueryParameter[] parameters)
         {
             string json = await Post(suffix, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<string> Post(string suffix, params UriParameter[] parameters)
+        internal async Task<string> Post(string suffix, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PostAsync(uri, null);
@@ -62,14 +62,14 @@ namespace TrelloDotNet.Control
             return content; //Content is assumed JSON
         }
         
-        public async Task<T> Put<T>(string suffix, params UriParameter[] parameters)
+        public async Task<T> Put<T>(string suffix, params QueryParameter[] parameters)
         {
             string json = await Put(suffix, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        public async Task<string> Put(string suffix, params UriParameter[] parameters)
+        public async Task<string> Put(string suffix, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PutAsync(uri, null);
@@ -81,7 +81,7 @@ namespace TrelloDotNet.Control
             return content; //Content is assumed JSON
         }
 
-        private static StringBuilder GetParametersAsString(UriParameter[] parameters)
+        private static StringBuilder GetParametersAsString(QueryParameter[] parameters)
         {
             StringBuilder parameterString = new StringBuilder();
             foreach (var parameter in parameters)
@@ -92,7 +92,7 @@ namespace TrelloDotNet.Control
             return parameterString;
         }
 
-        private Uri BuildUri(string suffix, UriParameter[] parameters)
+        private Uri BuildUri(string suffix, QueryParameter[] parameters)
         {
             return new Uri($@"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
         }
