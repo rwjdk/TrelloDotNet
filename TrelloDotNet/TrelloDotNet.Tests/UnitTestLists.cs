@@ -17,6 +17,10 @@ public class UnitTestLists
         var trelloClient = TestHelper.GetClient();
 
         var result = await trelloClient.AddListAsync(new List("XList", Constants.SampleBoardLongId));
+
+        result.Name = "Some new name of the list";
+
+        await trelloClient.UpdateListAsync(result);
     }
         
     [Fact]

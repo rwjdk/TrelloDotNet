@@ -17,8 +17,40 @@ namespace TrelloDotNet.Tests
         {
             var trelloClient = TestHelper.GetClient();
             var result = await trelloClient.GetBoardAsync("63d128787441d05619f44dbe");
+
+            result.Description = "New description";
+            result.Name = "New Name";
+
+            await trelloClient.UpdateBoardAsync(result);
         }
         
+        [Fact]
+        public async Task GetBoardMembers()
+        {
+            var trelloClient = TestHelper.GetClient();
+            var result = await trelloClient.GetMembersOfBoardAsync("63d128787441d05619f44dbe");
+
+            var member = await trelloClient.GetMember(result.First().Id);
+        }
+
+        [Fact]
+        public async Task GetBoardActions()
+        {
+            var trelloClient = TestHelper.GetClient();
+            var result = await trelloClient.GetBoardAsync("63d128787441d05619f44dbe");
+
+            //var actionsOnBoard = await trelloClient.GetActionsOnBoard("SCPjg8ON");
+        }
+
+        [Fact]
+        public async Task AddBoard()
+        {
+            var trelloClient = TestHelper.GetClient();
+            //var result = await trelloClient.AddBoardAsync(new Board("My Api board", "with some cool description"));
+
+            //var actionsOnBoard = await trelloClient.GetActionsOnBoard("SCPjg8ON");
+        }
+
         [Fact]
         public async Task GetBoardChecklists()
         {

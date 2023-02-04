@@ -13,7 +13,8 @@ namespace TrelloDotNet.Model
         /// Id of the Label
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonInclude]
+        public string Id { get; private set; }
 
         /// <summary>
         /// Name of the Label
@@ -31,12 +32,13 @@ namespace TrelloDotNet.Model
         /// Id of the Board the Label belong to
         /// </summary>
         [JsonPropertyName("idBoard")]
-        public string BoardId { get; set; }
+        [JsonInclude]
+        public string BoardId { get; private set; }
 
         /// <summary>
         /// When the Label was created [stored in UTC]
         /// </summary>
-        [JsonIgnore] public DateTimeOffset Created => IdToCreatedHelper.GetCreatedFromId(Id);
+        [JsonIgnore] public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
 
         /// <inheritdoc />
         public override string ToString()

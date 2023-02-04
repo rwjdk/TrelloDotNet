@@ -8,6 +8,6 @@
 ## Quick example to get going:
 
 ```cs
-ITrelloClient trelloClient = new TrelloClient("APIKey", "TOKEN");
-trelloClient.<what you want to do>
+TrelloClient trelloClient = new TrelloClient("APIKey", "TOKEN");
+trelloClient.What_You_Want_To_Do_With_The_Framework();
 ```

@@ -12,7 +12,8 @@ namespace TrelloDotNet.Model
         /// Id of the checklist
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonInclude]
+        public string Id { get; private set; }
 
         /// <summary>
         /// Name of the Checklist
@@ -25,7 +26,8 @@ namespace TrelloDotNet.Model
         /// Id of the Card the checklist is on
         /// </summary>
         [JsonPropertyName("idCard")]
-        public string CardId { get; set; }
+        [JsonInclude]
+        public string CardId { get; private set; }
 
         //todo - Add Support for position (research in order to understand)
         /*

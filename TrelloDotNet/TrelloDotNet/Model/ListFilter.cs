@@ -3,22 +3,22 @@
 namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// Filter of Lists
+    /// Filter of lists on a board
     /// </summary>
     public enum ListFilter
     {
         /// <summary>
-        /// All Lists regardless if the are Archived (closed) or not
+        /// All Cards
         /// </summary>
         [JsonPropertyName("all")]
         All,
         /// <summary>
-        /// All Archived (closed) lists
+        /// Only Closed (Archived) cards
         /// </summary>
         [JsonPropertyName("closed")]
         Closed,
         /// <summary>
-        /// All open active Lists
+        /// Only open cards (including those on archived lists)
         /// </summary>
         [JsonPropertyName("open")]
         Open

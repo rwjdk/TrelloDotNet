@@ -13,36 +13,61 @@ namespace TrelloDotNet.Model
         /// Id of the Board (This is the long version of the Id)
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonInclude]
+        public string Id { get; private set; }
 
         /// <summary>
         /// Name of the board
         /// </summary>
         [JsonPropertyName("name")]
+        [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of the Board
         /// </summary>
         [JsonPropertyName("desc")]
+        [QueryParameter]
         public string Description { get; set; }
         
         /// <summary>
         /// URL for the Board
         /// </summary>
         [JsonPropertyName("url")]
-        public string Url { get; set; }
+        [JsonInclude]
+        public string Url { get; private set; }
         
         /// <summary>
         /// Short Version URL for the Board
         /// </summary>
         [JsonPropertyName("shortUrl")]
-        public string ShortUrl { get; set; }
+        [JsonInclude]
+        public string ShortUrl { get; private set; }
 
         /// <summary>
         /// Date the Board was created [stored in UTC]
         /// </summary>
-        [JsonIgnore] public DateTimeOffset Created => IdToCreatedHelper.GetCreatedFromId(Id);
+        [JsonIgnore] public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Board()
+        {
+            //Serialization
+        }
+
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of Board</param>
+        /// <param name="description">Description of board</param>
+        public Board(string name, string description = null)
+        {
+            Name = name;
+            Description = description;
+        }
 
         /// <inheritdoc />
         public override string ToString()

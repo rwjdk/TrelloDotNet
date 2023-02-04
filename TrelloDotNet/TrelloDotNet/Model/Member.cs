@@ -11,19 +11,22 @@ namespace TrelloDotNet.Model
         /// Id of the Member
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonInclude]
+        public string Id { get; private set; }
 
         /// <summary>
         /// Full Name of the Member
         /// </summary>
         [JsonPropertyName("fullName")]
-        public string FullName { get; set; }
+        [JsonInclude]
+        public string FullName { get; private set; }
 
         /// <summary>
         /// Username of the Member
         /// </summary>
         [JsonPropertyName("username")]
-        public string Username { get; set; }
+        [JsonInclude]
+        public string Username { get; private set; }
 
         /// <inheritdoc />
         public override string ToString()

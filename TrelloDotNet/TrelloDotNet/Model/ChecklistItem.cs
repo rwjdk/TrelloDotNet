@@ -12,7 +12,8 @@ namespace TrelloDotNet.Model
         /// Id of the Item 
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonInclude]
+        public string Id { get; private set; }
 
         /// <summary>
         /// Name of the Item
@@ -49,13 +50,14 @@ namespace TrelloDotNet.Model
         /// Id of the Checklist the item belong to
         /// </summary>
         [JsonPropertyName("idChecklist")]
-        public string ChecklistId { get; set; }
+        [JsonInclude]
+        public string ChecklistId { get; private set; }
 
         /// <summary>
         /// State of the item (incomplete or complete)
         /// </summary>
         [JsonPropertyName("state")]
-        public string State { get; set; } //todo - enum?
+        public string State { get; set; } //bug - enum?
 
         /// <summary>
         /// Constructor

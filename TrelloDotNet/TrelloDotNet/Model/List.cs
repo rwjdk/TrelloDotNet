@@ -13,7 +13,8 @@ namespace TrelloDotNet.Model
         /// Id of the List
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonInclude]
+        public string Id { get; private set; }
 
         /// <summary>
         /// Name of the List
@@ -46,21 +47,21 @@ namespace TrelloDotNet.Model
         /// Indicate if the owner of the Token has subscribed (watching) the list
         /// </summary>
         [JsonPropertyName("subscribed")]
-        [QueryParameter]
-        public bool Subscribed { get; set; }
+        [JsonInclude]
+        public bool Subscribed { get; private set; }
 
         /// <summary>
         /// If there is a Soft Limit to number of cards in the list (Provided by PowerUp 'List Limits' from Trello)
         /// </summary>
         [JsonPropertyName("softLimit")]
-        [QueryParameter]
-        public int? SoftLimit { get; set; }
+        [JsonInclude]
+        public int? SoftLimit { get; private set; }
 
         /// <summary>
         /// The Creation date of the list [stored in UTC]
         /// </summary>
         [JsonIgnore]
-        public DateTimeOffset Created => IdToCreatedHelper.GetCreatedFromId(Id);
+        public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
 
         /// <summary>
         /// Constructor

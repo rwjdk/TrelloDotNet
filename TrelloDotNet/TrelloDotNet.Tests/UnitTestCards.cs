@@ -18,7 +18,62 @@ namespace TrelloDotNet.Tests
 
             var result = await trelloClient.GetCardAsync(Constants.SampleCardId);
         }
+
+        [Fact]
+        public async Task Add10Card()
+        {
+            var trelloClient = TestHelper.GetClient();
+            var boardId = "63d128787441d05619f44dbe";
+            var labels = await trelloClient.GetLabelsOfBoardAsync(boardId);
+            var listId = "63de3eb58d0d357abc562b02";
+
+            var membersOfBoardAsync = await trelloClient.GetMembersOfBoardAsync(boardId);
+
+            for (int i = 0; i < 10; i++)
+            {
+
+                var card = new Card(listId, "My Card " + i, "Some description");
+                card.LabelIds.Add(labels.First().Id);
+                card.MemberIds.Add(membersOfBoardAsync.First().Id);
+
+                var addCard = await trelloClient.AddCardAsync(card);
+            }
+        }
+
+        [Fact]
+        public async Task Add1Card()
+        {
+            var trelloClient = TestHelper.GetClient();
+            var boardId = "63d128787441d05619f44dbe";
+            var labels = await trelloClient.GetLabelsOfBoardAsync(boardId);
+            var listId = "63de3eb58d0d357abc562b02";
+
+            var membersOfBoardAsync = await trelloClient.GetMembersOfBoardAsync(boardId);
+
+            var card = new Card(listId, "xMy Card", "Some description");
+            card.LabelIds.Add(labels.First().Id);
+            var addCard = await trelloClient.AddCardAsync(card);
+        }
         
+        [Fact]
+        public async Task GetCardsOnList()
+        {
+            var trelloClient = TestHelper.GetClient();
+            var listId = "63de3eb58d0d357abc562b02";
+            var cardsOnListAsync = await trelloClient.GetCardsOnListAsync(listId);
+        }
+
+        [Fact]
+        public async Task Update1Card()
+        {
+            var trelloClient = TestHelper.GetClient();
+            var cardAsync = await trelloClient.GetCardAsync("63de84fd6ec529e05977a5ab");
+            cardAsync.Name = "cool update";
+
+
+            var updateCardAsync = await trelloClient.UpdateCardAsync(cardAsync);
+        }
+
         [Fact]
         public async Task GetCardChecklists()
         {
@@ -27,7 +82,7 @@ namespace TrelloDotNet.Tests
             var result = await trelloClient.GetChecklistsOnCardAsync("63d387ea95b02878fec0b6c0");
             var membersAsync = await trelloClient.GetMembersOfBoardAsync(Constants.SampleBoardId);
         }
-        
+
         [Fact]
         public async Task CreateChecklist()
         {
@@ -40,14 +95,14 @@ namespace TrelloDotNet.Tests
             };
             var addChecklist = await trelloClient.AddChecklistAsync("63d387ea95b02878fec0b6c0", new Checklist("My_Cool_list with items 3", checklistItems), true);
         }
-        
+
         [Fact]
         public async Task CreateChecklistFromSource()
         {
             var trelloClient = TestHelper.GetClient();
             var addChecklist = await trelloClient.AddChecklistAsync("63da9fdc0156601dbbe1563c", "63dbd5d5841dc8223cb67aeb");
         }
-        
+
         [Fact]
         public async Task UpdateCard()
         {
@@ -84,7 +139,7 @@ namespace TrelloDotNet.Tests
                 Console.WriteLine(e);
                 throw;
             }
-            
+
         }
     }
 }

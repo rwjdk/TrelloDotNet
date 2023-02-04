@@ -13,13 +13,15 @@ namespace TrelloDotNet.Model
         /// The Size of the Cover (Normal or full)
         /// </summary>
         [JsonPropertyName("size")]
-        public string Size { get; set; } //todo - enum?
+        [JsonInclude]
+        public string Size { get; private set; } //todo - enum?
 
         /// <summary>
         /// Color of the Cover (null if Background is used instead) - Options (pink, yellow, lime, blue, black, orange, red, purple, sky, green)
         /// </summary>
         [JsonPropertyName("color")]
-        public string Color { get; set; } //todo - enum
+        [JsonInclude]
+        public string Color { get; private set; } //todo - enum
 
         /// <summary>
         /// Background ImageId of the Cover

@@ -4,7 +4,7 @@ namespace TrelloDotNet.Tests;
 
 public static class TestHelper
 {
-    public static ITrelloClient GetClient()
+    public static TrelloClient GetClient()
     {
         try
         {
