@@ -45,6 +45,7 @@ namespace TrelloDotNet.Tests
         [Fact]
         public async Task AddBoard()
         {
+            await Task.CompletedTask;
             var trelloClient = TestHelper.GetClient();
             //var result = await trelloClient.AddBoardAsync(new Board("My Api board", "with some cool description"));
 
