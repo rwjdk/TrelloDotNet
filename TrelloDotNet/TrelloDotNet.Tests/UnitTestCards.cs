@@ -75,7 +75,6 @@ namespace TrelloDotNet.Tests
             //var allLists = await trelloClient.Boards.GetListsOnBoardAsync(Constants.SampleBoardId);
             //card.ListId = allLists.First(x=> x.Name == "Done").Id;
             card.ListId = null;
-            card.ChecklistIds = new List<string>();
             try
             {
                 await trelloClient.UpdateCardAsync(card);

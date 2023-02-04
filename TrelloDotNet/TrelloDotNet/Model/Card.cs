@@ -14,13 +14,15 @@ namespace TrelloDotNet.Model
         /// Id of the card (Long unique variant)
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        [JsonInclude]
+        public string Id { get; private set; }
 
         /// <summary>
         /// Id of the card in short form (only unique to the specific board)
         /// </summary>
         [JsonPropertyName("idShort")]
-        public int IdShort { get; set; }
+        [JsonInclude]
+        public int IdShort { get; private set; }
 
         /// <summary>
         /// Id of the board the card is on [UPDATEABLE]
@@ -89,7 +91,8 @@ namespace TrelloDotNet.Model
         /// When there was last activity on the card (aka update date) [stored UTC]
         /// </summary>
         [JsonPropertyName("dateLastActivity")]
-        public DateTimeOffset LastActivity { get; set; }
+        [JsonInclude]
+        public DateTimeOffset LastActivity { get; private set; }
 
         /// <summary>
         /// The Start-date of the work on the card (not to be confused with Created property as this can be null) [stored in UTC] [UPDATEABLE]
@@ -119,7 +122,8 @@ namespace TrelloDotNet.Model
         /// NB: This is not updateable. Instead update what labels should be included via the 'LabelIds' property in update scenarios
         /// </remarks>
         [JsonPropertyName("labels")]
-        public List<Label> Labels { get; set; }
+        [JsonInclude]
+        public List<Label> Labels { get; private set; }
 
         /// <summary>
         /// Ids of the Labels that are on the Card [UPDATEABLE]
@@ -135,7 +139,8 @@ namespace TrelloDotNet.Model
         /// NB: This is not Updateable here. Instead use TODO: Mention method to do so
         /// </remarks>
         [JsonPropertyName("idChecklists")]
-        public List<string> ChecklistIds { get; set; }
+        [JsonInclude]
+        public List<string> ChecklistIds { get; private set; }
 
         /// <summary>
         /// Ids of members that should be assigned to the card [UPDATEABLE]
@@ -147,21 +152,23 @@ namespace TrelloDotNet.Model
         //todo - find out what this is???
         /*
         [JsonPropertyName("idAttachmentCover")]
-        [QueryParameter]
-        public string AttachmentCover { get; set; } 
+        [UriParameter]
+        public string AttachmentCover { get; internal set; } 
         */
 
         /// <summary>
         /// Url you can use to get to the card
         /// </summary>
         [JsonPropertyName("url")]
-        public string Url { get; set; }
+        [JsonInclude]
+        public string Url { get; private set; }
 
         /// <summary>
         /// Short Url you can use to get to the card
         /// </summary>
         [JsonPropertyName("shortUrl")]
-        public string ShortUrl { get; set; }
+        [JsonInclude]
+        public string ShortUrl { get; private set; }
 
         /// <summary>
         /// Cover of the Card
