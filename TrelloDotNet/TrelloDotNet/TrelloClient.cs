@@ -16,7 +16,6 @@ namespace TrelloDotNet
     public class TrelloClient
     {
         //todo - Other
-        //- Create unit-test suite
         //- Common Scenario/Actions List (aka things that is not a one to one API call... Example: "Move Card to List with name" so user do not need to set everything up themselves)
 
         //todo: Management
