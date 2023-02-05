@@ -17,7 +17,7 @@
 		<Company>RWJDK</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReleaseNotes>- Bumped dependency version of System.Text.Json to 6.0.0 as 5.0.0 have know dependency vulnerabilities and 6.0.0 is also the LTS version
--</PackageReleaseNotes>
+- Fixed various bugs</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
