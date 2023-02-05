@@ -1,6 +1,7 @@
 ﻿using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model
 {
@@ -14,19 +15,29 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("size")]
         [JsonInclude]
-        public string Size { get; private set; } //todo - enum?
+        [JsonConverter(typeof(EnumViaJsonPropertyConverter<CardCoverSize>))]
+        public CardCoverSize Size { get; private set; }
 
         /// <summary>
         /// Color of the Cover (null if Background is used instead) - Options (pink, yellow, lime, blue, black, orange, red, purple, sky, green)
         /// </summary>
         [JsonPropertyName("color")]
         [JsonInclude]
-        public string Color { get; private set; } //todo - enum
+        [JsonConverter(typeof(EnumViaJsonPropertyConverter<CardCoverColor>))]
+        public CardCoverColor Color { get; private set; }
+
+        /// <summary>
+        /// Color of the Cover (null if Background is used instead) - Options (pink, yellow, lime, blue, black, orange, red, purple, sky, green)
+        /// </summary>
+        [JsonPropertyName("brightness")]
+        [JsonInclude]
+        [JsonConverter(typeof(EnumViaJsonPropertyConverter<CardCoverBrightness>))]
+        public CardCoverBrightness Brightness { get; private set; }
 
         /// <summary>
         /// Background ImageId of the Cover
         /// </summary>
         [JsonPropertyName("idUploadedBackground")]
-        public string BackgroundImageId { get; set; } //todo - is setting supported by the API (have not seen it)
+        public string BackgroundImageId { get; set; }
     }
 }

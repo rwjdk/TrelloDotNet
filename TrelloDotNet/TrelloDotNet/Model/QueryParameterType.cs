@@ -20,6 +20,10 @@
         /// <summary>
         /// DateTimeOffset
         /// </summary>
-        DateTimeOffset
+        DateTimeOffset,
+        /// <summary>
+        /// Decimal
+        /// </summary>
+        Decimal
     }
 }

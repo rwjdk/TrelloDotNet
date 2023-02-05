@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model
 {
@@ -21,14 +22,13 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("name")]
         [QueryParameter]
         public string Name { get; set; }
-
-        //todo - support Name-data field?
-
-        //todo - Add Support for position (research in order to understand)
-        /*
+        
+        /// <summary>
+        /// The position of the ChecklistItem on the Checklist
+        /// </summary>
         [JsonPropertyName("pos")]
-        public int Position { get; set; }
-        */
+        [QueryParameter]
+        public decimal Position { get; set; }
 
         /// <summary>
         /// Due Date of the Item [Stored in UTC]
@@ -36,9 +36,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("due")]
         [QueryParameter]
         public DateTimeOffset? Due { get; set; }
-
-        //todo - support dueReminder??
-
+        
         /// <summary>
         /// Member (user) assigned to the Item
         /// </summary>
@@ -57,7 +55,8 @@ namespace TrelloDotNet.Model
         /// State of the item (incomplete or complete)
         /// </summary>
         [JsonPropertyName("state")]
-        public string State { get; set; } //todo - enum?
+        [JsonConverter(typeof(EnumViaJsonPropertyConverter<ChecklistItemState>))]
+        public ChecklistItemState State { get; set; } 
 
         /// <summary>
         /// Constructor

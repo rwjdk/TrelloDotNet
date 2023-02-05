@@ -8,7 +8,7 @@ namespace TrelloDotNet.Model
     public class TrelloApiException : Exception
     {
         /// <summary>
-        /// What URL was sent to Trello (good to debug with in Postman and similar tools) //todo - will someone see this as a security risk? (setting is anything here or not of perhaps filter out token and api key)
+        /// What URL was sent to Trello (good to debug with in Postman and similar tools)
         /// </summary>
         public string DataSentToTrello { get; }
 

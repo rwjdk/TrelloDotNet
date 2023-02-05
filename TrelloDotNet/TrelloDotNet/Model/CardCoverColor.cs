@@ -5,8 +5,13 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// The color of the Cover
     /// </summary>
-    public enum CardCoverColor //todo - use
+    public enum CardCoverColor
     {
+        /// <summary>
+        /// None
+        /// </summary>
+        [JsonPropertyName("null")] 
+        None = 0,
         /// <summary>
         /// Pink
         /// </summary>

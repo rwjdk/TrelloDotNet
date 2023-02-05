@@ -45,6 +45,10 @@ namespace TrelloDotNet.Control
                 {
                     parameters.Add(new QueryParameter(jsonPropertyName.Name, (int?)rawValue));
                 }
+                else if (updateablePropertyType == typeof(decimal) || updateablePropertyType == typeof(decimal?))
+                {
+                    parameters.Add(new QueryParameter(jsonPropertyName.Name, (decimal?)rawValue));
+                }
                 else if (updateablePropertyType == typeof(DateTimeOffset) || updateablePropertyType == typeof(DateTimeOffset?))
                 {
                     parameters.Add(new QueryParameter(jsonPropertyName.Name, (DateTimeOffset?)rawValue));

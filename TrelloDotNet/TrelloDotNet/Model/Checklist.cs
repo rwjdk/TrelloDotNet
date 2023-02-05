@@ -29,13 +29,13 @@ namespace TrelloDotNet.Model
         [JsonInclude]
         public string CardId { get; private set; }
 
-        //todo - Add Support for position (research in order to understand)
-        /*
+        /// <summary>
+        /// The position of the Checklist on the card
+        /// </summary>
         [JsonPropertyName("pos")]
         [QueryParameter]
-        public int Position { get; set; }
-        */
-
+        public decimal Position { get; set; }
+        
         /// <summary>
         /// The items of the Checklist
         /// </summary>

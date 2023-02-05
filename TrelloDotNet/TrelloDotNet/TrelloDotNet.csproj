@@ -13,9 +13,11 @@
 		<PackageProjectUrl>https://github.com/rwjdk/TrelloDotNet</PackageProjectUrl>
 		<PackageIcon>trello.png</PackageIcon>
 		<PackageTags>trello;api;rest;trello api</PackageTags>
-		<Version>0.9.5-alpha</Version>
+		<Version>0.9.6-alpha</Version>
 		<Company>RWJDK</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReleaseNotes>- Bumped dependency version of System.Text.Json to 6.0.0 as 5.0.0 have know dependency vulnerabilities and 6.0.0 is also the LTS version
+-</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -26,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="System.Text.Json" Version="5.0.0" />
+	  <PackageReference Include="System.Text.Json" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

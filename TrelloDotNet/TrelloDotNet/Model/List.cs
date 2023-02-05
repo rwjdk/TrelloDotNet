@@ -37,11 +37,12 @@ namespace TrelloDotNet.Model
         [QueryParameter]
         public string BoardId { get; set; }
 
-        //todo - Add Support for position (research in order to understand)
-        /*
+        /// <summary>
+        /// The position of the List on the Board
+        /// </summary>
         [JsonPropertyName("pos")]
-        public int Position { get; set; }
-        */
+        [QueryParameter]
+        public decimal Position { get; set; }
 
         /// <summary>
         /// Indicate if the owner of the Token has subscribed (watching) the list

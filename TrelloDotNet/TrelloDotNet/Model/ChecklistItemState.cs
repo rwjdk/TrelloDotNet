@@ -3,9 +3,9 @@
 namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// The Size of the Card Cover
+    /// State of the Checklist-item (complete or incomplete)
     /// </summary>
-    public enum CardCoverSize
+    public enum ChecklistItemState
     {
         /// <summary>
         /// None
@@ -13,14 +13,14 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("null")]
         None = 0,
         /// <summary>
-        /// Normal (aka a colored bar at the top)
+        /// incomplete
         /// </summary>
-        [JsonPropertyName("normal")]
-        Normal,
+        [JsonPropertyName("incomplete")]
+        Incomplete,
         /// <summary>
-        /// Full (aka entire card is filled with the color)
+        /// complete
         /// </summary>
-        [JsonPropertyName("full")]
-        Full
+        [JsonPropertyName("complete")]
+        Complete
     }
 }

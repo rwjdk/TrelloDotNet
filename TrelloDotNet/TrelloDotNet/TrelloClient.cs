@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
@@ -17,7 +18,7 @@ namespace TrelloDotNet
         //todo - Other
         //- Create unit-test suite
         //- Common Scenario/Actions List (aka things that is not a one to one API call... Example: "Move Card to List with name" so user do not need to set everything up themselves)
-        
+
         //todo: Management
         //- Manage Custom Fields on board (CRUD)
         //- Manage Labels
@@ -32,9 +33,8 @@ namespace TrelloDotNet
         //- Remove Members from board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-idmember-delete)
         //- Update Membership on board (make admin as an example)
         //- WIP: Create Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-post)
-        
+
         //todo: Lists
-        //- Position of list (research)
         //- Delete List
         //- Archive All Cards on list (https://developer.atlassian.com/cloud/trello/rest/api-group-lists/#api-lists-id-archiveallcards-post)
         //- Move all Cards on list (https://developer.atlassian.com/cloud/trello/rest/api-group-lists/#api-lists-id-moveallcards-post)
@@ -55,17 +55,23 @@ namespace TrelloDotNet
         //- Lists
         //- Boards (WIP)
 
-        private static HttpClient _staticHttpClient = new HttpClient();
+        /// <summary>
+        /// Options for the client
+        /// </summary>
+        public TrelloClientOptions Options { get; }
+
         private readonly ApiRequestController _apiRequestController;
         private readonly QueryParametersBuilder _queryParametersBuilder;
+        private readonly HttpClient _staticHttpClient = new HttpClient();
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="apiKey">The Trello API Key you get on https://trello.com/power-ups/admin/</param>
         /// <param name="token">Your Authorization Token you generate get on https://trello.com/power-ups/admin/</param>
+        /// <param name="options">Various option for the client (if null default options will be used)</param>
         /// <param name="httpClient">Optional HTTP Client if you wish to specify it on your own (else an internal static HttpClient will be used for re-use)</param>
-        public TrelloClient(string apiKey, string token, HttpClient httpClient = null)
+        public TrelloClient(string apiKey, string token, TrelloClientOptions options = null, HttpClient httpClient = null)
         {
             if (string.IsNullOrWhiteSpace(apiKey))
             {
@@ -82,7 +88,8 @@ namespace TrelloDotNet
                 _staticHttpClient = httpClient;
             }
 
-            _apiRequestController = new ApiRequestController(_staticHttpClient, apiKey, token);
+            Options = options ?? new TrelloClientOptions();
+            _apiRequestController = new ApiRequestController(_staticHttpClient, apiKey, token, this);
             _queryParametersBuilder = new QueryParametersBuilder();
         }
 
@@ -195,6 +202,17 @@ namespace TrelloDotNet
             return await _apiRequestController.Post<List>($"{UrlPaths.Lists}", _queryParametersBuilder.GetViaQueryParameterAttributes(list));
         }
 
+        /// <summary>
+        /// Add a new Board
+        /// </summary>
+        /// <param name="board">The Board to Add</param>
+        /// <returns>The New Board</returns>
+        public async Task<Board> AddBoardAsync(Board board)
+        {
+            //todo - add creation options: https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-post
+            return await _apiRequestController.Post<Board>($"{UrlPaths.Boards}", _queryParametersBuilder.GetViaQueryParameterAttributes(board));
+        }
+
         #endregion
 
         #region Update
@@ -250,6 +268,26 @@ namespace TrelloDotNet
         public async Task<List> UpdateListAsync(List list)
         {
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{list.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(list));
+        }
+
+        #endregion
+
+        #region Delete
+        
+        /// <summary>
+        /// Delete a entire board (WARNING: THERE IS NO WAY GOING BACK!!!)
+        /// </summary>
+        /// <param name="boardId">The id of the Board to Delete</param>
+        public async Task DeleteBoard(string boardId)
+        {
+            if (Options.AllowDeleteOfBoards)
+            {
+                await _apiRequestController.Delete($"{UrlPaths.Boards}/{boardId}");
+            }
+            else
+            {
+                throw new SecurityException("Deletion of Boards are disabled via TrelloClient.Options.AllowDeleteOfBoards (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back: https://support.atlassian.com/trello/docs/deleting-a-board/)");
+            }
         }
 
         #endregion
@@ -400,7 +438,7 @@ namespace TrelloDotNet
         {
             return await _apiRequestController.Get<List<List>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Lists}");
         }
-        
+
         /// <summary>
         /// Get List of Labels defined for a board
         /// </summary>
@@ -430,15 +468,9 @@ namespace TrelloDotNet
             return await _apiRequestController.Get<List<Action>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Actions}");
         }
 
-        /// <summary>
-        /// Add a new Board
-        /// </summary>
-        /// <param name="board">The Board to Add</param>
-        /// <returns>The New Board</returns>
-        internal async Task<Board> AddBoardAsync(Board board) //todo - turn public once ready
+        internal static TrelloClientSingleBoard<TList, TLabel> CreateSingleBoard<TList, TLabel>(string apiKey, string token, BoardInfo<TList, TLabel> boardInfo) where TList : Enum where TLabel : Enum //todo - turn public once ready
         {
-            //todo - add creation options: https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-post
-            return await _apiRequestController.Post<Board>($"{UrlPaths.Boards}", _queryParametersBuilder.GetViaQueryParameterAttributes(board));
+            return new TrelloClientSingleBoard<TList, TLabel>(apiKey, token, boardInfo);
         }
 
         #endregion

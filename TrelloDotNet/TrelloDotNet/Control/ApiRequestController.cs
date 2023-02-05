@@ -15,13 +15,15 @@ namespace TrelloDotNet.Control
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
         private readonly string _token;
+        private readonly TrelloClient _client;
 
-        internal ApiRequestController(HttpClient httpClient, string apiKey, string token)
+        internal ApiRequestController(HttpClient httpClient, string apiKey, string token, TrelloClient client)
         {
             _httpClient = httpClient;
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _apiKey = apiKey;
             _token = token;
+            _client = client;
         }
 
         internal async Task<T> Get<T>(string suffix, params QueryParameter[] parameters)
@@ -38,7 +40,7 @@ namespace TrelloDotNet.Control
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new TrelloApiException(content, uri.AbsoluteUri); //Content is assumed Error Message
+                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
             }
             return content; //Content is assumed JSON
         }
@@ -57,7 +59,7 @@ namespace TrelloDotNet.Control
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new TrelloApiException(content, uri.AbsoluteUri); //Content is assumed Error Message
+                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
             }
             return content; //Content is assumed JSON
         }
@@ -76,9 +78,24 @@ namespace TrelloDotNet.Control
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new TrelloApiException(content, uri.AbsoluteUri); //Content is assumed Error Message
+                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
             }
             return content; //Content is assumed JSON
+        }
+
+        private string FormatExceptionUrlAccordingToClientOptions(string fullUrl)
+        {
+            switch (_client.Options.ApiCallExceptionOption)
+            {
+                case ApiCallExceptionOption.IncludeUrlAndCredentials:
+                    return fullUrl;
+                case ApiCallExceptionOption.IncludeUrlButMaskCredentials:
+                    return fullUrl.Replace($"?key={_apiKey}&token={_token}", $"?key=XXXXX&token=XXXXXXXXXX");
+                case ApiCallExceptionOption.DoNotIncludeTheUrl:
+                    return string.Empty.PadLeft(5,'X');
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private static StringBuilder GetParametersAsString(QueryParameter[] parameters)
@@ -92,9 +109,20 @@ namespace TrelloDotNet.Control
             return parameterString;
         }
 
-        private Uri BuildUri(string suffix, QueryParameter[] parameters)
+        private Uri BuildUri(string suffix, params QueryParameter[] parameters)
         {
             return new Uri($@"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
+        }
+
+        internal async Task Delete(string suffix)
+        {
+            var uri = BuildUri(suffix);
+            var response = await _httpClient.DeleteAsync(uri);
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
+            }
         }
     }
 }

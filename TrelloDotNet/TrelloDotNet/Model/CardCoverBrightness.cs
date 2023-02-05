@@ -8,6 +8,11 @@ namespace TrelloDotNet.Model
     public enum CardCoverBrightness
     {
         /// <summary>
+        /// None
+        /// </summary>
+        [JsonPropertyName("null")]
+        None = 0,
+        /// <summary>
         /// Dark
         /// </summary>
         [JsonPropertyName("dark")]

@@ -55,16 +55,13 @@ namespace TrelloDotNet.Model
         [QueryParameter]
         public bool Closed { get; set; }
 
-        //todo - Add Support for position (research in order to understand)
-        /*
         /// <summary>
         /// The position of the card in the current list
         /// </summary>
         [JsonPropertyName("pos")]
         [QueryParameter]
-        public int Position { get; set; }
-        */
-
+        public decimal Position { get; set; }
+        
         /// <summary>
         /// If the card is Watched (subscribed) by the owner of the Token used against the API
         /// </summary>
@@ -150,12 +147,13 @@ namespace TrelloDotNet.Model
         [QueryParameter]
         public List<string> MemberIds { get; set; }
 
-        //todo - find out what this is???
-        /*
+        /// <summary>
+        /// Id of the image attachment of this card to use as its cover
+        /// </summary>
         [JsonPropertyName("idAttachmentCover")]
-        [UriParameter]
-        public string AttachmentCover { get; internal set; } 
-        */
+        [QueryParameter(false)]
+        [JsonInclude]
+        public string AttachmentCover { get; private set; } 
 
         /// <summary>
         /// Url you can use to get to the card
