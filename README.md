@@ -51,7 +51,7 @@ var addedChecklist = await client.AddChecklistAsync("<cardId>", newChecklist);
 
 ![Trello Board](Images/trello_board.png)
 
-The Export looks like this
+The Export looks like this (search for id or use a tool to pretty-print the JSON to get a better view)
 
 ![JSON Example](Images/json_example.png)
 
