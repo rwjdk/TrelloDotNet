@@ -1,11 +1,14 @@
 # TrelloDotNet
 .NET Implementation of the Trello API
 
+## Version History
+- [Read the changelog here](Changelog.md)
+
 ## NuGet Options
 - Search for 'TrelloDotNet' in Package Manager
 - Install via .NET CLI
 ```shell
-> dotnet add package TrelloDotNet --version 1.0.0
+dotnet add package TrelloDotNet
 ```
 
 ## Handy Links from Trello
@@ -51,3 +54,6 @@ var addedChecklist = await client.AddChecklistAsync("<cardId>", newChecklist);
 The Export looks like this
 
 ![JSON Example](Images/json_example.png)
+
+## More info, bugs or questions?
+Visit the Github Page: https://github.com/rwjdk/TrelloDotNet
