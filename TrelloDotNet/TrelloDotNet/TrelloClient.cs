@@ -31,18 +31,9 @@ namespace TrelloDotNet
         //- Invite members by mail or userId to board [https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-put + https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-idmember-put]
         //- Remove Members from board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-idmember-delete)
         //- Update Membership on board (make admin as an example)
-        //- WIP: Create Board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-post)
-
-        //todo: Lists
-        //- Delete List
-        //- Archive All Cards on list (https://developer.atlassian.com/cloud/trello/rest/api-group-lists/#api-lists-id-archiveallcards-post)
-        //- Move all Cards on list (https://developer.atlassian.com/cloud/trello/rest/api-group-lists/#api-lists-id-moveallcards-post)
-        //- Update/Move List (https://developer.atlassian.com/cloud/trello/rest/api-group-lists/#api-lists-id-idboard-put)
 
         //todo: Cards
         //- Copy Card
-        //- Get members of a Card
-        //- Card: Delete a card
         //- Card: Attachments CRUD
         //- Card: Support Stickers
         //- Card: Comments CRUD
@@ -52,7 +43,7 @@ namespace TrelloDotNet
         //- Members
         //- Cards
         //- Lists
-        //- Boards (WIP)
+        //- WIP: Boards
 
         /// <summary>
         /// Options for the client
@@ -98,23 +89,23 @@ namespace TrelloDotNet
         /// Custom Post Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
         /// </summary>
         /// <typeparam name="T">Object to Return</typeparam>
-        /// <param name="suffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
         /// <param name="parameters">Additional Parameters</param>
         /// <returns>The Object specified to be returned</returns>
-        public async Task<T> PostAsync<T>(string suffix, params QueryParameter[] parameters)
+        public async Task<T> PostAsync<T>(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Post<T>(suffix, parameters);
+            return await _apiRequestController.Post<T>(urlSuffix, parameters);
         }
 
         /// <summary>
         /// Custom Post Method to be used on unexposed features of the API delivered back as JSON.
         /// </summary>
-        /// <param name="suffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
         /// <param name="parameters">Additional Parameters</param>
         /// <returns>JSON Representation of response</returns>
-        public async Task<string> PostAsync(string suffix, params QueryParameter[] parameters)
+        public async Task<string> PostAsync(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Post(suffix, parameters);
+            return await _apiRequestController.Post(urlSuffix, parameters);
         }
 
         /// <summary>
@@ -205,11 +196,16 @@ namespace TrelloDotNet
         /// Add a new Board
         /// </summary>
         /// <param name="board">The Board to Add</param>
+        /// <param name="options">Options for the new board</param>
         /// <returns>The New Board</returns>
-        public async Task<Board> AddBoardAsync(Board board)
+        public async Task<Board> AddBoardAsync(Board board, AddBoardOptions options = null)
         {
-            //todo - add creation options: https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-post
-            return await _apiRequestController.Post<Board>($"{UrlPaths.Boards}", _queryParametersBuilder.GetViaQueryParameterAttributes(board));
+            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(board).ToList();
+            if (options != null)
+            {
+                parameters.AddRange(_queryParametersBuilder.GetViaQueryParameterAttributes(options));
+            }
+            return await _apiRequestController.Post<Board>($"{UrlPaths.Boards}", parameters.ToArray());
         }
 
         #endregion
@@ -220,23 +216,83 @@ namespace TrelloDotNet
         /// Custom Put Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
         /// </summary>
         /// <typeparam name="T">Object to Return</typeparam>
-        /// <param name="suffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
         /// <param name="parameters">Additional Parameters</param>
         /// <returns>The Object specified to be returned</returns>
-        public async Task<T> PutAsync<T>(string suffix, params QueryParameter[] parameters)
+        public async Task<T> PutAsync<T>(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Put<T>(suffix, parameters);
+            return await _apiRequestController.Put<T>(urlSuffix, parameters);
         }
 
         /// <summary>
         /// Custom Put Method to be used on unexposed features of the API delivered back as JSON.
         /// </summary>
-        /// <param name="suffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
         /// <param name="parameters">Additional Parameters</param>
         /// <returns>JSON Representation of response</returns>
-        public async Task<string> PutAsync(string suffix, params QueryParameter[] parameters)
+        public async Task<string> PutAsync(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Put(suffix, parameters);
+            return await _apiRequestController.Put(urlSuffix, parameters);
+        }
+
+        /// <summary>
+        /// Archive a List
+        /// </summary>
+        /// <param name="listId">The id of list that should be Archived</param>
+        /// <returns>The Archived List</returns>
+        public async Task<Card> ArchiveListAsync(string listId)
+        {
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Lists}/{listId}", new QueryParameter("closed", true));
+        }
+        
+        /// <summary>
+        /// Reopen a List (Send back to board)
+        /// </summary>
+        /// <param name="listId">The id of list that should be Reopened</param>
+        /// <returns>The Archived List</returns>
+        public async Task<Card> ReOpenListAsync(string listId)
+        {
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Lists}/{listId}", new QueryParameter("closed", false));
+        }
+
+        /// <summary>
+        /// Archive (Close) a Card
+        /// </summary>
+        /// <param name="cardId">The id of card that should be archived</param>
+        /// <returns>The Archived Card</returns>
+        public async Task<Card> ArchiveCardAsync(string cardId)
+        {
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter("closed", true));
+        }
+
+        /// <summary>
+        /// ReOpen (Send back to board) a Card
+        /// </summary>
+        /// <param name="cardId">The id of card that should be reopened</param>
+        /// <returns>The ReOpened Card</returns>
+        public async Task<Card> ReOpenCardAsync(string cardId)
+        {
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter("closed", false));
+        }
+
+        /// <summary>
+        /// Close (Archive) a Board
+        /// </summary>
+        /// <param name="boardId">The id of board that should be closed</param>
+        /// <returns>The Closed Board</returns>
+        public async Task<Card> CloseBoardAsync(string boardId)
+        {
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Boards}/{boardId}", new QueryParameter("closed", true));
+        }
+
+        /// <summary>
+        /// ReOpen a Board
+        /// </summary>
+        /// <param name="boardId">The id of board that should be reopened</param>
+        /// <returns>The ReOpened Board</returns>
+        public async Task<Card> ReOpenBoardAsync(string boardId)
+        {
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Boards}/{boardId}", new QueryParameter("closed", false));
         }
 
         /// <summary>
@@ -269,13 +325,50 @@ namespace TrelloDotNet
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{list.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(list));
         }
 
+        /// <summary>
+        /// Move an entire list to another board
+        /// </summary>
+        /// <param name="listId">The id of the List to move</param>
+        /// <param name="newBoardId">The id of the board the list should be moved to [It need to be the long version of the boardId]</param>
+        /// <returns>The Updated List</returns>
+        public async Task<List> MoveListToBoardAsync(string listId, string newBoardId)
+        {
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", new QueryParameter("value", newBoardId));
+        }
+
+        /// <summary>
+        /// Archive all cards on in a List
+        /// </summary>
+        /// <param name="listId">The id of the List that should have its cards archived</param>
+        public async Task ArchiveAllCardsInList(string listId)
+        {
+            await _apiRequestController.Post<List>($"{UrlPaths.Lists}/{listId}/archiveAllCards");
+        }
+
+        /// <summary>
+        /// Move all cards of a list to another list
+        /// </summary>
+        /// <param name="currentListId">The id of the List that should have its cards moved</param>
+        /// <param name="newListId">The id of the new List that should receive the cards</param>
+        public async Task MoveAllCardsInList(string currentListId, string newListId)
+        {
+            var newList = await GetListAsync(newListId); //Get the new list's BoardId so the user do not need to provide it.
+            await _apiRequestController.Post($"{UrlPaths.Lists}/{currentListId}/moveAllCards",
+                new QueryParameter("idBoard", newList.BoardId),
+                new QueryParameter("idList", newListId)
+                );
+        }
+
         #endregion
 
         #region Delete
-        
+
         /// <summary>
-        /// Delete a entire board (WARNING: THERE IS NO WAY GOING BACK!!!)
+        /// Delete a entire board (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseBoard() for non-permanency
         /// </summary>
+        /// <remarks>
+        /// As this is a major thing, there is a secondary confirm needed by setting: Options.AllowDeleteOfBoards = true
+        /// </remarks>
         /// <param name="boardId">The id of the Board to Delete</param>
         public async Task DeleteBoard(string boardId)
         {
@@ -285,8 +378,26 @@ namespace TrelloDotNet
             }
             else
             {
-                throw new SecurityException("Deletion of Boards are disabled via TrelloClient.Options.AllowDeleteOfBoards (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back: https://support.atlassian.com/trello/docs/deleting-a-board/)");
+                throw new SecurityException("Deletion of Boards are disabled via Options.AllowDeleteOfBoards (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back: https://support.atlassian.com/trello/docs/deleting-a-board/)");
             }
+        }
+
+        /// <summary>
+        /// Delete a Card (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseCard() for non-permanency
+        /// </summary>
+        /// <param name="cardId">The id of the Board to Delete</param>
+        public async Task DeleteCard(string cardId)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}");
+        }
+
+        /// <summary>
+        /// Custom Delete Method to be used on unexposed features of the API.
+        /// </summary>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        public async Task DeleteAsync(string urlSuffix)
+        {
+            await _apiRequestController.Delete(urlSuffix);
         }
 
         #endregion
@@ -297,43 +408,43 @@ namespace TrelloDotNet
         /// Custom Get Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
         /// </summary>
         /// <typeparam name="T">Object to Return</typeparam>
-        /// <param name="suffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
         /// <param name="parameters">Additional Parameters</param>
         /// <returns>The Object specified to be returned</returns>
-        public async Task<T> GetAsync<T>(string suffix, params QueryParameter[] parameters)
+        public async Task<T> GetAsync<T>(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Get<T>(suffix, parameters);
+            return await _apiRequestController.Get<T>(urlSuffix, parameters);
         }
 
         /// <summary>
         /// Custom Get Method to be used on unexposed features of the API delivered back as JSON.
         /// </summary>
-        /// <param name="suffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
         /// <param name="parameters">Additional Parameters</param>
         /// <returns>JSON Representation of response</returns>
-        public async Task<string> GetAsync(string suffix, params QueryParameter[] parameters)
+        public async Task<string> GetAsync(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Get(suffix, parameters);
+            return await _apiRequestController.Get(urlSuffix, parameters);
         }
 
         /// <summary>
         /// Get a Board by its Id
         /// </summary>
-        /// <param name="id">Id of the Board (in its long or short version)</param>
+        /// <param name="boardId">Id of the Board (in its long or short version)</param>
         /// <returns>The Board</returns>
-        public async Task<Board> GetBoardAsync(string id)
+        public async Task<Board> GetBoardAsync(string boardId)
         {
-            return await _apiRequestController.Get<Board>($"{UrlPaths.Boards}/{id}");
+            return await _apiRequestController.Get<Board>($"{UrlPaths.Boards}/{boardId}");
         }
 
         /// <summary>
         /// Get Card by its Id
         /// </summary>
-        /// <param name="id">Id of the Card</param>
+        /// <param name="cardId">Id of the Card</param>
         /// <returns>The Card</returns>
-        public async Task<Card> GetCardAsync(string id)
+        public async Task<Card> GetCardAsync(string cardId)
         {
-            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{id}");
+            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}");
         }
 
         /// <summary>
@@ -351,7 +462,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="listId">Id of the List</param>
         /// <returns>List of Cards</returns>
-        public async Task<List<Card>> GetCardsOnListAsync(string listId)
+        public async Task<List<Card>> GetCardsInListAsync(string listId)
         {
             return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/");
         }
@@ -416,6 +527,16 @@ namespace TrelloDotNet
         public async Task<List<Member>> GetMembersOfBoardAsync(string boardId)
         {
             return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/");
+        }
+
+        /// <summary>
+        /// Get the Members (users) of a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <returns>List of Members</returns>
+        public async Task<List<Member>> GetMembersOfCardAsync(string cardId)
+        {
+            return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Members}/");
         }
 
         /// <summary>

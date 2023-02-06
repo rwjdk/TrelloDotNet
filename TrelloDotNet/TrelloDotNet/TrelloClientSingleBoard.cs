@@ -19,7 +19,7 @@ namespace TrelloDotNet
 
         public async Task<List<Card>> GetCardsOnListAsync(TList list)
         {
-            return await _trelloClient.GetCardsOnListAsync(_boardInfo.GetListId(list));
+            return await _trelloClient.GetCardsInListAsync(_boardInfo.GetListId(list));
         }
     }
 }

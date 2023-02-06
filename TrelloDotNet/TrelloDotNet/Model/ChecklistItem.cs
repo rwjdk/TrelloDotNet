@@ -31,14 +31,14 @@ namespace TrelloDotNet.Model
         public decimal Position { get; set; }
 
         /// <summary>
-        /// Due Date of the Item [Stored in UTC]
+        /// Due Date of the Item [Stored in UTC] [Warning: Not available in free version of Trello]
         /// </summary>
         [JsonPropertyName("due")]
         [QueryParameter]
         public DateTimeOffset? Due { get; set; }
         
         /// <summary>
-        /// Member (user) assigned to the Item
+        /// Member (user) assigned to the Item [Warning: Not available in free version of Trello]
         /// </summary>
         [JsonPropertyName("idMember")]
         [QueryParameter]
