@@ -1,8 +1,8 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## Unreleased (Not released yet to nuget)
-- Fixed: Trello icon on now have transparent edges
+## Unreleased (Not released yet to NuGet)
+- Fixed: Trello icon now has transparent edges
 - Changed: More detailed README.md
 
 <hr>
