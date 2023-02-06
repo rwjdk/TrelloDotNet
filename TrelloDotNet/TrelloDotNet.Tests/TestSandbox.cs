@@ -104,8 +104,6 @@ namespace TrelloDotNet.Tests
             var client = TestHelper.GetClient();
             var boardAsync = await client.GetBoardAsync("SCPjg8ON");
             await client.MoveAllCardsInList("63de3eb58d0d357abc562b02", "63dbef756685986201365c13");
-
-            client.GetBoardAsync()
         }
     }
 }
