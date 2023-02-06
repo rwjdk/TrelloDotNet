@@ -246,7 +246,7 @@ namespace TrelloDotNet
         }
         
         /// <summary>
-        /// Reopen a List (Send back to board)
+        /// Reopen a List (Send back to the board)
         /// </summary>
         /// <param name="listId">The id of list that should be Reopened</param>
         /// <returns>The Archived List</returns>
