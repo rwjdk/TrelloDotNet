@@ -16,17 +16,7 @@
 		<Version>1.0.0</Version>
 		<Company>RWJDK</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageReleaseNotes>1.0.0
-- First official version :-)
-
-0.9.6 Alpha
-- Bumped dependency version of System.Text.Json to 6.0.0 as 5.0.0 have know dependency vulnerabilities and 6.0.0 is also the LTS version
-- Fixed various bugs
-
-***
-
-0.9.1 - 0.9.5 Alpha
-- Initial releases with various bugs and breaking changes</PackageReleaseNotes>
+		<PackageReleaseNotes>Please see: https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
