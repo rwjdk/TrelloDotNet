@@ -11,6 +11,11 @@
 dotnet add package TrelloDotNet
 ```
 
+##Video Guides
+- [How to get your API-Key and Token](https://youtu.be/ndLSAD3StH8)
+- [How to Find ids on a Trello Board](https://youtu.be/aWYEg1wPVYY)
+- [How to use the TrelloDotNet NuGet Package](https://youtu.be/tf47BCkieus)
+
 ## Handy Links from Trello
 - Link to the page where you get your API Key and Token: https://trello.com/power-ups/admin/
 - Link to Rest Api documentation from Trello: https://developer.atlassian.com/cloud/trello/rest
