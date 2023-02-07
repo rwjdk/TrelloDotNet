@@ -5,7 +5,7 @@
 - [Read the changelog here](Changelog.md)
 
 ## NuGet Options
-- Search for 'TrelloDotNet' in Package Manager
+- Search for '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' in Package Manager
 - Install via .NET CLI
 ```shell
 dotnet add package TrelloDotNet
