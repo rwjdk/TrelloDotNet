@@ -2,7 +2,7 @@
 .NET Implementation of the Trello API
 
 ## Version History
-- [Read the changelog here](Changelog.md)
+- [Read the changelog here](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
 
 ## NuGet Options
 - Search for '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' in Package Manager
@@ -56,11 +56,11 @@ var addedChecklist = await client.AddChecklistAsync("<cardId>", newChecklist);
 ## On the subject of getting Ids from Trello
 - The easiest way to get Ids in Trello is to use the API itself or use the share buttons in the project
 
-![Trello Board](Images/trello_board.png)
+![Trello Board](https://github.com/rwjdk/TrelloDotNet/blob/main/Images/trello_board.png)
 
 The Export looks like this (search for id or use a tool to pretty-print the JSON to get a better view)
 
-![JSON Example](Images/json_example.png)
+![JSON Example](https://github.com/rwjdk/TrelloDotNet/blob/main/Images/json_example.png)
 
 ## More info, bugs, or questions?
 Visit the Github Page: https://github.com/rwjdk/TrelloDotNet
