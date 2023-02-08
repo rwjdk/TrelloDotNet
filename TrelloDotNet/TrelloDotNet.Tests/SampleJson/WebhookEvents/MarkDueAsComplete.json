@@ -1,0 +1,161 @@
+{
+  "model": {
+    "id": "63d128787441d05619f44dbe",
+    "name": "New Name2",
+    "desc": "New description",
+    "descData": { "emoji": {} },
+    "closed": false,
+    "idOrganization": "63d123a6472de44f1ea2801c",
+    "idEnterprise": null,
+    "pinned": false,
+    "url": "https://trello.com/b/SCPjg8ON/new-name2",
+    "shortUrl": "https://trello.com/b/SCPjg8ON",
+    "prefs": {
+      "permissionLevel": "org",
+      "hideVotes": false,
+      "voting": "disabled",
+      "comments": "members",
+      "invitations": "members",
+      "selfJoin": true,
+      "cardCovers": true,
+      "isTemplate": false,
+      "cardAging": "regular",
+      "calendarFeedEnabled": false,
+      "hiddenPluginBoardButtons": [],
+      "switcherViews": [
+        {
+          "viewType": "Board",
+          "enabled": true,
+          "_id": "63d128787441d05619f44dbf"
+        },
+        {
+          "viewType": "Table",
+          "enabled": true,
+          "_id": "63d128787441d05619f44dc0"
+        },
+        {
+          "viewType": "Calendar",
+          "enabled": false,
+          "_id": "63d128787441d05619f44dc1"
+        },
+        {
+          "viewType": "Dashboard",
+          "enabled": false,
+          "_id": "63d128787441d05619f44dc2"
+        },
+        {
+          "viewType": "Timeline",
+          "enabled": false,
+          "_id": "63d128787441d05619f44dc3"
+        },
+        {
+          "viewType": "Map",
+          "enabled": false,
+          "_id": "63d128787441d05619f44dc4"
+        }
+      ],
+      "background": "blue",
+      "backgroundColor": "#0079BF",
+      "backgroundImage": null,
+      "backgroundImageScaled": null,
+      "backgroundTile": false,
+      "backgroundBrightness": "dark",
+      "backgroundBottomColor": "#0079BF",
+      "backgroundTopColor": "#0079BF",
+      "canBePublic": false,
+      "canBeEnterprise": false,
+      "canBeOrg": false,
+      "canBePrivate": false,
+      "canInvite": true
+    },
+    "labelNames": {
+      "green": "API",
+      "yellow": "",
+      "orange": "",
+      "red": "",
+      "purple": "",
+      "blue": "",
+      "sky": "",
+      "lime": "",
+      "pink": "",
+      "black": "",
+      "green_dark": "",
+      "yellow_dark": "",
+      "orange_dark": "",
+      "red_dark": "Blocked",
+      "purple_dark": "",
+      "blue_dark": "",
+      "sky_dark": "",
+      "lime_dark": "",
+      "pink_dark": "",
+      "black_dark": "",
+      "green_light": "",
+      "yellow_light": "Customer",
+      "orange_light": "",
+      "red_light": "",
+      "purple_light": "",
+      "blue_light": "",
+      "sky_light": "",
+      "lime_light": "",
+      "pink_light": "",
+      "black_light": ""
+    }
+  },
+  "action": {
+    "id": "63e39d0cb61bca0d34df3996",
+    "idMemberCreator": "63d1239e857afaa8b003c633",
+    "data": {
+      "card": {
+        "dueComplete": true,
+        "id": "63daa5bdef6d121000749728",
+        "name": "Now",
+        "idShort": 5,
+        "shortLink": "cyiQF0af"
+      },
+      "old": { "dueComplete": false },
+      "board": {
+        "id": "63d128787441d05619f44dbe",
+        "name": "New Name2",
+        "shortLink": "SCPjg8ON"
+      },
+      "list": {
+        "id": "63d128787441d05619f44dc5",
+        "name": "To Do"
+      }
+    },
+    "appCreator": null,
+    "type": "updateCard",
+    "date": "2023-02-08T13:01:00.546Z",
+    "limits": null,
+    "display": {
+      "translationKey": "action_marked_the_due_date_complete",
+      "entities": {
+        "card": {
+          "type": "card",
+          "dueComplete": true,
+          "id": "63daa5bdef6d121000749728",
+          "shortLink": "cyiQF0af",
+          "text": "Now"
+        },
+        "memberCreator": {
+          "type": "member",
+          "id": "63d1239e857afaa8b003c633",
+          "username": "rasmus58348007",
+          "text": "Rasmus"
+        }
+      }
+    },
+    "memberCreator": {
+      "id": "63d1239e857afaa8b003c633",
+      "activityBlocked": false,
+      "avatarHash": "f07a53f609386b8f57a767bceb8a8a26",
+      "avatarUrl": "https://trello-members.s3.amazonaws.com/63d1239e857afaa8b003c633/f07a53f609386b8f57a767bceb8a8a26",
+      "fullName": "Rasmus",
+      "idMemberReferrer": null,
+      "initials": "R",
+      "nonPublic": {},
+      "nonPublicAvailable": true,
+      "username": "rasmus58348007"
+    }
+  }
+}

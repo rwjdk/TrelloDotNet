@@ -15,6 +15,8 @@ dotnet add package TrelloDotNet
 - [How to get your API-Key and Token](https://youtu.be/ndLSAD3StH8)
 - [How to Find ids on a Trello Board](https://youtu.be/aWYEg1wPVYY)
 - [How to use the TrelloDotNet NuGet Package](https://youtu.be/tf47BCkieus)
+- [How to work with Webhooks (Part 1: Setup)](https://youtu.be/A3_B-SLBm_0)
+- [How to work with Webhooks (Part 2: Receiving Events)](https://youtu.be/GsGKDDvuq40)
 
 ## Handy Links from Trello
 - Link to the page where you get your API Key and Token: https://trello.com/power-ups/admin/

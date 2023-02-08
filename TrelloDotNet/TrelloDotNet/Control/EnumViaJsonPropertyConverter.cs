@@ -8,7 +8,7 @@ namespace TrelloDotNet.Control
     /// Enum vis JSON Property Converter
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class EnumViaJsonPropertyConverter<T> : JsonConverter<T> where T: Enum
+    internal class EnumViaJsonPropertyConverter<T> : JsonConverter<T> where T: Enum
     {
         /// <inheritdoc />
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

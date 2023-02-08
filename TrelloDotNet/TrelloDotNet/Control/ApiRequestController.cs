@@ -26,6 +26,8 @@ namespace TrelloDotNet.Control
             _client = client;
         }
 
+        public string Token => _token;
+
         internal async Task<T> Get<T>(string suffix, params QueryParameter[] parameters)
         {
             string json = await Get(suffix, parameters);

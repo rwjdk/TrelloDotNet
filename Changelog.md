@@ -1,9 +1,12 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## Unreleased (Not released yet to NuGet)
-- Fixed: Trello icon now has transparent edges
+## 1.1.0 (8th of Feb. 2023)
+- Added: Webhook System (See video how to get going [here](https://youtu.be/A3_B-SLBm_0))
+- Added: Various 'Ease of use methods' to do common actions (Example add or remove Members/Labels from Cards)
+- Fixed: Trello icon edges where white
 - Changed: More detailed README.md
+- Fixed: Made class 'EnumViaJsonPropertyConverter' internal (incorrectly public) [COMPILE TIME BREAKING CHANGE]
 
 <hr>
 

@@ -37,5 +37,15 @@
         /// actions
         /// </summary>
         public const string Actions = "actions";
+
+        /// <summary>
+        /// webhooks
+        /// </summary>
+        public const string Webhooks = "webhooks";
+
+        /// <summary>
+        /// Tokens
+        /// </summary>
+        public const string Tokens = "tokens";
     }
 }

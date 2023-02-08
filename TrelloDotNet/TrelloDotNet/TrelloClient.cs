@@ -6,7 +6,7 @@ using System.Security;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
-using Action = TrelloDotNet.Model.Action;
+using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet
 {
@@ -22,7 +22,6 @@ namespace TrelloDotNet
         //- Manage Custom Fields on board (CRUD)
         //- Manage Labels
         //- Batch-system (why???)
-        //- Web-hooks (+ reaction to it)
         //- Workspace management
         //- Organizations (how to gain access?)
 
@@ -208,6 +207,16 @@ namespace TrelloDotNet
             return await _apiRequestController.Post<Board>($"{UrlPaths.Boards}", parameters.ToArray());
         }
 
+        /// <summary>
+        /// Add a new Webhook
+        /// </summary>
+        /// <param name="webhook">The Webhook to add</param>
+        /// <returns>The Webhook</returns>
+        public async Task<Webhook> AddWebhookAsync(Webhook webhook)
+        {
+            return await _apiRequestController.Post<Webhook>($"{UrlPaths.Webhooks}", _queryParametersBuilder.GetViaQueryParameterAttributes(webhook));
+        }
+
         #endregion
 
         #region Update
@@ -244,7 +253,7 @@ namespace TrelloDotNet
         {
             return await _apiRequestController.Put<Card>($"{UrlPaths.Lists}/{listId}", new QueryParameter("closed", true));
         }
-        
+
         /// <summary>
         /// Reopen a List (Send back to the board)
         /// </summary>
@@ -298,31 +307,41 @@ namespace TrelloDotNet
         /// <summary>
         /// Update a Card
         /// </summary>
-        /// <param name="card">The card with the changes</param>
+        /// <param name="cardWithChanges">The card with the changes</param>
         /// <returns>The Updated Card</returns>
-        public async Task<Card> UpdateCardAsync(Card card)
+        public async Task<Card> UpdateCardAsync(Card cardWithChanges)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{card.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(card));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(cardWithChanges));
         }
 
         /// <summary>
         /// Update a Board
         /// </summary>
-        /// <param name="board">The board with the changes</param>
+        /// <param name="boardWithChanges">The board with the changes</param>
         /// <returns>The Updated Card</returns>
-        public async Task<Board> UpdateBoardAsync(Board board)
+        public async Task<Board> UpdateBoardAsync(Board boardWithChanges)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{board.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(board));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardWithChanges.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(boardWithChanges));
         }
 
         /// <summary>
         /// Update a List
         /// </summary>
-        /// <param name="list">The List with the changes</param>
+        /// <param name="listWithChanges">The List with the changes</param>
         /// <returns>The Updated List</returns>
-        public async Task<List> UpdateListAsync(List list)
+        public async Task<List> UpdateListAsync(List listWithChanges)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{list.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(list));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listWithChanges.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges));
+        }
+
+        /// <summary>
+        /// Update a webhook
+        /// </summary>
+        /// <param name="webhookWithChanges">The Webhook with changes</param>
+        /// <returns>The Updated Webhook</returns>
+        public async Task<Webhook> UpdateWebhookAsync(Webhook webhookWithChanges)
+        {
+            return await _apiRequestController.Put<Webhook>($"{UrlPaths.Webhooks}/{webhookWithChanges.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(webhookWithChanges));
         }
 
         /// <summary>
@@ -385,10 +404,19 @@ namespace TrelloDotNet
         /// <summary>
         /// Delete a Card (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseCard() for non-permanency
         /// </summary>
-        /// <param name="cardId">The id of the Board to Delete</param>
-        public async Task DeleteCard(string cardId)
+        /// <param name="webhookId">The id of the Board to Delete</param>
+        public async Task DeleteCard(string webhookId)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}");
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{webhookId}");
+        }
+
+        /// <summary>
+        /// Delete a Webhook (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// </summary>
+        /// <param name="webhookId">The id of the Webhook to Delete</param>
+        public async Task DeleteWebhook(string webhookId)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Webhooks}/{webhookId}");
         }
 
         /// <summary>
@@ -579,18 +607,179 @@ namespace TrelloDotNet
             return await _apiRequestController.Get<Member>($"{UrlPaths.Members}/{memberId}");
         }
 
-        #endregion
-
-        #region WIP
-
-        internal async Task<List<Action>> GetActionsOnBoard(string boardId) //todo - turn public once ready
+        /// <summary>
+        /// Get Webhooks linked with the current Token used to authenticate with the API
+        /// </summary>
+        /// <returns>List of Webhooks</returns>
+        public async Task<List<Webhook>> GetWebhooksForCurrentToken()
         {
-            return await _apiRequestController.Get<List<Action>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Actions}");
+            return await _apiRequestController.Get<List<Webhook>>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/webhooks");
         }
 
-        internal static TrelloClientSingleBoard<TList, TLabel> CreateSingleBoard<TList, TLabel>(string apiKey, string token, BoardInfo<TList, TLabel> boardInfo) where TList : Enum where TLabel : Enum //todo - turn public once ready
+        /// <summary>
+        /// Get a Webhook from its Id
+        /// </summary>
+        /// <param name="webhookId">Id of the Webhook</param>
+        /// <returns>The Webhook</returns>
+        public async Task<Webhook> GetWebhookAsync(string webhookId)
         {
-            return new TrelloClientSingleBoard<TList, TLabel>(apiKey, token, boardInfo);
+            return await _apiRequestController.Get<Webhook>($"{UrlPaths.Webhooks}/{webhookId}");
+        }
+
+        #endregion
+
+        #region Ease of Use Methods
+
+        /// <summary>
+        /// Add a Member to a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="memberIdsToAdd">One or more Ids of Members to add</param>
+        public async Task<Card> AddMembersToCardAsync(string cardId, params string[] memberIdsToAdd)
+        {
+            var card = await GetCardAsync(cardId);
+            var missing = memberIdsToAdd.Where(x => !card.MemberIds.Contains(x)).ToList();
+
+            if (missing.Count == 0)
+            {
+                return card; //Everyone already There
+            }
+
+            //Need update
+            card.MemberIds.AddRange(missing);
+            return await UpdateCardAsync(card);
+        }
+
+        /// <summary>
+        /// Remove a Member of a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="memberIdsToRemove">One or more Ids of Members to remove</param>
+        public async Task<Card> RemoveMembersFromCardAsync(string cardId, params string[] memberIdsToRemove)
+        {
+            var card = await GetCardAsync(cardId);
+            var toRemove = memberIdsToRemove.Where(x => card.MemberIds.Contains(x)).ToList();
+            if (toRemove.Count == 0)
+            {
+                return card; //Everyone not there
+            }
+
+            //Need update
+            card.MemberIds = card.MemberIds.Except(toRemove).ToList();
+            return await UpdateCardAsync(card);
+        }
+        
+        /// <summary>
+        /// Remove all Members of a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        public async Task<Card> RemoveAllMembersFromCardAsync(string cardId)
+        {
+            var card = await GetCardAsync(cardId);
+            if (card.MemberIds.Any())
+            {
+                //Need update
+                card.MemberIds = new List<string>();
+                return await UpdateCardAsync(card);
+            }
+            return card;
+        }
+
+        /// <summary>
+        /// Add a Label to a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="labelIdsToAdd">One or more Ids of Labels to add</param>
+        public async Task<Card> AddLabelsToCardAsync(string cardId, params string[] labelIdsToAdd)
+        {
+            var card = await GetCardAsync(cardId);
+            var missing = labelIdsToAdd.Where(x => !card.LabelIds.Contains(x)).ToList();
+
+            if (missing.Count == 0)
+            {
+                return card; //All already There
+            }
+
+            //Need update
+            card.LabelIds.AddRange(missing);
+            return await UpdateCardAsync(card);
+        }
+
+        /// <summary>
+        /// Remove a Label of a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="labelIdsToRemove">One or more Ids of Labels to remove</param>
+        public async Task<Card> RemoveLabelsFromCardAsync(string cardId, params string[] labelIdsToRemove)
+        {
+            var card = await GetCardAsync(cardId);
+            var toRemove = labelIdsToRemove.Where(memberId => card.LabelIds.Contains(memberId)).ToList();
+            if (toRemove.Count == 0)
+            {
+                return card; //All not there
+            }
+
+            //Need update
+            card.MemberIds = card.LabelIds.Except(toRemove).ToList();
+            return await UpdateCardAsync(card);
+        }
+
+        /// <summary>
+        /// Remove all Labels of a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        public async Task<Card> RemoveAllLabelsFromCardAsync(string cardId)
+        {
+            var card = await GetCardAsync(cardId);
+            if (card.LabelIds.Any())
+            {
+                //Need update
+                card.LabelIds = new List<string>();
+                return await UpdateCardAsync(card);
+            }
+            return card;
+        }
+
+        /// <summary>
+        /// Set Due Date on a card a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="dueDate">The Due Date (In UTC Time)</param>
+        /// <param name="dueComplete">If Due is complete</param>
+        public async Task<Card> SetDueDateOnCardAsync(string cardId, DateTimeOffset dueDate, bool dueComplete = false)
+        {
+            var card = await GetCardAsync(cardId);
+            card.Due = dueDate;
+            card.DueComplete = dueComplete;
+            return await UpdateCardAsync(card);
+        }
+        
+        /// <summary>
+        /// Set Due Date on a card a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="startDate">The Start Date (In UTC Time)</param>
+        public async Task<Card> SetStartDateOnCardAsync(string cardId, DateTimeOffset startDate)
+        {
+            var card = await GetCardAsync(cardId);
+            card.Start = startDate;
+            return await UpdateCardAsync(card);
+        }
+
+        /// <summary>
+        /// Set Start and Due Date on a card a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="startDate">The Start Date (In UTC Time)</param>
+        /// <param name="dueDate">The Due Date (In UTC Time)</param>
+        /// <param name="dueComplete">If Due is complete</param> 
+        public async Task<Card> SetStartDateOnCardAsync(string cardId, DateTimeOffset startDate, DateTimeOffset dueDate, bool dueComplete = false)
+        {
+            var card = await GetCardAsync(cardId);
+            card.Start = startDate;
+            card.Due = dueDate;
+            card.DueComplete = dueComplete;
+            return await UpdateCardAsync(card);
         }
 
         #endregion
