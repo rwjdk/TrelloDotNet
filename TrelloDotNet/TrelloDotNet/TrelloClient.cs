@@ -773,7 +773,7 @@ namespace TrelloDotNet
         /// <param name="startDate">The Start Date (In UTC Time)</param>
         /// <param name="dueDate">The Due Date (In UTC Time)</param>
         /// <param name="dueComplete">If Due is complete</param> 
-        public async Task<Card> SetStartDateOnCardAsync(string cardId, DateTimeOffset startDate, DateTimeOffset dueDate, bool dueComplete = false)
+        public async Task<Card> SetStartDateAndDueDateOnCardAsync(string cardId, DateTimeOffset startDate, DateTimeOffset dueDate, bool dueComplete = false)
         {
             var card = await GetCardAsync(cardId);
             card.Start = startDate;

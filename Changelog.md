@@ -1,6 +1,9 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## Unreleased
+- Fixed: Method 'SetStartDateOnCardAsync' was renamed to 'SetStartDateAndDueDateOnCardAsync' [COMPILE TIME BREAKING CHANGE]
+
 ## 1.1.0 (8th of Feb. 2023)
 - Added: Webhook System (See video how to get going [here](https://youtu.be/A3_B-SLBm_0))
 - Added: Various 'Ease of use methods' to do common actions (Example add or remove Members/Labels from Cards)
