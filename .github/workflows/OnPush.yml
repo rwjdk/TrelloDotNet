@@ -17,7 +17,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: SetUserSecrets        
-      run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOAPIKEY }} --project TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
+      run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOAPIKEY }} --project ./../TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
     - name: Restore dependencies
       run: dotnet restore TrelloDotNet.sln
       working-directory: TrelloDotNet
