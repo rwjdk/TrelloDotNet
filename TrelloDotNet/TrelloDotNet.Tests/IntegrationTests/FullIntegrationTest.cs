@@ -11,7 +11,7 @@ public class FullIntegrationTest
     [Fact]
     public async Task CreateBoardAndDoNormalActions()
     {
-        var client = TestHelper.GetClient();
+        var client = new TestHelper().GetClient();
         var boardName = $"UnitTestBoard-{DateTime.Now:yyyyMMddHHmmss}";
         var boardDescription = $"BoardDescription-{DateTime.Now:yyyyMMddHHmmss}";
 

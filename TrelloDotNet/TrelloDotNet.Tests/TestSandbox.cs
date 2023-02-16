@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using TrelloDotNet.Model;
+﻿using TrelloDotNet.Model;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.Tests
@@ -16,7 +9,7 @@ namespace TrelloDotNet.Tests
         public async Task AddBoardWithOptions()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             var addBoardOptions = new AddBoardOptions
             {
                 DefaultLabels = false,
@@ -30,7 +23,7 @@ namespace TrelloDotNet.Tests
         public async Task CustomDelete()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             await client.DeleteAsync("cards/63de84fd6ec529e05977a5ab");
         }
         
@@ -38,7 +31,7 @@ namespace TrelloDotNet.Tests
         public async Task CloseCard()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             await client.ArchiveCardAsync("63de89f086c564af5be296ba");
         }
         
@@ -46,7 +39,7 @@ namespace TrelloDotNet.Tests
         public async Task ReOpenCard()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             await client.ReOpenCardAsync("63de89f086c564af5be296ba");
         }
         
@@ -54,7 +47,7 @@ namespace TrelloDotNet.Tests
         public async Task CloseBoard()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             await client.CloseBoardAsync("SCPjg8ON");
         }
         
@@ -62,7 +55,7 @@ namespace TrelloDotNet.Tests
         public async Task ReOpenBoard()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             await client.ReOpenBoardAsync("SCPjg8ON");
         }
         
@@ -70,7 +63,7 @@ namespace TrelloDotNet.Tests
         public async Task CloseList()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             await client.ArchiveListAsync("63de3eb58d0d357abc562b02");
         }
         
@@ -78,7 +71,7 @@ namespace TrelloDotNet.Tests
         public async Task ReOpenList()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             await client.ReOpenListAsync("63de3eb58d0d357abc562b02");
         }
         
@@ -86,7 +79,7 @@ namespace TrelloDotNet.Tests
         public async Task ArchiveAllCardsOnList()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             await client.ArchiveAllCardsInList("63de3eb58d0d357abc562b02");
         }
 
@@ -94,7 +87,7 @@ namespace TrelloDotNet.Tests
         public async Task MoveList()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             var boardAsync = await client.GetBoardAsync("uPB5YWto");
             await client.MoveListToBoardAsync("63dbef756685986201365c13", boardAsync.Id);
         }
@@ -103,23 +96,16 @@ namespace TrelloDotNet.Tests
         public async Task MoveAllCardsOnList()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             var boardAsync = await client.GetBoardAsync("SCPjg8ON");
             await client.MoveAllCardsInList("63de3eb58d0d357abc562b02", "63dbef756685986201365c13");
         }
-
-
-
-
-
-
-
-
+        
         [RunnableInDebugOnly]
         public async Task GetWebhooks()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             var webhooksForCurrentToken = await client.GetWebhooksForCurrentToken();
         }
         
@@ -127,7 +113,7 @@ namespace TrelloDotNet.Tests
         public async Task DeleteAllWebhooks()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             var webhooksForCurrentToken = await client.GetWebhooksForCurrentToken();
             foreach (var webhook in webhooksForCurrentToken)
             {
@@ -139,7 +125,7 @@ namespace TrelloDotNet.Tests
         public async Task AddWebhook()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             var webHook = new Webhook("My Webhook", "https://4cf8-185-229-154-225.eu.ngrok.io/api/FunctionTrelloWebhookEndpointReceiver", "63d128787441d05619f44dbe");
             var webhooksForCurrentToken = await client.AddWebhookAsync(webHook);
         }
@@ -148,7 +134,7 @@ namespace TrelloDotNet.Tests
         public async Task UpdateWebhook()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             Webhook webhook = await client.GetWebhookAsync("63e2892778670f4f7b7ffa2e");
             webhook.CallbackUrl = "https://4cf8-185-229-154-225.eu.ngrok.io/api/FunctionTrelloWebhookEndpointReceiver";
             var updatedWebhook = await client.UpdateWebhookAsync(webhook);
@@ -171,7 +157,7 @@ namespace TrelloDotNet.Tests
         public async Task RemoveMembers()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             var removeMemberFromCard = await client.RemoveMembersFromCardAsync("63daa5bdef6d121000749728", "63d1239e857afaa8b003c633", "a", "c");
             var cardAsync = await client.GetCardAsync("63daa5bdef6d121000749728");
         }
@@ -180,7 +166,7 @@ namespace TrelloDotNet.Tests
         public async Task RemoveAllMembers()
         {
             await Task.CompletedTask;
-            var client = TestHelper.GetClient();
+            var client = new TestHelper().GetClient();
             var removeMemberFromCard = await client.RemoveAllMembersFromCardAsync("63daa5bdef6d121000749728");
         }
         
