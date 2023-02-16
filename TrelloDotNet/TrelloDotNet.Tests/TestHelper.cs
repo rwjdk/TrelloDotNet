@@ -19,7 +19,8 @@ public class TestHelper
         }
         catch (Exception)
         {
-            throw new Exception("In order to run Unit-tests you need to add a user secrets 'TrelloApiKey' and 'TrelloToken' (both strings). See more here: https://bartwullems.blogspot.com/2022/06/using-secrets-in-your-unit-tests.html and here: https://itbackyard.com/how-to-manage-secrets-in-net-locally-and-on-github/");
+            throw;
+            //throw new Exception("In order to run Unit-tests you need to add a user secrets 'TrelloApiKey' and 'TrelloToken' (both strings). See more here: https://bartwullems.blogspot.com/2022/06/using-secrets-in-your-unit-tests.html and here: https://itbackyard.com/how-to-manage-secrets-in-net-locally-and-on-github/");
         }
     }
 }
