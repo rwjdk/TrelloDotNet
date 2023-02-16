@@ -16,13 +16,15 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
+    - name: SetUserSecrets        
+      run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOAPIKEY }}
     - name: Restore dependencies
       run: dotnet restore TrelloDotNet.sln
       working-directory: TrelloDotNet
     - name: Build
       run: dotnet build --no-restore
       working-directory: TrelloDotNet
-    - name: Test
+    - name: Test      
       env:
         TrelloApiKey: ${{ secrets.TRELLOAPIKEY }}
         TrelloToken: ${{ secrets.TRELLOTOKEN }}
