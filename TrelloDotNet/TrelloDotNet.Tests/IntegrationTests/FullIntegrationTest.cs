@@ -1,4 +1,5 @@
-﻿using TrelloDotNet.Model;
+﻿using Microsoft.Extensions.Configuration;
+using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -11,7 +12,26 @@ public class FullIntegrationTest
     [Fact]
     public async Task CreateBoardAndDoNormalActions()
     {
-        var client = new TestHelper().GetClient();
+        var config = new ConfigurationBuilder()
+            .AddUserSecrets<FullIntegrationTest>()
+            .Build();
+
+        var configurationSections = config.GetChildren().ToList();
+        foreach (var configurationSection in configurationSections)
+        {
+            Console.WriteLine(configurationSection.Key + "|" + configurationSection.Value);
+
+        }
+
+        var apiKey = config["TrelloApiKey"];
+        Console.WriteLine("apiKey is"+ apiKey);
+
+        var token = config["TrelloToken"];
+        Console.WriteLine("token is" + apiKey);
+        var client = new TrelloClient(apiKey, token);
+
+
+        //var client = new TestHelper().GetClient();
         var boardName = $"UnitTestBoard-{DateTime.Now:yyyyMMddHHmmss}";
         var boardDescription = $"BoardDescription-{DateTime.Now:yyyyMMddHHmmss}";
 

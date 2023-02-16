@@ -13,6 +13,14 @@ public class TestHelper
                 .AddUserSecrets<TestHelper>()
                 //.AddJsonFile("client-secrets.json")
                 .Build();
+
+            var configurationSections = config.GetChildren().ToList();
+            foreach (var configurationSection in configurationSections)
+            {
+                Console.WriteLine(configurationSection.Key + "|"+configurationSection.Value);
+
+            }
+
             var apiKey = config["TrelloApiKey"];
             var token = config["TrelloToken"];
             return new TrelloClient(apiKey, token);
