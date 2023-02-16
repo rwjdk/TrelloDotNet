@@ -25,7 +25,7 @@ jobs:
     - name: SetUserSecretsTrelloApiKey        
       run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOAPIKEY }} --project TrelloDotNet/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
     - name: SetUserSecretsTrelloToken        
-      run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOTOKEN }} --project TrelloDotNet/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
+      run: dotnet user-secrets set TrelloToken ${{ secrets.TRELLOTOKEN }} --project TrelloDotNet/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
     - name: Test      
       run: dotnet test --no-build --verbosity normal
       working-directory: TrelloDotNet/TrelloDotNet.Tests
