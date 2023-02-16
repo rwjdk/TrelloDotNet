@@ -11,6 +11,10 @@ namespace TrelloDotNet
     {
         private readonly TrelloClient _trelloClient;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="trelloClient">The base TrelloClient</param>
         public WebhookDataReceiver(TrelloClient trelloClient)
         {
             _trelloClient = trelloClient;
@@ -21,7 +25,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="json">The raw incoming JSON</param>
         /// <returns>If the Event was processed (aka it was a supported event)</returns>
-        public void ProcessJsonIntoEvents(string json)
+        public async void ProcessJsonIntoEvents(string json)
         {
             if (string.IsNullOrWhiteSpace(json))
             {
@@ -29,7 +33,7 @@ namespace TrelloDotNet
             }
             var webhookNotification = JsonSerializer.Deserialize<WebhookNotification>(json);
             BasicEvents.FireEvent(webhookNotification.Action);
-            SmartEvents.FireEvent(webhookNotification.Action, _trelloClient);
+            await SmartEvents.FireEvent(webhookNotification.Action, _trelloClient);
         }
 
         /// <summary>
