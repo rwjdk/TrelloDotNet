@@ -27,6 +27,6 @@ jobs:
         TrelloApiKey: ${{ secrets.TRELLOAPIKEY }}
         TrelloToken: ${{ secrets.TRELLOTOKEN }}
       run: dotnet test --no-build --verbosity normal
-      working-directory: TrelloDotNet
+      working-directory: TrelloDotNet.Tests
     - name: Publish 
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
