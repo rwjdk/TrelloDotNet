@@ -11,15 +11,7 @@ public class TestHelper
             //todo - add better system that also work in pipelines (added this for now)
             var config = new ConfigurationBuilder()
                 .AddUserSecrets<TestHelper>()
-                //.AddJsonFile("client-secrets.json")
                 .Build();
-
-            var configurationSections = config.GetChildren().ToList();
-            foreach (var configurationSection in configurationSections)
-            {
-                Console.WriteLine(configurationSection.Key + "|"+configurationSection.Value);
-
-            }
 
             var apiKey = config["TrelloApiKey"];
             var token = config["TrelloToken"];
@@ -27,8 +19,7 @@ public class TestHelper
         }
         catch (Exception)
         {
-            throw;
-            //throw new Exception("In order to run Unit-tests you need to add a user secrets 'TrelloApiKey' and 'TrelloToken' (both strings). See more here: https://bartwullems.blogspot.com/2022/06/using-secrets-in-your-unit-tests.html and here: https://itbackyard.com/how-to-manage-secrets-in-net-locally-and-on-github/");
+            throw new Exception("In order to run Unit-tests you need to add a user secrets 'TrelloApiKey' and 'TrelloToken' (both strings). See more here: https://bartwullems.blogspot.com/2022/06/using-secrets-in-your-unit-tests.html and here: https://itbackyard.com/how-to-manage-secrets-in-net-locally-and-on-github/");
         }
     }
 }
