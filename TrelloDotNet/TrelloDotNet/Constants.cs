@@ -34,15 +34,9 @@
         /// </summary>
         public const string Labels = "labels";
         /// <summary>
-        /// actions
-        /// </summary>
-        public const string Actions = "actions";
-
-        /// <summary>
         /// webhooks
         /// </summary>
         public const string Webhooks = "webhooks";
-
         /// <summary>
         /// Tokens
         /// </summary>

@@ -1,6 +1,4 @@
-﻿using System.Buffers.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model

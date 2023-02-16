@@ -1,6 +1,4 @@
-﻿using System.Net.Http;
-
-namespace TrelloDotNet
+﻿namespace TrelloDotNet
 {
     /// <summary>
     /// Control level of URL Details are shown in Exceptions from calls to the API

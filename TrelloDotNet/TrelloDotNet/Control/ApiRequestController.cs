@@ -92,7 +92,7 @@ namespace TrelloDotNet.Control
                 case ApiCallExceptionOption.IncludeUrlAndCredentials:
                     return fullUrl;
                 case ApiCallExceptionOption.IncludeUrlButMaskCredentials:
-                    return fullUrl.Replace($"?key={_apiKey}&token={_token}", $"?key=XXXXX&token=XXXXXXXXXX");
+                    return fullUrl.Replace($"?key={_apiKey}&token={_token}", "?key=XXXXX&token=XXXXXXXXXX");
                 case ApiCallExceptionOption.DoNotIncludeTheUrl:
                     return string.Empty.PadLeft(5,'X');
                 default:
