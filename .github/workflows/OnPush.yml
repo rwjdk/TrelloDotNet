@@ -22,13 +22,13 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: TrelloDotNet
-    - name: SetUserSecrets        
-      run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOAPIKEY }} --project TrelloDotNet/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
+#    - name: SetUserSecrets        
+#      run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOAPIKEY }} --project TrelloDotNet/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
     - name: Test      
       env:
         TrelloApiKey: ${{ secrets.TRELLOAPIKEY }}
         TrelloToken: ${{ secrets.TRELLOTOKEN }}
       run: dotnet test --no-build --verbosity normal
-      working-directory: TrelloDotNet
+      working-directory: TrelloDotNet/TrelloDotNet.Tests
     - name: Publish 
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
