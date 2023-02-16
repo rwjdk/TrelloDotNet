@@ -5,7 +5,6 @@ name: OnPush (Build and Publish)
 env:
     TrelloApiKey: ${{ secrets.TRELLOAPIKEY }}
     TrelloToken: ${{ secrets.TRELLOTOKEN }}
-    working-directory: TrelloDotNet.Tests
 on:
   push:
     branches: [ "main" ]
@@ -22,9 +21,12 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore TrelloDotNet.sln
+      working-directory: TrelloDotNet
     - name: Build
       run: dotnet build --no-restore
+      working-directory: TrelloDotNet
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      working-directory: TrelloDotNet
     - name: Publish 
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
