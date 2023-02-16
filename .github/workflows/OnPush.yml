@@ -20,14 +20,14 @@ jobs:
       run: dotnet restore TrelloDotNet.sln
       working-directory: TrelloDotNet
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --configuration Release --no-restore
       working-directory: TrelloDotNet
     - name: SetUserSecretsTrelloApiKey        
       run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOAPIKEY }} --project TrelloDotNet/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
     - name: SetUserSecretsTrelloToken        
       run: dotnet user-secrets set TrelloToken ${{ secrets.TRELLOTOKEN }} --project TrelloDotNet/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
     - name: Test      
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --configuration Release --no-build --verbosity normal
       working-directory: TrelloDotNet/TrelloDotNet.Tests
     - name: Publish 
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
