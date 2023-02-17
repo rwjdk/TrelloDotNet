@@ -2,33 +2,28 @@
 
 namespace TrelloDotNet.Tests;
 
-public abstract class TestBaseWithNewBoard : TestBase, IDisposable
+public abstract class TestBaseWithNewBoard : TestBase
 {
     protected Board? Board { get; private set; }
     protected string? BoardId { get; private set; }
     protected string? BoardName { get; private set; }
     protected string? BoardDescription { get; private set; }
 
-    protected TestBaseWithNewBoard()
-    {
-        CreateNewBoard();
-    }
-
-    private void CreateNewBoard()
+    public async Task CreateNewBoard()
     {
         BoardName = $"UnitTestBoard-{DateTime.Now:yyyyMMddHHmmss}";
         BoardDescription = $"BoardDescription-{DateTime.Now:yyyyMMddHHmmss}";
-        Board = TrelloClient.AddBoardAsync(new Board(BoardName, BoardDescription)).Result;
+        Board = await TrelloClient.AddBoardAsync(new Board(BoardName, BoardDescription));
         BoardId = Board.Id;
         Assert.Equal(BoardName, Board.Name);
         Assert.Equal(BoardDescription, Board.Description);
     }
     
-    public void Dispose()
+    public async Task DeleteBoard()
     {
         try
         {
-            TrelloClient.DeleteBoard(BoardId).Wait();
+            await TrelloClient.DeleteBoard(BoardId);
         }
         catch (Exception e)
         {
@@ -37,7 +32,7 @@ public abstract class TestBaseWithNewBoard : TestBase, IDisposable
         finally
         {
             TrelloClient.Options.AllowDeleteOfBoards = true;
-            TrelloClient.DeleteBoard(BoardId).Wait();
+            await TrelloClient.DeleteBoard(BoardId);
         }
     }
 }
