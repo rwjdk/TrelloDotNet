@@ -249,9 +249,9 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="listId">The id of list that should be Archived</param>
         /// <returns>The Archived List</returns>
-        public async Task<Card> ArchiveListAsync(string listId)
+        public async Task<List> ArchiveListAsync(string listId)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Lists}/{listId}", new QueryParameter("closed", true));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", new QueryParameter("closed", true));
         }
 
         /// <summary>
@@ -259,9 +259,9 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="listId">The id of list that should be Reopened</param>
         /// <returns>The Archived List</returns>
-        public async Task<Card> ReOpenListAsync(string listId)
+        public async Task<List> ReOpenListAsync(string listId)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Lists}/{listId}", new QueryParameter("closed", false));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", new QueryParameter("closed", false));
         }
 
         /// <summary>
@@ -289,9 +289,9 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="boardId">The id of board that should be closed</param>
         /// <returns>The Closed Board</returns>
-        public async Task<Card> CloseBoardAsync(string boardId)
+        public async Task<Board> CloseBoardAsync(string boardId)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Boards}/{boardId}", new QueryParameter("closed", true));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", new QueryParameter("closed", true));
         }
 
         /// <summary>
@@ -299,9 +299,9 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="boardId">The id of board that should be reopened</param>
         /// <returns>The ReOpened Board</returns>
-        public async Task<Card> ReOpenBoardAsync(string boardId)
+        public async Task<Board> ReOpenBoardAsync(string boardId)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Boards}/{boardId}", new QueryParameter("closed", false));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", new QueryParameter("closed", false));
         }
 
         /// <summary>
@@ -713,14 +713,14 @@ namespace TrelloDotNet
         public async Task<Card> RemoveLabelsFromCardAsync(string cardId, params string[] labelIdsToRemove)
         {
             var card = await GetCardAsync(cardId);
-            var toRemove = labelIdsToRemove.Where(memberId => card.LabelIds.Contains(memberId)).ToList();
+            var toRemove = labelIdsToRemove.Where(x => card.LabelIds.Contains(x)).ToList();
             if (toRemove.Count == 0)
             {
                 return card; //All not there
             }
 
             //Need update
-            card.MemberIds = card.LabelIds.Except(toRemove).ToList();
+            card.LabelIds = card.LabelIds.Except(toRemove).ToList();
             return await UpdateCardAsync(card);
         }
 

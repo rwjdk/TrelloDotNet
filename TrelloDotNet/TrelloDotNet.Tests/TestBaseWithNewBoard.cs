@@ -1,20 +1,21 @@
-﻿using Microsoft.Extensions.Configuration;
-using TrelloDotNet.Model;
+﻿using TrelloDotNet.Model;
 
-namespace TrelloDotNet.Tests.IntegrationTests;
+namespace TrelloDotNet.Tests;
 
-public abstract class IntegrationTestBase : IDisposable
+public abstract class TestBaseWithNewBoard : TestBase, IDisposable
 {
-    protected TrelloClient TrelloClient;
-    protected Board Board;
-    protected readonly string BoardId;
-    protected readonly string BoardName;
-    protected readonly string BoardDescription;
+    protected Board? Board { get; private set; }
+    protected string? BoardId { get; private set; }
+    protected string? BoardName { get; private set; }
+    protected string? BoardDescription { get; private set; }
 
-
-    protected IntegrationTestBase()
+    protected TestBaseWithNewBoard()
     {
-        TrelloClient = new TestHelper().GetClient();
+        CreateNewBoard();
+    }
+
+    private void CreateNewBoard()
+    {
         BoardName = $"UnitTestBoard-{DateTime.Now:yyyyMMddHHmmss}";
         BoardDescription = $"BoardDescription-{DateTime.Now:yyyyMMddHHmmss}";
         Board = TrelloClient.AddBoardAsync(new Board(BoardName, BoardDescription)).Result;
@@ -22,7 +23,7 @@ public abstract class IntegrationTestBase : IDisposable
         Assert.Equal(BoardName, Board.Name);
         Assert.Equal(BoardDescription, Board.Description);
     }
-
+    
     public void Dispose()
     {
         try

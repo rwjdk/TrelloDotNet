@@ -1,8 +1,8 @@
 ﻿using TrelloDotNet.Model;
 
-namespace TrelloDotNet.Tests.UnitTests;
+namespace TrelloDotNet.Tests.IntegrationTests;
 
-public class RawCallTests : UnitTestBase
+public class RawCallTests : TestBase
 {
     [Fact]
     public async Task RawExceptionThrowsIncludeUrlButMaskCredentials()

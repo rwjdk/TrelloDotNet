@@ -45,6 +45,13 @@ namespace TrelloDotNet.Model
         public string ShortUrl { get; private set; }
 
         /// <summary>
+        /// If the Board is Archived (closed)
+        /// </summary>
+        [JsonPropertyName("closed")]
+        [JsonInclude]
+        public bool Closed { get; private set; }
+
+        /// <summary>
         /// Date the Board was created [stored in UTC]
         /// </summary>
         [JsonIgnore] public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
