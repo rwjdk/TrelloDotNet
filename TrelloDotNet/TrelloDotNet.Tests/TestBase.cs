@@ -35,4 +35,9 @@ public abstract class TestBase
     {
         Assert.True(objectCreationTime < DateTimeOffset.Now && objectCreationTime > DateTimeOffset.Now.AddMinutes(-1));
     }
+
+    protected void WaitToAvoidRateLimits(int waitSeconds = 1)
+    {
+        Thread.Sleep(waitSeconds * 1000);
+    }
 }

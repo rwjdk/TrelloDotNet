@@ -10,7 +10,6 @@ public class DefaultBoardTests : TestBaseWithNewBoard
     {
         try
         {
-            Thread.Sleep(10000); //To ensure not hitting rate limits
             await CreateNewBoard();
             //Check Create date
             AssertTimeIsNow(Board!.Created);

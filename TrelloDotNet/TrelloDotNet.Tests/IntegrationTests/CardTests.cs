@@ -12,7 +12,6 @@ public class CardTests : TestBaseWithNewBoard
     {
         try
         {
-            Thread.Sleep(10000); //To ensure not hitting rate limits
             await CreateNewBoard();
             var member = (await TrelloClient.GetMembersOfBoardAsync(BoardId)).First();
             var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(BoardId);

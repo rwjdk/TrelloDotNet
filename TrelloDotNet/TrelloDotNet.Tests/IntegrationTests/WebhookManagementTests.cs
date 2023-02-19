@@ -9,7 +9,6 @@ public class WebhookManagementTests : TestBaseWithNewBoard
     {
         try
         {
-            Thread.Sleep(10000); //To ensure not hitting rate limits
             await CreateNewBoard();
             //Find current webhooks
             var currentWebhooks = await TrelloClient.GetWebhooksForCurrentToken();
