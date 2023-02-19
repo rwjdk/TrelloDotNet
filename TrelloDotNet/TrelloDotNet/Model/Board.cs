@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
@@ -7,6 +8,7 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// Representation of a Board
     /// </summary>
+    [DebuggerDisplay("{Name} (Id: {Id})")]
     public class Board
     {
         /// <summary>
@@ -74,12 +76,6 @@ namespace TrelloDotNet.Model
         {
             Name = name;
             Description = description;
-        }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{Name} (Id: {Id})";
         }
     }
 }

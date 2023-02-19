@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
@@ -8,6 +9,7 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// Represent a Trello Card
     /// </summary>
+    [DebuggerDisplay("{Name} (Id: {Id})")]
     public class Card
     {
         /// <summary>
@@ -236,12 +238,6 @@ namespace TrelloDotNet.Model
         {
             LabelIds = new List<string>();
             MemberIds = new List<string>();
-        }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{Name} (Id: {Id})";
         }
     }
 }

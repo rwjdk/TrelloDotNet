@@ -1,6 +1,11 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+##Unreleased
+- 
+
+<hr>
+
 ## 1.1.1 (17th of Feb. 2023)
 - Fixed: Method 'SetStartDateOnCardAsync' was renamed to 'SetStartDateAndDueDateOnCardAsync' [COMPILE TIME BREAKING CHANGE]
 - Fixed: Smart-events did not do a proper internal await so could technically be delayed
@@ -8,6 +13,8 @@
 - Fixed: Methods 'CloseBoardAsync' and 'ReOpenBoardAsync' incorrectly return a Card and not a Board [COMPILE TIME BREAKING CHANGE]
 - Fixed: Method 'RemoveLabelsFromCardAsync' did not work (wrongly implemented)
 - Added: Added Property 'Closed' on Board so you can see if a board is Closed or not
+
+<hr>
 
 ## 1.1.0 (8th of Feb. 2023)
 - Added: Webhook System (See video how to get going [here](https://youtu.be/A3_B-SLBm_0))

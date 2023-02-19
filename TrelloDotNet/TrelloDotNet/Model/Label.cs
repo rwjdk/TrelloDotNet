@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
@@ -7,6 +8,7 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// Represent a Label defined on a Board and Assigned to Cards
     /// </summary>
+    [DebuggerDisplay("{Name} (Id: {Id})")]
     public class Label
     {
         /// <summary>
@@ -39,11 +41,5 @@ namespace TrelloDotNet.Model
         /// When the Label was created [stored in UTC]
         /// </summary>
         [JsonIgnore] public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{Name} (Id: {Id})";
-        }
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Represent a member (User)
     /// </summary>
+    [DebuggerDisplay("{FullName} (Id: {Id})")]
     public class Member
     {
         /// <summary>
@@ -27,11 +29,5 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("username")]
         [JsonInclude]
         public string Username { get; private set; }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{FullName} (Id: {Id})";
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -6,6 +7,7 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// Represent a Card Checklist
     /// </summary>
+    [DebuggerDisplay("{Name} (Id: {Id})")]
     public class Checklist
     {
         /// <summary>
@@ -59,12 +61,6 @@ namespace TrelloDotNet.Model
         public Checklist()
         {
             //Serialization
-        }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{Name} (Id: {Id})";
         }
     }
 }

@@ -50,6 +50,11 @@ public class CardTests : TestBaseWithNewBoard
             Assert.NotEmpty(addedCard.ShortUrl);
             Assert.NotEmpty(addedCard.IdShort.ToString());
             Assert.NotNull(addedCard.Cover);
+            Assert.Equal(CardCoverSize.Normal, addedCard.Cover.Size);
+            Assert.Equal(CardCoverBrightness.Dark, addedCard.Cover.Brightness);
+            Assert.Equal(CardCoverColor.None, addedCard.Cover.Color);
+            Assert.Null(addedCard.Cover.BackgroundImageId);
+            Assert.Null(addedCard.Cover.BackgroundImageId);
 
             var membersOfCardAsync = await TrelloClient.GetMembersOfCardAsync(addedCard.Id);
             Assert.Single(membersOfCardAsync);
