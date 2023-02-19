@@ -9,6 +9,7 @@ public class MultiBoardTest : TestBaseWithNewBoard
     {
         try
         {
+            Thread.Sleep(10000); //To ensure not hitting rate limits
             await CreateNewBoard();
             string? secondBoardId = null;
             try

@@ -7,6 +7,7 @@ public class CustomBoardTests : TestBase
     [Fact]
     public async Task AddBoardWithOptions()
     {
+        Thread.Sleep(10000); //To ensure not hitting rate limits
         string? boardId = null;
         try
         {
