@@ -1,0 +1,102 @@
+{
+  "id": "63e1096da4ecf28dcb763ba9",
+  "name": "My Sample Board",
+  "desc": "",
+  "descData": null,
+  "closed": false,
+  "idOrganization": "63d123a6472de44f1ea2801c",
+  "idEnterprise": null,
+  "pinned": false,
+  "url": "https://trello.com/b/czwRjhWF/my-sample-board",
+  "shortUrl": "https://trello.com/b/czwRjhWF",
+  "prefs": {
+    "permissionLevel": "org",
+    "hideVotes": false,
+    "voting": "disabled",
+    "comments": "members",
+    "invitations": "members",
+    "selfJoin": true,
+    "cardCovers": true,
+    "isTemplate": false,
+    "cardAging": "regular",
+    "calendarFeedEnabled": false,
+    "hiddenPluginBoardButtons": [],
+    "switcherViews": [
+      {
+        "viewType": "Board",
+        "enabled": true,
+        "_id": "63e1096da4ecf28dcb763baa"
+      },
+      {
+        "viewType": "Table",
+        "enabled": true,
+        "_id": "63e1096da4ecf28dcb763bab"
+      },
+      {
+        "viewType": "Calendar",
+        "enabled": false,
+        "_id": "63e1096da4ecf28dcb763bac"
+      },
+      {
+        "viewType": "Dashboard",
+        "enabled": false,
+        "_id": "63e1096da4ecf28dcb763bad"
+      },
+      {
+        "viewType": "Timeline",
+        "enabled": false,
+        "_id": "63e1096da4ecf28dcb763bae"
+      },
+      {
+        "viewType": "Map",
+        "enabled": false,
+        "_id": "63e1096da4ecf28dcb763baf"
+      }
+    ],
+    "background": "blue",
+    "backgroundColor": "#0079BF",
+    "backgroundImage": null,
+    "backgroundImageScaled": null,
+    "backgroundTile": false,
+    "backgroundBrightness": "dark",
+    "backgroundBottomColor": "#0079BF",
+    "backgroundTopColor": "#0079BF",
+    "canBePublic": true,
+    "canBeEnterprise": true,
+    "canBeOrg": true,
+    "canBePrivate": true,
+    "canInvite": true
+  },
+  "labelNames": {
+    "green": "API",
+    "yellow": "Label2",
+    "orange": "",
+    "red": "",
+    "purple": "",
+    "blue": "",
+    "sky": "",
+    "lime": "",
+    "pink": "",
+    "black": "",
+    "green_dark": "",
+    "yellow_dark": "",
+    "orange_dark": "",
+    "red_dark": "",
+    "purple_dark": "",
+    "blue_dark": "",
+    "sky_dark": "",
+    "lime_dark": "",
+    "pink_dark": "",
+    "black_dark": "",
+    "green_light": "",
+    "yellow_light": "",
+    "orange_light": "",
+    "red_light": "",
+    "purple_light": "",
+    "blue_light": "",
+    "sky_light": "",
+    "lime_light": "",
+    "pink_light": "",
+    "black_light": ""
+  }
+}

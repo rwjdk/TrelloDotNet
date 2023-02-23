@@ -217,6 +217,28 @@ namespace TrelloDotNet
             return await _apiRequestController.Post<Webhook>($"{UrlPaths.Webhooks}", _queryParametersBuilder.GetViaQueryParameterAttributes(webhook));
         }
 
+        /// <summary>
+        /// Add a new Comment on a Card
+        /// </summary>
+        /// <paramref name="cardId">Id of the Card</paramref>
+        /// <paramref name="comment">The Comment</paramref>
+        /// <returns>The Comment</returns>
+        public async Task<Comment> AddCommentAsync(string cardId, Comment comment)
+        {
+            return await _apiRequestController.Post<Comment>($"{UrlPaths.Cards}/{cardId}/actions/comments", _queryParametersBuilder.GetViaQueryParameterAttributes(comment));
+        }
+
+        /// <summary>
+        /// Add a sticker to a card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="sticker">The Sticker to add</param>
+        /// <returns>The new sticker</returns>
+        public async Task<Sticker> AddStickerToCardAsync(string cardId, Sticker sticker)
+        {
+            return await _apiRequestController.Post<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers", _queryParametersBuilder.GetViaQueryParameterAttributes(sticker));
+        }
+
         #endregion
 
         #region Update
@@ -345,6 +367,17 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Update a sticker
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="stickerWithUpdates">The Sticker to update</param>
+        /// <returns>The Updated Sticker</returns>
+        public async Task<Sticker> UpdateStickerAsync(string cardId, Sticker stickerWithUpdates)
+        {
+            return await _apiRequestController.Put<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers/{stickerWithUpdates.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(stickerWithUpdates));
+        }
+
+        /// <summary>
         /// Move an entire list to another board
         /// </summary>
         /// <param name="listId">The id of the List to move</param>
@@ -359,7 +392,7 @@ namespace TrelloDotNet
         /// Archive all cards on in a List
         /// </summary>
         /// <param name="listId">The id of the List that should have its cards archived</param>
-        public async Task ArchiveAllCardsInList(string listId)
+        public async Task ArchiveAllCardsInListAsync(string listId)
         {
             await _apiRequestController.Post<List>($"{UrlPaths.Lists}/{listId}/archiveAllCards");
         }
@@ -369,7 +402,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="currentListId">The id of the List that should have its cards moved</param>
         /// <param name="newListId">The id of the new List that should receive the cards</param>
-        public async Task MoveAllCardsInList(string currentListId, string newListId)
+        public async Task MoveAllCardsInListAsync(string currentListId, string newListId)
         {
             var newList = await GetListAsync(newListId); //Get the new list's BoardId so the user do not need to provide it.
             await _apiRequestController.Post($"{UrlPaths.Lists}/{currentListId}/moveAllCards",
@@ -389,7 +422,7 @@ namespace TrelloDotNet
         /// As this is a major thing, there is a secondary confirm needed by setting: Options.AllowDeleteOfBoards = true
         /// </remarks>
         /// <param name="boardId">The id of the Board to Delete</param>
-        public async Task DeleteBoard(string boardId)
+        public async Task DeleteBoardAsync(string boardId)
         {
             if (Options.AllowDeleteOfBoards)
             {
@@ -405,7 +438,7 @@ namespace TrelloDotNet
         /// Delete a Card (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseCard() for non-permanency
         /// </summary>
         /// <param name="webhookId">The id of the Board to Delete</param>
-        public async Task DeleteCard(string webhookId)
+        public async Task DeleteCardAsync(string webhookId)
         {
             await _apiRequestController.Delete($"{UrlPaths.Cards}/{webhookId}");
         }
@@ -414,9 +447,19 @@ namespace TrelloDotNet
         /// Delete a Webhook (WARNING: THERE IS NO WAY GOING BACK!!!).
         /// </summary>
         /// <param name="webhookId">The id of the Webhook to Delete</param>
-        public async Task DeleteWebhook(string webhookId)
+        public async Task DeleteWebhookAsync(string webhookId)
         {
             await _apiRequestController.Delete($"{UrlPaths.Webhooks}/{webhookId}");
+        }
+
+        /// <summary>
+        /// Delete a sticker (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// </summary>
+        /// <param name="cardId">Id of Card that have the sticker</param>
+        /// <param name="stickerId">Id of the sticker</param>
+        public async Task DeleteStickerAsync(string cardId, string stickerId)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}");
         }
 
         /// <summary>
@@ -602,7 +645,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="memberId">Id of the Member</param>
         /// <returns>The Member</returns>
-        public async Task<Member> GetMember(string memberId)
+        public async Task<Member> GetMemberAsync(string memberId)
         {
             return await _apiRequestController.Get<Member>($"{UrlPaths.Members}/{memberId}");
         }
@@ -611,7 +654,7 @@ namespace TrelloDotNet
         /// Get Webhooks linked with the current Token used to authenticate with the API
         /// </summary>
         /// <returns>List of Webhooks</returns>
-        public async Task<List<Webhook>> GetWebhooksForCurrentToken()
+        public async Task<List<Webhook>> GetWebhooksForCurrentTokenAsync()
         {
             return await _apiRequestController.Get<List<Webhook>>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/webhooks");
         }
@@ -624,6 +667,27 @@ namespace TrelloDotNet
         public async Task<Webhook> GetWebhookAsync(string webhookId)
         {
             return await _apiRequestController.Get<Webhook>($"{UrlPaths.Webhooks}/{webhookId}");
+        }
+
+        /// <summary>
+        /// Get List of Stickers on a card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <returns>The List of Stickers</returns>
+        public async Task<List<Sticker>> GetStickersOnCardAsync(string cardId)
+        {
+            return await _apiRequestController.Get<List<Sticker>>($"{UrlPaths.Cards}/{cardId}/stickers");
+        }
+        
+        /// <summary>
+        /// Get a Stickers with a specific Id
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="stickerId">Id of the Sticker</param>
+        /// <returns>The Sticker</returns>
+        public async Task<Sticker> GetStickerAsync(string cardId, string stickerId)
+        {
+            return await _apiRequestController.Get<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}");
         }
 
         #endregion
@@ -783,5 +847,7 @@ namespace TrelloDotNet
         }
 
         #endregion
+
+
     }
 }

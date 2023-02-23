@@ -44,7 +44,7 @@ public class MultiBoardTest : TestBaseWithNewBoard
                 if (secondBoardId != null)
                 {
                     TrelloClient.Options.AllowDeleteOfBoards = true;
-                    await TrelloClient.DeleteBoard(secondBoardId);
+                    await TrelloClient.DeleteBoardAsync(secondBoardId);
                     TrelloClient.Options.AllowDeleteOfBoards = false;
                 }
             }

@@ -23,7 +23,7 @@ public abstract class TestBaseWithNewBoard : TestBase
     {
         try
         {
-            await TrelloClient.DeleteBoard(BoardId);
+            await TrelloClient.DeleteBoardAsync(BoardId);
         }
         catch (Exception e)
         {
@@ -32,7 +32,7 @@ public abstract class TestBaseWithNewBoard : TestBase
         finally
         {
             TrelloClient.Options.AllowDeleteOfBoards = true;
-            await TrelloClient.DeleteBoard(BoardId);
+            await TrelloClient.DeleteBoardAsync(BoardId);
         }
     }
 }

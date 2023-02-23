@@ -4,6 +4,9 @@ public sealed class FactManualOnlyAttribute : FactAttribute
 {
     public FactManualOnlyAttribute()
     {
-        Skip = "Manual";
+        if (!Environment.MachineName.ToLowerInvariant().Contains("rwj"))
+        {
+            Skip = "Manual";
+        }
     }
 }

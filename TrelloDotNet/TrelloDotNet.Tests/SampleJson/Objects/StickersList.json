@@ -1,0 +1,31 @@
+[
+  {
+    "id": "63f79b3a101c4fbb3ca3b22c",
+    "top": 0,
+    "left": 54.13385826771654,
+    "zIndex": 1,
+    "rotate": -5,
+    "image": "heart",
+    "imageUrl": "https://d2k1ftgv7pobq7.cloudfront.net/images/stickers/heart.png",
+    "imageScaled": [
+      {
+        "_id": null,
+        "id": null,
+        "scaled": false,
+        "url": "https://d2k1ftgv7pobq7.cloudfront.net/images/stickers/heart.png",
+        "bytes": null,
+        "height": 80,
+        "width": 80
+      },
+      {
+        "_id": null,
+        "id": null,
+        "scaled": false,
+        "url": "https://d2k1ftgv7pobq7.cloudfront.net/images/stickers/heart@2x.png",
+        "bytes": null,
+        "height": 160,
+        "width": 160
+      }
+    ]
+  }
+]

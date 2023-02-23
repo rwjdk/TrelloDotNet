@@ -11,7 +11,7 @@ public class WebhookManagementTests : TestBaseWithNewBoard
         {
             await CreateNewBoard();
             //Find current webhooks
-            var currentWebhooks = await TrelloClient.GetWebhooksForCurrentToken();
+            var currentWebhooks = await TrelloClient.GetWebhooksForCurrentTokenAsync();
 
             //Add Webhook
             var callbackUrl = "https://www.google.com";
@@ -33,7 +33,7 @@ public class WebhookManagementTests : TestBaseWithNewBoard
             Assert.False(addedWebHook.Active);
 
             //Check lists of webhooks are update
-            var webhooksAfterAdd = await TrelloClient.GetWebhooksForCurrentToken();
+            var webhooksAfterAdd = await TrelloClient.GetWebhooksForCurrentTokenAsync();
             Assert.Equal(currentWebhooks.Count + 1, webhooksAfterAdd.Count);
             Assert.Equal(webhookId, webhooksAfterAdd.First(x => x.Id == webhookId).Id);
             Assert.Equal(updatedDescription, webhooksAfterAdd.First(x => x.Id == webhookId).Description);
@@ -46,8 +46,8 @@ public class WebhookManagementTests : TestBaseWithNewBoard
             Assert.Equal(getWebhook.CallbackUrl, updatedWebHook.CallbackUrl);
 
             //Delete Webhook
-            await TrelloClient.DeleteWebhook(webhookId);
-            var webhooksAfterDelete = await TrelloClient.GetWebhooksForCurrentToken();
+            await TrelloClient.DeleteWebhookAsync(webhookId);
+            var webhooksAfterDelete = await TrelloClient.GetWebhooksForCurrentTokenAsync();
             Assert.Equal(currentWebhooks.Count, webhooksAfterDelete.Count);
         }
         finally

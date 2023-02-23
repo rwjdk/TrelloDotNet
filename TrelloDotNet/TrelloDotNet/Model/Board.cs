@@ -54,6 +54,27 @@ namespace TrelloDotNet.Model
         public bool Closed { get; private set; }
 
         /// <summary>
+        /// Id of Organization
+        /// </summary>
+        [JsonPropertyName("idOrganization")]
+        [JsonInclude]
+        public string OrganizationId { get; private set; }
+
+        /// <summary>
+        /// Id of Enterprise
+        /// </summary>
+        [JsonPropertyName("idEnterprise")]
+        [JsonInclude]
+        public string EnterpriseId { get; private set; }
+
+        /// <summary>
+        /// If the Board is pinned or not
+        /// </summary>
+        [JsonPropertyName("pinned")]
+        [JsonInclude]
+        public bool Pinned { get; private set; }
+
+        /// <summary>
         /// Date the Board was created [stored in UTC]
         /// </summary>
         [JsonIgnore] public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);

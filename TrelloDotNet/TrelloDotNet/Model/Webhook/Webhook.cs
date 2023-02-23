@@ -9,7 +9,7 @@ namespace TrelloDotNet.Model.Webhook
     public class Webhook
     {
         /// <summary>
-        /// Id of the Webhook (You can find these via method 'GetWebhooksForCurrentToken()')
+        /// Id of the Webhook (You can find these via method 'GetWebhooksForCurrentTokenAsync()')
         /// </summary>
         [JsonPropertyName("id")]
         [JsonInclude]

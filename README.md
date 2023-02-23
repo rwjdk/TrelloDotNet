@@ -56,11 +56,11 @@ var addedChecklist = await client.AddChecklistAsync("<cardId>", newChecklist);
 ## On the subject of getting Ids from Trello
 - The easiest way to get Ids in Trello is to use the API itself or use the share buttons in the project
 
-![Trello Board](https://github.com/rwjdk/TrelloDotNet/blob/main/Images/trello_board.png)
+![Trello Board](https://i.imgur.com/D6vxkrm.png)
 
 The Export looks like this (search for id or use a tool to pretty-print the JSON to get a better view)
 
-![JSON Example](https://github.com/rwjdk/TrelloDotNet/blob/main/Images/json_example.png)
+![JSON Example](https://i.imgur.com/qDJgzNz.png)
 
 ## More info, bugs, or questions?
 Visit the Github Page: https://github.com/rwjdk/TrelloDotNet

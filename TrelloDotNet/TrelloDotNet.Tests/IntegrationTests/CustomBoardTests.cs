@@ -28,7 +28,7 @@ public class CustomBoardTests : TestBase
             if (boardId != null)
             {
                 TrelloClient.Options.AllowDeleteOfBoards = true;
-                await TrelloClient.DeleteBoard(boardId);
+                await TrelloClient.DeleteBoardAsync(boardId);
             }
         }
     }

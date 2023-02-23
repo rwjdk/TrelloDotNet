@@ -137,7 +137,7 @@ public class CardTests : TestBaseWithNewBoard
             Assert.Equal(2, cardsNow.Count);
 
             WaitToAvoidRateLimits();
-            await TrelloClient.DeleteCard(doneCard.Id);
+            await TrelloClient.DeleteCardAsync(doneCard.Id);
             var cardsNowAfterDelete = await TrelloClient.GetCardsOnBoardAsync(BoardId);
             Assert.Single(cardsNowAfterDelete);
 

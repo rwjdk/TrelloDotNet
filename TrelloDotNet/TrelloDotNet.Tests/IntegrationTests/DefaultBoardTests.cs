@@ -21,7 +21,7 @@ public class DefaultBoardTests : TestBaseWithNewBoard
             //Member Tests
             var members = await TrelloClient.GetMembersOfBoardAsync(BoardId);
             Assert.Single(members);
-            var member = await TrelloClient.GetMember(members.First().Id);
+            var member = await TrelloClient.GetMemberAsync(members.First().Id);
             Assert.Equal(member.FullName, members.First().FullName);
             Assert.Equal(member.Username, members.First().Username);
 

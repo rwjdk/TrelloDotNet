@@ -68,7 +68,7 @@ public class ListTests : TestBaseWithNewBoard
             var listsAfterReopen = await TrelloClient.GetListsOnBoardAsync(BoardId);
             Assert.Equal(listsAfterArchive.Count + 1, listsAfterReopen.Count);
 
-            //Test: ArchiveAllCardsInList
+            //Test: ArchiveAllCardsInListAsync
             //Add some cards so we can test Archive All Cards In List
             WaitToAvoidRateLimits();
             await TrelloClient.AddCardAsync(new Card(reopenedList.Id, "C1"));
@@ -80,7 +80,7 @@ public class ListTests : TestBaseWithNewBoard
             var cardsOnListAfterAdd = await TrelloClient.GetCardsInListAsync(reopenedList.Id);
             Assert.Equal(3, cardsOnListAfterAdd.Count);
             WaitToAvoidRateLimits();
-            await TrelloClient.ArchiveAllCardsInList(reopenedList.Id);
+            await TrelloClient.ArchiveAllCardsInListAsync(reopenedList.Id);
             var cardsOnListAfterArchive = await TrelloClient.GetCardsInListAsync(reopenedList.Id);
             Assert.Empty(cardsOnListAfterArchive);
 
@@ -97,7 +97,7 @@ public class ListTests : TestBaseWithNewBoard
             WaitToAvoidRateLimits();
             var listToMoveTo = await TrelloClient.AddListAsync(new List("List to move to", BoardId));
             WaitToAvoidRateLimits();
-            await TrelloClient.MoveAllCardsInList(reopenedList.Id, listToMoveTo.Id);
+            await TrelloClient.MoveAllCardsInListAsync(reopenedList.Id, listToMoveTo.Id);
             WaitToAvoidRateLimits();
             var cardsOnListAfterMove = await TrelloClient.GetCardsInListAsync(listToMoveTo.Id);
             Assert.Equal(3, cardsOnListAfterMove.Count);

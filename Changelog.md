@@ -1,8 +1,12 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-##Unreleased
-- 
+## 1.2.0 (23rd of Feb. 2023)
+- Fixed: various methods was missing 'Async' suffix so it was added (Sorry for this breaking change (oversight by me) but better now than later :-/ ... and it should be easy to fix) [COMPILE TIME BREAKING CHANGE]
+- Changed: Overridden ToString() methods on Models are removed and DebuggerDisplay Attributes are now used instead.
+- Added: Added properties 'OrganizationId', 'EnterpriseId' and 'Pinned' to the Board Object
+- Added: Support for Card Stickers (CRUD) :-)
+- Added: Support to add Comments on cards :-)
 
 <hr>
 
@@ -31,7 +35,7 @@
 <hr>
 
 ## 0.9.6 Alpha
-- Bumped dependency version of System.Text.Json to 6.0.0 as 5.0.0 have know dependency vulnerabilities and 6.0.0 is also the LTS version
+- Bumped dependency version of System.Text.Json to 6.0.0 as 5.0.0 have known dependency vulnerabilities and 6.0.0 is also the LTS version
 - Fixed various bugs
 
 <hr>

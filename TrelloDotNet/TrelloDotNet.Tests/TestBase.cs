@@ -33,7 +33,9 @@ public abstract class TestBase
 
     protected void AssertTimeIsNow(DateTimeOffset? objectCreationTime)
     {
-        Assert.True(objectCreationTime < DateTimeOffset.Now && objectCreationTime > DateTimeOffset.Now.AddMinutes(-1));
+        var beforeNow = objectCreationTime < DateTimeOffset.UtcNow.AddMinutes(1);
+        var afterAMinuteAgo = objectCreationTime > DateTimeOffset.UtcNow.AddMinutes(-1);
+        Assert.True(beforeNow && afterAMinuteAgo);
     }
 
     protected void WaitToAvoidRateLimits(int waitSeconds = 1)
