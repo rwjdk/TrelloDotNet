@@ -130,9 +130,24 @@ namespace TrelloDotNet
 
             var checklistParameters = _queryParametersBuilder.GetViaQueryParameterAttributes(template);
             var newChecklist = await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", checklistParameters);
-            foreach (var item in template.Items)
+
+            if (template.Items == null)
             {
-                var checkItemParameters = _queryParametersBuilder.GetViaQueryParameterAttributes(item);
+                return newChecklist;
+            }
+
+            if (template.Items.TrueForAll(x => x.Position == 0)) //Give positions to have the system have same order as in list
+            {
+                int position = 1;
+                foreach (var item in template.Items)
+                {
+                    item.Position = position;
+                    position++;
+                }
+            }
+
+            foreach (var checkItemParameters in template.Items.Select(item => _queryParametersBuilder.GetViaQueryParameterAttributes(item)))
+            {
                 newChecklist.Items.Add(await _apiRequestController.Post<ChecklistItem>($"{UrlPaths.Checklists}/{newChecklist.Id}/{UrlPaths.CheckItems}", checkItemParameters));
             }
 
