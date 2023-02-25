@@ -26,8 +26,8 @@ namespace TrelloDotNet.Model
         /// Id of the Sticker Image (real Id for custom stickers and string-identifier for default stickers)
         /// </summary>
         [JsonPropertyName("image")]
-        [JsonInclude]
-        public string ImageId { get; private set; }
+        [QueryParameter]
+        public string ImageId { get; set; }
 
         /// <summary>
         /// Id of the Sticker Image as Enum
@@ -167,7 +167,5 @@ namespace TrelloDotNet.Model
             ZIndex = zIndex;
             Rotation = rotation;
         }
-
-
     }
 }

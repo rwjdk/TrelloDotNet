@@ -1,0 +1,105 @@
+{
+  "id": "63fa5147c4d387ef620a3cfb",
+  "idMemberCreator": "63d1239e857afaa8b003c633",
+  "data": {
+    "text": "My first cool comment! @rasmus58348007 mention",
+    "textData": { "emoji": {} },
+    "card": {
+      "id": "63e216e15baa8f45ae87948b",
+      "name": "My Cool Card",
+      "idShort": 2,
+      "shortLink": "ElFORGIf"
+    },
+    "board": {
+      "id": "63e1096da4ecf28dcb763ba9",
+      "name": "My Sample Board",
+      "shortLink": "czwRjhWF"
+    },
+    "list": {
+      "id": "63e216459be4ce6421f59885",
+      "name": "My Cool List"
+    }
+  },
+  "appCreator": { "id": "63dc1606d6ed5e0202a89fcf" },
+  "type": "commentCard",
+  "date": "2023-02-25T18:19:51.165Z",
+  "limits": {
+    "reactions": {
+      "perAction": {
+        "status": "ok",
+        "disableAt": 900,
+        "warnAt": 720
+      },
+      "uniquePerAction": {
+        "status": "ok",
+        "disableAt": 17,
+        "warnAt": 14
+      }
+    }
+  },
+  "display": {
+    "translationKey": "action_comment_on_card",
+    "entities": {
+      "contextOn": {
+        "type": "translatable",
+        "translationKey": "action_on",
+        "hideIfContext": true,
+        "idContext": "63e216e15baa8f45ae87948b"
+      },
+      "card": {
+        "type": "card",
+        "hideIfContext": true,
+        "id": "63e216e15baa8f45ae87948b",
+        "shortLink": "ElFORGIf",
+        "text": "My Cool Card"
+      },
+      "comment": {
+        "type": "comment",
+        "text": "My first cool comment! @rasmus58348007 mention"
+      },
+      "memberCreator": {
+        "type": "member",
+        "id": "63d1239e857afaa8b003c633",
+        "username": "rasmus58348007",
+        "text": "Rasmus"
+      }
+    }
+  },
+  "entities": [
+    {
+      "type": "member",
+      "id": "63d1239e857afaa8b003c633",
+      "username": "rasmus58348007",
+      "text": "Rasmus"
+    },
+    {
+      "type": "text",
+      "text": "on",
+      "hideIfContext": true,
+      "idContext": "63e216e15baa8f45ae87948b"
+    },
+    {
+      "type": "card",
+      "hideIfContext": true,
+      "id": "63e216e15baa8f45ae87948b",
+      "shortLink": "ElFORGIf",
+      "text": "My Cool Card"
+    },
+    {
+      "type": "comment",
+      "text": "My first cool comment! @rasmus58348007 mention"
+    }
+  ],
+  "memberCreator": {
+    "id": "63d1239e857afaa8b003c633",
+    "activityBlocked": false,
+    "avatarHash": "f07a53f609386b8f57a767bceb8a8a26",
+    "avatarUrl": "https://trello-members.s3.amazonaws.com/63d1239e857afaa8b003c633/f07a53f609386b8f57a767bceb8a8a26",
+    "fullName": "Rasmus",
+    "idMemberReferrer": null,
+    "initials": "R",
+    "nonPublic": {},
+    "nonPublicAvailable": true,
+    "username": "rasmus58348007"
+  }
+}

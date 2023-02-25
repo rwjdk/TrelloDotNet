@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using TrelloDotNet.Model;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace TrelloDotNet.Tests;
 
 public abstract class TestBase
 {
     protected TrelloClient TrelloClient;
-
     protected TestBase()
     {
         TrelloClient = GetClient();

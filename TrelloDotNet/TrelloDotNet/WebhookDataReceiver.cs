@@ -37,6 +37,16 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Convert JSON for the webhook into a Notification
+        /// </summary>
+        /// <param name="json">Raw JSON from the webhook</param>
+        /// <returns>C# Class representing the JSON</returns>
+        public WebhookNotification ConvertJsonToWebhookNotification(string json)
+        {
+            return JsonSerializer.Deserialize<WebhookNotification>(json);
+        }
+
+        /// <summary>
         /// Convert JSON for the webhook into a Board Notification (require that you webhook set it idModel to a BoardId)
         /// </summary>
         /// <param name="json">Raw JSON from the webhook</param>

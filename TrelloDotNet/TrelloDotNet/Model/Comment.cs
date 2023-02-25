@@ -8,13 +8,6 @@ namespace TrelloDotNet.Model
     public class Comment
     {
         /// <summary>
-        /// Id of the comment
-        /// </summary>
-        [JsonPropertyName("id")]
-        [JsonInclude]
-        public string Id { get; private set; }
-
-        /// <summary>
         /// Text of the comment
         /// </summary>
         [JsonPropertyName("text")]

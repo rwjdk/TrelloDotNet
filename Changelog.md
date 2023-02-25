@@ -1,8 +1,13 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## Unreleased 
+## 1.2.1 (25rd of Feb. 2023)
+- Added: Generic WebHookNotification that do not care if Webhook returned from a Board, List, Card, etc
+- Added: Added Method 'UpdateCommentActionAsync' for the ability to update Comments
+- Added: Added Methods 'GetAllCommentsOnCardAsync' and 'GetPagedCommentsOnCardAsync' for the ability to Get existing comments on a card
 - Changed: AddChecklistAsync will now add positions of checkitems automatically in same order as list if non is specified.
+- Fixed: 'AddStickerToCardAsync' did not work as intended (You got an 'Invalid ImageId' error) due to a late refactoring and a poor testing on my part (last time I skimp on integrationtests!) :-(
+- Fixed: 'AddCommentAsync' had a wrong return object (Trello API is just wierd and not being consistent!)
 
 ## 1.2.0 (23rd of Feb. 2023)
 - Fixed: various methods was missing 'Async' suffix so it was added (Sorry for this breaking change (oversight by me) but better now than later :-/ ... and it should be easy to fix) [COMPILE TIME BREAKING CHANGE]

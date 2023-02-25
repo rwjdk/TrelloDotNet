@@ -32,6 +32,8 @@ public class WebhookManagementTests : TestBaseWithNewBoard
             Assert.Equal(updatedDescription, updatedWebHook.Description);
             Assert.False(addedWebHook.Active);
 
+            WaitToAvoidRateLimits(3);
+
             //Check lists of webhooks are update
             var webhooksAfterAdd = await TrelloClient.GetWebhooksForCurrentTokenAsync();
             Assert.Equal(currentWebhooks.Count + 1, webhooksAfterAdd.Count);

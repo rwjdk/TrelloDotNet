@@ -6,6 +6,7 @@ using System.Security;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Actions;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet
@@ -237,10 +238,10 @@ namespace TrelloDotNet
         /// </summary>
         /// <paramref name="cardId">Id of the Card</paramref>
         /// <paramref name="comment">The Comment</paramref>
-        /// <returns>The Comment</returns>
-        public async Task<Comment> AddCommentAsync(string cardId, Comment comment)
+        /// <returns>The Comment Action</returns>
+        public async Task<TrelloAction> AddCommentAsync(string cardId, Comment comment)
         {
-            return await _apiRequestController.Post<Comment>($"{UrlPaths.Cards}/{cardId}/actions/comments", _queryParametersBuilder.GetViaQueryParameterAttributes(comment));
+            return await _apiRequestController.Post<TrelloAction>($"{UrlPaths.Cards}/{cardId}/actions/comments", _queryParametersBuilder.GetViaQueryParameterAttributes(comment));
         }
 
         /// <summary>
@@ -393,6 +394,15 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Update a comment Action (aka only way to update comments as they are not seen as their own objects)
+        /// </summary>
+        /// <param name="commentAction">The comment Action with the updated text</param>
+        public async Task<TrelloAction> UpdateCommentActionAsync(TrelloAction commentAction)
+        {
+            return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", new QueryParameter("text", commentAction.Data.Text));
+        }
+
+        /// <summary>
         /// Move an entire list to another board
         /// </summary>
         /// <param name="listId">The id of the List to move</param>
@@ -475,6 +485,15 @@ namespace TrelloDotNet
         public async Task DeleteStickerAsync(string cardId, string stickerId)
         {
             await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}");
+        }
+
+        /// <summary>
+        /// Delete a Comment (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// </summary>
+        /// <param name="commentActionId">Id of Comment Action Id</param>
+        public async Task DeleteCommentActionAsync(string commentActionId)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Actions}/{commentActionId}");
         }
 
         /// <summary>
@@ -693,7 +712,7 @@ namespace TrelloDotNet
         {
             return await _apiRequestController.Get<List<Sticker>>($"{UrlPaths.Cards}/{cardId}/stickers");
         }
-        
+
         /// <summary>
         /// Get a Stickers with a specific Id
         /// </summary>
@@ -705,6 +724,44 @@ namespace TrelloDotNet
             return await _apiRequestController.Get<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}");
         }
 
+        /// <summary>
+        /// Get All Comments on a Card
+        /// </summary>
+        /// <param name="cardId">Id of Card</param>
+        /// <returns>List of Comments</returns>
+        public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId)
+        {
+            var result = new List<TrelloAction>();
+            int page = 0;
+            bool moreComments = true;
+            do
+            {
+                var comments = await GetPagedCommentsOnCardAsync(cardId, page);
+                page++;
+                if (comments.Any())
+                {
+                    result.AddRange(comments);
+                }
+                else
+                {
+                    moreComments = false;
+                }
+            } while (moreComments);
+            return result;
+        }
+
+        /// <summary>
+        /// Get Paged Comments on a Card (Note: this method can max return up to 50 comments. For more use the page parameter [note: the API can't give you back how many there are in total so you need to try until non is returned])
+        /// </summary>
+        /// <param name="cardId">Id of Card</param>
+        /// <param name="page">The page of results for actions. Each page of results has 50 actions. (Default: 0, Maximum: 19)</param>
+        /// <returns>List of Comments</returns>
+        public async Task<List<TrelloAction>> GetPagedCommentsOnCardAsync(string cardId, int page = 0)
+        {
+            return await _apiRequestController.Get<List<TrelloAction>>($"{UrlPaths.Cards}/{cardId}/actions",
+                new QueryParameter("filter", "commentCard"),
+                new QueryParameter("page", page));
+        }
         #endregion
 
         #region Ease of Use Methods
@@ -747,7 +804,7 @@ namespace TrelloDotNet
             card.MemberIds = card.MemberIds.Except(toRemove).ToList();
             return await UpdateCardAsync(card);
         }
-        
+
         /// <summary>
         /// Remove all Members of a Card
         /// </summary>
@@ -832,7 +889,7 @@ namespace TrelloDotNet
             card.DueComplete = dueComplete;
             return await UpdateCardAsync(card);
         }
-        
+
         /// <summary>
         /// Set Due Date on a card a Card
         /// </summary>
@@ -862,7 +919,5 @@ namespace TrelloDotNet
         }
 
         #endregion
-
-
     }
 }

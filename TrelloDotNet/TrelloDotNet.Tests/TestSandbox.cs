@@ -3,12 +3,20 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Webhook;
+using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests
 {
 
     public class TestSandbox : TestBase
     {
+        private readonly ITestOutputHelper _output;
+
+        public TestSandbox(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [FactManualOnly]
         public async Task GetWebhooks()
         {
@@ -39,6 +47,8 @@ namespace TrelloDotNet.Tests
         [FactManualOnly]
         public async Task TestTask()
         {
+
+            _output.WriteLine("Hello");
             await Task.CompletedTask;
             var cardId = "63e216e15baa8f45ae87948b";
             var boardId = "63e1096da4ecf28dcb763ba9";
@@ -59,7 +69,19 @@ namespace TrelloDotNet.Tests
                 await TrelloClient.DeleteStickerAsync(cardId, s.Id);
             }*/
 
-            //await TrelloClient.AddCommentAsync(cardId, new Comment("My first cool comment! @rasmus58348007 mention"));
+            /*
+            for (int i = 0; i < 50; i++)
+            {
+              var comment = await TrelloClient.AddCommentAsync(cardId, new Comment("My first cool comment! @rasmus58348007 mention"));
+            }*/
+            
+            //comment.Data.Text = "New text!";
+            //var commentAction = await TrelloClient.UpdateCommentActionAsync(comment);
+
+            //var commentsOnCardAsync = await TrelloClient.GetAllCommentsOnCardAsync(cardId);
+            //var commentsOnCardAsync2 = await TrelloClient.GetPagedCommentsOnCardAsync(cardId, page: 1);
+            //var commentsOnCardAsync3 = await TrelloClient.GetPagedCommentsOnCardAsync(cardId, page: 2);
+            //var commentsOnCardAsync4 = await TrelloClient.GetPagedCommentsOnCardAsync(cardId, page: 3);
         }
     }
 }

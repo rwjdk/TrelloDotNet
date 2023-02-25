@@ -38,8 +38,13 @@
         /// </summary>
         public const string Webhooks = "webhooks";
         /// <summary>
-        /// Tokens
+        /// tokens
         /// </summary>
         public const string Tokens = "tokens";
+
+        /// <summary>
+        /// actions
+        /// </summary>
+        public const string Actions = "actions";
     }
 }

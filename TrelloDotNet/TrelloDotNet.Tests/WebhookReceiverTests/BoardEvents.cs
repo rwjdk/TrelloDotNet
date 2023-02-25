@@ -141,6 +141,9 @@ public class BoardEvents : TestBase
         var eMember = receiver.ConvertJsonToWebhookNotificationMember(json);
         Assert.NotNull(eMember.Action);
 
+        var noMember = receiver.ConvertJsonToWebhookNotification(json);
+        Assert.NotNull(noMember.Action);
+
         SubscribeToEventsProcessAndWait(receiver, json);
         AssertSmartEvents(); //None
         Assert.True(_basicEventOnUpdateCard);
