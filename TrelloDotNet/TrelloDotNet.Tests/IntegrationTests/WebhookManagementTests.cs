@@ -14,7 +14,7 @@ public class WebhookManagementTests : TestBaseWithNewBoard
             var currentWebhooks = await TrelloClient.GetWebhooksForCurrentTokenAsync();
 
             //Add Webhook
-            var callbackUrl = "https://www.google.com";
+            var callbackUrl = "https://www.trello.com";
             var description = "Webhook1";
             var webhook = new Webhook(description, callbackUrl, BoardId);
             var addedWebHook = await TrelloClient.AddWebhookAsync(webhook);
@@ -44,6 +44,8 @@ public class WebhookManagementTests : TestBaseWithNewBoard
             Assert.Equal(getWebhook.Id, updatedWebHook.Id);
             Assert.Equal(getWebhook.Description, updatedWebHook.Description);
             Assert.Equal(getWebhook.CallbackUrl, updatedWebHook.CallbackUrl);
+
+            WaitToAvoidRateLimits(3);
 
             //Delete Webhook
             await TrelloClient.DeleteWebhookAsync(webhookId);
