@@ -1,7 +1,7 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## 1.2.1 (25rd of Feb. 2023)
+## 1.2.1 (25th of Feb. 2023)
 - Added: Generic WebHookNotification that does not care if Webhook returned from a Board, List, Card, etc
 - Added: Added Method 'UpdateCommentActionAsync' for the ability to update Comments
 - Added: Added Methods 'GetAllCommentsOnCardAsync' and 'GetPagedCommentsOnCardAsync' for the ability to Get existing comments on a card
