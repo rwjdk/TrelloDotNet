@@ -77,6 +77,9 @@ namespace TrelloDotNet.Model.Webhook
         [JsonInclude]
         public WebhookActionDataMember Member { get; set; }
 
+        /// <summary>
+        /// Parent
+        /// </summary>
         public WebhookAction Parent { get; internal set; }
 
     }
