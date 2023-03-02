@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -27,5 +28,19 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("shortLink")]
         [JsonInclude]
         public string ShortLink { get; private set; }
+
+        /// <summary>
+        /// Get the Full Board Object
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Board> GetAsync()
+        {
+            return await Parent.Parent.TrelloClient.GetBoardAsync(Id);
+        }
+
+        /// <summary>
+        /// Parent
+        /// </summary>
+        public WebhookActionData Parent { get; internal set; }
     }
 }

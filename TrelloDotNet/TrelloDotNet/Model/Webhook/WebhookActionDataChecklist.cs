@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -20,5 +21,19 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("name")]
         [JsonInclude]
         public string Name { get; private set; }
+
+        /// <summary>
+        /// Get the Full Checklist Object
+        /// </summary>
+        /// <returns>The Checklist</returns>
+        public async Task<Checklist> GetAsync()
+        {
+            return await Parent.Parent.TrelloClient.GetChecklistAsync(Id);
+        }
+
+        /// <summary>
+        /// Parent
+        /// </summary>
+        public WebhookActionData Parent { get; internal set; }
     }
 }

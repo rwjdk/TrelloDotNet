@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -27,5 +28,19 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("pos")]
         [JsonInclude]
         public decimal Posistion { get; private set; }
+
+        /// <summary>
+        /// Get the Full List Object
+        /// </summary>
+        /// <returns>The List</returns>
+        public async Task<List> GetAsync()
+        {
+            return await Parent.Parent.TrelloClient.GetListAsync(Id);
+        }
+
+        /// <summary>
+        /// Parent
+        /// </summary>
+        public WebhookActionData Parent { get; internal set; }
     }
 }

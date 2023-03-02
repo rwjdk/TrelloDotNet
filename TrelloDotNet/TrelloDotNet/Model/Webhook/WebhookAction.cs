@@ -56,5 +56,10 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("display")]
         [JsonInclude]
         public WebhookActionDisplay Display { get; private set; }
+
+        /// <summary>
+        /// Trello Client
+        /// </summary>
+        public TrelloClient TrelloClient { get; internal set; } 
     }
 }
