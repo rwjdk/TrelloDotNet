@@ -17,7 +17,6 @@ public abstract class TestBase
     {
         try
         {
-            //todo - add better system that also work in pipelines (added this for now)
             var config = new ConfigurationBuilder()
                 .AddUserSecrets<TestBase>()
                 .Build();

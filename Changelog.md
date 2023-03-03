@@ -3,6 +3,7 @@
 
 ## Unreleased
 - Added: WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
+- Added: struct WebhookActionTypes that list all Type of Webhook events
 
 ## 1.2.1 (25th of Feb. 2023)
 - Added: Generic WebHookNotification that does not care if Webhook returned from a Board, List, Card, etc
