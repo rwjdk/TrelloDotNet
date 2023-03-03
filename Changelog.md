@@ -2,7 +2,7 @@
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
 ## Unreleased
-- WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
+- Added: WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
 
 ## 1.2.1 (25th of Feb. 2023)
 - Added: Generic WebHookNotification that does not care if Webhook returned from a Board, List, Card, etc
