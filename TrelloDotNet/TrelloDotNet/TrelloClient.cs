@@ -16,9 +16,6 @@ namespace TrelloDotNet
     /// </summary>
     public class TrelloClient
     {
-        //todo - Other
-        //- Common Scenario/Actions List (aka things that is not a one to one API call... Example: "Move Card to List with name" so user do not need to set everything up themselves)
-
         //todo: Management
         //- Manage Custom Fields on board (CRUD)
         //- Manage Labels
@@ -35,15 +32,13 @@ namespace TrelloDotNet
         //todo: Cards
         //- Copy Card
         //- Card: Attachments CRUD
-        //- Card: Support Stickers
-        //- Card: Comments CRUD
         //- Card: Custom Fields CRUD
 
         //todo: Actions
-        //- Members
-        //- Cards
-        //- Lists
-        //- WIP: Boards
+        //- Members (why??)
+        //- Cards (why??)
+        //- Lists (why??)
+        //- Boards (why??)
 
         /// <summary>
         /// Options for the client
@@ -462,10 +457,10 @@ namespace TrelloDotNet
         /// <summary>
         /// Delete a Card (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseCard() for non-permanency
         /// </summary>
-        /// <param name="webhookId">The id of the Board to Delete</param>
-        public async Task DeleteCardAsync(string webhookId)
+        /// <param name="cardId">The id of the Card to Delete</param>
+        public async Task DeleteCardAsync(string cardId)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Cards}/{webhookId}");
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}");
         }
 
         /// <summary>
@@ -503,6 +498,15 @@ namespace TrelloDotNet
         public async Task DeleteAsync(string urlSuffix)
         {
             await _apiRequestController.Delete(urlSuffix);
+        }
+
+        /// <summary>
+        /// Delete a Checklist (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// </summary>
+        /// <param name="checklistId">The id of the Checklist to Delete</param>
+        public async Task DeleteChecklistAsync(string checklistId)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}");
         }
 
         #endregion

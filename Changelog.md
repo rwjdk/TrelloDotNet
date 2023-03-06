@@ -1,9 +1,13 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## Unreleased
+## 1.3.0-alpha (6th of March 2023)
+- Added: Webhook Automation Engine that make it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
 - Added: WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
-- Added: struct WebhookActionTypes that list all Type of Webhook events
+- Added: Struct WebhookActionTypes that list all Type of Webhook events
+- Added: Method 'DeleteChecklistAsync'
+- Fixed: Various incorrect XML Summaries and parameter names (all non breaking changes)
+
 
 ## 1.2.1 (25th of Feb. 2023)
 - Added: Generic WebHookNotification that does not care if Webhook returned from a Board, List, Card, etc

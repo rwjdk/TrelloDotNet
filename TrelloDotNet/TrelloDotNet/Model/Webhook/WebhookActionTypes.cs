@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TrelloDotNet.Model.Webhook
+﻿namespace TrelloDotNet.Model.Webhook
 {
     /// <summary>
     /// The various WebhookAction.Types possible

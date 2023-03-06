@@ -85,7 +85,13 @@ namespace TrelloDotNet.Model
             ImageId = DefaultImageToString(imageId);
         }
 
-        private string DefaultImageToString(StickerDefaultImageId imageId)
+        /// <summary>
+        /// Convert a StickerDefaultImageId enum to its matching ImageId String
+        /// </summary>
+        /// <param name="imageId">The ImageId Enum value</param>
+        /// <returns>The String</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If image Id is not a known value</exception>
+        public static string DefaultImageToString(StickerDefaultImageId imageId)
         {
             switch (imageId)
             {
@@ -118,7 +124,12 @@ namespace TrelloDotNet.Model
             }
         }
 
-        private StickerDefaultImageId StringToDefaultImageId(string imageId)
+        /// <summary>
+        /// Turn an ImageId into its 'StickerDefaultImageId' value (or value NotADefault if it is not a known value )
+        /// </summary>
+        /// <param name="imageId">ImageId string to convert</param>
+        /// <returns>The Enum Value</returns>
+        public static StickerDefaultImageId StringToDefaultImageId(string imageId)
         {
             switch (imageId)
             {

@@ -65,15 +65,15 @@ namespace TrelloDotNet.Control
             }
             return content; //Content is assumed JSON
         }
-        
-        public async Task<T> Put<T>(string suffix, params QueryParameter[] parameters)
+
+        internal async Task<T> Put<T>(string suffix, params QueryParameter[] parameters)
         {
             string json = await Put(suffix, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        public async Task<string> Put(string suffix, params QueryParameter[] parameters)
+        internal async Task<string> Put(string suffix, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PutAsync(uri, null);
