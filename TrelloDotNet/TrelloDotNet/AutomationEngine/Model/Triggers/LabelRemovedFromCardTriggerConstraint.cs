@@ -13,6 +13,11 @@
         /// <summary>
         /// Any except these labels are removed (Example: Any label that is not the 'Documentation' label)
         /// </summary>
-        AnyButTheseLabelsAreRemoved = 2
+        AnyButTheseLabelsAreRemoved = 2,
+        
+        /// <summary>
+        /// Any Label is removed
+        /// </summary>
+        AnyLabel = 3
     }
 }

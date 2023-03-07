@@ -7,34 +7,34 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// Trigger that occur when a Card get a new label Added
+    /// Trigger that occur when a Card get a new Member Added
     /// </summary>
-    public class LabelAddedToCardTrigger : IAutomationTrigger
+    public class MemberAddedToCardTrigger : IAutomationTrigger
     {
         /// <summary>
-        /// Set this to 'True' if you supplied names of labels instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
+        /// Set this to 'True' if you supplied usernames of Members instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
         /// </summary>
-        public bool TreatLabelNameAsId { get; set; }
+        public bool TreatMemberNameAsId { get; set; }
         
         /// <summary>
         /// The Constraint of the Trigger
         /// </summary>
-        public LabelAddedToCardTriggerConstraint Constraint { get; }
+        public MemberAddedToCardTriggerConstraint Constraint { get; }
 
         /// <summary>
-        /// The Ids of the label or Labels to check. Tip: These can be Label-names instead of Ids if you set 'TreatLabelNameAsId' to True
+        /// The Ids of the Member or Members to check. Tip: These can be Member-usernames instead of Ids if you set 'TreatMemberNameAsId' to True
         /// </summary>
-        public string[] LabelIds { get; }
+        public string[] MemberIds { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="constraint">The Constraint of the Trigger</param>
-        /// <param name="labelIds">The Ids of the label or Labels to check. Tip: These can be Label-names instead of Ids if you set 'TreatLabelNameAsId' to True</param>
-        public LabelAddedToCardTrigger(LabelAddedToCardTriggerConstraint constraint, params string[] labelIds)
+        /// <param name="memberIds">The Ids of the Member or Members to check. Tip: These can be Member-usernames instead of Ids if you set 'TreatMemberNameAsId' to True</param>
+        public MemberAddedToCardTrigger(MemberAddedToCardTriggerConstraint constraint, params string[] memberIds)
         {
             Constraint = constraint;
-            LabelIds = labelIds;
+            MemberIds = memberIds;
         }
 
         /// <summary>
@@ -48,15 +48,15 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
         public async Task<bool> IsTriggerMetAsync(WebhookAction webhookAction)
         {
             await Task.CompletedTask;
-            var correctType = webhookAction.Type == WebhookActionTypes.AddLabelToCard;
-            var partToMatch = TreatLabelNameAsId ? webhookAction.Data?.Label?.Name : webhookAction.Data?.Label?.Id;
+            var correctType = webhookAction.Type == WebhookActionTypes.AddMemberToCard;
+            var partToMatch = TreatMemberNameAsId ? webhookAction.Data?.Member?.Name : webhookAction.Data?.Member?.Id;
             switch (Constraint)
             {
-                case LabelAddedToCardTriggerConstraint.AnyOfTheseLabelsAreAdded:
-                    return correctType && LabelIds.Contains(partToMatch);
-                case LabelAddedToCardTriggerConstraint.AnyButTheseLabelsAreAreAdded:
-                    return correctType && !LabelIds.Contains(partToMatch);
-                case LabelAddedToCardTriggerConstraint.AnyLabel:
+                case MemberAddedToCardTriggerConstraint.AnyOfTheseMembersAreAdded:
+                    return correctType && MemberIds.Contains(partToMatch);
+                case MemberAddedToCardTriggerConstraint.AnyButTheseMembersAreAreAdded:
+                    return correctType && !MemberIds.Contains(partToMatch);
+                case MemberAddedToCardTriggerConstraint.AnyMember:
                     return correctType;
                 default:
                     throw new ArgumentOutOfRangeException();

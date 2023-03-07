@@ -54,8 +54,8 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
         public async Task<bool> IsTriggerMetAsync(WebhookAction webhookAction)
         {
             await Task.CompletedTask;
-            var listPartToCheck = TreatListNameAsId ? webhookAction.Data?.ListAfter?.Name : webhookAction.Data?.ListAfter?.Id;
-            if (listPartToCheck == null)
+            var partToCheck = TreatListNameAsId ? webhookAction.Data?.ListAfter?.Name : webhookAction.Data?.ListAfter?.Id;
+            if (partToCheck == null)
             {
                 return false;
             }
@@ -72,28 +72,28 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
                     switch (ListNameMatchCriteria)
                     {
                         case StringMatchCriteria.StartsWith:
-                            return correctType && ListIds.Any(x => listPartToCheck.StartsWith(x));
+                            return correctType && ListIds.Any(x => partToCheck.StartsWith(x));
                         case StringMatchCriteria.EndsWith:
-                            return correctType && ListIds.Any(x => listPartToCheck.EndsWith(x));
+                            return correctType && ListIds.Any(x => partToCheck.EndsWith(x));
                         case StringMatchCriteria.Contains:
-                            return correctType && ListIds.Any(x => listPartToCheck.Contains(x));
+                            return correctType && ListIds.Any(x => partToCheck.Contains(x));
                         case StringMatchCriteria.Exact:
                         default:
-                            return correctType && ListIds.Contains(listPartToCheck);
+                            return correctType && ListIds.Contains(partToCheck);
                     }
 
                 case CardMovedToListTriggerContraint.AnyButTheseListsAreMovedTo:
                     switch (ListNameMatchCriteria)
                     {
                         case StringMatchCriteria.StartsWith:
-                            return correctType && ListIds.Any(x => !listPartToCheck.StartsWith(x));
+                            return correctType && ListIds.Any(x => !partToCheck.StartsWith(x));
                         case StringMatchCriteria.EndsWith:
-                            return correctType && ListIds.Any(x => !listPartToCheck.EndsWith(x));
+                            return correctType && ListIds.Any(x => !partToCheck.EndsWith(x));
                         case StringMatchCriteria.Contains:
-                            return correctType && ListIds.Any(x => !listPartToCheck.Contains(x));
+                            return correctType && ListIds.Any(x => !partToCheck.Contains(x));
                         case StringMatchCriteria.Exact:
                         default:
-                            return correctType && !ListIds.Contains(listPartToCheck);
+                            return correctType && !ListIds.Contains(partToCheck);
                     }
                 default:
                     throw new ArgumentOutOfRangeException();

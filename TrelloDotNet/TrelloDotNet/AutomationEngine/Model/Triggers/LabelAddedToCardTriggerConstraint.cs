@@ -13,6 +13,11 @@
         /// <summary>
         /// Trigger is true if any but the provided Labels are added (Example: Any label but the 'Documentation' label)
         /// </summary>
-        AnyButTheseLabelsAreAreAdded = 2
+        AnyButTheseLabelsAreAreAdded = 2,
+
+        /// <summary>
+        /// Trigger is true if any label is added (no matter which)
+        /// </summary>
+        AnyLabel = 3
     }
 }

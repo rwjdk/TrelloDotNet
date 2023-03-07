@@ -7,34 +7,34 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// Trigger that occur when a Card have a label removed
+    /// Trigger that occur when a Card have a Member removed
     /// </summary>
-    public class LabelRemovedFromCardTrigger : IAutomationTrigger
+    public class MemberRemovedFromCardTrigger : IAutomationTrigger
     {
         /// <summary>
-        /// Set this to 'True' if you supplied names of labels instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
+        /// Set this to 'True' if you supplied names of Members instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
         /// </summary>
-        public bool TreatLabelNameAsId { get; set; }
+        public bool TreatMemberNameAsId { get; set; }
 
         /// <summary>
         /// Constraint of the trigger
         /// </summary>
-        public LabelRemovedFromCardTriggerConstraint Constraint { get; }
+        public MemberRemovedFromCardTriggerConstraint Constraint { get; }
 
         /// <summary>
-        /// The Ids of the label or Labels to check. Tip: These can be Label-names instead of Ids if you set 'TreatLabelNameAsId' to True
+        /// The Ids of the Member or Members to check. Tip: These can be Member-names instead of Ids if you set 'TreatMemberNameAsId' to True
         /// </summary>
-        public string[] LabelIds { get; }
+        public string[] MemberIds { get; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="constraint">Constraint of the trigger</param>
-        /// <param name="labelIds">The Ids of the label or Labels to check. Tip: These can be Label-names instead of Ids if you set 'TreatLabelNameAsId' to True</param>
-        public LabelRemovedFromCardTrigger(LabelRemovedFromCardTriggerConstraint constraint, params string[] labelIds)
+        /// <param name="memberIds">The Ids of the Member or Members to check. Tip: These can be Member-names instead of Ids if you set 'TreatMemberNameAsId' to True</param>
+        public MemberRemovedFromCardTrigger(MemberRemovedFromCardTriggerConstraint constraint, params string[] memberIds)
         {
             Constraint = constraint;
-            LabelIds = labelIds;
+            MemberIds = memberIds;
         }
 
         /// <summary>
@@ -48,15 +48,15 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
         public async Task<bool> IsTriggerMetAsync(WebhookAction webhookAction)
         {
             await Task.CompletedTask;
-            var correctType = webhookAction.Type == WebhookActionTypes.RemoveLabelFromCard;
-            var partToMatch = TreatLabelNameAsId ? webhookAction.Data?.Label?.Name : webhookAction.Data?.Label?.Id;
+            var correctType = webhookAction.Type == WebhookActionTypes.RemoveMemberFromCard;
+            var partToMatch = TreatMemberNameAsId ? webhookAction.Data?.Member?.Name : webhookAction.Data?.Member?.Id;
             switch (Constraint)
             {
-                case LabelRemovedFromCardTriggerConstraint.AnyOfTheseLabelsAreRemoved:
-                    return correctType && LabelIds.Contains(partToMatch);
-                case LabelRemovedFromCardTriggerConstraint.AnyButTheseLabelsAreRemoved:
-                    return correctType && !LabelIds.Contains(partToMatch);
-                case LabelRemovedFromCardTriggerConstraint.AnyLabel:
+                case MemberRemovedFromCardTriggerConstraint.AnyOfTheseMembersAreRemoved:
+                    return correctType && MemberIds.Contains(partToMatch);
+                case MemberRemovedFromCardTriggerConstraint.AnyButTheseMembersAreRemoved:
+                    return correctType && !MemberIds.Contains(partToMatch);
+                case MemberRemovedFromCardTriggerConstraint.AnyMember:
                     return correctType;
                 default:
                     throw new ArgumentOutOfRangeException();
