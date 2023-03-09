@@ -6,9 +6,9 @@
     public enum StringMatchCriteria
     {
         /// <summary>
-        /// String should match Exact
+        /// String should match Equal
         /// </summary>
-        Exact = 1,
+        Equal = 1,
         /// <summary>
         /// String should start with the provided
         /// </summary>

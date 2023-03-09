@@ -27,7 +27,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
         public bool TreatListNameAsId { get; set; }
 
         /// <summary>
-        /// Defines the criteria on how to match Names (only used if TreatListNameAsId = 'True'). Default is Exact Match
+        /// Defines the criteria on how to match Names (only used if TreatListNameAsId = 'True'). Default is Equal Match
         /// </summary>
         public StringMatchCriteria ListNameMatchCriteria { get; set; }
 
@@ -40,7 +40,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
         {
             Contraint = contraint;
             ListIds = listIds;
-            ListNameMatchCriteria = StringMatchCriteria.Exact;
+            ListNameMatchCriteria = StringMatchCriteria.Equal;
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
 
             if (!TreatListNameAsId)
             {
-                ListNameMatchCriteria = StringMatchCriteria.Exact; //Force exact match no matter what user defined as it does not make sense to partly match auto-generated Ids
+                ListNameMatchCriteria = StringMatchCriteria.Equal; //Force exact match no matter what user defined as it does not make sense to partly match auto-generated Ids
             }
                 
             switch (Contraint)
@@ -77,7 +77,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
                             return correctType && ListIds.Any(x => partToCheck.EndsWith(x));
                         case StringMatchCriteria.Contains:
                             return correctType && ListIds.Any(x => partToCheck.Contains(x));
-                        case StringMatchCriteria.Exact:
+                        case StringMatchCriteria.Equal:
                         default:
                             return correctType && ListIds.Contains(partToCheck);
                     }
@@ -91,7 +91,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
                             return correctType && ListIds.Any(x => !partToCheck.EndsWith(x));
                         case StringMatchCriteria.Contains:
                             return correctType && ListIds.Any(x => !partToCheck.Contains(x));
-                        case StringMatchCriteria.Exact:
+                        case StringMatchCriteria.Equal:
                         default:
                             return correctType && !ListIds.Contains(partToCheck);
                     }

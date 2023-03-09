@@ -38,7 +38,9 @@ namespace TrelloDotNet.Control
 
                 if (updateablePropertyType == typeof(string))
                 {
-                    parameters.Add(new QueryParameter(jsonPropertyName.Name, (string)rawValue));
+                    parameters.Add(rawValue == null ? 
+                        new QueryParameter(jsonPropertyName.Name, string.Empty) : 
+                        new QueryParameter(jsonPropertyName.Name, (string)rawValue));
                 }
                 else if (updateablePropertyType == typeof(int) || updateablePropertyType == typeof(int?))
                 {
