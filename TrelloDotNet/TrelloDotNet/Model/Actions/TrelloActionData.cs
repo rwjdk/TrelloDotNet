@@ -34,5 +34,19 @@ namespace TrelloDotNet.Model.Actions
         [JsonPropertyName("list")]
         [JsonInclude]
         public TrelloActionDataList List { get; private set; }
+        
+        /// <summary>
+        /// Simplified ListBefore of the Action (present on card moved to new List)
+        /// </summary>
+        [JsonPropertyName("listBefore")]
+        [JsonInclude]
+        public TrelloActionDataList ListBefore { get; private set; }
+
+        /// <summary>
+        /// Simplified ListAfter of the Action (present on card moved to new List)
+        /// </summary>
+        [JsonPropertyName("listAfter")]
+        [JsonInclude]
+        public TrelloActionDataList ListAfter { get; private set; }
     }
 }

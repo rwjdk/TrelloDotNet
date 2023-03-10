@@ -6,9 +6,9 @@
 - Added: WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
 - Added: Struct WebhookActionTypes that list all Type of Webhook events
 - Added: Method 'DeleteChecklistAsync'
+- Added: ListBefore and ListAfter to TrelloActionData
 - Fixed: Various incorrect XML Summaries and parameter names (all non breaking changes)
 - Fixed: Null values in strings for update of objects are now considered empty string so you do not end up with 'null' values (aka the word 'null' as a string)
-
 
 ## 1.2.1 (25th of Feb. 2023)
 - Added: Generic WebHookNotification that does not care if Webhook returned from a Board, List, Card, etc
