@@ -13,7 +13,7 @@
 		<PackageProjectUrl>https://github.com/rwjdk/TrelloDotNet</PackageProjectUrl>
 		<PackageIcon>trello.png</PackageIcon>
 		<PackageTags>trello;api;rest;trello api</PackageTags>
-		<Version>1.3.0-alpha.3</Version>
+		<Version>1.3.0-alpha.4</Version>
 		<Company>RWJDK</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReleaseNotes>Please see: https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md</PackageReleaseNotes>

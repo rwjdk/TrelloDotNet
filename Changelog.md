@@ -1,7 +1,7 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## 1.3.0-alpha.2 (7th of March 2023)
+## 1.3.0-alpha.4 (13th of March 2023)
 - Added: Webhook Automation Engine that make it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
 - Added: WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
 - Added: Struct WebhookActionTypes that list all Type of Webhook events

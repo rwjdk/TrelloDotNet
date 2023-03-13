@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
+using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.Model.Webhook;
 
-namespace TrelloDotNet.AutomationEngine.Interface
+namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// The Interface representing a Trigger (main type of event)
+    /// Trigger when a card is email to the board
     /// </summary>
-    public interface IAutomationTrigger
+    public class CardEmailedTrigger : IAutomationTrigger
     {
         /// <summary>
         /// If the Trigger is met
@@ -16,6 +17,10 @@ namespace TrelloDotNet.AutomationEngine.Interface
         /// </remarks>
         /// <param name="webhookAction">The Webhook Action that led to the check of the trigger. This object also have the TrelloClient and information about the event at your disposal</param>
         /// <returns>If trigger is met or not</returns>
-        Task<bool> IsTriggerMetAsync(WebhookAction webhookAction);
+        public async Task<bool> IsTriggerMetAsync(WebhookAction webhookAction)
+        {
+            await Task.CompletedTask;
+            return webhookAction.Type == WebhookActionTypes.EmailCard;
+        }
     }
 }
