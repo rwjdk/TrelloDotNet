@@ -292,220 +292,248 @@ namespace TrelloDotNet.Control.Webhook
         /// OnUnknownActionType
         /// </summary>
         public event WebhookEventHandler<WebhookAction> OnUnknownActionType;
+        /// <summary>
+        /// OnAddCustomField
+        /// </summary>
+        public event WebhookEventHandler<WebhookAction> OnAddCustomField;
+        /// <summary>
+        /// OnDeleteCustomField
+        /// </summary>
+        public event WebhookEventHandler<WebhookAction> OnDeleteCustomField;
+        /// <summary>
+        /// OnUpdateCustomFieldItem (update on card)
+        /// </summary>
+        public event WebhookEventHandler<WebhookAction> OnUpdateCustomFieldItem;
+        /// <summary>
+        /// OnUpdateCustomField (update definition)
+        /// </summary>
+        public event WebhookEventHandler<WebhookAction> OnUpdateCustomField;
 
         internal void FireEvent(WebhookAction action)
         {
             switch (action.Type)
             {
-                case "acceptEnterpriseJoinRequest":
+                case WebhookActionTypes.AcceptEnterpriseJoinRequest:
                     OnAcceptEnterpriseJoinRequest?.Invoke(action);
                     break;
-                case "addAttachmentToCard":
+                case WebhookActionTypes.AddAttachmentToCard:
                     OnAddAttachmentToCard?.Invoke(action);
                     break;
-                case "addChecklistToCard":
+                case WebhookActionTypes.AddChecklistToCard:
                     OnAddChecklistToCard?.Invoke(action);
                     break;
-                case "addMemberToBoard":
+                case WebhookActionTypes.AddMemberToBoard:
                     OnAddMemberToBoard?.Invoke(action);
                     break;
-                case "addMemberToCard":
+                case WebhookActionTypes.AddMemberToCard:
                     OnAddMemberToCard?.Invoke(action);
                     break;
-                case "addMemberToOrganization":
+                case WebhookActionTypes.AddMemberToOrganization:
                     OnAddMemberToOrganization?.Invoke(action);
                     break;
-                case "addOrganizationToEnterprise":
+                case WebhookActionTypes.AddOrganizationToEnterprise:
                     OnAddOrganizationToEnterprise?.Invoke(action);
                     break;
-                case "addToEnterprisePluginWhitelist":
+                case WebhookActionTypes.AddToEnterprisePluginWhitelist:
                     OnAddToEnterprisePluginWhitelist?.Invoke(action);
                     break;
-                case "addToOrganizationBoard":
+                case WebhookActionTypes.AddToOrganizationBoard:
                     OnAddToOrganizationBoard?.Invoke(action);
                     break;
-                case "commentCard":
+                case WebhookActionTypes.CommentCard:
                     OnCommentCard?.Invoke(action);
                     break;
-                case "convertToCardFromCheckItem":
+                case WebhookActionTypes.ConvertToCardFromCheckItem:
                     OnConvertToCardFromCheckItem?.Invoke(action);
                     break;
-                case "copyBoard":
+                case WebhookActionTypes.CopyBoard:
                     OnCopyBoard?.Invoke(action);
                     break;
-                case "copyCard":
+                case WebhookActionTypes.CopyCard:
                     OnCopyCard?.Invoke(action);
                     break;
-                case "copyCommentCard":
+                case WebhookActionTypes.CopyCommentCard:
                     OnCopyCommentCard?.Invoke(action);
                     break;
-                case "createBoard":
+                case WebhookActionTypes.CreateBoard:
                     OnCreateBoard?.Invoke(action);
                     break;
-                case "createCard":
+                case WebhookActionTypes.CreateCard:
                     OnCreateCard?.Invoke(action);
                     break;
-                case "createList":
+                case WebhookActionTypes.CreateList:
                     OnCreateList?.Invoke(action);
                     break;
-                case "createOrganization":
+                case WebhookActionTypes.CreateOrganization:
                     OnCreateOrganization?.Invoke(action);
                     break;
-                case "deleteBoardInvitation":
+                case WebhookActionTypes.DeleteBoardInvitation:
                     OnDeleteBoardInvitation?.Invoke(action);
                     break;
-                case "deleteCard":
+                case WebhookActionTypes.DeleteCard:
                     OnDeleteCard?.Invoke(action);
                     break;
-                case "deleteOrganizationInvitation":
+                case WebhookActionTypes.DeleteOrganizationInvitation:
                     OnDeleteOrganizationInvitation?.Invoke(action);
                     break;
-                case "disableEnterprisePluginWhitelist":
+                case WebhookActionTypes.DisableEnterprisePluginWhitelist:
                     OnDisableEnterprisePluginWhitelist?.Invoke(action);
                     break;
-                case "disablePlugin":
+                case WebhookActionTypes.DisablePlugin:
                     OnDisablePlugin?.Invoke(action);
                     break;
-                case "disablePowerUp":
+                case WebhookActionTypes.DisablePowerUp:
                     OnDisablePowerUp?.Invoke(action);
                     break;
-                case "emailCard":
+                case WebhookActionTypes.EmailCard:
                     OnEmailCard?.Invoke(action);
                     break;
-                case "enableEnterprisePluginWhitelist":
+                case WebhookActionTypes.EnableEnterprisePluginWhitelist:
                     OnEnableEnterprisePluginWhitelist?.Invoke(action);
                     break;
-                case "enablePlugin":
+                case WebhookActionTypes.EnablePlugin:
                     OnEnablePlugin?.Invoke(action);
                     break;
-                case "enablePowerUp":
+                case WebhookActionTypes.EnablePowerUp:
                     OnEnablePowerUp?.Invoke(action);
                     break;
-                case "makeAdminOfBoard":
+                case WebhookActionTypes.MakeAdminOfBoard:
                     OnMakeAdminOfBoard?.Invoke(action);
                     break;
-                case "makeNormalMemberOfBoard":
+                case WebhookActionTypes.MakeNormalMemberOfBoard:
                     OnMakeNormalMemberOfBoard?.Invoke(action);
                     break;
-                case "makeNormalMemberOfOrganization":
+                case WebhookActionTypes.MakeNormalMemberOfOrganization:
                     OnMakeNormalMemberOfOrganization?.Invoke(action);
                     break;
-                case "makeObserverOfBoard":
+                case WebhookActionTypes.MakeObserverOfBoard:
                     OnMakeObserverOfBoard?.Invoke(action);
                     break;
-                case "memberJoinedTrello":
+                case WebhookActionTypes.MemberJoinedTrello:
                     OnMemberJoinedTrello?.Invoke(action);
                     break;
-                case "moveCardFromBoard":
+                case WebhookActionTypes.MoveCardFromBoard:
                     OnMoveCardFromBoard?.Invoke(action);
                     break;
-                case "moveCardToBoard":
+                case WebhookActionTypes.MoveCardToBoard:
                     OnMoveCardToBoard?.Invoke(action);
                     break;
-                case "moveListFromBoard":
+                case WebhookActionTypes.MoveListFromBoard:
                     OnMoveListFromBoard?.Invoke(action);
                     break;
-                case "moveListToBoard":
+                case WebhookActionTypes.MoveListToBoard:
                     OnMoveListToBoard?.Invoke(action);
                     break;
-                case "removeChecklistFromCard":
+                case WebhookActionTypes.RemoveChecklistFromCard:
                     OnRemoveChecklistFromCard?.Invoke(action);
                     break;
-                case "removeFromEnterprisePluginWhitelist":
+                case WebhookActionTypes.RemoveFromEnterprisePluginWhitelist:
                     OnRemoveFromEnterprisePluginWhitelist?.Invoke(action);
                     break;
-                case "removeFromOrganizationBoard":
+                case WebhookActionTypes.RemoveFromOrganizationBoard:
                     OnRemoveFromOrganizationBoard?.Invoke(action);
                     break;
-                case "removeMemberFromCard":
+                case WebhookActionTypes.RemoveMemberFromCard:
                     OnRemoveMemberFromCard?.Invoke(action);
                     break;
-                case "removeOrganizationFromEnterprise":
+                case WebhookActionTypes.RemoveOrganizationFromEnterprise:
                     OnRemoveOrganizationFromEnterprise?.Invoke(action);
                     break;
-                case "unconfirmedBoardInvitation":
+                case WebhookActionTypes.UnconfirmedBoardInvitation:
                     OnUnconfirmedBoardInvitation?.Invoke(action);
                     break;
-                case "unconfirmedOrganizationInvitation":
+                case WebhookActionTypes.UnconfirmedOrganizationInvitation:
                     OnUnconfirmedOrganizationInvitation?.Invoke(action);
                     break;
-                case "updateBoard":
+                case WebhookActionTypes.UpdateBoard:
                     OnUpdateBoard?.Invoke(action);
                     break;
-                case "updateCard":
+                case WebhookActionTypes.UpdateCard:
                     OnUpdateCard?.Invoke(action);
                     break;
-                case "updateCheckItemStateOnCard":
+                case WebhookActionTypes.UpdateCheckItemStateOnCard:
                     OnUpdateCheckItemStateOnCard?.Invoke(action);
                     break;
-                case "updateChecklist":
+                case WebhookActionTypes.UpdateChecklist:
                     OnUpdateChecklist?.Invoke(action);
                     break;
-                case "updateList":
+                case WebhookActionTypes.UpdateList:
                     OnUpdateList?.Invoke(action);
                     break;
-                case "updateMember":
+                case WebhookActionTypes.UpdateMember:
                     OnUpdateMember?.Invoke(action);
                     break;
-                case "updateOrganization":
+                case WebhookActionTypes.UpdateOrganization:
                     OnUpdateOrganization?.Invoke(action);
                     break;
-                case "addLabelToCard":
+                case WebhookActionTypes.AddLabelToCard:
                     OnAddLabelToCard?.Invoke(action);
                     break;
-                case "copyChecklist":
+                case WebhookActionTypes.CopyChecklist:
                     OnCopyChecklist?.Invoke(action);
                     break;
-                case "createBoardInvitation":
+                case WebhookActionTypes.CreateBoardInvitation:
                     OnCreateBoardInvitation?.Invoke(action);
                     break;
-                case "createBoardPreference":
+                case WebhookActionTypes.CreateBoardPreference:
                     OnCreateBoardPreference?.Invoke(action);
                     break;
-                case "createCheckItem":
+                case WebhookActionTypes.CreateCheckItem:
                     OnCreateCheckItem?.Invoke(action);
                     break;
-                case "createLabel":
+                case WebhookActionTypes.CreateLabel:
                     OnCreateLabel?.Invoke(action);
                     break;
-                case "createOrganizationInvitation":
+                case WebhookActionTypes.CreateOrganizationInvitation:
                     OnCreateOrganizationInvitation?.Invoke(action);
                     break;
-                case "deleteAttachmentFromCard":
+                case WebhookActionTypes.DeleteAttachmentFromCard:
                     OnDeleteAttachmentFromCard?.Invoke(action);
                     break;
-                case "deleteCheckItem":
+                case WebhookActionTypes.DeleteCheckItem:
                     OnDeleteCheckItem?.Invoke(action);
                     break;
-                case "deleteComment":
+                case WebhookActionTypes.DeleteComment:
                     OnDeleteComment?.Invoke(action);
                     break;
-                case "deleteLabel":
+                case WebhookActionTypes.DeleteLabel:
                     OnDeleteLabel?.Invoke(action);
                     break;
-                case "makeAdminOfOrganization":
+                case WebhookActionTypes.MakeAdminOfOrganization:
                     OnMakeAdminOfOrganization?.Invoke(action);
                     break;
-                case "removeLabelFromCard":
+                case WebhookActionTypes.RemoveLabelFromCard:
                     OnRemoveLabelFromCard?.Invoke(action);
                     break;
-                case "removeMemberFromBoard":
+                case WebhookActionTypes.RemoveMemberFromBoard:
                     OnRemoveMemberFromBoard?.Invoke(action);
                     break;
-                case "removeMemberFromOrganization":
+                case WebhookActionTypes.RemoveMemberFromOrganization:
                     OnRemoveMemberFromOrganization?.Invoke(action);
                     break;
-                case "updateCheckItem":
+                case WebhookActionTypes.UpdateCheckItem:
                     OnUpdateCheckItem?.Invoke(action);
                     break;
-                case "updateComment":
+                case WebhookActionTypes.UpdateComment:
                     OnUpdateComment?.Invoke(action);
                     break;
-                case "updateLabel":
+                case WebhookActionTypes.UpdateLabel:
                     OnUpdateLabel?.Invoke(action);
                     break;
-                case "voteOnCard":
+                case WebhookActionTypes.VoteOnCard:
                     OnVoteOnCard?.Invoke(action);
+                    break;
+                case WebhookActionTypes.DeleteCustomField:
+                    OnDeleteCustomField?.Invoke(action);
+                    break;
+                case WebhookActionTypes.AddCustomField:
+                    OnAddCustomField?.Invoke(action);
+                    break;
+                case WebhookActionTypes.UpdateCustomFieldItem:
+                    OnUpdateCustomFieldItem?.Invoke(action);
+                    break;
+                case WebhookActionTypes.UpdateCustomField:
+                    OnUpdateCustomField?.Invoke(action);
                     break;
                 default:
                     OnUnknownActionType?.Invoke(action);

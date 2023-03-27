@@ -43,7 +43,54 @@ namespace TrelloDotNet.Tests
             //webhook.CallbackUrl = "https://4cf8-185-229-154-225.eu.ngrok.io/api/FunctionTrelloWebhookEndpointReceiver";
             //var updatedWebhook = await TrelloClient.UpdateWebhookAsync(webhook);
         }
-        
+
+        [FactManualOnly]
+        public async Task CustomFieldsTests()
+        {
+            await Task.CompletedTask;
+            //NB: These are not part of the automated test-suite as that is linked to a free account that does not support custom fields
+            /*
+            var boardId = "641ddde2e37dc99ab1ccc988";
+            List<CustomField> customFieldsOnBoardAsync = await TrelloClient.GetCustomFieldsOnBoardAsync(boardId);
+            var cardsOnBoardAsync = await TrelloClient.GetCardsOnBoardAsync(boardId);
+            var card = cardsOnBoardAsync[0];
+            List<CustomFieldItem>? customFields = await TrelloClient.GetCustomFieldItemsForCardAsync(card.Id);
+            var customFieldValueAsString = customFields.GetCustomFieldValueAsString(customFieldsOnBoardAsync[0]);
+
+            foreach (var customField in customFieldsOnBoardAsync)
+            {
+                switch (customField.Type)
+                {
+                    case CustomFieldType.Checkbox:
+                        var b = card.CustomFieldItems.GetCustomFieldValueAsBoolean(customField);
+                        await TrelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, true);
+                        await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField);
+                        break;
+                    case CustomFieldType.Date:
+                        var d = card.CustomFieldItems.GetCustomFieldValueAsDateTimeOffset(customField);
+                        await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField);
+                        break;
+                    case CustomFieldType.List:
+                        var l1 = card.CustomFieldItems.GetCustomFieldValueAsOption(customField);
+                        var l2 = card.CustomFieldItems.GetCustomFieldValueAsString(customField);
+                        await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField);
+                        break;
+                    case CustomFieldType.Number:
+                        var n1 = card.CustomFieldItems.GetCustomFieldValueAsDecimal(customField);
+                        var n2 = card.CustomFieldItems.GetCustomFieldValueAsInteger(customField);
+                        await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField);
+                        break;
+                    case CustomFieldType.Text:
+                        var s = card.CustomFieldItems.GetCustomFieldValueAsString(customField);
+                        await TrelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, s + "WOW");
+                        await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }*/
+        }
+
         [FactManualOnly]
         public async Task TestTask()
         {

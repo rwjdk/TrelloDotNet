@@ -46,5 +46,15 @@
         /// actions
         /// </summary>
         public const string Actions = "actions";
+
+        /// <summary>
+        /// customFields
+        /// </summary>
+        public const string CustomFields = "customFields";
+        
+        /// <summary>
+        /// customFieldItems
+        /// </summary>
+        public const string CustomFieldItems = "customFieldItems";
     }
 }

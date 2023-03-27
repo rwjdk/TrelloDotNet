@@ -286,5 +286,22 @@
         /// voteOnCard
         /// </summary>
         public const string VoteOnCard = "voteOnCard";
+        /// <summary>
+        /// addCustomField
+        /// </summary>
+        public const string AddCustomField = "addCustomField";
+        /// <summary>
+        /// deleteCustomField
+        /// </summary>
+        public const string DeleteCustomField = "deleteCustomField";
+        /// <summary>
+        /// updateCustomField
+        /// </summary>
+        public const string UpdateCustomField = "updateCustomField";
+        /// <summary>
+        /// updateCustomFieldItem
+        /// </summary>
+        public const string UpdateCustomFieldItem = "updateCustomFieldItem";
+
     }
 }

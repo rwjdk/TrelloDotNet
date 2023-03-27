@@ -27,7 +27,6 @@ namespace TrelloDotNet.Control
                     return (T)memberInfo.GetValue(null);
                 }
             }
-
             throw new Exception($"Could not covert string value '{stringValue}' to Enum of type '{typeToConvert}'");
         }
 

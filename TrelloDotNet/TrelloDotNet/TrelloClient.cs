@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Security;
 using System.Threading.Tasks;
+using System.Web;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
@@ -24,21 +26,20 @@ namespace TrelloDotNet
         //- Organizations (how to gain access?)
 
         //todo: Boards
-        //- Get Board Membership (Aka what roles the Token user have on the board) [https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-memberships-get]
-        //- Invite members by mail or userId to board [https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-put + https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-idmember-put]
-        //- Remove Members from board (https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-members-idmember-delete)
+        //- Get Board Membership (Aka what roles the Token user have on the board)
+        //- Invite members by mail or userId to board
+        //- Remove Members from board
         //- Update Membership on board (make admin as an example)
 
         //todo: Cards
         //- Copy Card
         //- Card: Attachments CRUD
-        //- Card: Custom Fields CRUD
 
         //todo: Actions
-        //- Members (why??)
-        //- Cards (why??)
-        //- Lists (why??)
-        //- Boards (why??)
+        //- Members
+        //- Cards
+        //- Lists
+        //- Boards
 
         /// <summary>
         /// Options for the client
@@ -389,6 +390,216 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Update a Custom field on a Card
+        /// </summary>
+        /// <remarks>
+        /// Tip: To remove a value from a custom field use .ClearCustomFieldValueOnCardAsync()
+        /// </remarks>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="customField">The custom Field to update</param>
+        /// <param name="newValue">The new value</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, bool newValue)
+        {
+            string payload;
+            switch (customField.Type)
+            {
+                case CustomFieldType.Checkbox:
+                    var valueAsString = newValue ? "true" : "false";
+                    payload = $"{{\"value\": {{ \"checked\": \"{HttpUtility.JavaScriptStringEncode(valueAsString)}\" }}}}";
+                    break;
+                case CustomFieldType.Date:
+                case CustomFieldType.List:
+                case CustomFieldType.Number:
+                case CustomFieldType.Text:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Checkbox' can be set with a bool value");
+            }
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+        }
+
+        /// <summary>
+        /// Update a Custom field on a Card
+        /// </summary>
+        /// <remarks>
+        /// Tip: To remove a value from a custom field use .ClearCustomFieldValueOnCardAsync()
+        /// </remarks>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="customField">The custom Field to update</param>
+        /// <param name="newValue">The new value</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, DateTimeOffset newValue)
+        {
+            string payload;
+            switch (customField.Type)
+            {
+                case CustomFieldType.Date:
+                    string valueAsString = newValue.UtcDateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture);
+                    payload = $"{{\"value\": {{ \"date\": \"{HttpUtility.JavaScriptStringEncode(valueAsString)}\" }}}}";
+                    break;
+                case CustomFieldType.Checkbox:
+                case CustomFieldType.List:
+                case CustomFieldType.Number:
+                case CustomFieldType.Text:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Date' can be set with a DateTimeOffset value");
+            }
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+        }
+
+        /// <summary>
+        /// Update a Custom field on a Card
+        /// </summary>
+        /// <remarks>
+        /// Tip: To remove a value from a custom field use .ClearCustomFieldValueOnCardAsync()
+        /// </remarks>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="customField">The custom Field to update</param>
+        /// <param name="newValue">The new value</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, int newValue)
+        {
+            string payload;
+            switch (customField.Type)
+            {
+                case CustomFieldType.Number:
+                    var valueAsString = newValue.ToString(CultureInfo.InvariantCulture);
+                    payload = $"{{\"value\": {{ \"number\": \"{HttpUtility.JavaScriptStringEncode(valueAsString)}\" }}}}";
+                    break;
+                case CustomFieldType.Checkbox:
+                case CustomFieldType.Date:
+                case CustomFieldType.List:
+                case CustomFieldType.Text:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Number' can be set with a integer value");
+            }
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+
+        }
+
+        /// <summary>
+        /// Update a Custom field on a Card
+        /// </summary>
+        /// <remarks>
+        /// Tip: To remove a value from a custom field use .ClearCustomFieldValueOnCardAsync()
+        /// </remarks>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="customField">The custom Field to update</param>
+        /// <param name="newValue">The new value</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, decimal newValue)
+        {
+            string payload;
+            switch (customField.Type)
+            {
+                case CustomFieldType.Number:
+                    var valueAsString = newValue.ToString(CultureInfo.InvariantCulture);
+                    payload = $"{{\"value\": {{ \"number\": \"{HttpUtility.JavaScriptStringEncode(valueAsString)}\" }}}}";
+                    break;
+                case CustomFieldType.Checkbox:
+                case CustomFieldType.Date:
+                case CustomFieldType.List:
+                case CustomFieldType.Text:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Number' can be set with a decimal value");
+            }
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+        }
+
+        /// <summary>
+        /// Update a Custom field on a Card
+        /// </summary>
+        /// <remarks>
+        /// Tip: To remove a value from a custom field use .ClearCustomFieldValueOnCardAsync()
+        /// </remarks>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="customField">The custom Field to update</param>
+        /// <param name="newValue">The new value</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, CustomFieldOption newValue)
+        {
+            string payload;
+            switch (customField.Type)
+            {
+                case CustomFieldType.List:
+                    string valueAsString = string.Empty;
+                    if (newValue != null)
+                    {
+                        valueAsString = newValue.Id;
+                    }
+                    payload = $"{{\"idValue\": \"{HttpUtility.JavaScriptStringEncode(valueAsString)}\" }}";
+                    break;
+                case CustomFieldType.Checkbox:
+                case CustomFieldType.Date:
+                case CustomFieldType.Number:
+                case CustomFieldType.Text:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'List' can be set with a CustomFieldOption value");
+            }
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+        }
+
+        /// <summary>
+        /// Update a Custom field on a Card
+        /// </summary>
+        /// <remarks>
+        /// Tip: To remove a value from a custom field use .ClearCustomFieldValueOnCardAsync()
+        /// </remarks>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="customField">The custom Field to update</param>
+        /// <param name="newValue">The new value</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, string newValue)
+        {
+            string payload;
+            switch (customField.Type)
+            {
+                case CustomFieldType.Checkbox:
+                    payload = $"{{\"value\": {{ \"checked\": \"{HttpUtility.JavaScriptStringEncode(newValue)}\" }}}}";
+                    break;
+                case CustomFieldType.Date:
+                    payload = $"{{\"value\": {{ \"date\": \"{HttpUtility.JavaScriptStringEncode(newValue)}\" }}}}";
+                    break;
+                case CustomFieldType.List:
+                    payload = $"{{\"idValue\": \"{HttpUtility.JavaScriptStringEncode(newValue)}\" }}";
+                    break;
+                case CustomFieldType.Number:
+                    payload = $"{{\"value\": {{ \"number\": \"{HttpUtility.JavaScriptStringEncode(newValue)}\" }}}}";
+                    break;
+                case CustomFieldType.Text:
+                    payload = $"{{\"value\": {{ \"text\": \"{HttpUtility.JavaScriptStringEncode(newValue)}\" }}}}";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+        }
+
+        /// <summary>
+        /// Clear a Custom field on a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="customField">The custom Field to clear</param>
+        public async Task ClearCustomFieldValueOnCardAsync(string cardId, CustomField customField)
+        {
+            string payload;
+            switch (customField.Type)
+            {
+                case CustomFieldType.Checkbox:
+                case CustomFieldType.Date:
+                case CustomFieldType.Number:
+                case CustomFieldType.Text:
+                    payload = "{\"value\": \"\" }";
+                    break;
+                case CustomFieldType.List:
+                    payload = "{\"idValue\": \"\" }";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+        }
+
+        private async Task SendCustomFieldChangeRequestAsync(string cardId, CustomField customField, string payload)
+        {
+            await _apiRequestController.PutWithJsonPayload($"{UrlPaths.Cards}/{cardId}/customField/{customField.Id}/item", payload);
+        }
+
+        /// <summary>
         /// Update a comment Action (aka only way to update comments as they are not seen as their own objects)
         /// </summary>
         /// <param name="commentAction">The comment Action with the updated text</param>
@@ -553,7 +764,18 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> GetCardAsync(string cardId)
         {
-            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}");
+            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+        }
+
+        /// <summary>
+        /// Get Custom Fields for a Card
+        /// </summary>
+        /// <remarks>Tip: Use Extension methods GetCustomFieldValueAsXYZ for a handy way to get values</remarks>
+        /// <param name="cardId">Id of the Card</param> 
+        /// <returns>The Custom Fields</returns>
+        public async Task<List<CustomFieldItem>> GetCustomFieldItemsForCardAsync(string cardId)
+        {
+            return await _apiRequestController.Get<List<CustomFieldItem>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.CustomFieldItems}");
         }
 
         /// <summary>
@@ -563,7 +785,17 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/");
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+        }
+
+        /// <summary>
+        /// Get Custom Fields of a Board
+        /// </summary>
+        /// <param name="boardId">Id of the Board (long version)</param>
+        /// <returns>List of CustomFields</returns>
+        public async Task<List<CustomField>> GetCustomFieldsOnBoardAsync(string boardId)
+        {
+            return await _apiRequestController.Get<List<CustomField>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.CustomFields}");
         }
 
         /// <summary>
@@ -573,7 +805,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/");
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
         }
 
         /// <summary>
@@ -584,7 +816,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}");
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
         }
 
         /// <summary>
@@ -766,6 +998,25 @@ namespace TrelloDotNet
                 new QueryParameter("filter", "commentCard"),
                 new QueryParameter("page", page));
         }
+
+        /// <summary>
+        /// Get information about the token used by this TrelloClient
+        /// </summary>
+        /// <returns>Information about the Token</returns>
+        public async Task<TokenInformation> GetTokenInformationAsync()
+        {
+            return await _apiRequestController.Get<TokenInformation>($"{UrlPaths.Tokens}/{_apiRequestController.Token}");
+        }
+
+        /// <summary>
+        /// Get information about the Member that own the token used by this TrelloClient
+        /// </summary>
+        /// <returns>The Member</returns>
+        public async Task<Member> GetTokenMemberAsync()
+        {
+            return await _apiRequestController.Get<Member>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/member");
+        }
+
         #endregion
 
         #region Ease of Use Methods

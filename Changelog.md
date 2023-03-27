@@ -1,14 +1,20 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## 1.3.0-alpha.4 (13th of March 2023)
+## 1.3.0 (27th of March 2023)
 - Added: Webhook Automation Engine that make it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
 - Added: WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
 - Added: Struct WebhookActionTypes that list all Type of Webhook events
+- Added: Support for Basic Events 'OnDeleteCustomField','OnAddCustomField','OnUpdateCustomField' and 'OnUpdateCustomFieldItem'
 - Added: Method 'DeleteChecklistAsync'
 - Added: ListBefore and ListAfter to TrelloActionData
+- Added: Method GetTokenInformationAsync() to get information about the Trello Token used for connecting
+- Added: Method GetTokenMemberAsync() that return the user that own the Trello Token used for connecting
+- Added: Support for Retrieving, setting and removing Custom Field values of cards
 - Fixed: Various incorrect XML Summaries and parameter names (all non breaking changes)
 - Fixed: Null values in strings for update of objects are now considered empty string so you do not end up with 'null' values (aka the word 'null' as a string)
+
+<hr>
 
 ## 1.2.1 (25th of Feb. 2023)
 - Added: Generic WebHookNotification that does not care if Webhook returned from a Board, List, Card, etc
@@ -17,6 +23,8 @@
 - Changed: AddChecklistAsync will now add positions of check items automatically in the same order as the list if none is specified.
 - Fixed: 'AddStickerToCardAsync' did not work as intended (You got an 'Invalid ImageId' error) due to a late refactoring and poor testing on my part (last time I skimp on integration-tests!) :-(
 - Fixed: 'AddCommentAsync' had a wrong return object (Trello API is just weird and not consistent!)
+
+<hr>
 
 ## 1.2.0 (23rd of Feb. 2023)
 - Fixed: various methods were missing 'Async' suffix so it was added (Sorry for this breaking change (oversight by me) but better now than later :-/ ... and it should be easy to fix) [COMPILE TIME BREAKING CHANGE]

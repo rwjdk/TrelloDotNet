@@ -84,6 +84,18 @@ namespace TrelloDotNet.Control
             }
             return content; //Content is assumed JSON
         }
+        
+        internal async Task<string> PutWithJsonPayload(string suffix, string payload, params QueryParameter[] parameters)
+        {
+            var uri = BuildUri(suffix, parameters);
+            var response = await _httpClient.PutAsync(uri, new StringContent(payload, Encoding.UTF8, "application/json"));
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
+            }
+            return content; //Content is assumed JSON
+        }
 
         private string FormatExceptionUrlAccordingToClientOptions(string fullUrl)
         {

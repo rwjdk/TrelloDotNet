@@ -63,7 +63,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("pos")]
         [QueryParameter]
         public decimal Position { get; set; }
-        
+
         /// <summary>
         /// If the card is Watched (subscribed) by the owner of the Token used against the API
         /// </summary>
@@ -155,7 +155,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("idAttachmentCover")]
         [QueryParameter(false)]
         [JsonInclude]
-        public string AttachmentCover { get; private set; } 
+        public string AttachmentCover { get; private set; }
 
         /// <summary>
         /// Url you can use to get to the card
@@ -178,7 +178,14 @@ namespace TrelloDotNet.Model
         [JsonInclude]
         public CardCover Cover { get; private set; }
 
-        
+        /// <summary>
+        /// Custom Fields of the Card (Only populated in Get Methods and if enabled in TrelloClientOptions)
+        /// </summary>
+        /// <remarks>Tip: Use Extension methods GetCustomFieldValueAsXYZ on the list for a handy way to get values</remarks>
+        [JsonPropertyName("customFieldItems")]
+        [JsonInclude]
+        public List<CustomFieldItem> CustomFieldItems { get; private set; }
+
         /// <summary>
         /// Constructor (Common Card fields)
         /// </summary>
