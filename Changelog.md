@@ -2,17 +2,17 @@
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
 ## 1.3.0 (27th of March 2023)
-- Added: Webhook Automation Engine that make it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
+- Added: Webhook Automation Engine that makes it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
 - Added: WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
-- Added: Struct WebhookActionTypes that list all Type of Webhook events
+- Added: Struct WebhookActionTypes that list all Types of Webhook events
 - Added: Support for Basic Events 'OnDeleteCustomField','OnAddCustomField','OnUpdateCustomField' and 'OnUpdateCustomFieldItem'
 - Added: Method 'DeleteChecklistAsync'
 - Added: ListBefore and ListAfter to TrelloActionData
 - Added: Method GetTokenInformationAsync() to get information about the Trello Token used for connecting
-- Added: Method GetTokenMemberAsync() that return the user that own the Trello Token used for connecting
-- Added: Support for Retrieving, setting and removing Custom Field values of cards
-- Fixed: Various incorrect XML Summaries and parameter names (all non breaking changes)
-- Fixed: Null values in strings for update of objects are now considered empty string so you do not end up with 'null' values (aka the word 'null' as a string)
+- Added: Method GetTokenMemberAsync() that returns the user that owns the Trello Token used for connecting
+- Added: Support for Retrieving, setting, and removing Custom Field values of cards
+- Fixed: Various incorrect XML Summaries and parameter names (all nonbreaking changes)
+- Fixed: Null values in strings for an update of objects are now considered empty strings so you do not end up with 'null' values (aka the word 'null' as a string)
 
 <hr>
 
