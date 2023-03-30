@@ -36,6 +36,12 @@ List<List> lists = await client.GetCardsOnBoardAsync("<boardId>");
 //Get a card
 Card card = await client.GetCardAsync("<cardId>");
 
+//Get Cards on Board
+List<Card> cardsOnBoard = await trelloClient.GetCardsOnBoardAsync("<boardId>");
+
+//Get Cards in List
+List<Card> cardsInList = await trelloClient.GetCardsInListAsync("<listId>");
+
 //Add a card
 var input = new Card("<listId>", "My Card", "My Card description");
 //todo - add more about the card 
