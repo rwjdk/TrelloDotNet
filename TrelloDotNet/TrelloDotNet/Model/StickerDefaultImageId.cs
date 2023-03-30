@@ -1,4 +1,5 @@
-﻿namespace TrelloDotNet.Model
+﻿// ReSharper disable CommentTypo
+namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Default Supported Stickers

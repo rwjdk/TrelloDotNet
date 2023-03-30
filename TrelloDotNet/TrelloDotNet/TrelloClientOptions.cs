@@ -1,5 +1,7 @@
-﻿namespace TrelloDotNet
+﻿// ReSharper disable CommentTypo
+namespace TrelloDotNet
 {
+
     /// <summary>
     /// Control level of URL Details are shown in Exceptions from calls to the API
     /// </summary>

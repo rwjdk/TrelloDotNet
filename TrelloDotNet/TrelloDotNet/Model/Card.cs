@@ -172,11 +172,10 @@ namespace TrelloDotNet.Model
         public string ShortUrl { get; private set; }
 
         /// <summary>
-        /// Cover of the Card
+        /// Cover of the Card (set to null in update scenario if you wish to remove it)
         /// </summary>
         [JsonPropertyName("cover")]
-        [JsonInclude]
-        public CardCover Cover { get; private set; }
+        public CardCover Cover { get; set; }
 
         /// <summary>
         /// Custom Fields of the Card (Only populated in Get Methods and if enabled in TrelloClientOptions)

@@ -112,12 +112,15 @@ namespace TrelloDotNet.Model
                 case StickerDefaultImageId.Frown:
                     return "frown";
                 case StickerDefaultImageId.ThumbsUp:
+                    // ReSharper disable once StringLiteralTypo
                     return "thumbsup";
                 case StickerDefaultImageId.ThumbsDown:
+                    // ReSharper disable once StringLiteralTypo
                     return "thumbsdown";
                 case StickerDefaultImageId.Star:
                     return "star";
                 case StickerDefaultImageId.RocketShip:
+                    // ReSharper disable once StringLiteralTypo
                     return "rocketship";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(imageId), imageId, null);
@@ -149,12 +152,15 @@ namespace TrelloDotNet.Model
                     return StickerDefaultImageId.Huh;
                 case "frown":
                     return StickerDefaultImageId.Frown;
+                // ReSharper disable once StringLiteralTypo
                 case "thumbsup":
                     return StickerDefaultImageId.ThumbsUp;
+                // ReSharper disable once StringLiteralTypo
                 case "thumbsdown":
                     return StickerDefaultImageId.ThumbsDown;
                 case "star":
                     return StickerDefaultImageId.Star;
+                // ReSharper disable once StringLiteralTypo
                 case "rocketship":
                     return StickerDefaultImageId.RocketShip;
                 default:

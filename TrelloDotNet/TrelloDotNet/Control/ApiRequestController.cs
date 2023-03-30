@@ -84,7 +84,14 @@ namespace TrelloDotNet.Control
             }
             return content; //Content is assumed JSON
         }
-        
+
+        internal async Task<T> PutWithJsonPayload<T>(string suffix, string payload, params QueryParameter[] parameters)
+        {
+            string json = await PutWithJsonPayload(suffix, payload, parameters);
+            var @object = JsonSerializer.Deserialize<T>(json);
+            return @object;
+        }
+
         internal async Task<string> PutWithJsonPayload(string suffix, string payload, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
@@ -104,6 +111,7 @@ namespace TrelloDotNet.Control
                 case ApiCallExceptionOption.IncludeUrlAndCredentials:
                     return fullUrl;
                 case ApiCallExceptionOption.IncludeUrlButMaskCredentials:
+                    // ReSharper disable StringLiteralTypo
                     return fullUrl.Replace($"?key={_apiKey}&token={_token}", "?key=XXXXX&token=XXXXXXXXXX");
                 case ApiCallExceptionOption.DoNotIncludeTheUrl:
                     return string.Empty.PadLeft(5,'X');

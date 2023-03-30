@@ -99,7 +99,25 @@ namespace TrelloDotNet.Tests
             await Task.CompletedTask;
             var cardId = "63e216e15baa8f45ae87948b";
             var boardId = "63e1096da4ecf28dcb763ba9";
+
             //var card = await TrelloClient.GetCardAsync(cardId);
+
+            var addCoverToCardAsync = await TrelloClient.AddCoverToCardAsync(cardId, new CardCover(CardCoverColor.Orange, CardCoverSize.Normal));
+
+            var uaddCoverToCardAsync = await TrelloClient.UpdateCoverOnCardAsync(cardId, new CardCover(CardCoverColor.Blue, CardCoverSize.Full));
+
+            //card.Cover = new CardCover(CardCoverColor.Orange, CardCoverSize.Full);
+            //card.Cover.Color = CardCoverColor.Green;
+            //card.Cover.Size = CardCoverSize.Normal;
+            //card.Cover.Brightness = CardCoverBrightness.Dark;
+            //card.Cover.BackgroundImageId = "6425aff85c2e0abab405e043";
+            //await TrelloClient.UpdateCardAsync(card);
+
+
+            //var removeCoverFromCardAsync = await TrelloClient.RemoveCoverFromCardAsync(cardId);
+
+            int debug = 0;
+
             //var cards = await TrelloClient.GetCardsOnBoardAsync(boardId);
             /*
             var addStickerToCard = await TrelloClient.AddStickerToCardAsync(cardId, new Sticker(StickerDefaultImageId.Clock, 20, 10, 0, 45));
@@ -121,7 +139,7 @@ namespace TrelloDotNet.Tests
             {
               var comment = await TrelloClient.AddCommentAsync(cardId, new Comment("My first cool comment! @rasmus58348007 mention"));
             }*/
-            
+
             //comment.Data.Text = "New text!";
             //var commentAction = await TrelloClient.UpdateCommentActionAsync(comment);
 

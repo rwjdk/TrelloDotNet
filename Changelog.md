@@ -1,8 +1,16 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## Unreleased
+- Changed: UpdateCardAsync now has the ability to Add/Update/Remove the Cover
+- Added. AddCoverToCardAsync, UpdateCoverOnCardAsync, and RemoveCoverOnCardAsync
+
+<hr>
+
 ## 1.3.1 (30th of March 2023)
 - Added: ChecklistIncompleteCondition now has the option to define ChecklistNameMatchCriteria if you example want to check lists with a certain name prefix.
+
+<hr>
 
 ## 1.3.0 (27th of March 2023)
 - Added: Webhook Automation Engine that makes it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))

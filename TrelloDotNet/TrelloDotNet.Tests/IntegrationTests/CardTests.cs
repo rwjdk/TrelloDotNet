@@ -145,7 +145,7 @@ public class CardTests : TestBaseWithNewBoard
         Assert.NotNull(addedCard.Cover);
         Assert.Equal(CardCoverSize.Normal, addedCard.Cover.Size);
         Assert.Equal(CardCoverBrightness.Dark, addedCard.Cover.Brightness);
-        Assert.Equal(CardCoverColor.None, addedCard.Cover.Color);
+        Assert.Null(addedCard.Cover.Color);
         Assert.Null(addedCard.Cover.BackgroundImageId);
         Assert.Null(addedCard.Cover.BackgroundImageId);
 

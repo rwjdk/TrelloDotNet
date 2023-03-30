@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Security;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 using TrelloDotNet.Control;
@@ -32,7 +33,6 @@ namespace TrelloDotNet
         //- Update Membership on board (make admin as an example)
 
         //todo: Cards
-        //- Copy Card
         //- Card: Attachments CRUD
 
         //todo: Actions
@@ -251,6 +251,33 @@ namespace TrelloDotNet
             return await _apiRequestController.Post<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers", _queryParametersBuilder.GetViaQueryParameterAttributes(sticker));
         }
 
+        /// <summary>
+        /// Update a Cover to a card (this is equivalent to AddCoverToCardAsync, but here for discover-ability. Tip: It is also possible to update the cover via UpdateCardAsync)
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="newCover">The new Cover</param>
+        public async Task<Card> UpdateCoverOnCardAsync(string cardId, CardCover newCover)
+        {
+            return await AddCoverToCardAsync(cardId, newCover);
+        }
+
+        /// <summary>
+        /// Add a Cover to a card. Tip: It is also possible to update the cover via UpdateCardAsync
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="coverToAdd">The Cover to Add</param>
+        public async Task<Card> AddCoverToCardAsync(string cardId, CardCover coverToAdd)
+        {
+            if (coverToAdd == null)
+            {
+                throw new TrelloApiException("Cover can't be null (If you trying to remove a cover see 'RemoveCoverFromCardAsync')", string.Empty);
+            }
+
+            coverToAdd.PrepareForAddUpdate();
+            string payload = $"{{\"cover\":{JsonSerializer.Serialize(coverToAdd)}}}";
+            return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardId}", payload);
+        }
+
         #endregion
 
         #region Update
@@ -345,7 +372,20 @@ namespace TrelloDotNet
         /// <returns>The Updated Card</returns>
         public async Task<Card> UpdateCardAsync(Card cardWithChanges)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(cardWithChanges));
+            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(cardWithChanges).ToList();
+            //Special code for Cover
+            string payload = string.Empty;
+            if (cardWithChanges.Cover == null)
+            {
+                //Remove cover
+                parameters.Add(new QueryParameter(@"cover", ""));
+            }
+            else
+            {
+                cardWithChanges.Cover.PrepareForAddUpdate();
+                payload = $"{{\"cover\":{JsonSerializer.Serialize(cardWithChanges.Cover)}}}";
+            }
+            return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", payload, parameters.ToArray());
         }
 
         /// <summary>
@@ -1171,6 +1211,16 @@ namespace TrelloDotNet
             card.Due = dueDate;
             card.DueComplete = dueComplete;
             return await UpdateCardAsync(card);
+        }
+
+        /// <summary>
+        /// Remove a cover from a Card
+        /// </summary>
+        /// <param name="cardId">Id of Card</param>
+        /// <returns>The Card with the removed Cover</returns>
+        public async Task<Card> RemoveCoverFromCardAsync(string cardId)
+        {
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter("cover", ""));
         }
 
         #endregion
