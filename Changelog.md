@@ -1,6 +1,9 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.3.1 (30th of March 2023)
+- Added: ChecklistIncompleteCondition now has the option to define ChecklistNameMatchCriteria if you example want to check lists with a certain name prefix.
+
 ## 1.3.0 (27th of March 2023)
 - Added: Webhook Automation Engine that makes it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
 - Added: WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
