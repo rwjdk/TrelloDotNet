@@ -1,28 +1,14 @@
 # TrelloDotNet
-.NET Implementation of the Trello API
+Welcome to TrelloDotNet; a modern .NET Implementation of the Trello API.
 
-## Version History
-- [Read the changelog here](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
+## How to get started
+1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (dotnet add package TrelloDotNet)
+2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8)
+3. Create new instance of TrelloDotNet.TrelloClient
+4. Locate you Ids of you Boards, List and Cards (see video [here](https://youtu.be/aWYEg1wPVYY) or at the end on this ReadMe)
+5. Use the TrelloClient based on the examples below
 
-## NuGet Options
-- Search for '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' in Package Manager
-- Install via .NET CLI
-```shell
-dotnet add package TrelloDotNet
-```
-
-## Video Guides
-- [How to get your API-Key and Token](https://youtu.be/ndLSAD3StH8)
-- [How to Find ids on a Trello Board](https://youtu.be/aWYEg1wPVYY)
-- [How to use the TrelloDotNet NuGet Package](https://youtu.be/tf47BCkieus)
-- [How to work with Webhooks (Part 1: Setup)](https://youtu.be/A3_B-SLBm_0)
-- [How to work with Webhooks (Part 2: Receiving Events)](https://youtu.be/GsGKDDvuq40)
-
-## Handy Links from Trello
-- Link to the page where you get your API Key and Token: https://trello.com/power-ups/admin/
-- Link to Rest Api documentation from Trello: https://developer.atlassian.com/cloud/trello/rest
-
-## Quick examples to get going:
+### Examples of Usage:
 
 ```cs
 TrelloClient client = new TrelloClient("APIKey", "TOKEN");
@@ -58,6 +44,21 @@ var newChecklist = new Checklist("Sample Checklist", checklistItems);
 var addedChecklist = await client.AddChecklistAsync("<cardId>", newChecklist);
 
 ```
+
+## Version History
+- [Changelog](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
+
+## Video Guides
+- [How to get your API-Key and Token](https://youtu.be/ndLSAD3StH8)
+- [How to Find ids on a Trello Board](https://youtu.be/aWYEg1wPVYY)
+- [How to use the TrelloDotNet NuGet Package](https://youtu.be/tf47BCkieus)
+- [How to work with Webhooks (Part 1: Setup)](https://youtu.be/A3_B-SLBm_0)
+- [How to work with Webhooks (Part 2: Receiving Events)](https://youtu.be/GsGKDDvuq40)
+
+## Other handy links
+- Admin Center for API Keys and Tokens: https://trello.com/power-ups/admin/
+- REST API Documentation from Trello: https://developer.atlassian.com/cloud/trello/rest
+
 
 ## On the subject of getting Ids from Trello
 - The easiest way to get Ids in Trello is to use the API itself or use the share buttons in the project
