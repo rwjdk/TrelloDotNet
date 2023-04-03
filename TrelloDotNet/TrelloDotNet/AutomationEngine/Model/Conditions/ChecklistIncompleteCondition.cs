@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.Model;
@@ -63,6 +64,9 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                     break;
                 case StringMatchCriteria.Contains:
                     checklistsToCheck = checklists.Where(x => x.Name.Contains(ChecklistNameToCheck)).ToList();
+                    break;
+                case StringMatchCriteria.RegEx:
+                    checklistsToCheck = checklists.Where(x => Regex.IsMatch(x.Name, ChecklistNameToCheck)).ToList(); //todo - test
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

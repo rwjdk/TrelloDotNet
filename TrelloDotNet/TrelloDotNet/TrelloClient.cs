@@ -1224,5 +1224,10 @@ namespace TrelloDotNet
         }
 
         #endregion
+
+        public async Task<Webhook> UpdateCalbackUrlForWebhookAsync(string oldUrl, string newUrl)
+        {
+            await 
+        }
     }
 }

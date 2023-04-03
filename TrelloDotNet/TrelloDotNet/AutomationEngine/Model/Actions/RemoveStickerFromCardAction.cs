@@ -42,6 +42,11 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         /// <returns>Void</returns>
         public async Task PerformActionAsync(WebhookAction webhookAction, ProcessingResult processingResult)
         {
+            if (webhookAction.Data?.Card == null)
+            {
+                throw new AutomationException("Could not perform RemoveStickerFromCardAction as WebhookAction did not involve a Card");
+            }
+
             var trelloClient = webhookAction.TrelloClient;
             var cardId = webhookAction.Data.Card.Id;
             //Check if same image id sticker already exist

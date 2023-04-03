@@ -42,6 +42,8 @@ namespace TrelloDotNet.Tests
             //Webhook webhook = await TrelloClient.GetWebhookAsync("63e2892778670f4f7b7ffa2e");
             //webhook.CallbackUrl = "https://4cf8-185-229-154-225.eu.ngrok.io/api/FunctionTrelloWebhookEndpointReceiver";
             //var updatedWebhook = await TrelloClient.UpdateWebhookAsync(webhook);
+
+            Webhook wh = await TrelloClient.UpdateCalbackUrlForWebhookAsync("https://old", "https://new");
         }
 
         [FactManualOnly]

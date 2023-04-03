@@ -36,6 +36,10 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         /// <returns>Void</returns>
         public async Task PerformActionAsync(WebhookAction webhookAction, ProcessingResult processingResult)
         {
+            if (webhookAction.Data?.Card == null)
+            {
+                throw new AutomationException("Could not perform AddChecklistToCardAction as WebhookAction did not involve a Card");
+            }
             var cardId = webhookAction.Data.Card.Id;
             var existingOnCard = await webhookAction.TrelloClient.GetChecklistsOnCardAsync(cardId);
             var existing = existingOnCard.FirstOrDefault(x => x.Name == ChecklistToAdd.Name);

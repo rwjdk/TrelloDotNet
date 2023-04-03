@@ -21,5 +21,9 @@
         /// String should contain the provided
         /// </summary>
         Contains = 4,
+        /// <summary>
+        /// String should match a specific RegEx
+        /// </summary>
+        RegEx = 5, //todo - use everywhere
     }
 }
