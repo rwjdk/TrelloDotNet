@@ -49,5 +49,17 @@ namespace TrelloDotNet.Model.Webhook
         /// Parent
         /// </summary>
         public WebhookActionData Parent { get; internal set; }
+
+        internal static WebhookActionDataCard CreateDummy()
+        {
+            return new WebhookActionDataCard()
+            {
+                Id = "63d128787441d05619f44dbe",
+                DueComplete = true,
+                Name = "MyCard",
+                Posistion = 1
+            };
+        }
+
     }
 }

@@ -13,5 +13,14 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("translationKey")]
         [JsonInclude]
         public string TranslationKey { get; private set; }
+
+        internal static WebhookActionDisplay CreateDummy(WebhookAction.WebhookActionDummyCreationScenario scenario)
+        {
+            string tranlationKey = "foo";
+            return new WebhookActionDisplay()
+            {
+                TranslationKey = tranlationKey
+            };
+        }
     }
 }

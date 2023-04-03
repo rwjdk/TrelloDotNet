@@ -163,7 +163,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                         case StringMatchCriteria.Contains:
                             return cardStringValue.Contains(inputValue);
                         case StringMatchCriteria.RegEx:
-                            return Regex.IsMatch(cardStringValue, inputValue); //todo - Test
+                            return Regex.IsMatch(cardStringValue, inputValue);
                         default:
                             throw new ArgumentOutOfRangeException();
                     }

@@ -19,5 +19,14 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("latitude")]
         [JsonInclude]
         public decimal Latitude { get; private set; }
+
+        internal static Coordinates CreateDummy()
+        {
+            return new Coordinates()
+            {
+                Latitude = 1,
+                Longitude = 2,
+            };
+        }
     }
 }

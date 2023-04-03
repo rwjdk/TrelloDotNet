@@ -35,5 +35,14 @@ namespace TrelloDotNet.Model.Webhook
         /// Parent
         /// </summary>
         public WebhookActionData Parent { get; internal set; }
+
+        internal static WebhookActionDataMember CreateDummy()
+        {
+            return new WebhookActionDataMember()
+            {
+                Id = "63d1239e857afaa8b003c633",
+                Name = "Rasmus"
+            };
+        }
     }
 }

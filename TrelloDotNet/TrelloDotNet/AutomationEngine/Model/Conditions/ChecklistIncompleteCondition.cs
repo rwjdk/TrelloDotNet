@@ -66,7 +66,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                     checklistsToCheck = checklists.Where(x => x.Name.Contains(ChecklistNameToCheck)).ToList();
                     break;
                 case StringMatchCriteria.RegEx:
-                    checklistsToCheck = checklists.Where(x => Regex.IsMatch(x.Name, ChecklistNameToCheck)).ToList(); //todo - test
+                    checklistsToCheck = checklists.Where(x => Regex.IsMatch(x.Name, ChecklistNameToCheck)).ToList();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

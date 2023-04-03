@@ -21,7 +21,7 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("idMemberCreator")]
         [JsonInclude]
         public string MemberCreatorId { get; private set; }
-        
+
         /// <summary>
         /// Type of the Action (example Update of a Card)
         /// </summary>
@@ -60,6 +60,39 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// Trello Client
         /// </summary>
-        public TrelloClient TrelloClient { get; internal set; } 
+        public TrelloClient TrelloClient { get; internal set; }
+
+        internal static WebhookAction CreateDummy(TrelloClient trelloClient, WebhookActionDummyCreationScenario scenario)
+        {
+            var webhookAction = new WebhookAction()
+            {
+                TrelloClient = trelloClient,
+                Data = WebhookActionData.CreateDummy(),
+                Date = new DateTimeOffset(new DateTime(2000, 12, 1)),
+                Display = WebhookActionDisplay.CreateDummy(scenario),
+                Id = "63d128787441d05619f44dbe",
+                MemberCreator = Member.CreateDummy(),
+                MemberCreatorId = "63d1239e857afaa8b003c633",
+                Type = GetTypeFromScenario(scenario),
+            };
+            webhookAction.Data.Parent = webhookAction;
+            return webhookAction;
+        }
+
+        private static string GetTypeFromScenario(WebhookActionDummyCreationScenario scenario)
+        {
+            switch (scenario)
+            {
+                case WebhookActionDummyCreationScenario.MoveCardToList:
+                    return WebhookActionTypes.UpdateCard;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(scenario));
+            }
+        }
+
+        internal enum WebhookActionDummyCreationScenario
+        {
+            MoveCardToList
+        }
     }
 }

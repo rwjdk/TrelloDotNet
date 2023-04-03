@@ -84,6 +84,12 @@ public class DefaultBoardTests : TestBaseWithNewBoard
 
             var reopenedBoard = await TrelloClient.ReOpenBoardAsync(BoardId);
             Assert.False(reopenedBoard.Closed);
+
+            var tokenInformation = await TrelloClient.GetTokenInformationAsync();
+            Assert.NotNull(tokenInformation);
+
+            var tokenMember = await TrelloClient.GetTokenMemberAsync();
+            Assert.NotNull(tokenMember);
         }
         finally
         {

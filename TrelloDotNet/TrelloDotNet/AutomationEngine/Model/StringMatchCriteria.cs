@@ -24,6 +24,6 @@
         /// <summary>
         /// String should match a specific RegEx
         /// </summary>
-        RegEx = 5, //todo - use everywhere
+        RegEx = 5,
     }
 }

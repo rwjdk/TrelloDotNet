@@ -29,5 +29,15 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("username")]
         [JsonInclude]
         public string Username { get; private set; }
+
+        internal static Member CreateDummy()
+        {
+            return new Member()
+            {
+                FullName = "Rasmus",
+                Id = "63d1239e857afaa8b003c633",
+                Username = "rwj"
+            };
+        }
     }
 }

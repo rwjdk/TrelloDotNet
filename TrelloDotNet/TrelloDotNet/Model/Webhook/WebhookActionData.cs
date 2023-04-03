@@ -82,5 +82,29 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         public WebhookAction Parent { get; internal set; }
 
+        internal static WebhookActionData CreateDummy()
+        {
+            var webhookActionData = new WebhookActionData()
+            {
+                Card = WebhookActionDataCard.CreateDummy(),
+                Board = WebhookActionDataBoard.CreateDummy(),
+                Member = WebhookActionDataMember.CreateDummy(),
+                CheckItem = WebhookActionDataCheckItem.CreateDummy(),
+                Checklist = WebhookActionDataChecklist.CreateDummy(),
+                Label = WebhookActionDataLabel.CreateDummy(),
+                List = WebhookActionDataList.CreateDummy(),
+                ListAfter = WebhookActionDataList.CreateDummy(),
+                ListBefore = WebhookActionDataList.CreateDummy(),
+                Old = WebhookActionDataOld.CreateDummy(),
+            };
+            webhookActionData.Member.Parent = webhookActionData;
+            webhookActionData.Card.Parent = webhookActionData;
+            webhookActionData.Board.Parent = webhookActionData;
+            webhookActionData.Checklist.Parent = webhookActionData;
+            webhookActionData.ListBefore.Parent = webhookActionData;
+            webhookActionData.ListAfter.Parent = webhookActionData;
+            webhookActionData.List.Parent = webhookActionData;
+            return webhookActionData;
+        }
     }
 }

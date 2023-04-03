@@ -53,6 +53,27 @@ public class WebhookManagementTests : TestBaseWithNewBoard
             await TrelloClient.DeleteWebhookAsync(webhookId);
             var webhooksAfterDelete = await TrelloClient.GetWebhooksForCurrentTokenAsync();
             Assert.Equal(currentWebhooks.Count, webhooksAfterDelete.Count);
+
+            WaitToAvoidRateLimits(3);
+
+            //Update Webhook by URL
+            await TrelloClient.AddWebhookAsync(new Webhook("ByCallBack", callbackUrl, BoardId));
+            var newCallbackUrl = "https://bing.com";
+            await TrelloClient.UpdateWebhookByCallbackUrlAsync(callbackUrl, newCallbackUrl);
+            var webhooksAfterChangeByCallback = await TrelloClient.GetWebhooksForCurrentTokenAsync();
+            Assert.Contains(newCallbackUrl, webhooksAfterChangeByCallback.Select(x => x.CallbackUrl));
+
+            WaitToAvoidRateLimits(3);
+
+            //Delete Webhook by URL
+            await TrelloClient.DeleteWebhooksByCallbackUrlAsync(newCallbackUrl);
+            var webhooksAfterDeleteByCallback = await TrelloClient.GetWebhooksForCurrentTokenAsync();
+            Assert.Equal(webhooksAfterChangeByCallback.Count-1, webhooksAfterDeleteByCallback.Count);
+
+            await TrelloClient.AddWebhookAsync(new Webhook("DeleteById", callbackUrl, BoardId));
+            await TrelloClient.DeleteWebhooksByTargetModelIdAsync(BoardId);
+            var webhooksAfterDeleteById = await TrelloClient.GetWebhooksForCurrentTokenAsync();
+            Assert.Equal(webhooksAfterDeleteByCallback.Count, webhooksAfterDeleteById.Count);
         }
         finally
         {
