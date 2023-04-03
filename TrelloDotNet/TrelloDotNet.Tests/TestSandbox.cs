@@ -96,9 +96,9 @@ namespace TrelloDotNet.Tests
         [FactManualOnly]
         public async Task TestTask()
         {
-            /*
             _output.WriteLine("Hello");
             await Task.CompletedTask;
+            /*            
             var cardId = "63e216e15baa8f45ae87948b";
             var boardId = "63e1096da4ecf28dcb763ba9";
 
