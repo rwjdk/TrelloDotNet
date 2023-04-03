@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.Model.Webhook;
@@ -77,6 +78,8 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
                             return correctType && ListIds.Any(x => partToCheck.EndsWith(x));
                         case StringMatchCriteria.Contains:
                             return correctType && ListIds.Any(x => partToCheck.Contains(x));
+                        case StringMatchCriteria.RegEx:
+                            return correctType && ListIds.Any(x => Regex.IsMatch(partToCheck, x));
                         case StringMatchCriteria.Equal:
                         default:
                             return correctType && ListIds.Contains(partToCheck);
@@ -91,6 +94,8 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
                             return correctType && ListIds.Any(x => !partToCheck.EndsWith(x));
                         case StringMatchCriteria.Contains:
                             return correctType && ListIds.Any(x => !partToCheck.Contains(x));
+                        case StringMatchCriteria.RegEx:
+                            return correctType && ListIds.Any(x => !Regex.IsMatch(partToCheck, x));
                         case StringMatchCriteria.Equal:
                         default:
                             return correctType && !ListIds.Contains(partToCheck);

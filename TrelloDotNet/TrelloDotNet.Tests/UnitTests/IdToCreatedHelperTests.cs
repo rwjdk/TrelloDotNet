@@ -1,7 +1,4 @@
-﻿using System.Text;
-using System.Text.Json;
-using TrelloDotNet.Control;
-using TrelloDotNet.Model;
+﻿using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Tests.UnitTests;
 

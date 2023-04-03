@@ -1,25 +1,30 @@
 ﻿using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
 {
     /// <summary>
-    /// Action to set one or more fields on a card
+    /// This Automation Action adds/updates a Cover on a card
     /// </summary>
-    public class SetFieldsOnCardAction : IAutomationAction
+    /// <remarks>
+    /// This is often used to warn about something irregular on a Card, Example when it is moved to 'Done'
+    /// </remarks>
+    public class AddCoverOnCardAction : IAutomationAction
     {
         /// <summary>
-        /// List of field-values to set
+        /// The Cover object to add/update
         /// </summary>
-        public ISetCardFieldValue[] FieldValues { get; }
+        public CardCover CardCoverToAdd { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="fieldValues">List of field-values to set</param>
-        public SetFieldsOnCardAction(params ISetCardFieldValue[] fieldValues)
+        /// <param name="cardCoverToAdd">The Cover object to add/update</param>
+        public AddCoverOnCardAction(CardCover cardCoverToAdd)
         {
-            FieldValues = fieldValues;
+            CardCoverToAdd = cardCoverToAdd;
         }
 
         /// <summary>
@@ -32,22 +37,14 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         {
             if (webhookAction.Data?.Card == null)
             {
-                throw new AutomationException("Could not perform SetFieldsOnCardAction as WebhookAction did not involve a Card");
+                throw new AutomationException("Could not perform AddCoverOnCardAction as WebhookAction did not involve a Card");
             }
+            var trelloClient = webhookAction.TrelloClient;
             var card = await webhookAction.Data.Card.GetAsync();
-            bool updateNeeded = false;
-            foreach (var fieldValue in FieldValues)
-            {
-                if (fieldValue.SetIfNeeded(card))
-                {
-                    updateNeeded = true;
-                }
-            }
-
-            if (updateNeeded)
-            {
-                await webhookAction.TrelloClient.UpdateCardAsync(card);
-            }
+            card.Cover = CardCoverToAdd;
+            await trelloClient.UpdateCardAsync(card);
+            processingResult.AddToLog($"Updated Card '{webhookAction.Data.Card.Name}' with new Cover");
+            processingResult.ActionsExecuted++;
         }
     }
 }

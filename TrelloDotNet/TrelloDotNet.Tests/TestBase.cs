@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using TrelloDotNet.Model;
-using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace TrelloDotNet.Tests;
 

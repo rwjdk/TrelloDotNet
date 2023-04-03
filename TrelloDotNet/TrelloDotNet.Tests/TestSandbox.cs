@@ -42,6 +42,8 @@ namespace TrelloDotNet.Tests
             //Webhook webhook = await TrelloClient.GetWebhookAsync("63e2892778670f4f7b7ffa2e");
             //webhook.CallbackUrl = "https://4cf8-185-229-154-225.eu.ngrok.io/api/FunctionTrelloWebhookEndpointReceiver";
             //var updatedWebhook = await TrelloClient.UpdateWebhookAsync(webhook);
+
+            await TrelloClient.UpdateWebhookByCallbackUrlAsync("https://old", "https://new");
         }
 
         [FactManualOnly]
@@ -94,7 +96,7 @@ namespace TrelloDotNet.Tests
         [FactManualOnly]
         public async Task TestTask()
         {
-
+            /*
             _output.WriteLine("Hello");
             await Task.CompletedTask;
             var cardId = "63e216e15baa8f45ae87948b";

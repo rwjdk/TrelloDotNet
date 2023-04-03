@@ -92,5 +92,24 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("coordinates")]
         [JsonInclude]
         public Coordinates Coordinates { get; private set; }
+
+        internal static WebhookActionDataOld CreateDummy()
+        {
+            return new WebhookActionDataOld()
+            {
+                DueComplete = true,
+                Address = "My Street",
+                Coordinates = Coordinates.CreateDummy(),
+                Name = "MyName",
+                Description = "MyDescription",
+                Due = new DateTimeOffset(new DateTime(2022, 12, 31)),
+                DueReminder = 10,
+                Labels = new List<string> { "a", "b", "c" },
+                ListId = "63d1239e857afaa8b003c633",
+                LocationName = "My Location",
+                Position = 42,
+                Start = new DateTimeOffset(new DateTime(2023, 1, 1))
+            };
+        }
     }
 }

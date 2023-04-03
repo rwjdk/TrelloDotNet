@@ -29,5 +29,15 @@ namespace TrelloDotNet.Model.Webhook
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<ChecklistItemState>))]
         public ChecklistItemState State { get; private set; }
+
+        internal static WebhookActionDataCheckItem CreateDummy()
+        {
+            return new WebhookActionDataCheckItem()
+            {
+                Id = "63d1239e857afaa8b003c633",
+                Name = "MyItem",
+                State = ChecklistItemState.Incomplete
+            };
+        }
     }
 }

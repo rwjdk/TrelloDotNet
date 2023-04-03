@@ -25,7 +25,7 @@ public class CardTests : TestBaseWithNewBoard
         try
         {
             int step = 1;
-            int totalSteps = 16;
+            int totalSteps = 17;
             WaitToAvoidRateLimits();
             await CreateNewBoard();
             var member = (await TrelloClient.GetMembersOfBoardAsync(BoardId)).First();
@@ -40,7 +40,7 @@ public class CardTests : TestBaseWithNewBoard
             //Create list to test cards on
             WaitToAvoidRateLimits();
             var cardList = await TrelloClient.AddListAsync(new List("List for Card Tests", BoardId));
-
+            
             AddOutput("TestAddCard", ref step, totalSteps);
             var addedCard = await TestAddCard(cardList, start, due, memberIds, allLabelsOnBoard);
 
@@ -85,6 +85,9 @@ public class CardTests : TestBaseWithNewBoard
 
             AddOutput("TestComments", ref step, totalSteps);
             await TestComments(cardList);
+
+            AddOutput("TestCover", ref step, totalSteps);
+            await TestCovers(cardList);
         }
         finally
         {
@@ -227,6 +230,11 @@ public class CardTests : TestBaseWithNewBoard
 
         var checklistsNow = await TrelloClient.GetChecklistsOnBoardAsync(BoardId);
         Assert.Equal(3, checklistsNow.Count);
+
+        await TrelloClient.DeleteChecklistAsync(addedChecklist.Id);
+        var checklistsNow2 = await TrelloClient.GetChecklistsOnBoardAsync(BoardId);
+        Assert.Equal(2, checklistsNow2.Count);
+
         return doneCard;
     }
 
@@ -454,5 +462,42 @@ public class CardTests : TestBaseWithNewBoard
 
         List<TrelloAction> commentsOnCardAfterDelete = await TrelloClient.GetPagedCommentsOnCardAsync(cardForComments.Id);
         Assert.Empty(commentsOnCardAfterDelete);
+
+        List<TrelloAction> allCommentsOnCardAfterDelete = await TrelloClient.GetAllCommentsOnCardAsync(cardForComments.Id);
+        Assert.Empty(allCommentsOnCardAfterDelete);
+    }
+
+    private async Task TestCovers(List cardList)
+    {
+        WaitToAvoidRateLimits();
+        var card = await TrelloClient.AddCardAsync(new Card(cardList.Id, "Cover Tests"));
+        Assert.Null(card.Cover.Color);
+        card.Cover.Color = CardCoverColor.Blue;
+        card.Cover.Size = CardCoverSize.Full;
+        
+        var updatedCard = await TrelloClient.UpdateCardAsync(card);
+        Assert.Equal(CardCoverColor.Blue, updatedCard.Cover.Color);
+        Assert.Equal(CardCoverSize.Full, updatedCard.Cover.Size);
+
+        WaitToAvoidRateLimits();
+
+        card.Cover = null;
+        var updated2Card = await TrelloClient.UpdateCardAsync(card);
+        Assert.Null(updated2Card.Cover.Color);
+
+        var addCoverOnCardAsync = await TrelloClient.AddCoverToCardAsync(updated2Card.Id, new CardCover(CardCoverColor.Lime, CardCoverSize.Normal));
+        Assert.Equal(CardCoverColor.Lime, addCoverOnCardAsync.Cover.Color);
+        Assert.Equal(CardCoverSize.Normal, addCoverOnCardAsync.Cover.Size);
+
+        WaitToAvoidRateLimits();
+
+        var updateCoverOnCardAsync = await TrelloClient.UpdateCoverOnCardAsync(addCoverOnCardAsync.Id, new CardCover(CardCoverColor.Purple, CardCoverSize.Normal));
+        Assert.Equal(CardCoverColor.Purple, updateCoverOnCardAsync.Cover.Color);
+        Assert.Equal(CardCoverSize.Normal, updateCoverOnCardAsync.Cover.Size);
+
+        await Assert.ThrowsAsync<TrelloApiException>(async () => await TrelloClient.UpdateCoverOnCardAsync("", null));
+
+        var removeCoverFromCardAsync = await TrelloClient.RemoveCoverFromCardAsync(updateCoverOnCardAsync.Id);
+        Assert.Null(removeCoverFromCardAsync.Cover.Color);
     }
 }

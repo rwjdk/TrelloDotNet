@@ -175,7 +175,7 @@ namespace TrelloDotNet
 
             QueryParameter[] parameters =
             {
-                new QueryParameter("idChecklistSource", existingChecklistIdToCopyFrom)
+                new QueryParameter(@"idChecklistSource", existingChecklistIdToCopyFrom)
             };
             return await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", parameters);
         }
@@ -270,7 +270,7 @@ namespace TrelloDotNet
         {
             if (coverToAdd == null)
             {
-                throw new TrelloApiException("Cover can't be null (If you trying to remove a cover see 'RemoveCoverFromCardAsync')", string.Empty);
+                throw new TrelloApiException(@"Cover can't be null (If you trying to remove a cover see 'RemoveCoverFromCardAsync')", string.Empty);
             }
 
             coverToAdd.PrepareForAddUpdate();
@@ -342,7 +342,7 @@ namespace TrelloDotNet
         /// <returns>The ReOpened Card</returns>
         public async Task<Card> ReOpenCardAsync(string cardId)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter("closed", false));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter(@"closed", false));
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace TrelloDotNet
         /// <returns>The Closed Board</returns>
         public async Task<Board> CloseBoardAsync(string boardId)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", new QueryParameter("closed", true));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", new QueryParameter(@"closed", true));
         }
 
         /// <summary>
@@ -362,7 +362,7 @@ namespace TrelloDotNet
         /// <returns>The ReOpened Board</returns>
         public async Task<Board> ReOpenBoardAsync(string boardId)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", new QueryParameter("closed", false));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", new QueryParameter(@"closed", false));
         }
 
         /// <summary>
@@ -480,7 +480,7 @@ namespace TrelloDotNet
                 case CustomFieldType.Number:
                 case CustomFieldType.Text:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Date' can be set with a DateTimeOffset value");
+                    throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'Date' can be set with a DateTimeOffset value");
             }
             await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
         }
@@ -508,7 +508,7 @@ namespace TrelloDotNet
                 case CustomFieldType.List:
                 case CustomFieldType.Text:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Number' can be set with a integer value");
+                    throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'Number' can be set with a integer value");
             }
             await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
 
@@ -537,7 +537,7 @@ namespace TrelloDotNet
                 case CustomFieldType.List:
                 case CustomFieldType.Text:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Number' can be set with a decimal value");
+                    throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'Number' can be set with a decimal value");
             }
             await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
         }
@@ -569,7 +569,7 @@ namespace TrelloDotNet
                 case CustomFieldType.Number:
                 case CustomFieldType.Text:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'List' can be set with a CustomFieldOption value");
+                    throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'List' can be set with a CustomFieldOption value");
             }
             await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
         }
@@ -645,7 +645,7 @@ namespace TrelloDotNet
         /// <param name="commentAction">The comment Action with the updated text</param>
         public async Task<TrelloAction> UpdateCommentActionAsync(TrelloAction commentAction)
         {
-            return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", new QueryParameter("text", commentAction.Data.Text));
+            return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", new QueryParameter(@"text", commentAction.Data.Text));
         }
 
         /// <summary>
@@ -656,7 +656,7 @@ namespace TrelloDotNet
         /// <returns>The Updated List</returns>
         public async Task<List> MoveListToBoardAsync(string listId, string newBoardId)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", new QueryParameter("value", newBoardId));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", new QueryParameter(@"value", newBoardId));
         }
 
         /// <summary>
@@ -677,8 +677,8 @@ namespace TrelloDotNet
         {
             var newList = await GetListAsync(newListId); //Get the new list's BoardId so the user do not need to provide it.
             await _apiRequestController.Post($"{UrlPaths.Lists}/{currentListId}/moveAllCards",
-                new QueryParameter("idBoard", newList.BoardId),
-                new QueryParameter("idList", newListId)
+                new QueryParameter(@"idBoard", newList.BoardId),
+                new QueryParameter(@"idList", newListId)
                 );
         }
 
@@ -701,7 +701,7 @@ namespace TrelloDotNet
             }
             else
             {
-                throw new SecurityException("Deletion of Boards are disabled via Options.AllowDeleteOfBoards (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back: https://support.atlassian.com/trello/docs/deleting-a-board/)");
+                throw new SecurityException(@"Deletion of Boards are disabled via Options.AllowDeleteOfBoards (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back: https://support.atlassian.com/trello/docs/deleting-a-board/)");
             }
         }
 
@@ -721,6 +721,32 @@ namespace TrelloDotNet
         public async Task DeleteWebhookAsync(string webhookId)
         {
             await _apiRequestController.Delete($"{UrlPaths.Webhooks}/{webhookId}");
+        }
+
+        /// <summary>
+        /// Delete Webhooks using indicated Callback URL (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// </summary>
+        /// <param name="callbackUrl">The URL of the callback URL</param>
+        public async Task DeleteWebhooksByCallbackUrlAsync(string callbackUrl)
+        {
+            var currentWebhooks = await GetWebhooksForCurrentTokenAsync();
+            foreach (var webhook in currentWebhooks.Where(x => x.CallbackUrl == callbackUrl))
+            {
+                await DeleteWebhookAsync(webhook.Id);
+            }
+        }
+
+        /// <summary>
+        /// Delete Webhooks using indicated target ModelId (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// </summary>
+        /// <param name="targetIdModel">The Target Model Id (example an ID of a Board)</param>
+        public async Task DeleteWebhooksByTargetModelIdAsync(string targetIdModel)
+        {
+            var currentWebhooks = await GetWebhooksForCurrentTokenAsync();
+            foreach (var webhook in currentWebhooks.Where(x => x.IdOfTypeYouWishToMonitor == targetIdModel))
+            {
+                await DeleteWebhookAsync(webhook.Id);
+            }
         }
 
         /// <summary>
@@ -804,7 +830,7 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> GetCardAsync(string cardId)
         {
-            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
         }
 
         /// <summary>
@@ -825,7 +851,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
         }
 
         /// <summary>
@@ -845,7 +871,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
         }
 
         /// <summary>
@@ -856,7 +882,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
         }
 
         /// <summary>
@@ -1035,8 +1061,8 @@ namespace TrelloDotNet
         public async Task<List<TrelloAction>> GetPagedCommentsOnCardAsync(string cardId, int page = 0)
         {
             return await _apiRequestController.Get<List<TrelloAction>>($"{UrlPaths.Cards}/{cardId}/actions",
-                new QueryParameter("filter", "commentCard"),
-                new QueryParameter("page", page));
+                new QueryParameter(@"filter", @"commentCard"),
+                new QueryParameter(@"page", page));
         }
 
         /// <summary>
@@ -1220,9 +1246,23 @@ namespace TrelloDotNet
         /// <returns>The Card with the removed Cover</returns>
         public async Task<Card> RemoveCoverFromCardAsync(string cardId)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter("cover", ""));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter(@"cover", string.Empty));
         }
 
+        /// <summary>
+        /// Replace callback URL for one or more Webhooks
+        /// </summary>
+        /// <param name="oldUrl">The old callback URL to find</param>
+        /// <param name="newUrl">The new callback URL to replace it with</param>
+        public async Task UpdateWebhookByCallbackUrlAsync(string oldUrl, string newUrl)
+        {
+            var currentWebhooks = await GetWebhooksForCurrentTokenAsync();
+            foreach (var webhook in currentWebhooks.Where(x => x.CallbackUrl == oldUrl))
+            {
+                webhook.CallbackUrl = newUrl;
+                await UpdateWebhookAsync(webhook);
+            }
+        }
         #endregion
     }
 }

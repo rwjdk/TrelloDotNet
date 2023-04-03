@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.Model.Webhook;
@@ -123,18 +124,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                 case CardFieldConditionConstraint.IsSet:
                     return boolean;
                 case CardFieldConditionConstraint.Value:
-                    var boolValue = (bool)Value;
-                    switch (StringValueMatchCriteria)
-                    {
-                        case StringMatchCriteria.Equal:
-                            return boolValue == boolean;
-                        case StringMatchCriteria.StartsWith:
-                        case StringMatchCriteria.EndsWith:
-                        case StringMatchCriteria.Contains:
-                            throw new AutomationException("Bool can't use MatchCriteria 'StartsWith', 'EndsWith' and 'Contains'");
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    return (bool)Value == boolean;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -152,26 +142,28 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
             return CheckString(card.Description);
         }
 
-        private bool CheckString(string stringValue)
+        private bool CheckString(string cardStringValue)
         {
             switch (Constraint)
             {
                 case CardFieldConditionConstraint.IsNotSet:
-                    return string.IsNullOrWhiteSpace(stringValue);
+                    return string.IsNullOrWhiteSpace(cardStringValue);
                 case CardFieldConditionConstraint.IsSet:
-                    return !string.IsNullOrWhiteSpace(stringValue);
+                    return !string.IsNullOrWhiteSpace(cardStringValue);
                 case CardFieldConditionConstraint.Value:
-                    var valueAsString = (string)Value;
+                    var inputValue = (string)Value;
                     switch (StringValueMatchCriteria)
                     {
                         case StringMatchCriteria.Equal:
-                            return stringValue == valueAsString;
+                            return cardStringValue == inputValue;
                         case StringMatchCriteria.StartsWith:
-                            return stringValue.StartsWith(valueAsString);
+                            return cardStringValue.StartsWith(inputValue);
                         case StringMatchCriteria.EndsWith:
-                            return stringValue.EndsWith(valueAsString);
+                            return cardStringValue.EndsWith(inputValue);
                         case StringMatchCriteria.Contains:
-                            return stringValue.Contains(valueAsString);
+                            return cardStringValue.Contains(inputValue);
+                        case StringMatchCriteria.RegEx:
+                            return Regex.IsMatch(cardStringValue, inputValue);
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
