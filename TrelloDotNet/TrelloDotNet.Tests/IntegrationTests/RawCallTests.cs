@@ -48,4 +48,13 @@ public class RawCallTests : TestBase
             Assert.DoesNotContain("XXXXXXXXXX", e.DataSentToTrello);
         }
     }
+
+    [Fact]
+    public async Task RawExceptionsThrowCorrectException()
+    {
+        await Assert.ThrowsAsync<TrelloApiException>(async () => await TrelloClient.GetAsync("xyz"));
+        await Assert.ThrowsAsync<TrelloApiException>(async () => await TrelloClient.PostAsync("xyz"));
+        await Assert.ThrowsAsync<TrelloApiException>(async () => await TrelloClient.PutAsync("xyz"));
+        await Assert.ThrowsAsync<TrelloApiException>(async () => await TrelloClient.DeleteAsync("xyz"));
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace TrelloDotNet.AutomationEngine.Model
 {
@@ -8,16 +7,6 @@ namespace TrelloDotNet.AutomationEngine.Model
     /// </summary>
     public class AutomationException : Exception
     {
-        /// <inheritdoc />
-        public AutomationException()
-        {
-        }
-
-        /// <inheritdoc />
-        protected AutomationException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-
         /// <inheritdoc />
         public AutomationException(string message) : base(message)
         {

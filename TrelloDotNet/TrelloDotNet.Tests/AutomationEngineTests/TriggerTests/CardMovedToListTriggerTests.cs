@@ -2,7 +2,7 @@
 using TrelloDotNet.AutomationEngine.Model.Triggers;
 using TrelloDotNet.Model.Webhook;
 
-namespace TrelloDotNet.Tests.AutomationEngineTests;
+namespace TrelloDotNet.Tests.AutomationEngineTests.TriggerTests;
 
 public class CardMovedToListTriggerTests : TestBase
 {
@@ -29,7 +29,7 @@ public class CardMovedToListTriggerTests : TestBase
         var cardMovedToListTrigger = new CardMovedToListTrigger(CardMovedToListTriggerContraint.AnyOfTheseListsAreMovedTo, webhookAction.Data.ListAfter.Id);
         Assert.True(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
     [Fact]
     public async Task NameStartWithTrigger()
     {
@@ -43,6 +43,18 @@ public class CardMovedToListTriggerTests : TestBase
     }
     
     [Fact]
+    public async Task AnyButNameStartWithTrigger()
+    {
+        var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList);
+        var cardMovedToListTrigger = new CardMovedToListTrigger(CardMovedToListTriggerContraint.AnyButTheseListsAreMovedTo, "My")
+        {
+            TreatListNameAsId = true,
+            ListNameMatchCriteria = StringMatchCriteria.StartsWith
+        };
+        Assert.False(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
+    }
+
+    [Fact]
     public async Task NameEndsWithTrigger()
     {
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList);
@@ -53,7 +65,19 @@ public class CardMovedToListTriggerTests : TestBase
         };
         Assert.True(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
+    [Fact]
+    public async Task AnyButNameEndsWithTrigger()
+    {
+        var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList);
+        var cardMovedToListTrigger = new CardMovedToListTrigger(CardMovedToListTriggerContraint.AnyButTheseListsAreMovedTo, "st")
+        {
+            TreatListNameAsId = true,
+            ListNameMatchCriteria = StringMatchCriteria.EndsWith
+        };
+        Assert.False(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
+    }
+
     [Fact]
     public async Task NameContainsTrigger()
     {
@@ -67,7 +91,19 @@ public class CardMovedToListTriggerTests : TestBase
     }
     
     [Fact]
-    public async Task NameregExTrigger()
+    public async Task AnyButNameContainsTrigger()
+    {
+        var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList);
+        var cardMovedToListTrigger = new CardMovedToListTrigger(CardMovedToListTriggerContraint.AnyButTheseListsAreMovedTo, "yLi")
+        {
+            TreatListNameAsId = true,
+            ListNameMatchCriteria = StringMatchCriteria.Contains
+        };
+        Assert.False(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
+    }
+
+    [Fact]
+    public async Task NameRegExTrigger()
     {
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList);
         var cardMovedToListTrigger = new CardMovedToListTrigger(CardMovedToListTriggerContraint.AnyOfTheseListsAreMovedTo, "M\\w+t")
@@ -78,6 +114,18 @@ public class CardMovedToListTriggerTests : TestBase
         Assert.True(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
     }
     
+    [Fact]
+    public async Task AnyButNameRegExTrigger()
+    {
+        var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList);
+        var cardMovedToListTrigger = new CardMovedToListTrigger(CardMovedToListTriggerContraint.AnyButTheseListsAreMovedTo, "M\\w+t")
+        {
+            TreatListNameAsId = true,
+            ListNameMatchCriteria = StringMatchCriteria.RegEx
+        };
+        Assert.False(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
+    }
+
     [Fact]
     public async Task IdFalseTrigger()
     {
@@ -100,5 +148,22 @@ public class CardMovedToListTriggerTests : TestBase
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList);
         var cardMovedToListTrigger = new CardMovedToListTrigger(CardMovedToListTriggerContraint.AnyButTheseListsAreMovedTo, Guid.NewGuid().ToString());
         Assert.True(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
+    }
+
+    [Fact]
+    public async Task TriggerException()
+    {
+        var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList);
+        CardMovedToListTriggerContraint contraint = Enum.Parse<CardMovedToListTriggerContraint>("99");
+        var cardMovedToListTrigger = new CardMovedToListTrigger(contraint, Guid.NewGuid().ToString());
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () =>  await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
+    }
+    
+    [Fact]
+    public async Task WrongWebActionException()
+    {
+        var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.NoListAfter);
+        var cardMovedToListTrigger = new CardMovedToListTrigger(CardMovedToListTriggerContraint.AnyOfTheseListsAreMovedTo, "MyList");
+        Assert.False(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
     }
 }

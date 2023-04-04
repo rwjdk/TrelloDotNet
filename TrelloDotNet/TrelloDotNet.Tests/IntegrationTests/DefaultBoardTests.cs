@@ -17,6 +17,9 @@ public class DefaultBoardTests : TestBaseWithNewBoard
             Assert.False(Board.Closed);
             Assert.NotEmpty(Board.ShortUrl);
             Assert.NotEmpty(Board.Url);
+            Assert.False(Board.Pinned);
+            Assert.Null(Board.EnterpriseId);
+            Assert.Equal("63e0bdc4ab548c20ba689bf9", Board.OrganizationId);
 
             //Member Tests
             var members = await TrelloClient.GetMembersOfBoardAsync(BoardId);
@@ -87,6 +90,16 @@ public class DefaultBoardTests : TestBaseWithNewBoard
 
             var tokenInformation = await TrelloClient.GetTokenInformationAsync();
             Assert.NotNull(tokenInformation);
+            Assert.NotNull(tokenInformation.Created);
+            Assert.Null(tokenInformation.Expires);
+            Assert.NotNull(tokenInformation.Id);
+            Assert.NotNull(tokenInformation.Identifier);
+            Assert.NotNull(tokenInformation.MemberId);
+            Assert.NotNull(tokenInformation.Permissions);
+            Assert.NotNull(tokenInformation.Permissions[0].ModelId);
+            Assert.NotNull(tokenInformation.Permissions[0].ModelType);
+            Assert.True(tokenInformation.Permissions[0].Read);
+            Assert.True(tokenInformation.Permissions[0].Write);
 
             var tokenMember = await TrelloClient.GetTokenMemberAsync();
             Assert.NotNull(tokenMember);

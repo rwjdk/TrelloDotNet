@@ -306,6 +306,18 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Custom Put Method (with JSON Payload) to be used on unexposed features of the API delivered back as JSON.
+        /// </summary>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="payload">JSON Payload (In the rare cases Trello API need this)</param>
+        /// <param name="parameters">Additional Parameters</param>
+        /// <returns>JSON Representation of response</returns>
+        public async Task<string> PutAsync(string urlSuffix, string payload, params QueryParameter[] parameters)
+        {
+            return await _apiRequestController.PutWithJsonPayload(urlSuffix, payload, parameters);
+        }
+
+        /// <summary>
         /// Archive a List
         /// </summary>
         /// <param name="listId">The id of list that should be Archived</param>

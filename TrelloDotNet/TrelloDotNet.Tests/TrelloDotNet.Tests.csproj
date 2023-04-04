@@ -120,7 +120,6 @@
     <Folder Include="AutomationEngineTests\SampleActions\" />
     <Folder Include="AutomationEngineTests\SampleConditions\" />
     <Folder Include="AutomationEngineTests\SampleTriggers\" />
-    <Folder Include="UnitTests\" />
   </ItemGroup>
 
 </Project>

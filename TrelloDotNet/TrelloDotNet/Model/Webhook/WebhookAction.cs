@@ -67,7 +67,7 @@ namespace TrelloDotNet.Model.Webhook
             var webhookAction = new WebhookAction()
             {
                 TrelloClient = trelloClient,
-                Data = WebhookActionData.CreateDummy(),
+                Data = WebhookActionData.CreateDummy(scenario),
                 Date = new DateTimeOffset(new DateTime(2000, 12, 1)),
                 Display = WebhookActionDisplay.CreateDummy(scenario),
                 Id = "63d128787441d05619f44dbe",
@@ -84,15 +84,38 @@ namespace TrelloDotNet.Model.Webhook
             switch (scenario)
             {
                 case WebhookActionDummyCreationScenario.MoveCardToList:
+                case WebhookActionDummyCreationScenario.CardUpdated:
                     return WebhookActionTypes.UpdateCard;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(scenario));
+                case WebhookActionDummyCreationScenario.CardCreated:
+                    return WebhookActionTypes.CreateCard;
+                case WebhookActionDummyCreationScenario.CardEmailed:
+                    return WebhookActionTypes.EmailCard;
+                case WebhookActionDummyCreationScenario.CardMovedToBoard:
+                    return WebhookActionTypes.MoveCardToBoard;
+                case WebhookActionDummyCreationScenario.LabelAddedToCard:
+                    return WebhookActionTypes.AddLabelToCard;
+                case WebhookActionDummyCreationScenario.MemberAddedToCard:
+                    return WebhookActionTypes.AddMemberToCard;
+                case WebhookActionDummyCreationScenario.LabelRemovedFromCard:
+                    return WebhookActionTypes.RemoveLabelFromCard;
+                case WebhookActionDummyCreationScenario.MemberRemovedFromCard:
+                    return WebhookActionTypes.RemoveMemberFromCard;
             }
+            return WebhookActionTypes.UpdateCard;
         }
 
         internal enum WebhookActionDummyCreationScenario
         {
-            MoveCardToList
+            MoveCardToList,
+            NoListAfter,
+            CardCreated,
+            CardEmailed,
+            CardMovedToBoard,
+            CardUpdated,
+            LabelAddedToCard,
+            MemberAddedToCard,
+            LabelRemovedFromCard,
+            MemberRemovedFromCard
         }
     }
 }

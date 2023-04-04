@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests;
 
@@ -20,7 +21,8 @@ public abstract class TestBase
 
             var apiKey = config["TrelloApiKey"];
             var token = config["TrelloToken"];
-            return new TrelloClient(apiKey, token);
+            var trelloClientOptions = new TrelloClientOptions(includeCustomFieldsInCardGetMethods: true);
+            return new TrelloClient(apiKey, token, trelloClientOptions);
         }
         catch (Exception)
         {

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -82,28 +83,75 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         public WebhookAction Parent { get; internal set; }
 
-        internal static WebhookActionData CreateDummy()
+        internal static WebhookActionData CreateDummy(WebhookAction.WebhookActionDummyCreationScenario webhookActionDummyCreationScenario)
         {
+            var listAfter = WebhookActionDataList.CreateDummy();
+            var listBefore = WebhookActionDataList.CreateDummy();
+            var card = WebhookActionDataCard.CreateDummy();
+            var board = WebhookActionDataBoard.CreateDummy();
+            var member = WebhookActionDataMember.CreateDummy();
+            var checkItem = WebhookActionDataCheckItem.CreateDummy();
+            var checklist = WebhookActionDataChecklist.CreateDummy();
+            var label = WebhookActionDataLabel.CreateDummy();
+            var list = WebhookActionDataList.CreateDummy();
+
+            switch (webhookActionDummyCreationScenario)
+            {
+                case WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList:
+                    member = null;
+                    checkItem = null;
+                    checklist = null;
+                    label = null;
+                    list = null;
+                    break;
+                case WebhookAction.WebhookActionDummyCreationScenario.NoListAfter:
+                    listAfter = null;
+                    break;
+            }
+
             var webhookActionData = new WebhookActionData()
             {
-                Card = WebhookActionDataCard.CreateDummy(),
-                Board = WebhookActionDataBoard.CreateDummy(),
-                Member = WebhookActionDataMember.CreateDummy(),
-                CheckItem = WebhookActionDataCheckItem.CreateDummy(),
-                Checklist = WebhookActionDataChecklist.CreateDummy(),
-                Label = WebhookActionDataLabel.CreateDummy(),
-                List = WebhookActionDataList.CreateDummy(),
-                ListAfter = WebhookActionDataList.CreateDummy(),
-                ListBefore = WebhookActionDataList.CreateDummy(),
+                Card = card,
+                Board = board,
+                Member = member,
+                CheckItem = checkItem,
+                Checklist = checklist,
+                Label = label,
+                List = list,
+                ListAfter = listAfter,
+                ListBefore = listBefore,
                 Old = WebhookActionDataOld.CreateDummy(),
             };
-            webhookActionData.Member.Parent = webhookActionData;
-            webhookActionData.Card.Parent = webhookActionData;
-            webhookActionData.Board.Parent = webhookActionData;
-            webhookActionData.Checklist.Parent = webhookActionData;
-            webhookActionData.ListBefore.Parent = webhookActionData;
-            webhookActionData.ListAfter.Parent = webhookActionData;
-            webhookActionData.List.Parent = webhookActionData;
+            if (webhookActionData.Member != null)
+            {
+                webhookActionData.Member.Parent = webhookActionData;
+            }
+            if (webhookActionData.Card != null)
+            {
+                webhookActionData.Card.Parent = webhookActionData;
+            }
+            if (webhookActionData.Board != null)
+            {
+                webhookActionData.Board.Parent = webhookActionData;
+            }
+            if (webhookActionData.Checklist != null)
+            {
+                webhookActionData.Checklist.Parent = webhookActionData;
+            }
+
+            if (webhookActionData.ListBefore != null)
+            {
+                webhookActionData.ListBefore.Parent = webhookActionData;
+            }
+
+            if (webhookActionData.ListAfter != null)
+            {
+                webhookActionData.ListAfter.Parent = webhookActionData;
+            }
+            if (webhookActionData.List != null)
+            {
+                webhookActionData.List.Parent = webhookActionData;
+            }
             return webhookActionData;
         }
     }
