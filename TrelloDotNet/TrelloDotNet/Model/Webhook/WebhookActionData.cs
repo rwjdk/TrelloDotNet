@@ -83,12 +83,12 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         public WebhookAction Parent { get; internal set; }
 
-        internal static WebhookActionData CreateDummy(WebhookAction.WebhookActionDummyCreationScenario webhookActionDummyCreationScenario, Card cardToSimulate, List listToSimulate)
+        internal static WebhookActionData CreateDummy(WebhookAction.WebhookActionDummyCreationScenario webhookActionDummyCreationScenario, Card cardToSimulate, List listToSimulate, Board boardToSimulate)
         {
             var listAfter = WebhookActionDataList.CreateDummy();
             var listBefore = WebhookActionDataList.CreateDummy();
             var card = WebhookActionDataCard.CreateDummy(cardToSimulate);
-            var board = WebhookActionDataBoard.CreateDummy();
+            var board = WebhookActionDataBoard.CreateDummy(boardToSimulate);
             var member = WebhookActionDataMember.CreateDummy();
             var checkItem = WebhookActionDataCheckItem.CreateDummy();
             var checklist = WebhookActionDataChecklist.CreateDummy();
@@ -113,6 +113,7 @@ namespace TrelloDotNet.Model.Webhook
                     break;
                 case WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated:
                     card = null;
+                    list = null;
                     break;
             }
 

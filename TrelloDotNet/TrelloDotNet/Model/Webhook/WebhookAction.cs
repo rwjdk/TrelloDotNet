@@ -62,12 +62,12 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         public TrelloClient TrelloClient { get; internal set; }
 
-        internal static WebhookAction CreateDummy(TrelloClient trelloClient, WebhookActionDummyCreationScenario scenario, Card cardToSimulate = null, List listToSimulate = null)
+        internal static WebhookAction CreateDummy(TrelloClient trelloClient, WebhookActionDummyCreationScenario scenario, Board boardToSimulate = null, List listToSimulate = null, Card cardToSimulate = null)
         {
             var webhookAction = new WebhookAction()
             {
                 TrelloClient = trelloClient,
-                Data = WebhookActionData.CreateDummy(scenario, cardToSimulate, listToSimulate),
+                Data = WebhookActionData.CreateDummy(scenario, cardToSimulate, listToSimulate, boardToSimulate),
                 Date = new DateTimeOffset(new DateTime(2000, 12, 1)),
                 Display = WebhookActionDisplay.CreateDummy(scenario),
                 Id = "63d128787441d05619f44dbe",

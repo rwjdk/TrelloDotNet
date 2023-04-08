@@ -1287,5 +1287,14 @@ namespace TrelloDotNet
             }
         }
         #endregion
+
+        /// <summary>
+        /// Update the definition of a label (Name and Color)
+        /// </summary>
+        /// <param name="labelWithUpdates">The label with updates</param>
+        public async Task<Label> UpdateLabelAsync(Label labelWithUpdates)
+        {
+            return await _apiRequestController.Put<Label>($"{UrlPaths.Labels}/{labelWithUpdates.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(labelWithUpdates));
+        }
     }
 }

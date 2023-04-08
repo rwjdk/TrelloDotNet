@@ -5,6 +5,7 @@
 - Fixed that 'Constraint' was spelled incorrectly (missing an 's') in 2 places ('ListConditionConstraint' and 'CardMovedToListTriggerConstraint') [COMPILE TIME BREAKING CHANGE] (sorry but better to change now than later ;-( ) 
 - Fixed that 'CardCoverCondition' was not evaluated correctly in all scenarios
 - Added 'UpdateChecklistItemAsync'
+- Added 'UpdateLabelAsync'
 
 ## 1.4.0 (3rd of April 2023)
 - Enhanced 'UpdateCardAsync' so it now has the ability to Add/Update/Remove the Cover of a card
