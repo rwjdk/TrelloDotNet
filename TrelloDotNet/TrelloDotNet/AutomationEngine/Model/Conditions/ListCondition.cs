@@ -14,7 +14,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         /// <summary>
         /// The constraint of the Condition
         /// </summary>
-        public ListConditionContraint Contraint { get; }
+        public ListConditionConstraint Constraint { get; }
         /// <summary>
         /// The Ids of the List or Lists to check. Tip: These can be List-names instead of Ids if you set 'TreatListNameAsId' to True
         /// </summary>
@@ -28,11 +28,11 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="contraint">The constraint of the Condition</param>
+        /// <param name="constraint">The constraint of the Condition</param>
         /// <param name="listIds">The Ids of the List or Lists to check. Tip: These can be List-names instead of Ids if you set 'TreatListNameAsId' to True</param>
-        public ListCondition(ListConditionContraint contraint, params string[] listIds)
+        public ListCondition(ListConditionConstraint constraint, params string[] listIds)
         {
-            Contraint = contraint;
+            Constraint = constraint;
             ListIds = listIds;
         }
 
@@ -47,11 +47,11 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
             {
                 //List can be checked via Webhook
                 var listPartToCheck = TreatListNameAsId ? webhookAction.Data?.List?.Name : webhookAction.Data?.List?.Id;
-                switch (Contraint)
+                switch (Constraint)
                 {
-                    case ListConditionContraint.AnyOfTheseLists:
+                    case ListConditionConstraint.AnyOfTheseLists:
                         return ListIds.Contains(listPartToCheck);
-                    case ListConditionContraint.NoneOfTheseLists:
+                    case ListConditionConstraint.NoneOfTheseLists:
                         return !ListIds.Contains(listPartToCheck);
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -66,22 +66,22 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                 {
                     //Get list of card to check name
                     var list = await webhookAction.TrelloClient.GetListAsync(card.ListId);
-                    switch (Contraint)
+                    switch (Constraint)
                     {
-                        case ListConditionContraint.AnyOfTheseLists:
+                        case ListConditionConstraint.AnyOfTheseLists:
                             return ListIds.Contains(list.Name);
-                        case ListConditionContraint.NoneOfTheseLists:
+                        case ListConditionConstraint.NoneOfTheseLists:
                             return !ListIds.Contains(list.Name);
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
                 }
 
-                switch (Contraint)
+                switch (Constraint)
                 {
-                    case ListConditionContraint.AnyOfTheseLists:
+                    case ListConditionConstraint.AnyOfTheseLists:
                         return ListIds.Contains(card.ListId);
-                    case ListConditionContraint.NoneOfTheseLists:
+                    case ListConditionConstraint.NoneOfTheseLists:
                         return !ListIds.Contains(card.ListId);
                     default:
                         throw new ArgumentOutOfRangeException();

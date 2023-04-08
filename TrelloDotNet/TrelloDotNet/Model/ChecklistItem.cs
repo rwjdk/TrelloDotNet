@@ -58,6 +58,7 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("state")]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<ChecklistItemState>))]
+        [QueryParameter]
         public ChecklistItemState State { get; set; } 
 
         /// <summary>

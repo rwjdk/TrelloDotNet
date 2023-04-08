@@ -421,6 +421,17 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Update a Check-item on a Card
+        /// </summary>
+        /// <param name="cardId">The Id of the Card the ChecklistItem is on</param>
+        /// <param name="item">The updated Check-item</param>
+        /// <returns>The Updated Checklist Item</returns>
+        public async Task<ChecklistItem> UpdateChecklistItemAsync(string cardId, ChecklistItem item)
+        {
+            return await _apiRequestController.Put<ChecklistItem>($"{UrlPaths.Cards}/{cardId}/checkItem/{item.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(item));
+        }
+
+        /// <summary>
         /// Update a webhook
         /// </summary>
         /// <param name="webhookWithChanges">The Webhook with changes</param>

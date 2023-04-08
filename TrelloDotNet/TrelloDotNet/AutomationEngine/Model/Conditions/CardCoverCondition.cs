@@ -47,9 +47,9 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                 case CardCoverConditionConstraint.DoesNotHaveACoverOfTypeImage:
                     return card.Cover?.BackgroundImageId == null;
                 case CardCoverConditionConstraint.HaveACover:
-                    return card.Cover.BackgroundImageId != null || card.Cover.Color != CardCoverColor.None;
+                    return card.Cover.BackgroundImageId != null || (card.Cover.Color != null && card.Cover.Color != CardCoverColor.None);
                 case CardCoverConditionConstraint.HaveACoverOfTypeColor:
-                    return card.Cover.Color != CardCoverColor.None;
+                    return card.Cover.Color != null && card.Cover.Color != CardCoverColor.None;
                 case CardCoverConditionConstraint.HaveACoverOfTypeImage:
                     return card.Cover.BackgroundImageId != null;
                 default:

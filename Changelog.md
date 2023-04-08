@@ -1,6 +1,11 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## Unreleased
+- Fixed that 'Constraint' was spelled incorrectly (missing an 's') in 2 places ('ListConditionConstraint' and 'CardMovedToListTriggerConstraint') [COMPILE TIME BREAKING CHANGE] (sorry but better to change now than later ;-( ) 
+- Fixed that 'CardCoverCondition' was not evaluated correctly in all scenarios
+- Added 'UpdateChecklistItemAsync'
+
 ## 1.4.0 (3rd of April 2023)
 - Enhanced 'UpdateCardAsync' so it now has the ability to Add/Update/Remove the Cover of a card
 - Added methods 'AddCoverToCardAsync', 'UpdateCoverOnCardAsync', and 'RemoveCoverOnCardAsync'

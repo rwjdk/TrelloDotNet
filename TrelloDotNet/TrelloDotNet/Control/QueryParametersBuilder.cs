@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Model;
 
@@ -13,7 +14,7 @@ namespace TrelloDotNet.Control
             var type = instance.GetType();
             var propertyInfos = type.GetProperties();
             List<QueryParameter> parameters = new List<QueryParameter>();
-            foreach (var updateableProperty in propertyInfos)
+            foreach (PropertyInfo updateableProperty in propertyInfos)
             {
                 var updateableAttributes = updateableProperty.GetCustomAttributes(typeof(QueryParameterAttribute), true);
                 if (!updateableAttributes.Any())
@@ -38,8 +39,8 @@ namespace TrelloDotNet.Control
 
                 if (updateablePropertyType == typeof(string))
                 {
-                    parameters.Add(rawValue == null ? 
-                        new QueryParameter(jsonPropertyName.Name, string.Empty) : 
+                    parameters.Add(rawValue == null ?
+                        new QueryParameter(jsonPropertyName.Name, string.Empty) :
                         new QueryParameter(jsonPropertyName.Name, (string)rawValue));
                 }
                 else if (updateablePropertyType == typeof(int) || updateablePropertyType == typeof(int?))
@@ -62,6 +63,10 @@ namespace TrelloDotNet.Control
                 {
                     var list = (List<string>)rawValue;
                     parameters.Add(list == null ? new QueryParameter(jsonPropertyName.Name, string.Empty) : new QueryParameter(jsonPropertyName.Name, string.Join(",", list)));
+                }
+                else if (updateablePropertyType.BaseType == typeof(Enum))
+                {
+                    parameters.Add(new QueryParameter(jsonPropertyName.Name, ((Enum)rawValue).GetJsonPropertyName()));
                 }
                 else
                 {

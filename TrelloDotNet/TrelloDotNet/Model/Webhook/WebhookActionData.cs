@@ -83,20 +83,24 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         public WebhookAction Parent { get; internal set; }
 
-        internal static WebhookActionData CreateDummy(WebhookAction.WebhookActionDummyCreationScenario webhookActionDummyCreationScenario)
+        internal static WebhookActionData CreateDummy(WebhookAction.WebhookActionDummyCreationScenario webhookActionDummyCreationScenario, Card cardToSimulate, List listToSimulate)
         {
             var listAfter = WebhookActionDataList.CreateDummy();
             var listBefore = WebhookActionDataList.CreateDummy();
-            var card = WebhookActionDataCard.CreateDummy();
+            var card = WebhookActionDataCard.CreateDummy(cardToSimulate);
             var board = WebhookActionDataBoard.CreateDummy();
             var member = WebhookActionDataMember.CreateDummy();
             var checkItem = WebhookActionDataCheckItem.CreateDummy();
             var checklist = WebhookActionDataChecklist.CreateDummy();
             var label = WebhookActionDataLabel.CreateDummy();
-            var list = WebhookActionDataList.CreateDummy();
+            var list = WebhookActionDataList.CreateDummy(listToSimulate);
 
             switch (webhookActionDummyCreationScenario)
             {
+                case WebhookAction.WebhookActionDummyCreationScenario.CardCreated:
+                case WebhookAction.WebhookActionDummyCreationScenario.CardUpdated:
+                    list = null;
+                    break;
                 case WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList:
                     member = null;
                     checkItem = null;
@@ -106,6 +110,9 @@ namespace TrelloDotNet.Model.Webhook
                     break;
                 case WebhookAction.WebhookActionDummyCreationScenario.NoListAfter:
                     listAfter = null;
+                    break;
+                case WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated:
+                    card = null;
                     break;
             }
 

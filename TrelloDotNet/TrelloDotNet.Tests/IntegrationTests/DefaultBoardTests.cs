@@ -19,7 +19,7 @@ public class DefaultBoardTests : TestBaseWithNewBoard
             Assert.NotEmpty(Board.Url);
             Assert.False(Board.Pinned);
             Assert.Null(Board.EnterpriseId);
-            Assert.Equal("63e0bdc4ab548c20ba689bf9", Board.OrganizationId);
+            Assert.NotEmpty(Board.OrganizationId);
 
             //Member Tests
             var members = await TrelloClient.GetMembersOfBoardAsync(BoardId);

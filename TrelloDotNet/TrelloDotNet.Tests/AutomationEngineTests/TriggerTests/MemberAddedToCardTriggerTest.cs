@@ -41,8 +41,8 @@ public class MemberAddedToCardTriggerTest : TestBase
     public async Task TriggerException()
     {
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MemberAddedToCard);
-        MemberAddedToCardTriggerConstraint contraint = Enum.Parse<MemberAddedToCardTriggerConstraint>("99");
-        var cardMovedToListTrigger = new MemberAddedToCardTrigger(contraint, Guid.NewGuid().ToString());
+        MemberAddedToCardTriggerConstraint constraint = Enum.Parse<MemberAddedToCardTriggerConstraint>("99");
+        var cardMovedToListTrigger = new MemberAddedToCardTrigger(constraint, Guid.NewGuid().ToString());
         await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
     }
 }

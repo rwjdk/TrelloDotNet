@@ -39,8 +39,6 @@ public abstract class TestBase
 
     protected void WaitToAvoidRateLimits(int waitSeconds = 1)
     {
-#if !DEBUG
         Thread.Sleep(waitSeconds * 1000);
-#endif
     }
 }

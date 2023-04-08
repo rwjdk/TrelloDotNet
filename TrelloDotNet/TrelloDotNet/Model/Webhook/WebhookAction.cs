@@ -62,12 +62,12 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         public TrelloClient TrelloClient { get; internal set; }
 
-        internal static WebhookAction CreateDummy(TrelloClient trelloClient, WebhookActionDummyCreationScenario scenario)
+        internal static WebhookAction CreateDummy(TrelloClient trelloClient, WebhookActionDummyCreationScenario scenario, Card cardToSimulate = null, List listToSimulate = null)
         {
             var webhookAction = new WebhookAction()
             {
                 TrelloClient = trelloClient,
-                Data = WebhookActionData.CreateDummy(scenario),
+                Data = WebhookActionData.CreateDummy(scenario, cardToSimulate, listToSimulate),
                 Date = new DateTimeOffset(new DateTime(2000, 12, 1)),
                 Display = WebhookActionDisplay.CreateDummy(scenario),
                 Id = "63d128787441d05619f44dbe",
@@ -100,6 +100,10 @@ namespace TrelloDotNet.Model.Webhook
                     return WebhookActionTypes.RemoveLabelFromCard;
                 case WebhookActionDummyCreationScenario.MemberRemovedFromCard:
                     return WebhookActionTypes.RemoveMemberFromCard;
+                case WebhookActionDummyCreationScenario.BoardUpdated:
+                    return WebhookActionTypes.UpdateBoard;
+                case WebhookActionDummyCreationScenario.ListUpdated:
+                    return WebhookActionTypes.UpdateList;
             }
             return WebhookActionTypes.UpdateCard;
         }
@@ -115,7 +119,9 @@ namespace TrelloDotNet.Model.Webhook
             LabelAddedToCard,
             MemberAddedToCard,
             LabelRemovedFromCard,
-            MemberRemovedFromCard
+            MemberRemovedFromCard,
+            BoardUpdated,
+            ListUpdated
         }
     }
 }
