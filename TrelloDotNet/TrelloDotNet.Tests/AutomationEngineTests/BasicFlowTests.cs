@@ -20,6 +20,21 @@ public class BasicFlowTests : TestBase
         Assert.Equal(0, result.AutomationsSkipped);
         Assert.Equal(2, result.ActionsExecuted);
         Assert.Equal(0, result.ActionsSkipped);
+        Assert.NotNull(result.Log);
+        Assert.NotNull(result.Log[0].Message);
+        Assert.NotEmpty(result.Log[0].Timestamp.ToString());
+    }
+    
+    [Fact]
+    public async Task SkipAction()
+    {
+        var trigger = new AlwaysTrueTrigger();
+        var automationController = CreateAutomationController(trigger, new List<IAutomationCondition>(), new List<IAutomationAction>() { new SkipAction() });
+        var result = await automationController.ProcessJsonFromWebhookAsync(new ProcessingRequest(GetJsonFromSampleFile("MoveCardFromListToList.json")));
+        Assert.Equal(2, result.AutomationsProcessed); 
+        Assert.Equal(0, result.AutomationsSkipped);
+        Assert.Equal(0, result.ActionsExecuted);
+        Assert.Equal(2, result.ActionsSkipped);
     }
     
     [Fact]
@@ -93,6 +108,32 @@ public class BasicFlowTests : TestBase
         Assert.Equal(4, result.ActionsExecuted);
         Assert.Equal(0, result.ActionsSkipped);
     }
+
+    [Fact]
+    public async Task ExceptionTrigger()
+    {
+        var trigger = new ExceptionTrigger();
+        var automationController = CreateAutomationController(trigger, new List<IAutomationCondition>(), new List<IAutomationAction>() { new ExceptionAction() });
+        await Assert.ThrowsAsync<AutomationException>(async () => await automationController.ProcessJsonFromWebhookAsync(new ProcessingRequest(GetJsonFromSampleFile("MoveCardFromListToList.json"))));
+    }
+
+    [Fact]
+    public async Task ExceptionCondition()
+    {
+        var trigger = new AlwaysTrueTrigger();
+        var automationController = CreateAutomationController(trigger, new List<IAutomationCondition>() { new ExceptionCondition()}, new List<IAutomationAction>() { new ExceptionAction() });
+        await Assert.ThrowsAsync<AutomationException>(async () => await automationController.ProcessJsonFromWebhookAsync(new ProcessingRequest(GetJsonFromSampleFile("MoveCardFromListToList.json"))));
+    }
+
+    [Fact]
+    public async Task ExceptionAction()
+    {
+        var trigger = new AlwaysTrueTrigger();
+        var automationController = CreateAutomationController(trigger, new List<IAutomationCondition>(), new List<IAutomationAction>() { new ExceptionAction() });
+        await Assert.ThrowsAsync<AutomationException>(async () => await automationController.ProcessJsonFromWebhookAsync(new ProcessingRequest(GetJsonFromSampleFile("MoveCardFromListToList.json"))));
+    }
+
+
 
     private AutomationController CreateAutomationController(IAutomationTrigger trigger, List<IAutomationCondition> conditions, List<IAutomationAction> actions)
     {

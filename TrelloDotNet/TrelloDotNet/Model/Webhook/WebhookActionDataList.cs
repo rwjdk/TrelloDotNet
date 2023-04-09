@@ -43,8 +43,18 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         public WebhookActionData Parent { get; internal set; }
 
-        internal static WebhookActionDataList CreateDummy()
+        internal static WebhookActionDataList CreateDummy(List listToSimulate = null)
         {
+            if (listToSimulate != null)
+            {
+                return new WebhookActionDataList()
+                {
+                    Id = listToSimulate.Id,
+                    Name = listToSimulate.Name,
+                    Posistion = listToSimulate.Position
+                };
+            }
+
             return new WebhookActionDataList()
             {
                 Id = "63d1239e857afaa8b003c633",

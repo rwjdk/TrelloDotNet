@@ -151,6 +151,8 @@ public class CardTests : TestBaseWithNewBoard
         Assert.Null(addedCard.Cover.Color);
         Assert.Null(addedCard.Cover.BackgroundImageId);
         Assert.Null(addedCard.Cover.BackgroundImageId);
+        Assert.Empty(addedCard.ChecklistIds);
+        Assert.Null(addedCard.CustomFieldItems);
 
         WaitToAvoidRateLimits();
         var membersOfCardAsync = await TrelloClient.GetMembersOfCardAsync(addedCard.Id);
@@ -190,6 +192,7 @@ public class CardTests : TestBaseWithNewBoard
         await TrelloClient.AddChecklistAsync(getCard.Id, newChecklist, true);
 
         Assert.Equal("Sample Checklist", addedChecklist.Name);
+        Assert.Equal(getCard.Id, addedChecklist.CardId);
         Assert.Equal(3, addedChecklist.Items.Count);
         var itemA = addedChecklist.Items.FirstOrDefault(x => x.Name == "ItemA");
         var itemB = addedChecklist.Items.FirstOrDefault(x => x.Name == "ItemB");
@@ -440,7 +443,12 @@ public class CardTests : TestBaseWithNewBoard
         //Test Comments
         WaitToAvoidRateLimits();
         var cardForComments = await TrelloClient.AddCardAsync(new Card(cardList.Id, "Comments Tests"));
-        var comment = await TrelloClient.AddCommentAsync(cardForComments.Id, new Comment("Hello World"));
+        // ReSharper disable once RedundantAssignment
+#pragma warning disable IDE0059
+        var commentInput = new Comment(); //For Test-coverage
+#pragma warning restore IDE0059
+        commentInput = new Comment("Hello World");
+        var comment = await TrelloClient.AddCommentAsync(cardForComments.Id, commentInput);
         Assert.NotEmpty(comment.Id);
         Assert.Equal("Hello World", comment.Data.Text);
 

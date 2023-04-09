@@ -3,7 +3,7 @@
     /// <summary>
     /// The Constraints on a CardMoved To List Trigger
     /// </summary>
-    public enum CardMovedToListTriggerContraint
+    public enum CardMovedToListTriggerConstraint
     {
         /// <summary>
         /// That any of the provided Lists are being moved to

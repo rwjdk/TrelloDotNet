@@ -306,6 +306,18 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Custom Put Method (with JSON Payload) to be used on unexposed features of the API delivered back as JSON.
+        /// </summary>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="payload">JSON Payload (In the rare cases Trello API need this)</param>
+        /// <param name="parameters">Additional Parameters</param>
+        /// <returns>JSON Representation of response</returns>
+        public async Task<string> PutAsync(string urlSuffix, string payload, params QueryParameter[] parameters)
+        {
+            return await _apiRequestController.PutWithJsonPayload(urlSuffix, payload, parameters);
+        }
+
+        /// <summary>
         /// Archive a List
         /// </summary>
         /// <param name="listId">The id of list that should be Archived</param>
@@ -406,6 +418,17 @@ namespace TrelloDotNet
         public async Task<List> UpdateListAsync(List listWithChanges)
         {
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listWithChanges.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges));
+        }
+
+        /// <summary>
+        /// Update a Check-item on a Card
+        /// </summary>
+        /// <param name="cardId">The Id of the Card the ChecklistItem is on</param>
+        /// <param name="item">The updated Check-item</param>
+        /// <returns>The Updated Checklist Item</returns>
+        public async Task<ChecklistItem> UpdateChecklistItemAsync(string cardId, ChecklistItem item)
+        {
+            return await _apiRequestController.Put<ChecklistItem>($"{UrlPaths.Cards}/{cardId}/checkItem/{item.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(item));
         }
 
         /// <summary>
@@ -1264,5 +1287,14 @@ namespace TrelloDotNet
             }
         }
         #endregion
+
+        /// <summary>
+        /// Update the definition of a label (Name and Color)
+        /// </summary>
+        /// <param name="labelWithUpdates">The label with updates</param>
+        public async Task<Label> UpdateLabelAsync(Label labelWithUpdates)
+        {
+            return await _apiRequestController.Put<Label>($"{UrlPaths.Labels}/{labelWithUpdates.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(labelWithUpdates));
+        }
     }
 }

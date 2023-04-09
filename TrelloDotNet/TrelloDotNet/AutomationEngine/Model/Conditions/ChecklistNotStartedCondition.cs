@@ -42,12 +42,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
 
             var checklists = await webhookAction.TrelloClient.GetChecklistsOnCardAsync(webhookAction.Data.Card.Id);
             var checklistToCheck = checklists.FirstOrDefault(x => x.Name == ChecklistNameToCheck);
-            if (checklistToCheck == null)
-            {
-                return false;
-            }
-
-            return checklistToCheck.Items.All(x => x.State != ChecklistItemState.Complete);
+            return checklistToCheck != null && checklistToCheck.Items.All(x => x.State != ChecklistItemState.Complete);
         }
     }
 }

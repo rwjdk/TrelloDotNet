@@ -3,7 +3,7 @@
     /// <summary>
     /// The Constraint of a List Condition
     /// </summary>
-    public enum ListConditionContraint
+    public enum ListConditionConstraint
     {
         /// <summary>
         /// If any of the provided lists is the list of the event

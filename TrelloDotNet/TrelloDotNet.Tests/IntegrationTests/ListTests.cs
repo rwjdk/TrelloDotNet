@@ -22,6 +22,8 @@ public class ListTests : TestBaseWithNewBoard
             Assert.False(addedList.Closed);
             Assert.Equal(listId, addedList.Id);
             Assert.Equal(newListName, addedList.Name);
+            Assert.False(addedList.Subscribed);
+            Assert.Null(addedList.SoftLimit);
 
             //There are now one more list
             WaitToAvoidRateLimits();

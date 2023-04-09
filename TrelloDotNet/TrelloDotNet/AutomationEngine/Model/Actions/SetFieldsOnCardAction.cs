@@ -46,7 +46,12 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
 
             if (updateNeeded)
             {
+                processingResult.ActionsExecuted++;
                 await webhookAction.TrelloClient.UpdateCardAsync(card);
+            }
+            else
+            {
+                processingResult.ActionsSkipped++;
             }
         }
     }

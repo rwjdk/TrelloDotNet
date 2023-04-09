@@ -22,12 +22,14 @@ namespace TrelloDotNet.Model
         /// Name of the Label
         /// </summary>
         [JsonPropertyName("name")]
+        [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// Color of the Label
         /// </summary>
         [JsonPropertyName("color")]
+        [QueryParameter]
         public string Color { get; set; }
 
         /// <summary>

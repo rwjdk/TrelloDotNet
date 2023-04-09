@@ -50,8 +50,19 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         public WebhookActionData Parent { get; internal set; }
 
-        internal static WebhookActionDataCard CreateDummy()
+        internal static WebhookActionDataCard CreateDummy(Card cardToSimulate)
         {
+            if (cardToSimulate != null)
+            {
+                return new WebhookActionDataCard()
+                {
+                    Id = cardToSimulate.Id,
+                    DueComplete = cardToSimulate.DueComplete,
+                    Name = cardToSimulate.Name,
+                    Posistion = cardToSimulate.Position
+                };
+            }
+
             return new WebhookActionDataCard()
             {
                 Id = "63d128787441d05619f44dbe",

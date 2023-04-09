@@ -124,7 +124,6 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                 case CardFieldConditionConstraint.IsSet:
                     return boolean;
                 case CardFieldConditionConstraint.Value:
-                    return (bool)Value == boolean;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

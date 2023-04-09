@@ -15,7 +15,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
         /// <summary>
         /// The constraints of the Trigger
         /// </summary>
-        public CardMovedToListTriggerContraint Contraint { get; }
+        public CardMovedToListTriggerConstraint Constraint { get; }
 
         /// <summary>
         /// The Ids of the Lists the trigger should evaluate. Tip: These can be List-names instead of Ids if you set 'TreatListNameAsId' to True
@@ -35,11 +35,11 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="contraint">The constraints of the Trigger</param>
+        /// <param name="constraint">The constraints of the Trigger</param>
         /// <param name="listIds"></param>
-        public CardMovedToListTrigger(CardMovedToListTriggerContraint contraint, params string[] listIds)
+        public CardMovedToListTrigger(CardMovedToListTriggerConstraint constraint, params string[] listIds)
         {
-            Contraint = contraint;
+            Constraint = constraint;
             ListIds = listIds;
             ListNameMatchCriteria = StringMatchCriteria.Equal;
         }
@@ -67,9 +67,9 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
                 ListNameMatchCriteria = StringMatchCriteria.Equal; //Force exact match no matter what user defined as it does not make sense to partly match auto-generated Ids
             }
                 
-            switch (Contraint)
+            switch (Constraint)
             {
-                case CardMovedToListTriggerContraint.AnyOfTheseListsAreMovedTo:
+                case CardMovedToListTriggerConstraint.AnyOfTheseListsAreMovedTo:
                     switch (ListNameMatchCriteria)
                     {
                         case StringMatchCriteria.StartsWith:
@@ -85,7 +85,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
                             return correctType && ListIds.Contains(partToCheck);
                     }
 
-                case CardMovedToListTriggerContraint.AnyButTheseListsAreMovedTo:
+                case CardMovedToListTriggerConstraint.AnyButTheseListsAreMovedTo:
                     switch (ListNameMatchCriteria)
                     {
                         case StringMatchCriteria.StartsWith:
