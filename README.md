@@ -6,7 +6,7 @@ Welcome to TrelloDotNet; a modern .NET Implementation of the Trello API.
 2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8)
 3. Create new instance of TrelloDotNet.TrelloClient
 4. Locate you Ids of you Boards, List and Cards (see video [here](https://youtu.be/aWYEg1wPVYY) or at the end on this ReadMe)
-5. Use the TrelloClient based on the examples below
+5. Use the TrelloClient based on the examples below.
 
 ### Examples of Usage:
 
