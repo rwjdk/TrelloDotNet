@@ -32,6 +32,9 @@ namespace TrelloDotNet
         //- Remove Members from board
         //- Update Membership on board (make admin as an example)
 
+        //todo: Members
+        //- Get Card for Member
+
         //todo: Cards
         //- Card: Attachments CRUD
 
