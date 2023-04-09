@@ -6,6 +6,7 @@
 - Fixed that 'CardCoverCondition' was not evaluated correctly in all scenarios
 - Added 'UpdateChecklistItemAsync'
 - Added 'UpdateLabelAsync'
+- Fixed that 'SetFieldsOnCardAction' did not update processing result (Executed and Skipped Actions counts)
 
 ## 1.4.0 (3rd of April 2023)
 - Enhanced 'UpdateCardAsync' so it now has the ability to Add/Update/Remove the Cover of a card

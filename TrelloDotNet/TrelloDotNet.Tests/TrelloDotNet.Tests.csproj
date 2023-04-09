@@ -118,6 +118,7 @@
 
   <ItemGroup>
     <Folder Include="AutomationEngineTests\ConditionTests\" />
+    <Folder Include="AutomationEngineTests\ActionTests\" />
     <Folder Include="AutomationEngineTests\SampleActions\" />
     <Folder Include="AutomationEngineTests\SampleConditions\" />
     <Folder Include="AutomationEngineTests\SampleTriggers\" />
