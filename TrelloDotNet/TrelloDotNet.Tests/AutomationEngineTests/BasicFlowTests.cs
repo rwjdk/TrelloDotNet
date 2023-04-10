@@ -8,6 +8,7 @@ using TrelloDotNet.Tests.AutomationEngineTests.SampleTriggers;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests;
 
+[Collection("Automation Engine Tests")]
 public class BasicFlowTests : TestBase
 {
     [Fact]

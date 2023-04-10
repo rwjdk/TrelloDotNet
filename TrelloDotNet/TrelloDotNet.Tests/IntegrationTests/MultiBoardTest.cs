@@ -2,6 +2,7 @@
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
+[Collection("Integration Tests")]
 public class MultiBoardTest : TestBaseWithNewBoard
 {
     [Fact]

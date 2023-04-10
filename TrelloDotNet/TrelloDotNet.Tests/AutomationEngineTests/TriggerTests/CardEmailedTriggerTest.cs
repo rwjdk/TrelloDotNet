@@ -3,6 +3,7 @@ using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests.TriggerTests;
 
+[Collection("Automation Engine Tests")]
 public class CardEmailedTriggerTest : TestBase
 {
     [Fact]

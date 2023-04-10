@@ -5,8 +5,12 @@
 - Fixed that 'Constraint' was spelled incorrectly (missing an 's') in 2 places ('ListConditionConstraint' and 'CardMovedToListTriggerConstraint') [COMPILE TIME BREAKING CHANGE] (sorry but better to change now than later ;-( ) 
 - Fixed that 'CardCoverCondition' was not evaluated correctly in all scenarios
 - Added 'UpdateChecklistItemAsync'
-- Added 'UpdateLabelAsync'
+- Added support for managing Labels on the Board
 - Fixed that 'SetFieldsOnCardAction' did not update processing result (Executed and Skipped Actions counts)
+- Added support for managing Attachments
+- Added support to set/remove Attachment Cover on a Card
+
+<hr>
 
 ## 1.4.0 (3rd of April 2023)
 - Enhanced 'UpdateCardAsync' so it now has the ability to Add/Update/Remove the Cover of a card
