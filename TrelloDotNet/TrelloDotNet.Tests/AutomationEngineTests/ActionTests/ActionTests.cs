@@ -9,6 +9,7 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests.ActionTests;
 
+[Collection("Automation Engine Tests")]
 public class ActionTests : TestBaseWithNewBoard
 {
     private readonly ITestOutputHelper _output;
@@ -29,35 +30,35 @@ public class ActionTests : TestBaseWithNewBoard
             await CreateNewBoard();
             var lists = await TrelloClient.GetListsOnBoardAsync(BoardId);
 
+            AddOutput("TestAddCoverOnCardAction", ref step, totalSteps);
+            await TestAddCoverOnCardAction(lists);
+
+            WaitToAvoidRateLimits(3);
+
             AddOutput("TestRemoveChecklistToCardAction", ref step, totalSteps);
             await TestRemoveChecklistToCardAction(lists);
 
-            WaitToAvoidRateLimits(2);
+            WaitToAvoidRateLimits(3);
 
             AddOutput("TestAddChecklistToCardAction", ref step, totalSteps);
             await TestAddChecklistToCardAction(lists);
 
-            WaitToAvoidRateLimits(2);
+            WaitToAvoidRateLimits(3);
 
             AddOutput("TestAddStickerToCardAction", ref step, totalSteps);
             await TestAddStickerToCardAction(lists);
 
-            WaitToAvoidRateLimits(2);
+            WaitToAvoidRateLimits(3);
 
             AddOutput("TestRemoveCoverFromCardAction", ref step, totalSteps);
             await TestRemoveCoverFromCardAction(lists);
 
-            WaitToAvoidRateLimits(2);
+            WaitToAvoidRateLimits(3);
 
             AddOutput("TestSetFieldsOnCardAction", ref step, totalSteps);
             await TestSetFieldsOnCardAction(lists);
             
-            WaitToAvoidRateLimits(2);
-
-            AddOutput("TestAddCoverOnCardAction", ref step, totalSteps);
-            await TestAddCoverOnCardAction(lists);
-
-            WaitToAvoidRateLimits(2);
+            WaitToAvoidRateLimits(3);
 
             AddOutput("TestRemoveStickerFromCardAction", ref step, totalSteps);
             await TestRemoveStickerFromCardAction(lists);
@@ -77,6 +78,8 @@ public class ActionTests : TestBaseWithNewBoard
         await TrelloClient.AddChecklistAsync(card.Id, checklist);
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
+
+        WaitToAvoidRateLimits(3);
 
         IAutomationAction action = new RemoveChecklistFromCardAction(checklist.Name);
         await action.PerformActionAsync(webhookAction, processingResult);
@@ -100,11 +103,15 @@ public class ActionTests : TestBaseWithNewBoard
         var checklistToAdd = new Checklist("My Checklist", new List<ChecklistItem> { new("A"), new("B")});
         IAutomationAction action = new AddChecklistToCardAction(checklistToAdd);
 
+        WaitToAvoidRateLimits(3);
+
         await action.PerformActionAsync(webhookAction, processingResult);
         var checklists = await TrelloClient.GetChecklistsOnCardAsync(card.Id);
         Assert.Single(checklists);
         Assert.Equal(1, processingResult.ActionsExecuted);
         Assert.Equal(0, processingResult.ActionsSkipped);
+
+        WaitToAvoidRateLimits(3);
 
         await action.PerformActionAsync(webhookAction, processingResult);
         checklists = await TrelloClient.GetChecklistsOnCardAsync(card.Id);
@@ -131,6 +138,8 @@ public class ActionTests : TestBaseWithNewBoard
         Assert.Equal(1, processingResult.ActionsExecuted);
         Assert.Equal(0, processingResult.ActionsSkipped);
 
+        WaitToAvoidRateLimits(3);
+
         await action.PerformActionAsync(webhookAction, processingResult);
         stickers = await TrelloClient.GetStickersOnCardAsync(card.Id);
         Assert.Single(stickers);
@@ -150,6 +159,8 @@ public class ActionTests : TestBaseWithNewBoard
 
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
+
+        WaitToAvoidRateLimits(3);
 
         IAutomationAction action = new RemoveCoverFromCardAction();
         await action.PerformActionAsync(webhookAction, processingResult);
@@ -243,6 +254,8 @@ public class ActionTests : TestBaseWithNewBoard
 
         IAutomationAction action = new RemoveStickerFromCardAction(StickerDefaultImageId.Check);
         await action.PerformActionAsync(webhookAction, processingResult);
+
+        WaitToAvoidRateLimits(3);
 
         action = new RemoveStickerFromCardAction("check"); //Second call to test no sticker exists
         await action.PerformActionAsync(webhookAction, processingResult); 

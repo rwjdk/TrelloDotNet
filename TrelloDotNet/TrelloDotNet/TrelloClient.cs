@@ -21,7 +21,7 @@ namespace TrelloDotNet
     {
         //todo: Management
         //- Manage Custom Fields on board (CRUD)
-        //- Manage Labels
+        //- Manage Labels (Delete/Add)
         //- Batch-system (why???)
         //- Workspace management
         //- Organizations (how to gain access?)
@@ -33,10 +33,7 @@ namespace TrelloDotNet
         //- Update Membership on board (make admin as an example)
 
         //todo: Members
-        //- Get Card for Member
-
-        //todo: Cards
-        //- Card: Attachments CRUD
+        //- Get Cards for Member
 
         //todo: Actions
         //- Members
@@ -81,8 +78,6 @@ namespace TrelloDotNet
             _apiRequestController = new ApiRequestController(_staticHttpClient, apiKey, token, this);
             _queryParametersBuilder = new QueryParametersBuilder();
         }
-
-        #region Add
 
         /// <summary>
         /// Custom Post Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
@@ -281,10 +276,6 @@ namespace TrelloDotNet
             return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardId}", payload);
         }
 
-        #endregion
-
-        #region Update
-
         /// <summary>
         /// Custom Put Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
         /// </summary>
@@ -398,6 +389,10 @@ namespace TrelloDotNet
             else
             {
                 cardWithChanges.Cover.PrepareForAddUpdate();
+                if (cardWithChanges.Cover.Color != null || cardWithChanges.Cover.BackgroundImageId != null)
+                {
+                    parameters.Remove(parameters.First(x => x.Name == "idAttachmentCover")); //This parameter can't be there while a cover is added
+                }
                 payload = $"{{\"cover\":{JsonSerializer.Serialize(cardWithChanges.Cover)}}}";
             }
             return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", payload, parameters.ToArray());
@@ -708,10 +703,6 @@ namespace TrelloDotNet
                 );
         }
 
-        #endregion
-
-        #region Delete
-
         /// <summary>
         /// Delete a entire board (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseBoard() for non-permanency
         /// </summary>
@@ -738,6 +729,15 @@ namespace TrelloDotNet
         public async Task DeleteCardAsync(string cardId)
         {
             await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}");
+        }
+
+        /// <summary>
+        /// Delete a Label from the board and remove it from all cards it was added to (WARNING: THERE IS NO WAY GOING BACK!!!). If you are looking to remove a label from a Card then see 'RemoveLabelsFromCardAsync' and 'RemoveAllLabelsFromCardAsync'
+        /// </summary>
+        /// <param name="labelId">The id of the Label to Delete</param>
+        public async Task DeleteLabelAsync(string labelId)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Labels}/{labelId}");
         }
 
         /// <summary>
@@ -812,10 +812,6 @@ namespace TrelloDotNet
             await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}");
         }
 
-        #endregion
-
-        #region Get
-
         /// <summary>
         /// Custom Get Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
         /// </summary>
@@ -856,7 +852,10 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> GetCardAsync(string cardId)
         {
-            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", 
+                new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
+                new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods)
+                );
         }
 
         /// <summary>
@@ -877,7 +876,9 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", 
+                new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
+                new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
 
         /// <summary>
@@ -897,7 +898,9 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", 
+                new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
+                new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
 
         /// <summary>
@@ -908,7 +911,9 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods));
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", 
+                new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
+                new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
 
         /// <summary>
@@ -1109,10 +1114,6 @@ namespace TrelloDotNet
             return await _apiRequestController.Get<Member>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/member");
         }
 
-        #endregion
-
-        #region Ease of Use Methods
-
         /// <summary>
         /// Add a Member to a Card
         /// </summary>
@@ -1289,7 +1290,6 @@ namespace TrelloDotNet
                 await UpdateWebhookAsync(webhook);
             }
         }
-        #endregion
 
         /// <summary>
         /// Update the definition of a label (Name and Color)
@@ -1298,6 +1298,73 @@ namespace TrelloDotNet
         public async Task<Label> UpdateLabelAsync(Label labelWithUpdates)
         {
             return await _apiRequestController.Put<Label>($"{UrlPaths.Labels}/{labelWithUpdates.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(labelWithUpdates));
+        }
+
+        /// <summary>
+        /// Get Attachments on a card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <returns>The Attachments</returns>
+        public async Task<List<Attachment>> GetAttachmentsOnCardAsync(string cardId)
+        {
+            return await _apiRequestController.Get<List<Attachment>>($"{UrlPaths.Cards}/{cardId}/attachments");
+        }
+
+        /// <summary>
+        /// Delete an Attachments on a card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="attachmentId">Id of Attachment</param>
+        public async Task DeleteAttachmentOnCardAsync(string cardId, string attachmentId)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/attachments/{attachmentId}");
+        }
+
+        /// <summary>
+        /// Add an Attachment to a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="attachmentUrlLink">A Link Attachment</param>
+        /// <returns>The Created Attachment</returns>
+        public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentUrlLink attachmentUrlLink)
+        {
+            var parameters = new List<QueryParameter> { new QueryParameter("url", attachmentUrlLink.Url) };
+            if (!string.IsNullOrWhiteSpace(attachmentUrlLink.Name))
+            {
+                parameters.Add(new QueryParameter("name", attachmentUrlLink.Name));
+            }
+            return await _apiRequestController.Post<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Add an Attachment to a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="attachmentFileUpload">A Link Attachment</param>
+        /// <param name="setAsCover">Make this attachment the cover of the Card</param>
+        /// <returns>The Created Attachment</returns>
+        public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentFileUpload attachmentFileUpload, bool setAsCover = false)
+        {
+            var parameters = new List<QueryParameter>();
+            if (!string.IsNullOrWhiteSpace(attachmentFileUpload.Name))
+            {
+                parameters.Add(new QueryParameter("name", attachmentFileUpload.Name));
+            }
+            if (setAsCover)
+            {
+                parameters.Add(new QueryParameter("setCover", "true"));
+            }
+            return await _apiRequestController.PostWithAttachmentFileUpload<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", attachmentFileUpload, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Add a new label to the Board (Not to be confused with 'AddLabelsToCardAsync' that assign labels to cards)
+        /// </summary>
+        /// <param name="label">Definition of the new label</param>
+        /// <returns>The newly created label</returns>
+        public async Task<Label> AddLabelAsync(Label label)
+        {
+            return await _apiRequestController.Post<Label>($"{UrlPaths.Labels}", _queryParametersBuilder.GetViaQueryParameterAttributes(label));
         }
     }
 }

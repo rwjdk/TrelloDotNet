@@ -16,7 +16,7 @@ namespace TrelloDotNet.Model.Webhook
 
         internal static WebhookActionDisplay CreateDummy(WebhookAction.WebhookActionDummyCreationScenario scenario)
         {
-            string tranlationKey = "foo";
+            const string tranlationKey = "foo";
             return new WebhookActionDisplay()
             {
                 TranslationKey = tranlationKey

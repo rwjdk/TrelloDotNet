@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using TrelloDotNet.Model;
-using TrelloDotNet.Model.Webhook;
+﻿using TrelloDotNet.Model;
 using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests
@@ -21,7 +17,10 @@ namespace TrelloDotNet.Tests
         public async Task GetWebhooks()
         {
             await Task.CompletedTask;
+#pragma warning disable IDE0059
+            // ReSharper disable once UnusedVariable
             var webhooksForCurrentToken = await TrelloClient.GetWebhooksForCurrentTokenAsync();
+#pragma warning restore IDE0059
         }
 
         [FactManualOnly]
@@ -50,6 +49,12 @@ namespace TrelloDotNet.Tests
         public async Task CustomFieldsTests()
         {
             await Task.CompletedTask;
+            /*
+            int debug = 0;
+            /*card.AttachmentCover = null;
+            await TrelloClient.UpdateCardAsync(card);*/
+            //await TrelloClient.AddCoverToCardAsync(card.Id, new CardCover(card.Attachments[0].Id, CardCoverBrightness.Light));
+
             //NB: These are not part of the automated test-suite as that is linked to a free account that does not support custom fields
             /*
             var boardId = "641ddde2e37dc99ab1ccc988";
@@ -98,6 +103,44 @@ namespace TrelloDotNet.Tests
         {
             _output.WriteLine("Hello");
             await Task.CompletedTask;
+            TrelloClient.Options.IncludeAttachmentsInCardGetMethods = true;
+
+            string boardId = "czwRjhWF";
+            boardId = "63e1096da4ecf28dcb763ba9";
+
+            var labelsOfBoardAsync = await TrelloClient.GetLabelsOfBoardAsync(boardId);
+
+            Label label = await TrelloClient.AddLabelAsync(new Label(boardId, name: "Mine!!!", color: "blue"));
+
+            //await TrelloClient.DeleteLabelAsync(labelsOfBoardAsync[0].Id);
+
+
+            var cardId = "63fb5126051edb121d91b4aa";
+
+            var card = await TrelloClient.GetCardAsync(cardId);
+            card.Cover = new CardCover(CardCoverColor.Blue, CardCoverSize.Normal);
+            card.AttachmentCover = null;
+            var updateCardAsync = await TrelloClient.UpdateCardAsync(card);
+
+            updateCardAsync.Cover = null;
+            updateCardAsync.AttachmentCover = card.Attachments[0].Id;
+
+            var updateCardAsync2 = await TrelloClient.UpdateCardAsync(updateCardAsync);
+            //var updateCardAsync2 = await TrelloClient.UpdateCardAsync(updateCardAsync);
+
+            int debug = 0;
+
+            /*
+            await TrelloClient.AddAttachmentToCardAsync(cardId, new AttachmentFileUpload(File.OpenRead(@"C:\Users\rasmu\OneDrive\Pictures\workout.png"), "MyFile.png", "my attachment name"), true);
+
+            //var addAttachmentToCardAsync = await TrelloClient.AddAttachmentToCardAsync(cardId, new AttachmentUrlLink("https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png", "My Link Attachment"));
+
+            List<Attachment> att = await TrelloClient.GetAttachmentsOnCardAsync(cardId);
+
+            //await TrelloClient.DeleteAttachmentOnCardAsync(cardId, addAttachmentToCardAsync.Id);
+            */
+
+
             /*            
             var cardId = "63e216e15baa8f45ae87948b";
             var boardId = "63e1096da4ecf28dcb763ba9";

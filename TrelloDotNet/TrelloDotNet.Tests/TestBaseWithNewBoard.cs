@@ -21,6 +21,7 @@ public abstract class TestBaseWithNewBoard : TestBase
     
     public async Task DeleteBoard()
     {
+        WaitToAvoidRateLimits(10);
         try
         {
             await TrelloClient.DeleteBoardAsync(BoardId);

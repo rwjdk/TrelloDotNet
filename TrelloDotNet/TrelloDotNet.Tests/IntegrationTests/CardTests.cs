@@ -7,9 +7,7 @@ using Xunit.Sdk;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-/// <summary>
-/// This is a full test of all client features. It is done on a auto-generated board that is deleted at the end so will not touch any existing boards for the token
-/// </summary>
+[Collection("Integration Tests")]
 public class CardTests : TestBaseWithNewBoard
 {
     private readonly ITestOutputHelper _output;
@@ -91,7 +89,6 @@ public class CardTests : TestBaseWithNewBoard
         }
         finally
         {
-            WaitToAvoidRateLimits();
             await DeleteBoard();
         }
     }

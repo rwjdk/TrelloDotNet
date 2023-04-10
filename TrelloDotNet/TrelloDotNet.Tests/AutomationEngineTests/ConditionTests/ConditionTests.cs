@@ -7,6 +7,7 @@ using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests.ConditionTests;
 
+[Collection("Automation Engine Tests")]
 public class ConditionTests : TestBaseWithNewBoard
 {
     private readonly ITestOutputHelper _output;
@@ -293,16 +294,24 @@ public class ConditionTests : TestBaseWithNewBoard
         Assert.True(await new CardCoverCondition(CardCoverConditionConstraint.DoesNotHaveACoverOfTypeColor).IsConditionMetAsync(webhookAction));
         Assert.True(await new CardCoverCondition(CardCoverConditionConstraint.DoesNotHaveACoverOfTypeImage).IsConditionMetAsync(webhookAction));
 
+        WaitToAvoidRateLimits(3);
+
         Assert.False(await new CardCoverCondition(CardCoverConditionConstraint.HaveACover).IsConditionMetAsync(webhookAction));
         Assert.False(await new CardCoverCondition(CardCoverConditionConstraint.HaveACoverOfTypeColor).IsConditionMetAsync(webhookAction));
         Assert.False(await new CardCoverCondition(CardCoverConditionConstraint.HaveACoverOfTypeImage).IsConditionMetAsync(webhookAction));
 
+        WaitToAvoidRateLimits(3);
+
         card.Cover = new CardCover(CardCoverColor.Blue, CardCoverSize.Full);
         await TrelloClient.UpdateCardAsync(card);
+
+        WaitToAvoidRateLimits(3);
 
         Assert.False(await new CardCoverCondition(CardCoverConditionConstraint.DoesNotHaveACover).IsConditionMetAsync(webhookAction));
         Assert.False(await new CardCoverCondition(CardCoverConditionConstraint.DoesNotHaveACoverOfTypeColor).IsConditionMetAsync(webhookAction));
         Assert.True(await new CardCoverCondition(CardCoverConditionConstraint.DoesNotHaveACoverOfTypeImage).IsConditionMetAsync(webhookAction));
+
+        WaitToAvoidRateLimits(3);
 
         Assert.True(await new CardCoverCondition(CardCoverConditionConstraint.HaveACover).IsConditionMetAsync(webhookAction));
         Assert.True(await new CardCoverCondition(CardCoverConditionConstraint.HaveACoverOfTypeColor).IsConditionMetAsync(webhookAction));

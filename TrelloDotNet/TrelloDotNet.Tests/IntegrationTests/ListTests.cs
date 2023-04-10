@@ -2,6 +2,7 @@
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
+[Collection("Integration Tests")]
 public class ListTests : TestBaseWithNewBoard
 {
     [Fact]
@@ -106,7 +107,6 @@ public class ListTests : TestBaseWithNewBoard
         }
         finally
         {
-            WaitToAvoidRateLimits();
             await DeleteBoard();
         }
     }

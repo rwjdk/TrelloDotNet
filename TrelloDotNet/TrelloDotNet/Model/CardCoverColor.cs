@@ -63,5 +63,5 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("green")]
         Green
     }
-
+    
 }

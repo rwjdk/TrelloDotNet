@@ -26,7 +26,7 @@ namespace TrelloDotNet.Model
         public string Name { get; set; }
 
         /// <summary>
-        /// Color of the Label
+        /// Color of the Label (Valid values: yellow, purple, blue, red, green, orange, black, sky, pink, lime)
         /// </summary>
         [JsonPropertyName("color")]
         [QueryParameter]
@@ -37,11 +37,25 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("idBoard")]
         [JsonInclude]
+        [QueryParameter]
         public string BoardId { get; private set; }
 
         /// <summary>
         /// When the Label was created [stored in UTC]
         /// </summary>
         [JsonIgnore] public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="boardId">Id of the Board to add the label to</param>
+        /// <param name="name">Optional Name of the Label</param>
+        /// <param name="color">Optional Color of the Label</param>
+        public Label(string boardId, string name = null, string color = null)
+        {
+            BoardId = boardId;
+            Name = name;
+            Color = color;
+        }
     }
 }

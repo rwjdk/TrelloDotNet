@@ -153,9 +153,9 @@ namespace TrelloDotNet.Model
         /// Id of the image attachment of this card to use as its cover
         /// </summary>
         [JsonPropertyName("idAttachmentCover")]
-        [QueryParameter(false)]
+        [QueryParameter]
         [JsonInclude]
-        public string AttachmentCover { get; private set; }
+        public string AttachmentCover { get; set; }
 
         /// <summary>
         /// Url you can use to get to the card
@@ -184,6 +184,13 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("customFieldItems")]
         [JsonInclude]
         public List<CustomFieldItem> CustomFieldItems { get; private set; }
+
+        /// <summary>
+        /// Attachments of the Card (Only populated in Get Methods and if enabled in TrelloClientOptions)
+        /// </summary>
+        [JsonPropertyName("attachments")]
+        [JsonInclude]
+        public List<Attachment> Attachments { get; private set; }
 
         /// <summary>
         /// Constructor (Common Card fields)

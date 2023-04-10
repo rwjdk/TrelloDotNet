@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace TrelloDotNet.Model
@@ -6,6 +7,7 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// URI Parameter to build the URL
     /// </summary>
+    [DebuggerDisplay("{Name} (Type: {Type})")]
     public class QueryParameter
     {
         private readonly object _valueAsObject;

@@ -34,7 +34,7 @@ namespace TrelloDotNet.Control
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
-        
+
         internal async Task<string> Get(string suffix, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
@@ -46,12 +46,35 @@ namespace TrelloDotNet.Control
             }
             return content; //Content is assumed JSON
         }
-        
+
         internal async Task<T> Post<T>(string suffix, params QueryParameter[] parameters)
         {
             string json = await Post(suffix, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
+        }
+
+        internal async Task<T> PostWithAttachmentFileUpload<T>(string suffix, AttachmentFileUpload attachmentFile, params QueryParameter[] parameters)
+        {
+            string json = await PostWithAttachmentFileUpload(suffix, attachmentFile, parameters);
+            var @object = JsonSerializer.Deserialize<T>(json);
+            return @object;
+        }
+
+        internal async Task<string> PostWithAttachmentFileUpload(string suffix, AttachmentFileUpload attachmentFile, params QueryParameter[] parameters)
+        {
+            var uri = BuildUri(suffix, parameters);
+            using (var multipartFormContent = new MultipartFormDataContent())
+            {
+                multipartFormContent.Add(new StreamContent(attachmentFile.Stream), name: @"file", fileName: attachmentFile.Filename);
+                var response = await _httpClient.PostAsync(uri, multipartFormContent);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new TrelloApiException(responseContent, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
+                }
+                return responseContent; //Content is assumed JSON
+            }
         }
 
         internal async Task<string> Post(string suffix, params QueryParameter[] parameters)
@@ -114,7 +137,7 @@ namespace TrelloDotNet.Control
                     // ReSharper disable StringLiteralTypo
                     return fullUrl.Replace($"?key={_apiKey}&token={_token}", "?key=XXXXX&token=XXXXXXXXXX");
                 case ApiCallExceptionOption.DoNotIncludeTheUrl:
-                    return string.Empty.PadLeft(5,'X');
+                    return string.Empty.PadLeft(5, 'X');
                 default:
                     throw new ArgumentOutOfRangeException();
             }
