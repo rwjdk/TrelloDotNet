@@ -1366,5 +1366,25 @@ namespace TrelloDotNet
         {
             return await _apiRequestController.Post<Label>($"{UrlPaths.Labels}", _queryParametersBuilder.GetViaQueryParameterAttributes(label));
         }
+
+        /// <summary>
+        /// Get the Boards that the specified member have access to
+        /// </summary>
+        /// <param name="memberId">Id of the Member to find boards for</param>
+        /// <returns>The Active Boards there is access to</returns>
+        public async Task<List<Board>> GetBoardsForMemberAsync(string memberId)
+        {
+            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Members}/{memberId}/boards");
+        }
+
+        /// <summary>
+        /// Get the Boards that the token provided to the TrelloClient can Access
+        /// </summary>
+        /// <returns>The Active Boards there is access to</returns>
+        public async Task<List<Board>> GetBoardsCurrentTokenCanAccessAsync()
+        {
+            var tokenMember = await GetTokenMemberAsync();
+            return await GetBoardsForMemberAsync(tokenMember.Id);
+        }
     }
 }

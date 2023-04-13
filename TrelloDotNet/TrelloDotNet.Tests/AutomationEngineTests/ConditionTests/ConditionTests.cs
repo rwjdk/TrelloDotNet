@@ -7,7 +7,6 @@ using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests.ConditionTests;
 
-[Collection("Automation Engine Tests")]
 public class ConditionTests : TestBaseWithNewBoard
 {
     private readonly ITestOutputHelper _output;

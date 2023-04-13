@@ -7,7 +7,6 @@ using Xunit.Sdk;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-[Collection("Integration Tests")]
 public class CardTests : TestBaseWithNewBoard
 {
     private readonly ITestOutputHelper _output;

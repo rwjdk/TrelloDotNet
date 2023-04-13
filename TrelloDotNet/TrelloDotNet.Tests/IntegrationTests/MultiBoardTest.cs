@@ -2,7 +2,6 @@
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-[Collection("Integration Tests")]
 public class MultiBoardTest : TestBaseWithNewBoard
 {
     [Fact]
@@ -14,7 +13,7 @@ public class MultiBoardTest : TestBaseWithNewBoard
             string? secondBoardId = null;
             try
             {
-                var secondBoard = await TrelloClient.AddBoardAsync(new Board("Second Board"));
+                var secondBoard = await TrelloClient.AddBoardAsync(new Board("UnitTestBoard - Second Board"));
                 secondBoardId = secondBoard.Id;
 
                 var addedList = await TrelloClient.AddListAsync(new List("List on first board", BoardId));

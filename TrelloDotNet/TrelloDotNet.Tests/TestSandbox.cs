@@ -1,5 +1,4 @@
-﻿using TrelloDotNet.Model;
-using Xunit.Abstractions;
+﻿using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests
 {
@@ -17,21 +16,39 @@ namespace TrelloDotNet.Tests
         public async Task GetWebhooks()
         {
             await Task.CompletedTask;
-#pragma warning disable IDE0059
-            // ReSharper disable once UnusedVariable
             var webhooksForCurrentToken = await TrelloClient.GetWebhooksForCurrentTokenAsync();
-#pragma warning restore IDE0059
+            foreach (var webhook in webhooksForCurrentToken)
+            {
+                _output.WriteLine("- Webhook: {0} ({1})", webhook.Description, webhook.CallbackUrl);
+            }
+        }
+
+        [FactManualOnly]
+        public async Task DeleteAllBoardsWithUnitTestBoardPrefix()
+        {
+            await Task.CompletedTask;
+            /*
+            TrelloClient.Options.AllowDeleteOfBoards = true;
+            List<Board> boards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync();
+            foreach (var unitTestBoard in boards.Where(x => x.Name.StartsWith("UnitTestBoard")))
+            {
+                await TrelloClient.DeleteBoardAsync(unitTestBoard.Id);
+            }
+
+            TrelloClient.Options.AllowDeleteOfBoards = false;
+            }*/
         }
 
         [FactManualOnly]
         public async Task DeleteAllWebhooks()
         {
             await Task.CompletedTask;
+            /*
             var webhooksForCurrentToken = await TrelloClient.GetWebhooksForCurrentTokenAsync();
             foreach (var webhook in webhooksForCurrentToken)
             {
                 await TrelloClient.DeleteWebhookAsync(webhook.Id);
-            }
+            }*/
         }
 
         [FactManualOnly]
@@ -41,8 +58,8 @@ namespace TrelloDotNet.Tests
             //Webhook webhook = await TrelloClient.GetWebhookAsync("63e2892778670f4f7b7ffa2e");
             //webhook.CallbackUrl = "https://4cf8-185-229-154-225.eu.ngrok.io/api/FunctionTrelloWebhookEndpointReceiver";
             //var updatedWebhook = await TrelloClient.UpdateWebhookAsync(webhook);
-
-            await TrelloClient.UpdateWebhookByCallbackUrlAsync("https://old", "https://new");
+            //or
+            //await TrelloClient.UpdateWebhookByCallbackUrlAsync("https://old", "https://new");
         }
 
         [FactManualOnly]
@@ -98,11 +115,41 @@ namespace TrelloDotNet.Tests
             }*/
         }
 
+
+        private async Task MindlessApiWork()
+        {
+            try
+            {
+                for (int i = 0; i < 150; i++)
+                {
+                    const string boardId = "63e1096da4ecf28dcb763ba9";
+                    _output.WriteLine(i.ToString());
+                    var board = await TrelloClient.GetBoardAsync(boardId);
+                }
+            }
+            catch (Exception e)
+            {
+                _output.WriteLine(e.Message);
+                throw;
+            }
+            
+        }
+
         [FactManualOnly]
-        public async Task TestTask()
+        public async Task PlaygroundTest()
         {
             _output.WriteLine("Hello");
             await Task.CompletedTask;
+
+
+            /*
+            var t1 = await Task.Factory.StartNew(async () => await MindlessApiWork());
+            var t2 = await Task.Factory.StartNew(async () => await MindlessApiWork());
+            var t3 = await Task.Factory.StartNew(async () => await MindlessApiWork());
+
+            Task.WaitAll(t1, t2, t3);
+            */
+            /*
             TrelloClient.Options.IncludeAttachmentsInCardGetMethods = true;
 
             string boardId = "czwRjhWF";

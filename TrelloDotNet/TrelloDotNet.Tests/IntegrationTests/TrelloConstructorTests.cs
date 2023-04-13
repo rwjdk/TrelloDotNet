@@ -1,6 +1,5 @@
 ﻿namespace TrelloDotNet.Tests.IntegrationTests;
 
-[Collection("Integration Tests")]
 public class TrelloConstructorTests
 {
     [Fact]
