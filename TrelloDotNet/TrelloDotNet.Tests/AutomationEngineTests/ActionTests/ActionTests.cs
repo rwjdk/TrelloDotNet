@@ -9,7 +9,6 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests.ActionTests;
 
-[Collection("Automation Engine Tests")]
 public class ActionTests : TestBaseWithNewBoard
 {
     private readonly ITestOutputHelper _output;

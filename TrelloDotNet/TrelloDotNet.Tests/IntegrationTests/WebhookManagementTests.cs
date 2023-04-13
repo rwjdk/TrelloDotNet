@@ -3,7 +3,7 @@ using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-[Collection("Integration Tests - Webhook Management")]
+[Collection("Webhook Management")] //In own collection to not overlap other tests
 public class WebhookManagementTests : TestBaseWithNewBoard
 {
     private readonly ITestOutputHelper _output;

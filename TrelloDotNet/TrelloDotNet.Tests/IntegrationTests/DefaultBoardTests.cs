@@ -3,7 +3,6 @@ using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-[Collection("Integration Tests")]
 public class DefaultBoardTests : TestBaseWithNewBoard
 {
     [Fact]
