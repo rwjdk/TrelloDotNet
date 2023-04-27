@@ -1,6 +1,11 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.5.1 (27th of March 2023)
+- Fixed that strings were not properly URL encoded if they contained an '&'
+
+<hr>
+
 ## 1.5.0 (27th of March 2023)
 - Fixed that 'Constraint' was spelled incorrectly (missing an 's') in 2 places ('ListConditionCon**s**traint' and 'CardMovedToListTriggerCon**s**traint') [COMPILE TIME BREAKING CHANGE] (sorry but better to change now than later ;-( ) 
 - Fixed that 'CardCoverCondition' was not evaluated correctly in all scenarios

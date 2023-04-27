@@ -94,7 +94,7 @@ namespace TrelloDotNet.Model
             switch (Type)
             {
                 case QueryParameterType.String:
-                    return (string)_valueAsObject;
+                    return System.Web.HttpUtility.UrlEncode((string)_valueAsObject);
                 case QueryParameterType.Boolean:
                     return ((bool)_valueAsObject).ToString().ToLowerInvariant();
                 case QueryParameterType.Integer:
