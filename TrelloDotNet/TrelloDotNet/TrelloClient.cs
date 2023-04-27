@@ -21,8 +21,7 @@ namespace TrelloDotNet
     {
         //todo: Management
         //- Manage Custom Fields on board (CRUD)
-        //- Manage Labels (Delete/Add)
-        //- Batch-system (why???)
+        //- Batch-system (why???) [https://developer.atlassian.com/cloud/trello/rest/api-group-batch/#api-batch-get]
         //- Workspace management
         //- Organizations (how to gain access?)
 
@@ -1385,6 +1384,16 @@ namespace TrelloDotNet
         {
             var tokenMember = await GetTokenMemberAsync();
             return await GetBoardsForMemberAsync(tokenMember.Id);
+        }
+
+        /// <summary>
+        /// The Membership Information for a board (aka if Users are Admin, Normal or Observer)
+        /// </summary>
+        /// <param name="boardId">Id of the Board that you wish information on</param>
+        /// <returns>The List of Memberships</returns>
+        public async Task<List<Membership>> GetMembershipsOfBoardAsync(string boardId)
+        {
+            return await _apiRequestController.Get<List<Membership>>($"{UrlPaths.Boards}/{boardId}/memberships");
         }
     }
 }

@@ -57,21 +57,23 @@ namespace TrelloDotNet.AutomationEngine
                 }
 
                 var conditionsMet = true;
-                foreach (var x in automation.Conditions)
+                if (automation.Conditions != null)
                 {
-                    try
+                    foreach (var x in automation.Conditions)
                     {
-                        if (!await x.IsConditionMetAsync(webhookAction))
+                        try
                         {
-                            conditionsMet = false;
-                            break;
+                            if (!await x.IsConditionMetAsync(webhookAction))
+                            {
+                                conditionsMet = false;
+                                break;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            throw new AutomationException($"Error checking Condition of type '{x.GetType()}' in automation '{automation.Name}'", e);
                         }
                     }
-                    catch (Exception e)
-                    {
-                        throw new AutomationException($"Error checking Condition of type '{x.GetType()}' in automation '{automation.Name}'", e);
-                    }
-                    
                 }
 
                 if (conditionsMet)

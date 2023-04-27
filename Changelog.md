@@ -1,7 +1,7 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## Unreleased
+## 1.5.0 (27th of March 2023)
 - Fixed that 'Constraint' was spelled incorrectly (missing an 's') in 2 places ('ListConditionCon**s**traint' and 'CardMovedToListTriggerCon**s**traint') [COMPILE TIME BREAKING CHANGE] (sorry but better to change now than later ;-( ) 
 - Fixed that 'CardCoverCondition' was not evaluated correctly in all scenarios
 - Added support for managing Labels on the Board
@@ -11,6 +11,9 @@
 - Added 'UpdateChecklistItemAsync'
 - Added 'GetBoardsForMemberAsync'
 - Added 'GetBoardsCurrentTokenCanAccessAsync'
+- Added 'GetMembershipsOfBoardAsync' 
+- Added Automation Action: 'RemoveLabelsFromCardAction'
+- It is now legal to have a null as Condition in Automation Engine (indicating there are no further conditions)
 
 <hr>
 

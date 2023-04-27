@@ -140,8 +140,10 @@ namespace TrelloDotNet.Tests
         {
             _output.WriteLine("Hello");
             await Task.CompletedTask;
+            var boardId = "63e1096da4ecf28dcb763ba9";
+            var membershipsOfBoardAsync = await TrelloClient.GetMembershipsOfBoardAsync(boardId);
 
-
+            int debug = 0;
             /*
             var t1 = await Task.Factory.StartNew(async () => await MindlessApiWork());
             var t2 = await Task.Factory.StartNew(async () => await MindlessApiWork());
