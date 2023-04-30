@@ -143,7 +143,9 @@ namespace TrelloDotNet.Tests
             var boardId = "63e1096da4ecf28dcb763ba9";
             var membershipsOfBoardAsync = await TrelloClient.GetMembershipsOfBoardAsync(boardId);
 
+#pragma warning disable CS0219
             int debug = 0;
+#pragma warning restore CS0219
             /*
             var t1 = await Task.Factory.StartNew(async () => await MindlessApiWork());
             var t2 = await Task.Factory.StartNew(async () => await MindlessApiWork());
