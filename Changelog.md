@@ -1,6 +1,11 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.5.2 (30th of March 2023)
+- Added 'AddChecklistToCardIfLabelMatchAction' to make combination of creating checklists easier to maintain
+
+<hr>
+
 ## 1.5.1 (27th of March 2023)
 - Fixed that strings were not properly URL encoded if they contained an '&'
 
