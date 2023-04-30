@@ -111,7 +111,7 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// BoardSource of the Action (Only there when event is 'moveCardToBoard')
         /// </summary>
-        [JsonPropertyName("boardTarget")]
+        [JsonPropertyName("boardSource")]
         [JsonInclude]
         public WebhookActionDataBoard BoardSource { get; private set; }
 
