@@ -26,11 +26,11 @@ namespace TrelloDotNet.Model.Webhook
         public string Name { get; private set; }
 
         /// <summary>
-        /// Position
+        /// pos
         /// </summary>
         [JsonPropertyName("pos")]
         [JsonInclude]
-        public decimal? Posistion { get; private set; }
+        public decimal? Position { get; private set; }
 
         /// <summary>
         /// If the due work is completed
@@ -87,14 +87,7 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("idList")]
         [JsonInclude]
         public string ListId { get; private set; }
-
-        /// <summary>
-        /// pos
-        /// </summary>
-        [JsonPropertyName("pos")]
-        [JsonInclude]
-        public decimal? Position { get; private set; }
-
+        
         /// <summary>
         /// dueReminder
         /// </summary>
@@ -139,7 +132,7 @@ namespace TrelloDotNet.Model.Webhook
                     Id = cardToSimulate.Id,
                     DueComplete = cardToSimulate.DueComplete,
                     Name = cardToSimulate.Name,
-                    Posistion = cardToSimulate.Position
+                    Position = cardToSimulate.Position
                 };
             }
 
@@ -148,7 +141,7 @@ namespace TrelloDotNet.Model.Webhook
                 Id = "63d128787441d05619f44dbe",
                 DueComplete = true,
                 Name = "MyCard",
-                Posistion = 1
+                Position = 1
             };
         }
 
