@@ -1,4 +1,6 @@
 ﻿using System.Text.Json.Serialization;
+using TrelloDotNet.Control;
+using TrelloDotNet.Model.Actions;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -71,11 +73,61 @@ namespace TrelloDotNet.Model.Webhook
         public WebhookActionDataOld Old { get; private set; }
 
         /// <summary>
+        /// Organization Data
+        /// </summary>
+        [JsonPropertyName("organization")]
+        [JsonInclude]
+        public WebhookActionDataOrganization Organization { get; private set; }
+
+        /// <summary>
         /// Member
         /// </summary>
         [JsonPropertyName("member")]
         [JsonInclude]
         public WebhookActionDataMember Member { get; set; }
+
+        /// <summary>
+        /// The Type of an added member (Only there when event is 'addMemberToBoard')
+        /// </summary>
+        [JsonPropertyName("memberType")]
+        [JsonInclude]
+        [JsonConverter(typeof(EnumViaJsonPropertyConverter<MembershipType>))]
+        public MembershipType MemberType { get; private set; }
+
+        /// <summary>
+        /// The Id of an Added Member (Only there when event is 'addMemberToBoard')
+        /// </summary>
+        [JsonPropertyName("idMemberAdded")]
+        [JsonInclude]
+        public string MemberIdAdded { get; private set; }
+
+        /// <summary>
+        /// BoardTarget of the Action (Only there when event is 'moveCardFromBoard')
+        /// </summary>
+        [JsonPropertyName("boardTarget")]
+        [JsonInclude]
+        public WebhookActionDataBoard BoardTarget { get; private set; }
+
+        /// <summary>
+        /// BoardSource of the Action (Only there when event is 'moveCardToBoard')
+        /// </summary>
+        [JsonPropertyName("boardTarget")]
+        [JsonInclude]
+        public WebhookActionDataBoard BoardSource { get; private set; }
+
+        /// <summary>
+        /// Attachment Data Object
+        /// </summary>
+        [JsonPropertyName("attachment")]
+        [JsonInclude]
+        public WebhookActionDataAttachment Attachment { get; private set; }
+
+        /// <summary>
+        /// Plugin of the Action (Only there when event is 'enablePlugin' or 'disablePlugin')
+        /// </summary>
+        [JsonPropertyName("plugin")]
+        [JsonInclude]
+        public WebhookActionDataPlugin Plugin { get; private set; }
 
         /// <summary>
         /// Parent

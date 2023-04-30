@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Actions
@@ -6,6 +7,7 @@ namespace TrelloDotNet.Model.Actions
     /// <summary>
     /// Represent an Action
     /// </summary>
+    [DebuggerDisplay("{Type} (Id: {Id}) @ {Date}")]
     public class TrelloAction
     {
         /// <summary>

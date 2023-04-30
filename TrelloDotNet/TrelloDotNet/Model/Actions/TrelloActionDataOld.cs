@@ -1,13 +1,13 @@
-﻿using System.Text.Json.Serialization;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace TrelloDotNet.Model.Webhook
+namespace TrelloDotNet.Model.Actions
 {
     /// <summary>
-    /// Collection of Old values of the Webhook Action Data
+    /// Collection of Old values of the Action Data
     /// </summary>
-    public class WebhookActionDataOld
+    public class TrelloActionDataOld
     {
         /// <summary>
         /// due
@@ -15,7 +15,7 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("due")]
         [JsonInclude]
         public DateTimeOffset? Due { get; private set; }
-        
+
         /// <summary>
         /// dueComplete
         /// </summary>
@@ -71,7 +71,7 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("idList")]
         [JsonInclude]
         public string ListId { get; private set; }
-        
+
         /// <summary>
         /// pos
         /// </summary>
@@ -85,7 +85,7 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("dueReminder")]
         [JsonInclude]
         public int? DueReminder { get; private set; }
-        
+
         /// <summary>
         /// coordinates
         /// </summary>
@@ -106,24 +106,5 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("idAttachmentCover")]
         [JsonInclude]
         public string AttachmentCover { get; private set; }
-
-        internal static WebhookActionDataOld CreateDummy()
-        {
-            return new WebhookActionDataOld()
-            {
-                DueComplete = true,
-                Address = "My Street",
-                Coordinates = Coordinates.CreateDummy(),
-                Name = "MyName",
-                Description = "MyDescription",
-                Due = new DateTimeOffset(new DateTime(2022, 12, 31)),
-                DueReminder = 10,
-                Labels = new List<string> { "a", "b", "c" },
-                ListId = "63d1239e857afaa8b003c633",
-                LocationName = "My Location",
-                Position = 42,
-                Start = new DateTimeOffset(new DateTime(2023, 1, 1))
-            };
-        }
     }
 }

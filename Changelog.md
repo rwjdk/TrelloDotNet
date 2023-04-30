@@ -1,6 +1,14 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## Unreleased
+- Added 'GetActionsOfBoardAsync'
+- Added 'GetActionsOnCardAsync'
+- Added 'GetActionsForListAsync'
+- Added 'GetActionsForMemberAsync'
+
+<hr>
+
 ## 1.5.2 (30th of March 2023)
 - Added 'AddChecklistToCardIfLabelMatchAction' to make combination of creating checklists easier to maintain
 

@@ -22,23 +22,15 @@ namespace TrelloDotNet
         //todo: Management
         //- Manage Custom Fields on board (CRUD)
         //- Batch-system (why???) [https://developer.atlassian.com/cloud/trello/rest/api-group-batch/#api-batch-get]
-        //- Workspace management
-        //- Organizations (how to gain access?)
+        //- Organizations (Work spaces)
 
         //todo: Boards
-        //- Get Board Membership (Aka what roles the Token user have on the board)
         //- Invite members by mail or userId to board
         //- Remove Members from board
         //- Update Membership on board (make admin as an example)
 
         //todo: Members
         //- Get Cards for Member
-
-        //todo: Actions
-        //- Members
-        //- Cards
-        //- Lists
-        //- Boards
 
         /// <summary>
         /// Options for the client
@@ -851,7 +843,7 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> GetCardAsync(string cardId)
         {
-            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", 
+            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}",
                 new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods)
                 );
@@ -875,7 +867,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", 
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/",
                 new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
@@ -897,7 +889,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", 
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/",
                 new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
@@ -910,7 +902,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", 
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}",
                 new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
@@ -1394,6 +1386,73 @@ namespace TrelloDotNet
         public async Task<List<Membership>> GetMembershipsOfBoardAsync(string boardId)
         {
             return await _apiRequestController.Get<List<Membership>>($"{UrlPaths.Boards}/{boardId}/memberships");
+        }
+
+        /// <summary>
+        /// Get the most recent Actions (Changelog Events) of a board
+        /// </summary>
+        /// <param name="boardId">The Id of the Board</param>
+        /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes)</param>
+        /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
+        /// <returns>List of most Recent Trello Actions</returns>
+        public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, List<string> filter = null, int limit = 50)
+        {
+            return await GetActionsFromSuffix($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Actions}", filter, limit);
+        }
+
+        /// <summary>
+        /// Get the most recent Actions (Changelog Events) on a Card
+        /// </summary>
+        /// <remarks>
+        /// If no filter is given the default filter of Trello API is 'commentCard, updateCard:idList' (aka 'Move Card To List' and 'Add Comment')
+        /// </remarks>
+        /// <param name="cardId">The Id of the Card</param>
+        /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes). Default: 'commentCard, updateCard:idList' (aka 'Move Card To List' and 'Add Comment')</param>
+        /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
+        /// <returns>List of most Recent Trello Actions</returns>
+        public async Task<List<TrelloAction>> GetActionsOnCardAsync(string cardId, List<string> filter = null, int limit = 50)
+        {
+            return await GetActionsFromSuffix($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Actions}", filter, limit);
+        }
+        
+        /// <summary>
+        /// Get the most recent Actions (Changelog Events) for a List
+        /// </summary>
+        /// <param name="listId">The Id of the List</param>
+        /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes)</param>
+        /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
+        /// <returns>List of most Recent Trello Actions</returns>
+        public async Task<List<TrelloAction>> GetActionsForListAsync(string listId, List<string> filter = null, int limit = 50)
+        {
+            return await GetActionsFromSuffix($"{UrlPaths.Lists}/{listId}/{UrlPaths.Actions}", filter, limit);
+        }
+        
+        /// <summary>
+        /// Get the most recent Actions (Changelog Events) for a Member
+        /// </summary>
+        /// <param name="memberId">The Id of the Member</param>
+        /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes)</param>
+        /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
+        /// <returns>List of most Recent Trello Actions</returns>
+        public async Task<List<TrelloAction>> GetActionsForMemberAsync(string memberId, List<string> filter = null, int limit = 50)
+        {
+            return await GetActionsFromSuffix($"{UrlPaths.Members}/{memberId}/{UrlPaths.Actions}", filter, limit);
+        }
+        
+        private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, List<string> filter, int limit)
+        {
+            var parameters = new List<QueryParameter>();
+            if (filter != null)
+            {
+                parameters.Add(new QueryParameter("filter", string.Join(",", filter)));
+            }
+
+            if (limit > 0)
+            {
+                parameters.Add(new QueryParameter("limit", limit));
+            }
+
+            return await _apiRequestController.Get<List<TrelloAction>>(suffix, parameters.ToArray());
         }
     }
 }

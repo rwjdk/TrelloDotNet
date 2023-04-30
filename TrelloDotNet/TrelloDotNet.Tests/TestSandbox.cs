@@ -1,4 +1,5 @@
-﻿using Xunit.Abstractions;
+﻿using TrelloDotNet.Model.Webhook;
+using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests
 {
@@ -132,7 +133,7 @@ namespace TrelloDotNet.Tests
                 _output.WriteLine(e.Message);
                 throw;
             }
-            
+
         }
 
         [FactManualOnly]
@@ -140,12 +141,11 @@ namespace TrelloDotNet.Tests
         {
             _output.WriteLine("Hello");
             await Task.CompletedTask;
-            var boardId = "63e1096da4ecf28dcb763ba9";
-            var membershipsOfBoardAsync = await TrelloClient.GetMembershipsOfBoardAsync(boardId);
-
-#pragma warning disable CS0219
-            int debug = 0;
-#pragma warning restore CS0219
+            /*
+            var boardId = "63c939a5cea0cb006dc9e88b";
+            var cardId = "63c939a5cea0cb006dc9e9dd";
+            var listId = "63c939a5cea0cb006dc9e89d";
+            var memberId = "63d1239e857afaa8b003c633";*/
             /*
             var t1 = await Task.Factory.StartNew(async () => await MindlessApiWork());
             var t2 = await Task.Factory.StartNew(async () => await MindlessApiWork());

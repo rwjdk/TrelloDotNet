@@ -1,5 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using TrelloDotNet.Model.Actions;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -36,6 +39,83 @@ namespace TrelloDotNet.Model.Webhook
         [JsonInclude]
         public bool? DueComplete { get; private set; }
 
+        /// <summary>
+        /// due
+        /// </summary>
+        [JsonPropertyName("due")]
+        [JsonInclude]
+        public DateTimeOffset? Due { get; private set; }
+
+        /// <summary>
+        /// start
+        /// </summary>
+        [JsonPropertyName("start")]
+        [JsonInclude]
+        public DateTimeOffset? Start { get; private set; }
+
+        /// <summary>
+        /// idLabels
+        /// </summary>
+        [JsonPropertyName("idLabels")]
+        [JsonInclude]
+        public List<string> Labels { get; private set; }
+
+        /// <summary>
+        /// locationName
+        /// </summary>
+        [JsonPropertyName("locationName")]
+        [JsonInclude]
+        public string LocationName { get; private set; }
+
+        /// <summary>
+        /// address
+        /// </summary>
+        [JsonPropertyName("address")]
+        [JsonInclude]
+        public string Address { get; private set; }
+
+        /// <summary>
+        /// desc
+        /// </summary>
+        [JsonPropertyName("desc")]
+        [JsonInclude]
+        public string Description { get; private set; }
+
+        /// <summary>
+        /// idList
+        /// </summary>
+        [JsonPropertyName("idList")]
+        [JsonInclude]
+        public string ListId { get; private set; }
+
+        /// <summary>
+        /// pos
+        /// </summary>
+        [JsonPropertyName("pos")]
+        [JsonInclude]
+        public decimal? Position { get; private set; }
+
+        /// <summary>
+        /// dueReminder
+        /// </summary>
+        [JsonPropertyName("dueReminder")]
+        [JsonInclude]
+        public int? DueReminder { get; private set; }
+
+        /// <summary>
+        /// coordinates
+        /// </summary>
+        [JsonPropertyName("coordinates")]
+        [JsonInclude]
+        public Coordinates Coordinates { get; private set; }
+
+        /// <summary>
+        /// cover
+        /// </summary>
+        [JsonPropertyName("cover")]
+        [JsonInclude]
+        public CardCover Cover { get; private set; }
+        
         /// <summary>
         /// Get the Full Card Object
         /// </summary>

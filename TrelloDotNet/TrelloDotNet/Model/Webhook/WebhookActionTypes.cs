@@ -302,6 +302,9 @@
         /// updateCustomFieldItem
         /// </summary>
         public const string UpdateCustomFieldItem = "updateCustomFieldItem";
-
+        /// <summary>
+        /// updateCard:idList (This is sort of a special "event" that indicate a card was moved to a list despite the official type is "updateCard"). Use in GetAction... Methods
+        /// </summary>
+        public const string MoveCardToList = "updateCard:idList";
     }
 }
