@@ -8,6 +8,7 @@
 - Added 'GetActionsForMemberAsync'
 - Added option to pass Cancellation Tokens to the API
 - Added 'AddCommentToCardAction' for the Automation-engine
+- Automation Action 'AddChecklistToCardAction' now have the option to add Items to existing Checklists with same name (Example two Definition of Done Automations for two different labels add their items to a single Checklist)
 
 <hr>
 

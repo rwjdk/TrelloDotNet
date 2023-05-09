@@ -159,13 +159,19 @@ namespace TrelloDotNet
                 }
             }
 
-            foreach (var checkItemParameters in template.Items.Select(item => _queryParametersBuilder.GetViaQueryParameterAttributes(item)))
-            {
-                newChecklist.Items.Add(await _apiRequestController.Post<ChecklistItem>($"{UrlPaths.Checklists}/{newChecklist.Id}/{UrlPaths.CheckItems}", CancellationToken.None, checkItemParameters));
-            }
+            await AddCheckItemsAsync(newChecklist, template.Items.ToArray());
 
             return newChecklist;
         }
+
+        internal async Task AddCheckItemsAsync(Checklist existingChecklist, params ChecklistItem[] checkItemsToAdd)
+        {
+            foreach (var checkItemParameters in checkItemsToAdd.Select(item => _queryParametersBuilder.GetViaQueryParameterAttributes(item)))
+            {
+                existingChecklist.Items.Add(await _apiRequestController.Post<ChecklistItem>($"{UrlPaths.Checklists}/{existingChecklist.Id}/{UrlPaths.CheckItems}", CancellationToken.None, checkItemParameters));
+            }
+        }
+
 
         /// <summary>
         /// Add a Checklist to the card based on an existing checklist (as a copy)
