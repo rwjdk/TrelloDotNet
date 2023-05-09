@@ -92,6 +92,10 @@ namespace TrelloDotNet.AutomationEngine
                             cancellationToken.ThrowIfCancellationRequested();
                             await actionAction.PerformActionAsync(webhookAction, result);
                         }
+                        catch(StopProcessingFurtherActionException)
+                        {
+                            return result;
+                        }
                         catch (Exception e)
                         {
                             throw new AutomationException($"Error performing Action of type '{actionAction.GetType()}' in automation '{automation.Name}'", e);
