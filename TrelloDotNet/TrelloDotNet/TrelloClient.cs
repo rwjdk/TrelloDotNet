@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using TrelloDotNet.Control;
@@ -79,7 +80,20 @@ namespace TrelloDotNet
         /// <returns>The Object specified to be returned</returns>
         public async Task<T> PostAsync<T>(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Post<T>(urlSuffix, parameters);
+            return await PostAsync<T>(urlSuffix, CancellationToken.None, parameters);
+        }
+
+        /// <summary>
+        /// Custom Post Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
+        /// </summary>
+        /// <typeparam name="T">Object to Return</typeparam>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="parameters">Additional Parameters</param>
+        /// <returns>The Object specified to be returned</returns>
+        public async Task<T> PostAsync<T>(string urlSuffix, CancellationToken cancellationToken = default, params QueryParameter[] parameters)
+        {
+            return await _apiRequestController.Post<T>(urlSuffix, cancellationToken, parameters);
         }
 
         /// <summary>
@@ -90,7 +104,19 @@ namespace TrelloDotNet
         /// <returns>JSON Representation of response</returns>
         public async Task<string> PostAsync(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Post(urlSuffix, parameters);
+            return await PostAsync(urlSuffix, CancellationToken.None, parameters);
+        }
+
+        /// <summary>
+        /// Custom Post Method to be used on unexposed features of the API delivered back as JSON.
+        /// </summary>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="parameters">Additional Parameters</param>
+        /// <returns>JSON Representation of response</returns>
+        public async Task<string> PostAsync(string urlSuffix, CancellationToken cancellationToken = default, params QueryParameter[] parameters)
+        {
+            return await _apiRequestController.Post(urlSuffix, cancellationToken, parameters);
         }
 
         /// <summary>
@@ -99,14 +125,15 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="checklist">The Checklist to add</param>
         /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case sensitive) exist and if so return that instead of creating a new</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>New or Existing Checklist with same name</returns>
-        public async Task<Checklist> AddChecklistAsync(string cardId, Checklist checklist, bool ignoreIfAChecklistWithThisNameAlreadyExist = false)
+        public async Task<Checklist> AddChecklistAsync(string cardId, Checklist checklist, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, CancellationToken cancellationToken = default)
         {
             var template = checklist;
             if (ignoreIfAChecklistWithThisNameAlreadyExist)
             {
                 //Check if card already have a list with same name
-                var existingOnCard = await GetChecklistsOnCardAsync(cardId);
+                var existingOnCard = await GetChecklistsOnCardAsync(cardId, cancellationToken);
                 var existing = existingOnCard.FirstOrDefault(x => x.Name == template.Name);
                 if (existing != null)
                 {
@@ -115,7 +142,7 @@ namespace TrelloDotNet
             }
 
             var checklistParameters = _queryParametersBuilder.GetViaQueryParameterAttributes(template);
-            var newChecklist = await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", checklistParameters);
+            var newChecklist = await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", cancellationToken, checklistParameters);
 
             if (template.Items == null)
             {
@@ -134,7 +161,7 @@ namespace TrelloDotNet
 
             foreach (var checkItemParameters in template.Items.Select(item => _queryParametersBuilder.GetViaQueryParameterAttributes(item)))
             {
-                newChecklist.Items.Add(await _apiRequestController.Post<ChecklistItem>($"{UrlPaths.Checklists}/{newChecklist.Id}/{UrlPaths.CheckItems}", checkItemParameters));
+                newChecklist.Items.Add(await _apiRequestController.Post<ChecklistItem>($"{UrlPaths.Checklists}/{newChecklist.Id}/{UrlPaths.CheckItems}", CancellationToken.None, checkItemParameters));
             }
 
             return newChecklist;
@@ -146,15 +173,16 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="existingChecklistIdToCopyFrom">Id of an existing Checklist that should be added to the card as a new copy</param>
         /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case sensitive) exist and if so return that instead of creating a new</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>New Checklist</returns>
-        public async Task<Checklist> AddChecklistAsync(string cardId, string existingChecklistIdToCopyFrom, bool ignoreIfAChecklistWithThisNameAlreadyExist = false)
+        public async Task<Checklist> AddChecklistAsync(string cardId, string existingChecklistIdToCopyFrom, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, CancellationToken cancellationToken = default)
         {
             if (ignoreIfAChecklistWithThisNameAlreadyExist)
             {
                 //Find the name of the template (as we are only provided Id)
-                var existingChecklist = await GetChecklistAsync(existingChecklistIdToCopyFrom);
+                var existingChecklist = await GetChecklistAsync(existingChecklistIdToCopyFrom, cancellationToken);
                 //Check if card already have a list with same name
-                var existingOnCard = await GetChecklistsOnCardAsync(cardId);
+                var existingOnCard = await GetChecklistsOnCardAsync(cardId, cancellationToken);
                 var existing = existingOnCard.FirstOrDefault(x => x.Name == existingChecklist.Name);
                 if (existing != null)
                 {
@@ -166,17 +194,18 @@ namespace TrelloDotNet
             {
                 new QueryParameter(@"idChecklistSource", existingChecklistIdToCopyFrom)
             };
-            return await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", parameters);
+            return await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", cancellationToken, parameters);
         }
 
         /// <summary>
         /// Add a Card
         /// </summary>
         /// <param name="card">The Card to Add</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Added Card</returns>
-        public async Task<Card> AddCardAsync(Card card)
+        public async Task<Card> AddCardAsync(Card card, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", _queryParametersBuilder.GetViaQueryParameterAttributes(card));
+            return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(card));
         }
 
         /// <summary>
@@ -186,10 +215,11 @@ namespace TrelloDotNet
         /// The Provided BoardId the list should be added to need to be the long version of the BoardId as API does not support the short version
         /// </remarks>
         /// <param name="list">List to add</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Create list</returns>
-        public async Task<List> AddListAsync(List list)
+        public async Task<List> AddListAsync(List list, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Post<List>($"{UrlPaths.Lists}", _queryParametersBuilder.GetViaQueryParameterAttributes(list));
+            return await _apiRequestController.Post<List>($"{UrlPaths.Lists}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(list));
         }
 
         /// <summary>
@@ -197,25 +227,27 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="board">The Board to Add</param>
         /// <param name="options">Options for the new board</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>The New Board</returns>
-        public async Task<Board> AddBoardAsync(Board board, AddBoardOptions options = null)
+        public async Task<Board> AddBoardAsync(Board board, AddBoardOptions options = null, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(board).ToList();
             if (options != null)
             {
                 parameters.AddRange(_queryParametersBuilder.GetViaQueryParameterAttributes(options));
             }
-            return await _apiRequestController.Post<Board>($"{UrlPaths.Boards}", parameters.ToArray());
+            return await _apiRequestController.Post<Board>($"{UrlPaths.Boards}", cancellationToken, parameters.ToArray());
         }
 
         /// <summary>
         /// Add a new Webhook
         /// </summary>
         /// <param name="webhook">The Webhook to add</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Webhook</returns>
-        public async Task<Webhook> AddWebhookAsync(Webhook webhook)
+        public async Task<Webhook> AddWebhookAsync(Webhook webhook, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Post<Webhook>($"{UrlPaths.Webhooks}", _queryParametersBuilder.GetViaQueryParameterAttributes(webhook));
+            return await _apiRequestController.Post<Webhook>($"{UrlPaths.Webhooks}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(webhook));
         }
 
         /// <summary>
@@ -224,9 +256,9 @@ namespace TrelloDotNet
         /// <paramref name="cardId">Id of the Card</paramref>
         /// <paramref name="comment">The Comment</paramref>
         /// <returns>The Comment Action</returns>
-        public async Task<TrelloAction> AddCommentAsync(string cardId, Comment comment)
+        public async Task<TrelloAction> AddCommentAsync(string cardId, Comment comment, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Post<TrelloAction>($"{UrlPaths.Cards}/{cardId}/actions/comments", _queryParametersBuilder.GetViaQueryParameterAttributes(comment));
+            return await _apiRequestController.Post<TrelloAction>($"{UrlPaths.Cards}/{cardId}/actions/comments", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(comment));
         }
 
         /// <summary>
@@ -234,10 +266,11 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="sticker">The Sticker to add</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The new sticker</returns>
-        public async Task<Sticker> AddStickerToCardAsync(string cardId, Sticker sticker)
+        public async Task<Sticker> AddStickerToCardAsync(string cardId, Sticker sticker, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Post<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers", _queryParametersBuilder.GetViaQueryParameterAttributes(sticker));
+            return await _apiRequestController.Post<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(sticker));
         }
 
         /// <summary>
@@ -245,9 +278,10 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="newCover">The new Cover</param>
-        public async Task<Card> UpdateCoverOnCardAsync(string cardId, CardCover newCover)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task<Card> UpdateCoverOnCardAsync(string cardId, CardCover newCover, CancellationToken cancellationToken = default)
         {
-            return await AddCoverToCardAsync(cardId, newCover);
+            return await AddCoverToCardAsync(cardId, newCover, cancellationToken);
         }
 
         /// <summary>
@@ -255,7 +289,8 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="coverToAdd">The Cover to Add</param>
-        public async Task<Card> AddCoverToCardAsync(string cardId, CardCover coverToAdd)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task<Card> AddCoverToCardAsync(string cardId, CardCover coverToAdd, CancellationToken cancellationToken = default)
         {
             if (coverToAdd == null)
             {
@@ -264,7 +299,7 @@ namespace TrelloDotNet
 
             coverToAdd.PrepareForAddUpdate();
             string payload = $"{{\"cover\":{JsonSerializer.Serialize(coverToAdd)}}}";
-            return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardId}", payload);
+            return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, payload);
         }
 
         /// <summary>
@@ -276,7 +311,20 @@ namespace TrelloDotNet
         /// <returns>The Object specified to be returned</returns>
         public async Task<T> PutAsync<T>(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Put<T>(urlSuffix, parameters);
+            return await PutAsync<T>(urlSuffix, CancellationToken.None, parameters);
+        }
+
+        /// <summary>
+        /// Custom Put Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
+        /// </summary>
+        /// <typeparam name="T">Object to Return</typeparam>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="parameters">Additional Parameters</param>
+        /// <returns>The Object specified to be returned</returns>
+        public async Task<T> PutAsync<T>(string urlSuffix, CancellationToken cancellationToken = default, params QueryParameter[] parameters)
+        {
+            return await _apiRequestController.Put<T>(urlSuffix, cancellationToken, parameters);
         }
 
         /// <summary>
@@ -287,7 +335,19 @@ namespace TrelloDotNet
         /// <returns>JSON Representation of response</returns>
         public async Task<string> PutAsync(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Put(urlSuffix, parameters);
+            return await PutAsync(urlSuffix, CancellationToken.None, parameters);
+        }
+
+        /// <summary>
+        /// Custom Put Method to be used on unexposed features of the API delivered back as JSON.
+        /// </summary>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="parameters">Additional Parameters</param>
+        /// <returns>JSON Representation of response</returns>
+        public async Task<string> PutAsync(string urlSuffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
+        {
+            return await _apiRequestController.Put(urlSuffix, cancellationToken, parameters);
         }
 
         /// <summary>
@@ -299,75 +359,95 @@ namespace TrelloDotNet
         /// <returns>JSON Representation of response</returns>
         public async Task<string> PutAsync(string urlSuffix, string payload, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.PutWithJsonPayload(urlSuffix, payload, parameters);
+            return await PutAsync(urlSuffix, payload, CancellationToken.None, parameters);
+        }
+
+        /// <summary>
+        /// Custom Put Method (with JSON Payload) to be used on unexposed features of the API delivered back as JSON.
+        /// </summary>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="payload">JSON Payload (In the rare cases Trello API need this)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="parameters">Additional Parameters</param>
+        /// <returns>JSON Representation of response</returns>
+        public async Task<string> PutAsync(string urlSuffix, string payload, CancellationToken cancellationToken = default, params QueryParameter[] parameters)
+        {
+            return await _apiRequestController.PutWithJsonPayload(urlSuffix, cancellationToken, payload, parameters);
         }
 
         /// <summary>
         /// Archive a List
         /// </summary>
         /// <param name="listId">The id of list that should be Archived</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Archived List</returns>
-        public async Task<List> ArchiveListAsync(string listId)
+        public async Task<List> ArchiveListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", new QueryParameter("closed", true));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", true));
         }
 
         /// <summary>
         /// Reopen a List (Send back to the board)
         /// </summary>
         /// <param name="listId">The id of list that should be Reopened</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Archived List</returns>
-        public async Task<List> ReOpenListAsync(string listId)
+        public async Task<List> ReOpenListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", new QueryParameter("closed", false));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", false));
         }
 
         /// <summary>
         /// Archive (Close) a Card
         /// </summary>
         /// <param name="cardId">The id of card that should be archived</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Archived Card</returns>
-        public async Task<Card> ArchiveCardAsync(string cardId)
+        public async Task<Card> ArchiveCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter("closed", true));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter("closed", true));
         }
 
         /// <summary>
         /// ReOpen (Send back to board) a Card
         /// </summary>
         /// <param name="cardId">The id of card that should be reopened</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The ReOpened Card</returns>
-        public async Task<Card> ReOpenCardAsync(string cardId)
+        public async Task<Card> ReOpenCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter(@"closed", false));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter(@"closed", false));
         }
 
         /// <summary>
         /// Close (Archive) a Board
         /// </summary>
         /// <param name="boardId">The id of board that should be closed</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Closed Board</returns>
-        public async Task<Board> CloseBoardAsync(string boardId)
+        public async Task<Board> CloseBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", new QueryParameter(@"closed", true));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter(@"closed", true));
         }
 
         /// <summary>
         /// ReOpen a Board
         /// </summary>
         /// <param name="boardId">The id of board that should be reopened</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The ReOpened Board</returns>
-        public async Task<Board> ReOpenBoardAsync(string boardId)
+        public async Task<Board> ReOpenBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", new QueryParameter(@"closed", false));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter(@"closed", false));
         }
 
         /// <summary>
         /// Update a Card
         /// </summary>
         /// <param name="cardWithChanges">The card with the changes</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Updated Card</returns>
-        public async Task<Card> UpdateCardAsync(Card cardWithChanges)
+        public async Task<Card> UpdateCardAsync(Card cardWithChanges, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(cardWithChanges).ToList();
             //Special code for Cover
@@ -386,27 +466,29 @@ namespace TrelloDotNet
                 }
                 payload = $"{{\"cover\":{JsonSerializer.Serialize(cardWithChanges.Cover)}}}";
             }
-            return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", payload, parameters.ToArray());
+            return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", cancellationToken, payload, parameters.ToArray());
         }
 
         /// <summary>
         /// Update a Board
         /// </summary>
         /// <param name="boardWithChanges">The board with the changes</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Updated Card</returns>
-        public async Task<Board> UpdateBoardAsync(Board boardWithChanges)
+        public async Task<Board> UpdateBoardAsync(Board boardWithChanges, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardWithChanges.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(boardWithChanges));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardWithChanges.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(boardWithChanges));
         }
 
         /// <summary>
         /// Update a List
         /// </summary>
         /// <param name="listWithChanges">The List with the changes</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Updated List</returns>
-        public async Task<List> UpdateListAsync(List listWithChanges)
+        public async Task<List> UpdateListAsync(List listWithChanges, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listWithChanges.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listWithChanges.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges));
         }
 
         /// <summary>
@@ -414,20 +496,22 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">The Id of the Card the ChecklistItem is on</param>
         /// <param name="item">The updated Check-item</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>The Updated Checklist Item</returns>
-        public async Task<ChecklistItem> UpdateChecklistItemAsync(string cardId, ChecklistItem item)
+        public async Task<ChecklistItem> UpdateChecklistItemAsync(string cardId, ChecklistItem item, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<ChecklistItem>($"{UrlPaths.Cards}/{cardId}/checkItem/{item.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(item));
+            return await _apiRequestController.Put<ChecklistItem>($"{UrlPaths.Cards}/{cardId}/checkItem/{item.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(item));
         }
 
         /// <summary>
         /// Update a webhook
         /// </summary>
         /// <param name="webhookWithChanges">The Webhook with changes</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>The Updated Webhook</returns>
-        public async Task<Webhook> UpdateWebhookAsync(Webhook webhookWithChanges)
+        public async Task<Webhook> UpdateWebhookAsync(Webhook webhookWithChanges, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Webhook>($"{UrlPaths.Webhooks}/{webhookWithChanges.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(webhookWithChanges));
+            return await _apiRequestController.Put<Webhook>($"{UrlPaths.Webhooks}/{webhookWithChanges.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(webhookWithChanges));
         }
 
         /// <summary>
@@ -435,10 +519,11 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="stickerWithUpdates">The Sticker to update</param>
+        /// <param name="cancellationToken"></param>
         /// <returns>The Updated Sticker</returns>
-        public async Task<Sticker> UpdateStickerAsync(string cardId, Sticker stickerWithUpdates)
+        public async Task<Sticker> UpdateStickerAsync(string cardId, Sticker stickerWithUpdates, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers/{stickerWithUpdates.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(stickerWithUpdates));
+            return await _apiRequestController.Put<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers/{stickerWithUpdates.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(stickerWithUpdates));
         }
 
         /// <summary>
@@ -450,7 +535,8 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
-        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, bool newValue)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, bool newValue, CancellationToken cancellationToken = default)
         {
             string payload;
             switch (customField.Type)
@@ -466,7 +552,7 @@ namespace TrelloDotNet
                 default:
                     throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Checkbox' can be set with a bool value");
             }
-            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
         }
 
         /// <summary>
@@ -478,7 +564,8 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
-        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, DateTimeOffset newValue)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, DateTimeOffset newValue, CancellationToken cancellationToken = default)
         {
             string payload;
             switch (customField.Type)
@@ -494,7 +581,7 @@ namespace TrelloDotNet
                 default:
                     throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'Date' can be set with a DateTimeOffset value");
             }
-            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
         }
 
         /// <summary>
@@ -506,7 +593,8 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
-        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, int newValue)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, int newValue, CancellationToken cancellationToken = default)
         {
             string payload;
             switch (customField.Type)
@@ -522,7 +610,7 @@ namespace TrelloDotNet
                 default:
                     throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'Number' can be set with a integer value");
             }
-            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
 
         }
 
@@ -535,7 +623,8 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
-        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, decimal newValue)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, decimal newValue, CancellationToken cancellationToken = default)
         {
             string payload;
             switch (customField.Type)
@@ -551,7 +640,7 @@ namespace TrelloDotNet
                 default:
                     throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'Number' can be set with a decimal value");
             }
-            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
         }
 
         /// <summary>
@@ -563,7 +652,8 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
-        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, CustomFieldOption newValue)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, CustomFieldOption newValue, CancellationToken cancellationToken = default)
         {
             string payload;
             switch (customField.Type)
@@ -583,7 +673,7 @@ namespace TrelloDotNet
                 default:
                     throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'List' can be set with a CustomFieldOption value");
             }
-            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
         }
 
         /// <summary>
@@ -595,7 +685,8 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
-        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, string newValue)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, string newValue, CancellationToken cancellationToken = default)
         {
             string payload;
             switch (customField.Type)
@@ -618,7 +709,7 @@ namespace TrelloDotNet
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
         }
 
         /// <summary>
@@ -626,7 +717,8 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="customField">The custom Field to clear</param>
-        public async Task ClearCustomFieldValueOnCardAsync(string cardId, CustomField customField)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task ClearCustomFieldValueOnCardAsync(string cardId, CustomField customField, CancellationToken cancellationToken = default)
         {
             string payload;
             switch (customField.Type)
@@ -643,21 +735,22 @@ namespace TrelloDotNet
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            await SendCustomFieldChangeRequestAsync(cardId, customField, payload);
+            await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
         }
 
-        private async Task SendCustomFieldChangeRequestAsync(string cardId, CustomField customField, string payload)
+        private async Task SendCustomFieldChangeRequestAsync(string cardId, CustomField customField, string payload, CancellationToken cancellationToken)
         {
-            await _apiRequestController.PutWithJsonPayload($"{UrlPaths.Cards}/{cardId}/customField/{customField.Id}/item", payload);
+            await _apiRequestController.PutWithJsonPayload($"{UrlPaths.Cards}/{cardId}/customField/{customField.Id}/item", cancellationToken, payload);
         }
 
         /// <summary>
         /// Update a comment Action (aka only way to update comments as they are not seen as their own objects)
         /// </summary>
         /// <param name="commentAction">The comment Action with the updated text</param>
-        public async Task<TrelloAction> UpdateCommentActionAsync(TrelloAction commentAction)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task<TrelloAction> UpdateCommentActionAsync(TrelloAction commentAction, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", new QueryParameter(@"text", commentAction.Data.Text));
+            return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", cancellationToken, new QueryParameter(@"text", commentAction.Data.Text));
         }
 
         /// <summary>
@@ -665,19 +758,21 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="listId">The id of the List to move</param>
         /// <param name="newBoardId">The id of the board the list should be moved to [It need to be the long version of the boardId]</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Updated List</returns>
-        public async Task<List> MoveListToBoardAsync(string listId, string newBoardId)
+        public async Task<List> MoveListToBoardAsync(string listId, string newBoardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", new QueryParameter(@"value", newBoardId));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", cancellationToken, new QueryParameter(@"value", newBoardId));
         }
 
         /// <summary>
         /// Archive all cards on in a List
         /// </summary>
         /// <param name="listId">The id of the List that should have its cards archived</param>
-        public async Task ArchiveAllCardsInListAsync(string listId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task ArchiveAllCardsInListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Post<List>($"{UrlPaths.Lists}/{listId}/archiveAllCards");
+            await _apiRequestController.Post<List>($"{UrlPaths.Lists}/{listId}/archiveAllCards", cancellationToken);
         }
 
         /// <summary>
@@ -685,10 +780,11 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="currentListId">The id of the List that should have its cards moved</param>
         /// <param name="newListId">The id of the new List that should receive the cards</param>
-        public async Task MoveAllCardsInListAsync(string currentListId, string newListId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task MoveAllCardsInListAsync(string currentListId, string newListId, CancellationToken cancellationToken = default)
         {
-            var newList = await GetListAsync(newListId); //Get the new list's BoardId so the user do not need to provide it.
-            await _apiRequestController.Post($"{UrlPaths.Lists}/{currentListId}/moveAllCards",
+            var newList = await GetListAsync(newListId, cancellationToken); //Get the new list's BoardId so the user do not need to provide it.
+            await _apiRequestController.Post($"{UrlPaths.Lists}/{currentListId}/moveAllCards", cancellationToken,
                 new QueryParameter(@"idBoard", newList.BoardId),
                 new QueryParameter(@"idList", newListId)
                 );
@@ -701,11 +797,12 @@ namespace TrelloDotNet
         /// As this is a major thing, there is a secondary confirm needed by setting: Options.AllowDeleteOfBoards = true
         /// </remarks>
         /// <param name="boardId">The id of the Board to Delete</param>
-        public async Task DeleteBoardAsync(string boardId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             if (Options.AllowDeleteOfBoards)
             {
-                await _apiRequestController.Delete($"{UrlPaths.Boards}/{boardId}");
+                await _apiRequestController.Delete($"{UrlPaths.Boards}/{boardId}", cancellationToken);
             }
             else
             {
@@ -717,39 +814,43 @@ namespace TrelloDotNet
         /// Delete a Card (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseCard() for non-permanency
         /// </summary>
         /// <param name="cardId">The id of the Card to Delete</param>
-        public async Task DeleteCardAsync(string cardId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}");
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}", cancellationToken);
         }
 
         /// <summary>
         /// Delete a Label from the board and remove it from all cards it was added to (WARNING: THERE IS NO WAY GOING BACK!!!). If you are looking to remove a label from a Card then see 'RemoveLabelsFromCardAsync' and 'RemoveAllLabelsFromCardAsync'
         /// </summary>
         /// <param name="labelId">The id of the Label to Delete</param>
-        public async Task DeleteLabelAsync(string labelId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteLabelAsync(string labelId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Labels}/{labelId}");
+            await _apiRequestController.Delete($"{UrlPaths.Labels}/{labelId}", cancellationToken);
         }
 
         /// <summary>
         /// Delete a Webhook (WARNING: THERE IS NO WAY GOING BACK!!!).
         /// </summary>
         /// <param name="webhookId">The id of the Webhook to Delete</param>
-        public async Task DeleteWebhookAsync(string webhookId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteWebhookAsync(string webhookId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Webhooks}/{webhookId}");
+            await _apiRequestController.Delete($"{UrlPaths.Webhooks}/{webhookId}", cancellationToken);
         }
 
         /// <summary>
         /// Delete Webhooks using indicated Callback URL (WARNING: THERE IS NO WAY GOING BACK!!!).
         /// </summary>
         /// <param name="callbackUrl">The URL of the callback URL</param>
-        public async Task DeleteWebhooksByCallbackUrlAsync(string callbackUrl)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteWebhooksByCallbackUrlAsync(string callbackUrl, CancellationToken cancellationToken = default)
         {
-            var currentWebhooks = await GetWebhooksForCurrentTokenAsync();
+            var currentWebhooks = await GetWebhooksForCurrentTokenAsync(cancellationToken);
             foreach (var webhook in currentWebhooks.Where(x => x.CallbackUrl == callbackUrl))
             {
-                await DeleteWebhookAsync(webhook.Id);
+                await DeleteWebhookAsync(webhook.Id, cancellationToken);
             }
         }
 
@@ -757,12 +858,13 @@ namespace TrelloDotNet
         /// Delete Webhooks using indicated target ModelId (WARNING: THERE IS NO WAY GOING BACK!!!).
         /// </summary>
         /// <param name="targetIdModel">The Target Model Id (example an ID of a Board)</param>
-        public async Task DeleteWebhooksByTargetModelIdAsync(string targetIdModel)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteWebhooksByTargetModelIdAsync(string targetIdModel, CancellationToken cancellationToken = default)
         {
-            var currentWebhooks = await GetWebhooksForCurrentTokenAsync();
+            var currentWebhooks = await GetWebhooksForCurrentTokenAsync(cancellationToken);
             foreach (var webhook in currentWebhooks.Where(x => x.IdOfTypeYouWishToMonitor == targetIdModel))
             {
-                await DeleteWebhookAsync(webhook.Id);
+                await DeleteWebhookAsync(webhook.Id, cancellationToken);
             }
         }
 
@@ -771,36 +873,40 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of Card that have the sticker</param>
         /// <param name="stickerId">Id of the sticker</param>
-        public async Task DeleteStickerAsync(string cardId, string stickerId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteStickerAsync(string cardId, string stickerId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}");
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}", cancellationToken);
         }
 
         /// <summary>
         /// Delete a Comment (WARNING: THERE IS NO WAY GOING BACK!!!).
         /// </summary>
         /// <param name="commentActionId">Id of Comment Action Id</param>
-        public async Task DeleteCommentActionAsync(string commentActionId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteCommentActionAsync(string commentActionId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Actions}/{commentActionId}");
+            await _apiRequestController.Delete($"{UrlPaths.Actions}/{commentActionId}", cancellationToken);
         }
 
         /// <summary>
         /// Custom Delete Method to be used on unexposed features of the API.
         /// </summary>
         /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
-        public async Task DeleteAsync(string urlSuffix)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteAsync(string urlSuffix, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete(urlSuffix);
+            await _apiRequestController.Delete(urlSuffix, cancellationToken);
         }
 
         /// <summary>
         /// Delete a Checklist (WARNING: THERE IS NO WAY GOING BACK!!!).
         /// </summary>
         /// <param name="checklistId">The id of the Checklist to Delete</param>
-        public async Task DeleteChecklistAsync(string checklistId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteChecklistAsync(string checklistId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}");
+            await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}", cancellationToken);
         }
 
         /// <summary>
@@ -812,7 +918,20 @@ namespace TrelloDotNet
         /// <returns>The Object specified to be returned</returns>
         public async Task<T> GetAsync<T>(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Get<T>(urlSuffix, parameters);
+            return await GetAsync<T>(urlSuffix, CancellationToken.None, parameters);
+        }
+
+        /// <summary>
+        /// Custom Get Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
+        /// </summary>
+        /// <typeparam name="T">Object to Return</typeparam>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="parameters">Additional Parameters</param>
+        /// <returns>The Object specified to be returned</returns>
+        public async Task<T> GetAsync<T>(string urlSuffix, CancellationToken cancellationToken = default, params QueryParameter[] parameters)
+        {
+            return await _apiRequestController.Get<T>(urlSuffix, cancellationToken, parameters);
         }
 
         /// <summary>
@@ -823,27 +942,41 @@ namespace TrelloDotNet
         /// <returns>JSON Representation of response</returns>
         public async Task<string> GetAsync(string urlSuffix, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Get(urlSuffix, parameters);
+            return await GetAsync(urlSuffix, CancellationToken.None, parameters);
+        }
+
+        /// <summary>
+        /// Custom Get Method to be used on unexposed features of the API delivered back as JSON.
+        /// </summary>
+        /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="parameters">Additional Parameters</param>
+        /// <returns>JSON Representation of response</returns>
+        public async Task<string> GetAsync(string urlSuffix, CancellationToken cancellationToken = default, params QueryParameter[] parameters)
+        {
+            return await _apiRequestController.Get(urlSuffix, cancellationToken, parameters);
         }
 
         /// <summary>
         /// Get a Board by its Id
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Board</returns>
-        public async Task<Board> GetBoardAsync(string boardId)
+        public async Task<Board> GetBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Board>($"{UrlPaths.Boards}/{boardId}");
+            return await _apiRequestController.Get<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken);
         }
 
         /// <summary>
         /// Get Card by its Id
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Card</returns>
-        public async Task<Card> GetCardAsync(string cardId)
+        public async Task<Card> GetCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}",
+            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken,
                 new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods)
                 );
@@ -853,21 +986,23 @@ namespace TrelloDotNet
         /// Get Custom Fields for a Card
         /// </summary>
         /// <remarks>Tip: Use Extension methods GetCustomFieldValueAsXYZ for a handy way to get values</remarks>
-        /// <param name="cardId">Id of the Card</param> 
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Custom Fields</returns>
-        public async Task<List<CustomFieldItem>> GetCustomFieldItemsForCardAsync(string cardId)
+        public async Task<List<CustomFieldItem>> GetCustomFieldItemsForCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<CustomFieldItem>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.CustomFieldItems}");
+            return await _apiRequestController.Get<List<CustomFieldItem>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.CustomFieldItems}", cancellationToken);
         }
 
         /// <summary>
         /// Get all open cards on un-archived lists
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>List of Cards</returns>
-        public async Task<List<Card>> GetCardsOnBoardAsync(string boardId)
+        public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/",
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", cancellationToken,
                 new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
@@ -876,20 +1011,22 @@ namespace TrelloDotNet
         /// Get Custom Fields of a Board
         /// </summary>
         /// <param name="boardId">Id of the Board (long version)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of CustomFields</returns>
-        public async Task<List<CustomField>> GetCustomFieldsOnBoardAsync(string boardId)
+        public async Task<List<CustomField>> GetCustomFieldsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<CustomField>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.CustomFields}");
+            return await _apiRequestController.Get<List<CustomField>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.CustomFields}", cancellationToken);
         }
 
         /// <summary>
         /// Get all open cards on a specific list
         /// </summary>
         /// <param name="listId">Id of the List</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Cards</returns>
-        public async Task<List<Card>> GetCardsInListAsync(string listId)
+        public async Task<List<Card>> GetCardsInListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/",
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", cancellationToken,
                 new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
@@ -899,10 +1036,11 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
         /// <param name="filter">The Selected Filter</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Cards</returns>
-        public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter)
+        public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}",
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", cancellationToken,
                 new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
@@ -912,129 +1050,141 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
         /// <param name="filter">The Selected Filter</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Cards</returns>
-        public async Task<List<List>> GetListsOnBoardFilteredAsync(string boardId, ListFilter filter)
+        public async Task<List<List>> GetListsOnBoardFilteredAsync(string boardId, ListFilter filter, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<List>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Lists}/{filter.GetJsonPropertyName()}");
+            return await _apiRequestController.Get<List<List>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Lists}/{filter.GetJsonPropertyName()}", cancellationToken);
         }
 
         /// <summary>
         /// Get a Checklist with a specific Id
         /// </summary>
-        /// <param name="id">Id of the Checklist</param>
+        /// <param name="checkListId">Id of the Checklist</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Checklist</returns>
-        public Task<Checklist> GetChecklistAsync(string id)
+        public Task<Checklist> GetChecklistAsync(string checkListId, CancellationToken cancellationToken = default)
         {
-            return _apiRequestController.Get<Checklist>($"{UrlPaths.Checklists}/{id}");
+            return _apiRequestController.Get<Checklist>($"{UrlPaths.Checklists}/{checkListId}", cancellationToken);
         }
 
         /// <summary>
         /// Get list of Checklists that are used on cards on a specific Board
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Checklists</returns>
-        public async Task<List<Checklist>> GetChecklistsOnBoardAsync(string boardId)
+        public async Task<List<Checklist>> GetChecklistsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Checklist>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Checklists}");
+            return await _apiRequestController.Get<List<Checklist>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Checklists}", cancellationToken);
         }
 
         /// <summary>
         /// Get list of Checklists that are used on a specific card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Checklists</returns>
-        public async Task<List<Checklist>> GetChecklistsOnCardAsync(string cardId)
+        public async Task<List<Checklist>> GetChecklistsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Checklist>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}");
+            return await _apiRequestController.Get<List<Checklist>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", cancellationToken);
         }
 
         /// <summary>
         /// Get the Members (users) of a board
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Members</returns>
-        public async Task<List<Member>> GetMembersOfBoardAsync(string boardId)
+        public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/");
+            return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/", cancellationToken);
         }
 
         /// <summary>
         /// Get the Members (users) of a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Members</returns>
-        public async Task<List<Member>> GetMembersOfCardAsync(string cardId)
+        public async Task<List<Member>> GetMembersOfCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Members}/");
+            return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Members}/", cancellationToken);
         }
 
         /// <summary>
         /// Get a specific List (Column) based on it's Id
         /// </summary>
         /// <param name="listId">Id of the List</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<List> GetListAsync(string listId)
+        public async Task<List> GetListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List>($"{UrlPaths.Lists}/{listId}");
+            return await _apiRequestController.Get<List>($"{UrlPaths.Lists}/{listId}", cancellationToken);
         }
 
         /// <summary>
         /// Get Lists (Columns) on a Board
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Lists (Columns)</returns>
-        public async Task<List<List>> GetListsOnBoardAsync(string boardId)
+        public async Task<List<List>> GetListsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<List>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Lists}");
+            return await _apiRequestController.Get<List<List>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Lists}", cancellationToken);
         }
 
         /// <summary>
         /// Get List of Labels defined for a board
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Labels</returns>
-        public async Task<List<Label>> GetLabelsOfBoardAsync(string boardId)
+        public async Task<List<Label>> GetLabelsOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Label>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Labels}");
+            return await _apiRequestController.Get<List<Label>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Labels}", cancellationToken);
         }
 
         /// <summary>
         /// Get a Member with a specific Id
         /// </summary>
         /// <param name="memberId">Id of the Member</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Member</returns>
-        public async Task<Member> GetMemberAsync(string memberId)
+        public async Task<Member> GetMemberAsync(string memberId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Member>($"{UrlPaths.Members}/{memberId}");
+            return await _apiRequestController.Get<Member>($"{UrlPaths.Members}/{memberId}", cancellationToken);
         }
 
         /// <summary>
         /// Get Webhooks linked with the current Token used to authenticate with the API
         /// </summary>
         /// <returns>List of Webhooks</returns>
-        public async Task<List<Webhook>> GetWebhooksForCurrentTokenAsync()
+        public async Task<List<Webhook>> GetWebhooksForCurrentTokenAsync(CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Webhook>>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/webhooks");
+            return await _apiRequestController.Get<List<Webhook>>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/webhooks", cancellationToken);
         }
 
         /// <summary>
         /// Get a Webhook from its Id
         /// </summary>
         /// <param name="webhookId">Id of the Webhook</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Webhook</returns>
-        public async Task<Webhook> GetWebhookAsync(string webhookId)
+        public async Task<Webhook> GetWebhookAsync(string webhookId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Webhook>($"{UrlPaths.Webhooks}/{webhookId}");
+            return await _apiRequestController.Get<Webhook>($"{UrlPaths.Webhooks}/{webhookId}", cancellationToken);
         }
 
         /// <summary>
         /// Get List of Stickers on a card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The List of Stickers</returns>
-        public async Task<List<Sticker>> GetStickersOnCardAsync(string cardId)
+        public async Task<List<Sticker>> GetStickersOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Sticker>>($"{UrlPaths.Cards}/{cardId}/stickers");
+            return await _apiRequestController.Get<List<Sticker>>($"{UrlPaths.Cards}/{cardId}/stickers", cancellationToken);
         }
 
         /// <summary>
@@ -1042,25 +1192,27 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="stickerId">Id of the Sticker</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Sticker</returns>
-        public async Task<Sticker> GetStickerAsync(string cardId, string stickerId)
+        public async Task<Sticker> GetStickerAsync(string cardId, string stickerId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}");
+            return await _apiRequestController.Get<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}", cancellationToken);
         }
 
         /// <summary>
         /// Get All Comments on a Card
         /// </summary>
         /// <param name="cardId">Id of Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Comments</returns>
-        public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId)
+        public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             var result = new List<TrelloAction>();
             int page = 0;
             bool moreComments = true;
             do
             {
-                var comments = await GetPagedCommentsOnCardAsync(cardId, page);
+                var comments = await GetPagedCommentsOnCardAsync(cardId, page, cancellationToken);
                 page++;
                 if (comments.Any())
                 {
@@ -1079,10 +1231,11 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of Card</param>
         /// <param name="page">The page of results for actions. Each page of results has 50 actions. (Default: 0, Maximum: 19)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Comments</returns>
-        public async Task<List<TrelloAction>> GetPagedCommentsOnCardAsync(string cardId, int page = 0)
+        public async Task<List<TrelloAction>> GetPagedCommentsOnCardAsync(string cardId, int page = 0, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<TrelloAction>>($"{UrlPaths.Cards}/{cardId}/actions",
+            return await _apiRequestController.Get<List<TrelloAction>>($"{UrlPaths.Cards}/{cardId}/actions", cancellationToken,
                 new QueryParameter(@"filter", @"commentCard"),
                 new QueryParameter(@"page", page));
         }
@@ -1091,18 +1244,18 @@ namespace TrelloDotNet
         /// Get information about the token used by this TrelloClient
         /// </summary>
         /// <returns>Information about the Token</returns>
-        public async Task<TokenInformation> GetTokenInformationAsync()
+        public async Task<TokenInformation> GetTokenInformationAsync(CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<TokenInformation>($"{UrlPaths.Tokens}/{_apiRequestController.Token}");
+            return await _apiRequestController.Get<TokenInformation>($"{UrlPaths.Tokens}/{_apiRequestController.Token}", cancellationToken);
         }
 
         /// <summary>
         /// Get information about the Member that own the token used by this TrelloClient
         /// </summary>
         /// <returns>The Member</returns>
-        public async Task<Member> GetTokenMemberAsync()
+        public async Task<Member> GetTokenMemberAsync(CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Member>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/member");
+            return await _apiRequestController.Get<Member>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/member", cancellationToken);
         }
 
         /// <summary>
@@ -1112,7 +1265,18 @@ namespace TrelloDotNet
         /// <param name="memberIdsToAdd">One or more Ids of Members to add</param>
         public async Task<Card> AddMembersToCardAsync(string cardId, params string[] memberIdsToAdd)
         {
-            var card = await GetCardAsync(cardId);
+            return await AddMembersToCardAsync(cardId, CancellationToken.None, memberIdsToAdd);
+        }
+
+        /// <summary>
+        /// Add a Member to a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="memberIdsToAdd">One or more Ids of Members to add</param>
+        public async Task<Card> AddMembersToCardAsync(string cardId, CancellationToken cancellationToken = default, params string[] memberIdsToAdd)
+        {
+            var card = await GetCardAsync(cardId, cancellationToken);
             var missing = memberIdsToAdd.Where(x => !card.MemberIds.Contains(x)).ToList();
 
             if (missing.Count == 0)
@@ -1122,7 +1286,7 @@ namespace TrelloDotNet
 
             //Need update
             card.MemberIds.AddRange(missing);
-            return await UpdateCardAsync(card);
+            return await UpdateCardAsync(card, cancellationToken);
         }
 
         /// <summary>
@@ -1132,7 +1296,18 @@ namespace TrelloDotNet
         /// <param name="memberIdsToRemove">One or more Ids of Members to remove</param>
         public async Task<Card> RemoveMembersFromCardAsync(string cardId, params string[] memberIdsToRemove)
         {
-            var card = await GetCardAsync(cardId);
+            return await RemoveMembersFromCardAsync(cardId, CancellationToken.None, memberIdsToRemove);
+        }
+
+        /// <summary>
+        /// Remove a Member of a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellation">Cancellation Token</param>
+        /// <param name="memberIdsToRemove">One or more Ids of Members to remove</param>
+        public async Task<Card> RemoveMembersFromCardAsync(string cardId, CancellationToken cancellation = default, params string[] memberIdsToRemove)
+        {
+            var card = await GetCardAsync(cardId, cancellation);
             var toRemove = memberIdsToRemove.Where(x => card.MemberIds.Contains(x)).ToList();
             if (toRemove.Count == 0)
             {
@@ -1141,21 +1316,22 @@ namespace TrelloDotNet
 
             //Need update
             card.MemberIds = card.MemberIds.Except(toRemove).ToList();
-            return await UpdateCardAsync(card);
+            return await UpdateCardAsync(card, cancellation);
         }
 
         /// <summary>
         /// Remove all Members of a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
-        public async Task<Card> RemoveAllMembersFromCardAsync(string cardId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task<Card> RemoveAllMembersFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            var card = await GetCardAsync(cardId);
+            var card = await GetCardAsync(cardId, cancellationToken);
             if (card.MemberIds.Any())
             {
                 //Need update
                 card.MemberIds = new List<string>();
-                return await UpdateCardAsync(card);
+                return await UpdateCardAsync(card, cancellationToken);
             }
             return card;
         }
@@ -1167,7 +1343,18 @@ namespace TrelloDotNet
         /// <param name="labelIdsToAdd">One or more Ids of Labels to add</param>
         public async Task<Card> AddLabelsToCardAsync(string cardId, params string[] labelIdsToAdd)
         {
-            var card = await GetCardAsync(cardId);
+            return await AddLabelsToCardAsync(cardId, CancellationToken.None, labelIdsToAdd);
+        }
+
+        /// <summary>
+        /// Add a Label to a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellation">Cancellation Token</param>
+        /// <param name="labelIdsToAdd">One or more Ids of Labels to add</param>
+        public async Task<Card> AddLabelsToCardAsync(string cardId, CancellationToken cancellation = default, params string[] labelIdsToAdd)
+        {
+            var card = await GetCardAsync(cardId, cancellation);
             var missing = labelIdsToAdd.Where(x => !card.LabelIds.Contains(x)).ToList();
 
             if (missing.Count == 0)
@@ -1177,7 +1364,7 @@ namespace TrelloDotNet
 
             //Need update
             card.LabelIds.AddRange(missing);
-            return await UpdateCardAsync(card);
+            return await UpdateCardAsync(card, cancellation);
         }
 
         /// <summary>
@@ -1187,7 +1374,18 @@ namespace TrelloDotNet
         /// <param name="labelIdsToRemove">One or more Ids of Labels to remove</param>
         public async Task<Card> RemoveLabelsFromCardAsync(string cardId, params string[] labelIdsToRemove)
         {
-            var card = await GetCardAsync(cardId);
+            return await RemoveLabelsFromCardAsync(cardId, CancellationToken.None, labelIdsToRemove);
+        }
+
+        /// <summary>
+        /// Remove a Label of a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="labelIdsToRemove">One or more Ids of Labels to remove</param>
+        public async Task<Card> RemoveLabelsFromCardAsync(string cardId, CancellationToken cancellationToken, params string[] labelIdsToRemove)
+        {
+            var card = await GetCardAsync(cardId, cancellationToken);
             var toRemove = labelIdsToRemove.Where(x => card.LabelIds.Contains(x)).ToList();
             if (toRemove.Count == 0)
             {
@@ -1196,21 +1394,22 @@ namespace TrelloDotNet
 
             //Need update
             card.LabelIds = card.LabelIds.Except(toRemove).ToList();
-            return await UpdateCardAsync(card);
+            return await UpdateCardAsync(card, cancellationToken);
         }
 
         /// <summary>
         /// Remove all Labels of a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
-        public async Task<Card> RemoveAllLabelsFromCardAsync(string cardId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task<Card> RemoveAllLabelsFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            var card = await GetCardAsync(cardId);
+            var card = await GetCardAsync(cardId, cancellationToken);
             if (card.LabelIds.Any())
             {
                 //Need update
                 card.LabelIds = new List<string>();
-                return await UpdateCardAsync(card);
+                return await UpdateCardAsync(card, cancellationToken);
             }
             return card;
         }
@@ -1221,12 +1420,13 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="dueDate">The Due Date (In UTC Time)</param>
         /// <param name="dueComplete">If Due is complete</param>
-        public async Task<Card> SetDueDateOnCardAsync(string cardId, DateTimeOffset dueDate, bool dueComplete = false)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task<Card> SetDueDateOnCardAsync(string cardId, DateTimeOffset dueDate, bool dueComplete = false, CancellationToken cancellationToken = default)
         {
-            var card = await GetCardAsync(cardId);
+            var card = await GetCardAsync(cardId, cancellationToken);
             card.Due = dueDate;
             card.DueComplete = dueComplete;
-            return await UpdateCardAsync(card);
+            return await UpdateCardAsync(card, cancellationToken);
         }
 
         /// <summary>
@@ -1234,11 +1434,12 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="startDate">The Start Date (In UTC Time)</param>
-        public async Task<Card> SetStartDateOnCardAsync(string cardId, DateTimeOffset startDate)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task<Card> SetStartDateOnCardAsync(string cardId, DateTimeOffset startDate, CancellationToken cancellationToken = default)
         {
-            var card = await GetCardAsync(cardId);
+            var card = await GetCardAsync(cardId, cancellationToken);
             card.Start = startDate;
-            return await UpdateCardAsync(card);
+            return await UpdateCardAsync(card, cancellationToken);
         }
 
         /// <summary>
@@ -1247,24 +1448,26 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="startDate">The Start Date (In UTC Time)</param>
         /// <param name="dueDate">The Due Date (In UTC Time)</param>
-        /// <param name="dueComplete">If Due is complete</param> 
-        public async Task<Card> SetStartDateAndDueDateOnCardAsync(string cardId, DateTimeOffset startDate, DateTimeOffset dueDate, bool dueComplete = false)
+        /// <param name="dueComplete">If Due is complete</param>
+        /// <param name="cancellationToken">Cancellation Token</param> 
+        public async Task<Card> SetStartDateAndDueDateOnCardAsync(string cardId, DateTimeOffset startDate, DateTimeOffset dueDate, bool dueComplete = false, CancellationToken cancellationToken = default)
         {
-            var card = await GetCardAsync(cardId);
+            var card = await GetCardAsync(cardId, cancellationToken);
             card.Start = startDate;
             card.Due = dueDate;
             card.DueComplete = dueComplete;
-            return await UpdateCardAsync(card);
+            return await UpdateCardAsync(card, cancellationToken);
         }
 
         /// <summary>
         /// Remove a cover from a Card
         /// </summary>
         /// <param name="cardId">Id of Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Card with the removed Cover</returns>
-        public async Task<Card> RemoveCoverFromCardAsync(string cardId)
+        public async Task<Card> RemoveCoverFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", new QueryParameter(@"cover", string.Empty));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter(@"cover", string.Empty));
         }
 
         /// <summary>
@@ -1272,13 +1475,14 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="oldUrl">The old callback URL to find</param>
         /// <param name="newUrl">The new callback URL to replace it with</param>
-        public async Task UpdateWebhookByCallbackUrlAsync(string oldUrl, string newUrl)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task UpdateWebhookByCallbackUrlAsync(string oldUrl, string newUrl, CancellationToken cancellationToken = default)
         {
-            var currentWebhooks = await GetWebhooksForCurrentTokenAsync();
+            var currentWebhooks = await GetWebhooksForCurrentTokenAsync(cancellationToken);
             foreach (var webhook in currentWebhooks.Where(x => x.CallbackUrl == oldUrl))
             {
                 webhook.CallbackUrl = newUrl;
-                await UpdateWebhookAsync(webhook);
+                await UpdateWebhookAsync(webhook, cancellationToken);
             }
         }
 
@@ -1286,19 +1490,21 @@ namespace TrelloDotNet
         /// Update the definition of a label (Name and Color)
         /// </summary>
         /// <param name="labelWithUpdates">The label with updates</param>
-        public async Task<Label> UpdateLabelAsync(Label labelWithUpdates)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task<Label> UpdateLabelAsync(Label labelWithUpdates, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Label>($"{UrlPaths.Labels}/{labelWithUpdates.Id}", _queryParametersBuilder.GetViaQueryParameterAttributes(labelWithUpdates));
+            return await _apiRequestController.Put<Label>($"{UrlPaths.Labels}/{labelWithUpdates.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(labelWithUpdates));
         }
 
         /// <summary>
         /// Get Attachments on a card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Attachments</returns>
-        public async Task<List<Attachment>> GetAttachmentsOnCardAsync(string cardId)
+        public async Task<List<Attachment>> GetAttachmentsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Attachment>>($"{UrlPaths.Cards}/{cardId}/attachments");
+            return await _apiRequestController.Get<List<Attachment>>($"{UrlPaths.Cards}/{cardId}/attachments", cancellationToken);
         }
 
         /// <summary>
@@ -1306,9 +1512,10 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="attachmentId">Id of Attachment</param>
-        public async Task DeleteAttachmentOnCardAsync(string cardId, string attachmentId)
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteAttachmentOnCardAsync(string cardId, string attachmentId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/attachments/{attachmentId}");
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/attachments/{attachmentId}", cancellationToken);
         }
 
         /// <summary>
@@ -1316,15 +1523,16 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="attachmentUrlLink">A Link Attachment</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Created Attachment</returns>
-        public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentUrlLink attachmentUrlLink)
+        public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentUrlLink attachmentUrlLink, CancellationToken cancellationToken = default)
         {
             var parameters = new List<QueryParameter> { new QueryParameter("url", attachmentUrlLink.Url) };
             if (!string.IsNullOrWhiteSpace(attachmentUrlLink.Name))
             {
                 parameters.Add(new QueryParameter("name", attachmentUrlLink.Name));
             }
-            return await _apiRequestController.Post<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", parameters.ToArray());
+            return await _apiRequestController.Post<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", cancellationToken, parameters.ToArray());
         }
 
         /// <summary>
@@ -1333,8 +1541,9 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="attachmentFileUpload">A Link Attachment</param>
         /// <param name="setAsCover">Make this attachment the cover of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Created Attachment</returns>
-        public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentFileUpload attachmentFileUpload, bool setAsCover = false)
+        public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentFileUpload attachmentFileUpload, bool setAsCover = false, CancellationToken cancellationToken = default)
         {
             var parameters = new List<QueryParameter>();
             if (!string.IsNullOrWhiteSpace(attachmentFileUpload.Name))
@@ -1345,47 +1554,50 @@ namespace TrelloDotNet
             {
                 parameters.Add(new QueryParameter("setCover", "true"));
             }
-            return await _apiRequestController.PostWithAttachmentFileUpload<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", attachmentFileUpload, parameters.ToArray());
+            return await _apiRequestController.PostWithAttachmentFileUpload<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", attachmentFileUpload, cancellationToken, parameters.ToArray());
         }
 
         /// <summary>
         /// Add a new label to the Board (Not to be confused with 'AddLabelsToCardAsync' that assign labels to cards)
         /// </summary>
         /// <param name="label">Definition of the new label</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The newly created label</returns>
-        public async Task<Label> AddLabelAsync(Label label)
+        public async Task<Label> AddLabelAsync(Label label, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Post<Label>($"{UrlPaths.Labels}", _queryParametersBuilder.GetViaQueryParameterAttributes(label));
+            return await _apiRequestController.Post<Label>($"{UrlPaths.Labels}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(label));
         }
 
         /// <summary>
         /// Get the Boards that the specified member have access to
         /// </summary>
         /// <param name="memberId">Id of the Member to find boards for</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Active Boards there is access to</returns>
-        public async Task<List<Board>> GetBoardsForMemberAsync(string memberId)
+        public async Task<List<Board>> GetBoardsForMemberAsync(string memberId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Members}/{memberId}/boards");
+            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Members}/{memberId}/boards", cancellationToken);
         }
 
         /// <summary>
         /// Get the Boards that the token provided to the TrelloClient can Access
         /// </summary>
         /// <returns>The Active Boards there is access to</returns>
-        public async Task<List<Board>> GetBoardsCurrentTokenCanAccessAsync()
+        public async Task<List<Board>> GetBoardsCurrentTokenCanAccessAsync(CancellationToken cancellationToken = default)
         {
-            var tokenMember = await GetTokenMemberAsync();
-            return await GetBoardsForMemberAsync(tokenMember.Id);
+            var tokenMember = await GetTokenMemberAsync(cancellationToken);
+            return await GetBoardsForMemberAsync(tokenMember.Id, cancellationToken);
         }
 
         /// <summary>
         /// The Membership Information for a board (aka if Users are Admin, Normal or Observer)
         /// </summary>
         /// <param name="boardId">Id of the Board that you wish information on</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The List of Memberships</returns>
-        public async Task<List<Membership>> GetMembershipsOfBoardAsync(string boardId)
+        public async Task<List<Membership>> GetMembershipsOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Membership>>($"{UrlPaths.Boards}/{boardId}/memberships");
+            return await _apiRequestController.Get<List<Membership>>($"{UrlPaths.Boards}/{boardId}/memberships", cancellationToken);
         }
 
         /// <summary>
@@ -1394,10 +1606,11 @@ namespace TrelloDotNet
         /// <param name="boardId">The Id of the Board</param>
         /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes)</param>
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, List<string> filter = null, int limit = 50)
+        public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
-            return await GetActionsFromSuffix($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Actions}", filter, limit);
+            return await GetActionsFromSuffix($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
         }
 
         /// <summary>
@@ -1409,37 +1622,40 @@ namespace TrelloDotNet
         /// <param name="cardId">The Id of the Card</param>
         /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes). Default: 'commentCard, updateCard:idList' (aka 'Move Card To List' and 'Add Comment')</param>
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        public async Task<List<TrelloAction>> GetActionsOnCardAsync(string cardId, List<string> filter = null, int limit = 50)
+        public async Task<List<TrelloAction>> GetActionsOnCardAsync(string cardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
-            return await GetActionsFromSuffix($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Actions}", filter, limit);
+            return await GetActionsFromSuffix($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
         }
-        
+
         /// <summary>
         /// Get the most recent Actions (Changelog Events) for a List
         /// </summary>
         /// <param name="listId">The Id of the List</param>
         /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes)</param>
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        public async Task<List<TrelloAction>> GetActionsForListAsync(string listId, List<string> filter = null, int limit = 50)
+        public async Task<List<TrelloAction>> GetActionsForListAsync(string listId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
-            return await GetActionsFromSuffix($"{UrlPaths.Lists}/{listId}/{UrlPaths.Actions}", filter, limit);
+            return await GetActionsFromSuffix($"{UrlPaths.Lists}/{listId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
         }
-        
+
         /// <summary>
         /// Get the most recent Actions (Changelog Events) for a Member
         /// </summary>
         /// <param name="memberId">The Id of the Member</param>
         /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes)</param>
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        public async Task<List<TrelloAction>> GetActionsForMemberAsync(string memberId, List<string> filter = null, int limit = 50)
+        public async Task<List<TrelloAction>> GetActionsForMemberAsync(string memberId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
-            return await GetActionsFromSuffix($"{UrlPaths.Members}/{memberId}/{UrlPaths.Actions}", filter, limit);
+            return await GetActionsFromSuffix($"{UrlPaths.Members}/{memberId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
         }
-        
-        private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, List<string> filter, int limit)
+
+        private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, List<string> filter, int limit, CancellationToken cancellationToken = default)
         {
             var parameters = new List<QueryParameter>();
             if (filter != null)
@@ -1452,7 +1668,7 @@ namespace TrelloDotNet
                 parameters.Add(new QueryParameter("limit", limit));
             }
 
-            return await _apiRequestController.Get<List<TrelloAction>>(suffix, parameters.ToArray());
+            return await _apiRequestController.Get<List<TrelloAction>>(suffix, cancellationToken, parameters.ToArray());
         }
     }
 }

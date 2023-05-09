@@ -1,7 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using TrelloDotNet.Control;
-using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.Model.Actions
 {

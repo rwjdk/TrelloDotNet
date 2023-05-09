@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TrelloDotNet.Model.Webhook
@@ -25,10 +26,11 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// Get the Full Checklist Object
         /// </summary>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Checklist</returns>
-        public async Task<Checklist> GetAsync()
+        public async Task<Checklist> GetAsync(CancellationToken cancellationToken = default)
         {
-            return await Parent.Parent.TrelloClient.GetChecklistAsync(Id);
+            return await Parent.Parent.TrelloClient.GetChecklistAsync(Id, cancellationToken);
         }
 
         /// <summary>

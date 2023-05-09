@@ -1,9 +1,7 @@
-﻿using Microsoft.VisualStudio.TestPlatform.Utilities;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -22,7 +20,7 @@ public class CardTests : TestBaseWithNewBoard
         try
         {
             int step = 1;
-            int totalSteps = 17;
+            const int totalSteps = 17;
             WaitToAvoidRateLimits();
             await CreateNewBoard();
             var member = (await TrelloClient.GetMembersOfBoardAsync(BoardId)).First();

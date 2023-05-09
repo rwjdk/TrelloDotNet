@@ -1,5 +1,4 @@
-﻿using TrelloDotNet.Model.Webhook;
-using Xunit.Abstractions;
+﻿using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests
 {
@@ -116,26 +115,6 @@ namespace TrelloDotNet.Tests
             }*/
         }
 
-
-        private async Task MindlessApiWork()
-        {
-            try
-            {
-                for (int i = 0; i < 150; i++)
-                {
-                    const string boardId = "63e1096da4ecf28dcb763ba9";
-                    _output.WriteLine(i.ToString());
-                    var board = await TrelloClient.GetBoardAsync(boardId);
-                }
-            }
-            catch (Exception e)
-            {
-                _output.WriteLine(e.Message);
-                throw;
-            }
-
-        }
-
         [FactManualOnly]
         public async Task PlaygroundTest()
         {
@@ -146,103 +125,6 @@ namespace TrelloDotNet.Tests
             var cardId = "63c939a5cea0cb006dc9e9dd";
             var listId = "63c939a5cea0cb006dc9e89d";
             var memberId = "63d1239e857afaa8b003c633";*/
-            /*
-            var t1 = await Task.Factory.StartNew(async () => await MindlessApiWork());
-            var t2 = await Task.Factory.StartNew(async () => await MindlessApiWork());
-            var t3 = await Task.Factory.StartNew(async () => await MindlessApiWork());
-
-            Task.WaitAll(t1, t2, t3);
-            */
-            /*
-            TrelloClient.Options.IncludeAttachmentsInCardGetMethods = true;
-
-            string boardId = "czwRjhWF";
-            boardId = "63e1096da4ecf28dcb763ba9";
-
-            var labelsOfBoardAsync = await TrelloClient.GetLabelsOfBoardAsync(boardId);
-
-            Label label = await TrelloClient.AddLabelAsync(new Label(boardId, name: "Mine!!!", color: "blue"));
-
-            //await TrelloClient.DeleteLabelAsync(labelsOfBoardAsync[0].Id);
-
-
-            var cardId = "63fb5126051edb121d91b4aa";
-
-            var card = await TrelloClient.GetCardAsync(cardId);
-            card.Cover = new CardCover(CardCoverColor.Blue, CardCoverSize.Normal);
-            card.AttachmentCover = null;
-            var updateCardAsync = await TrelloClient.UpdateCardAsync(card);
-
-            updateCardAsync.Cover = null;
-            updateCardAsync.AttachmentCover = card.Attachments[0].Id;
-
-            var updateCardAsync2 = await TrelloClient.UpdateCardAsync(updateCardAsync);
-            //var updateCardAsync2 = await TrelloClient.UpdateCardAsync(updateCardAsync);
-
-            int debug = 0;
-
-            /*
-            await TrelloClient.AddAttachmentToCardAsync(cardId, new AttachmentFileUpload(File.OpenRead(@"C:\Users\rasmu\OneDrive\Pictures\workout.png"), "MyFile.png", "my attachment name"), true);
-
-            //var addAttachmentToCardAsync = await TrelloClient.AddAttachmentToCardAsync(cardId, new AttachmentUrlLink("https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png", "My Link Attachment"));
-
-            List<Attachment> att = await TrelloClient.GetAttachmentsOnCardAsync(cardId);
-
-            //await TrelloClient.DeleteAttachmentOnCardAsync(cardId, addAttachmentToCardAsync.Id);
-            */
-
-
-            /*            
-            var cardId = "63e216e15baa8f45ae87948b";
-            var boardId = "63e1096da4ecf28dcb763ba9";
-
-            //var card = await TrelloClient.GetCardAsync(cardId);
-
-            var addCoverToCardAsync = await TrelloClient.AddCoverToCardAsync(cardId, new CardCover(CardCoverColor.Orange, CardCoverSize.Normal));
-
-            var uaddCoverToCardAsync = await TrelloClient.UpdateCoverOnCardAsync(cardId, new CardCover(CardCoverColor.Blue, CardCoverSize.Full));
-
-            //card.Cover = new CardCover(CardCoverColor.Orange, CardCoverSize.Full);
-            //card.Cover.Color = CardCoverColor.Green;
-            //card.Cover.Size = CardCoverSize.Normal;
-            //card.Cover.Brightness = CardCoverBrightness.Dark;
-            //card.Cover.BackgroundImageId = "6425aff85c2e0abab405e043";
-            //await TrelloClient.UpdateCardAsync(card);
-
-
-            //var removeCoverFromCardAsync = await TrelloClient.RemoveCoverFromCardAsync(cardId);
-
-            int debug = 0;
-
-            //var cards = await TrelloClient.GetCardsOnBoardAsync(boardId);
-            /*
-            var addStickerToCard = await TrelloClient.AddStickerToCardAsync(cardId, new Sticker(StickerDefaultImageId.Clock, 20, 10, 0, 45));
-
-            var stickerAsync = await TrelloClient.GetStickerAsync(cardId, addStickerToCard.Id);
-
-            stickerAsync.Left = 50;
-            var u = await TrelloClient.UpdateStickerAsync(cardId, stickerAsync);
-
-            var stickersOnCard = await TrelloClient.GetStickersOnCardAsync(cardId);
-
-            foreach (var s in stickersOnCard)
-            {
-                await TrelloClient.DeleteStickerAsync(cardId, s.Id);
-            }*/
-
-            /*
-            for (int i = 0; i < 50; i++)
-            {
-              var comment = await TrelloClient.AddCommentAsync(cardId, new Comment("My first cool comment! @rasmus58348007 mention"));
-            }*/
-
-            //comment.Data.Text = "New text!";
-            //var commentAction = await TrelloClient.UpdateCommentActionAsync(comment);
-
-            //var commentsOnCardAsync = await TrelloClient.GetAllCommentsOnCardAsync(cardId);
-            //var commentsOnCardAsync2 = await TrelloClient.GetPagedCommentsOnCardAsync(cardId, page: 1);
-            //var commentsOnCardAsync3 = await TrelloClient.GetPagedCommentsOnCardAsync(cardId, page: 2);
-            //var commentsOnCardAsync4 = await TrelloClient.GetPagedCommentsOnCardAsync(cardId, page: 3);
         }
     }
 }

@@ -334,7 +334,7 @@ public class ConditionTests : TestBaseWithNewBoard
         Assert.False(await condition.IsConditionMetAsync(webhookAction));
         Assert.False(await condition.IsConditionMetAsync(webhookActionNoCard));
 
-        var checklist = await TrelloClient.AddChecklistAsync(card.Id, new Checklist(checklistNameToCheck, new List<ChecklistItem> { new ChecklistItem("Item A"), new ChecklistItem("Item B") }));
+        var checklist = await TrelloClient.AddChecklistAsync(card.Id, new Checklist(checklistNameToCheck, new List<ChecklistItem> { new("Item A"), new("Item B") }));
         Assert.True(await condition.IsConditionMetAsync(webhookAction));
 
         checklist.Items[0].State = ChecklistItemState.Complete;
@@ -354,7 +354,7 @@ public class ConditionTests : TestBaseWithNewBoard
         await TrelloClient.AddChecklistAsync(card.Id, new Checklist("CheckList1"));
         Assert.False(await condition.IsConditionMetAsync(webhookAction));
 
-        var checklist = await TrelloClient.AddChecklistAsync(card.Id, new Checklist("CheckList2", new List<ChecklistItem> { new ChecklistItem("Item A"), new ChecklistItem("Item B") }));
+        var checklist = await TrelloClient.AddChecklistAsync(card.Id, new Checklist("CheckList2", new List<ChecklistItem> { new("Item A"), new("Item B") }));
         Assert.True(await condition.IsConditionMetAsync(webhookAction));
 
         checklist.Items[0].State = ChecklistItemState.Complete;

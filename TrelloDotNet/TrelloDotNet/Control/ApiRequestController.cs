@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Model;
 
@@ -28,17 +29,17 @@ namespace TrelloDotNet.Control
 
         public string Token => _token;
 
-        internal async Task<T> Get<T>(string suffix, params QueryParameter[] parameters)
+        internal async Task<T> Get<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
-            string json = await Get(suffix, parameters);
+            string json = await Get(suffix, cancellationToken, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<string> Get(string suffix, params QueryParameter[] parameters)
+        internal async Task<string> Get(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.GetAsync(uri);
+            var response = await _httpClient.GetAsync(uri, cancellationToken);
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -47,27 +48,27 @@ namespace TrelloDotNet.Control
             return content; //Content is assumed JSON
         }
 
-        internal async Task<T> Post<T>(string suffix, params QueryParameter[] parameters)
+        internal async Task<T> Post<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
-            string json = await Post(suffix, parameters);
+            string json = await Post(suffix, cancellationToken, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<T> PostWithAttachmentFileUpload<T>(string suffix, AttachmentFileUpload attachmentFile, params QueryParameter[] parameters)
+        internal async Task<T> PostWithAttachmentFileUpload<T>(string suffix, AttachmentFileUpload attachmentFile, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
-            string json = await PostWithAttachmentFileUpload(suffix, attachmentFile, parameters);
+            string json = await PostWithAttachmentFileUpload(suffix, attachmentFile, cancellationToken, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<string> PostWithAttachmentFileUpload(string suffix, AttachmentFileUpload attachmentFile, params QueryParameter[] parameters)
+        internal async Task<string> PostWithAttachmentFileUpload(string suffix, AttachmentFileUpload attachmentFile, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             using (var multipartFormContent = new MultipartFormDataContent())
             {
                 multipartFormContent.Add(new StreamContent(attachmentFile.Stream), name: @"file", fileName: attachmentFile.Filename);
-                var response = await _httpClient.PostAsync(uri, multipartFormContent);
+                var response = await _httpClient.PostAsync(uri, multipartFormContent, cancellationToken);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -77,10 +78,10 @@ namespace TrelloDotNet.Control
             }
         }
 
-        internal async Task<string> Post(string suffix, params QueryParameter[] parameters)
+        internal async Task<string> Post(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.PostAsync(uri, null);
+            var response = await _httpClient.PostAsync(uri, null, cancellationToken);
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -89,17 +90,17 @@ namespace TrelloDotNet.Control
             return content; //Content is assumed JSON
         }
 
-        internal async Task<T> Put<T>(string suffix, params QueryParameter[] parameters)
+        internal async Task<T> Put<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
-            string json = await Put(suffix, parameters);
+            string json = await Put(suffix, cancellationToken, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<string> Put(string suffix, params QueryParameter[] parameters)
+        internal async Task<string> Put(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.PutAsync(uri, null);
+            var response = await _httpClient.PutAsync(uri, null, cancellationToken);
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -108,17 +109,17 @@ namespace TrelloDotNet.Control
             return content; //Content is assumed JSON
         }
 
-        internal async Task<T> PutWithJsonPayload<T>(string suffix, string payload, params QueryParameter[] parameters)
+        internal async Task<T> PutWithJsonPayload<T>(string suffix, CancellationToken cancellationToken, string payload, params QueryParameter[] parameters)
         {
-            string json = await PutWithJsonPayload(suffix, payload, parameters);
+            string json = await PutWithJsonPayload(suffix, cancellationToken, payload, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<string> PutWithJsonPayload(string suffix, string payload, params QueryParameter[] parameters)
+        internal async Task<string> PutWithJsonPayload(string suffix, CancellationToken cancellationToken, string payload, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.PutAsync(uri, new StringContent(payload, Encoding.UTF8, "application/json"));
+            var response = await _httpClient.PutAsync(uri, new StringContent(payload, Encoding.UTF8, "application/json"), cancellationToken);
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -159,10 +160,10 @@ namespace TrelloDotNet.Control
             return new Uri($@"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
         }
 
-        internal async Task Delete(string suffix)
+        internal async Task Delete(string suffix, CancellationToken cancellationToken)
         {
             var uri = BuildUri(suffix);
-            var response = await _httpClient.DeleteAsync(uri);
+            var response = await _httpClient.DeleteAsync(uri, cancellationToken);
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {

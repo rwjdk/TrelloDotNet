@@ -1,11 +1,9 @@
-﻿using System;
-using TrelloDotNet.AutomationEngine.Interface;
+﻿using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.AutomationEngine.Model;
 using TrelloDotNet.AutomationEngine.Model.Actions;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Webhook;
 using Xunit.Abstractions;
-using static System.Collections.Specialized.BitVector32;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests.ActionTests;
 

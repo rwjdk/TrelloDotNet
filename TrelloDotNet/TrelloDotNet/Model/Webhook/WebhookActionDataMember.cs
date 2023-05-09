@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TrelloDotNet.Model.Webhook
@@ -25,10 +26,11 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// Get the Full Member Object
         /// </summary>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Member</returns>
-        public async Task<Member> GetAsync()
+        public async Task<Member> GetAsync(CancellationToken cancellationToken = default)
         {
-            return await Parent.Parent.TrelloClient.GetMemberAsync(Id);
+            return await Parent.Parent.TrelloClient.GetMemberAsync(Id, cancellationToken);
         }
 
         /// <summary>

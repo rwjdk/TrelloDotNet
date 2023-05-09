@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Model;
 
@@ -33,9 +34,11 @@ namespace TrelloDotNet.AutomationEngine
         /// Process raw JSON from a Trello Webhook against the provided set of Automations in the configuration
         /// </summary>
         /// <param name="request">The processing request (with the JSON)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<ProcessingResult> ProcessJsonFromWebhookAsync(ProcessingRequest request)
+        public async Task<ProcessingResult> ProcessJsonFromWebhookAsync(ProcessingRequest request, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var data = _receiver.ConvertJsonToWebhookNotification(request.JsonFromWebhook);
             var webhookAction = data.Action;
             var result = new ProcessingResult();
@@ -44,6 +47,7 @@ namespace TrelloDotNet.AutomationEngine
             {
                 try
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     if (!await automation.Trigger.IsTriggerMetAsync(webhookAction))
                     {
                         result.AddToLog($"Automation '{automation.Name}' was not processed as trigger was not met");
@@ -63,6 +67,7 @@ namespace TrelloDotNet.AutomationEngine
                     {
                         try
                         {
+                            cancellationToken.ThrowIfCancellationRequested();
                             if (!await x.IsConditionMetAsync(webhookAction))
                             {
                                 conditionsMet = false;
@@ -84,6 +89,7 @@ namespace TrelloDotNet.AutomationEngine
                     {
                         try
                         {
+                            cancellationToken.ThrowIfCancellationRequested();
                             await actionAction.PerformActionAsync(webhookAction, result);
                         }
                         catch (Exception e)

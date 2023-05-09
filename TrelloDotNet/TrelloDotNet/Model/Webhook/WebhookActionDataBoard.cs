@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TrelloDotNet.Model.Webhook
@@ -31,11 +32,12 @@ namespace TrelloDotNet.Model.Webhook
 
         /// <summary>
         /// Get the Full Board Object
-        /// </summary>
-        /// <returns></returns>
-        public async Task<Board> GetAsync()
+        ///  </summary>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Board</returns>
+        public async Task<Board> GetAsync(CancellationToken cancellationToken = default)
         {
-            return await Parent.Parent.TrelloClient.GetBoardAsync(Id);
+            return await Parent.Parent.TrelloClient.GetBoardAsync(Id, cancellationToken);
         }
 
         /// <summary>

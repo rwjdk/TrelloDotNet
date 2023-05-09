@@ -6,6 +6,8 @@
 - Added 'GetActionsOnCardAsync'
 - Added 'GetActionsForListAsync'
 - Added 'GetActionsForMemberAsync'
+- Added option to pass Cancellation Tokens to the API
+- Added 'AddCommentToCardAction' for the Automation-engine
 
 <hr>
 

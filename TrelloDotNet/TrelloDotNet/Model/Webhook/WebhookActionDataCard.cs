@@ -2,7 +2,7 @@
 using System;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using TrelloDotNet.Model.Actions;
+using System.Threading;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -108,14 +108,15 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("cover")]
         [JsonInclude]
         public CardCover Cover { get; private set; }
-        
+
         /// <summary>
         /// Get the Full Card Object
         /// </summary>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Card</returns>
-        public async Task<Card> GetAsync()
+        public async Task<Card> GetAsync(CancellationToken cancellationToken = default)
         {
-            return await Parent.Parent.TrelloClient.GetCardAsync(Id);
+            return await Parent.Parent.TrelloClient.GetCardAsync(Id, cancellationToken);
         }
 
         /// <summary>
