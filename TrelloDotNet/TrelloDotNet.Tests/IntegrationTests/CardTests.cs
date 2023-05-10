@@ -294,7 +294,7 @@ public class CardTests : TestBaseWithNewBoard
         //Test: Set dates
         WaitToAvoidRateLimits();
         var cardWithDates = await TrelloClient.AddCardAsync(new Card(cardList.Id, "Date Card"));
-        DateTimeOffset testStartDate = new DateTimeOffset(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc));
+        DateTimeOffset testStartDate = new(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc));
         var testDueDate = testStartDate.AddDays(2);
 
         WaitToAvoidRateLimits();

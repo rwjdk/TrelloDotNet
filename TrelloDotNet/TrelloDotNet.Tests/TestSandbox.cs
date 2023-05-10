@@ -1,4 +1,5 @@
-﻿using Xunit.Abstractions;
+﻿using TrelloDotNet.Model;
+using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests
 {
@@ -120,6 +121,18 @@ namespace TrelloDotNet.Tests
         {
             _output.WriteLine("Hello");
             await Task.CompletedTask;
+            var boardId = "63c939a5cea0cb006dc9e88b";
+            var memberIdRealRWJ = "63c14bd0466af2001c308467";
+
+            //await TrelloClient.AddMemberToBoardAsync(boardId, memberIdRealRWJ, MembershipType.Admin);
+
+            List<Membership>? membershipsOfBoardAsync = await TrelloClient.GetMembershipsOfBoardAsync(boardId);
+
+            await TrelloClient.UpdateMembershipTypeOfMemberOnBoardAsync(boardId, membershipsOfBoardAsync.First(x=> x.MemberId == memberIdRealRWJ).Id, MembershipType.Normal);
+
+            //await TrelloClient.RemoveMemberFromBoardAsync(boardId, memberIdRealRWJ);
+
+            //await TrelloClient.InviteMemberToBoardViaEmailAsync(boardId, "mail@rwj.dk", MembershipType.Admin);
             /*
             var boardId = "63c939a5cea0cb006dc9e88b";
             var cardId = "63c939a5cea0cb006dc9e9dd";

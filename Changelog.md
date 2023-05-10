@@ -10,6 +10,10 @@
 - Added 'AddCommentToCardAction' for the Automation-engine
 - Automation Action 'AddChecklistToCardAction' now have the option to add Items to existing Checklists with same name (Example two Definition of Done Automations for two different labels add their items to a single Checklist)
 - Added a 'StopProcessingFurtherAction' to the automation-engine that allow you to conditionally stop any further processing for the specifc webhook call.
+- Added 'GetCardsForMemberAsync'
+- Added 'AddMemberToBoardAsync'
+- Added 'RemoveMemberFromBoardAsync'
+- Added 'UpdateMembershipTypeOfMemberOnBoardAsync'
 
 <hr>
 

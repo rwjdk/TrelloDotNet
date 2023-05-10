@@ -1,0 +1,74 @@
+﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using TrelloDotNet.Model;
+
+namespace TrelloDotNet
+{
+    public partial class TrelloClient
+    {
+        /// <summary>
+        /// Get Attachments on a card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Attachments</returns>
+        public async Task<List<Attachment>> GetAttachmentsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Attachment>>($"{UrlPaths.Cards}/{cardId}/attachments", cancellationToken);
+        }
+
+        /// <summary>
+        /// Delete an Attachments on a card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="attachmentId">Id of Attachment</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteAttachmentOnCardAsync(string cardId, string attachmentId, CancellationToken cancellationToken = default)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/attachments/{attachmentId}", cancellationToken);
+        }
+
+        /// <summary>
+        /// Add an Attachment to a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="attachmentUrlLink">A Link Attachment</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Created Attachment</returns>
+        public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentUrlLink attachmentUrlLink, CancellationToken cancellationToken = default)
+        {
+            var parameters = new List<QueryParameter> { new QueryParameter("url", attachmentUrlLink.Url) };
+            if (!string.IsNullOrWhiteSpace(attachmentUrlLink.Name))
+            {
+                parameters.Add(new QueryParameter("name", attachmentUrlLink.Name));
+            }
+
+            return await _apiRequestController.Post<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", cancellationToken, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Add an Attachment to a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="attachmentFileUpload">A Link Attachment</param>
+        /// <param name="setAsCover">Make this attachment the cover of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Created Attachment</returns>
+        public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentFileUpload attachmentFileUpload, bool setAsCover = false, CancellationToken cancellationToken = default)
+        {
+            var parameters = new List<QueryParameter>();
+            if (!string.IsNullOrWhiteSpace(attachmentFileUpload.Name))
+            {
+                parameters.Add(new QueryParameter("name", attachmentFileUpload.Name));
+            }
+
+            if (setAsCover)
+            {
+                parameters.Add(new QueryParameter("setCover", "true"));
+            }
+
+            return await _apiRequestController.PostWithAttachmentFileUpload<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", attachmentFileUpload, cancellationToken, parameters.ToArray());
+        }
+    }
+}
