@@ -107,6 +107,20 @@ namespace TrelloDotNet.Model.Webhook
         [JsonInclude]
         public string AttachmentCover { get; private set; }
 
+        /// <summary>
+        /// Display Name of the Organization
+        /// </summary>
+        [JsonPropertyName("displayName")]
+        [JsonInclude]
+        public string DisplayName { get; private set; }
+
+        /// <summary>
+        /// Website of the Organization
+        /// </summary>
+        [JsonPropertyName("website")]
+        [JsonInclude]
+        public string Website { get; private set; }
+
         internal static WebhookActionDataOld CreateDummy()
         {
             return new WebhookActionDataOld()

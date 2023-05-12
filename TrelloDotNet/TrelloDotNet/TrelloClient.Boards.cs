@@ -111,5 +111,16 @@ namespace TrelloDotNet
             var tokenMember = await GetTokenMemberAsync(cancellationToken);
             return await GetBoardsForMemberAsync(tokenMember.Id, cancellationToken);
         }
+
+        /// <summary>
+        /// Get the Boards in an Organization
+        /// </summary>
+        /// <param name="organizationId">Id of the Organization</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Active Boards in the Organization</returns>
+        public async Task<List<Board>> GetBoardsInOrganization(string organizationId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Boards}", cancellationToken);
+        }
     }
 }

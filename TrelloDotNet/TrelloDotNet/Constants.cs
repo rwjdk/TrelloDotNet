@@ -56,5 +56,10 @@
         /// customFieldItems
         /// </summary>
         public const string CustomFieldItems = "customFieldItems";
+
+        /// <summary>
+        /// organizations
+        /// </summary>
+        public const string Organizations = "organizations";
     }
 }

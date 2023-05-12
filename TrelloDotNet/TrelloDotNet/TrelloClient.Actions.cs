@@ -63,6 +63,19 @@ namespace TrelloDotNet
             return await GetActionsFromSuffix($"{UrlPaths.Members}/{memberId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
         }
 
+        /// <summary>
+        /// Get the most recent Actions (Changelog Events) for an Organization
+        /// </summary>
+        /// <param name="organizationId">The Id of the Organization</param>
+        /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes)</param>
+        /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of most Recent Trello Actions</returns>
+        public async Task<List<TrelloAction>> GetActionsForOrganizationsAsync(string organizationId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
+        {
+            return await GetActionsFromSuffix($"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
+        }
+
         private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, List<string> filter, int limit, CancellationToken cancellationToken = default)
         {
             var parameters = new List<QueryParameter>();
@@ -78,5 +91,6 @@ namespace TrelloDotNet
 
             return await _apiRequestController.Get<List<TrelloAction>>(suffix, cancellationToken, parameters.ToArray());
         }
+
     }
 }

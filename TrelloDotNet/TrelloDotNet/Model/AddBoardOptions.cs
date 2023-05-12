@@ -22,7 +22,7 @@ namespace TrelloDotNet.Model
         public bool DefaultLists { get; set; } = true;
 
         /// <summary>
-        /// The id or name of the Workspace the board should belong to.
+        /// The id or name of the Workspace (Organization) the board should belong to.
         /// </summary>
         [JsonPropertyName("idOrganization")]
         [QueryParameter(false)]

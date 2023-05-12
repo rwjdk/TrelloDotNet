@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Net.Http;
-using System.Security;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
-using TrelloDotNet.Model.Actions;
-using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet
 {
@@ -23,7 +15,6 @@ namespace TrelloDotNet
         //todo: Management
         //- Manage Custom Fields on board (CRUD)
         //- Batch-system (why???) [https://developer.atlassian.com/cloud/trello/rest/api-group-batch/#api-batch-get]
-        //- Organizations (Work spaces)
 
         /// <summary>
         /// Options for the client
@@ -71,4 +62,5 @@ namespace TrelloDotNet
         {
             return await _apiRequestController.Get<TokenInformation>($"{UrlPaths.Tokens}/{_apiRequestController.Token}", cancellationToken);
         }
-    } }
+    }
+}

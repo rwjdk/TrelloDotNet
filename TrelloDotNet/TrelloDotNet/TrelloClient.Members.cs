@@ -169,5 +169,16 @@ namespace TrelloDotNet
         {
             return await _apiRequestController.Get<Member>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/member", cancellationToken);
         }
+
+        /// <summary>
+        /// Get the Members (users) of an Organization
+        /// </summary>
+        /// <param name="organizationId">Id of the Organization</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Members</returns>
+        public async Task<List<Member>> GetMembersOfOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Members}/", cancellationToken);
+        }
     }
 }

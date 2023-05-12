@@ -1,11 +1,12 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## Unreleased
+## 1.6.0 (12th of May 2023)
 - Added `GetActionsOfBoardAsync`
 - Added `GetActionsOnCardAsync`
 - Added `GetActionsForListAsync`
 - Added `GetActionsForMemberAsync`
+- Added `GetActionsForOrganizationAsync`
 - Added option to pass Cancellation Tokens to the API
 - Added `AddCommentToCardAction` for the Automation-engine
 - Automation Action `AddChecklistToCardAction` now have the option to add Items to existing Checklists with same name (Example two Definition of Done Automations for two different labels add their items to a single Checklist)
@@ -14,6 +15,9 @@
 - Added `AddMemberToBoardAsync`
 - Added `RemoveMemberFromBoardAsync`
 - Added `UpdateMembershipTypeOfMemberOnBoardAsync`
+- Added support for `Organizations` CRUD (also know as Workspaces)
+- Added `GetBoardsInOrganization` 
+- Added `GetMembersOfOrganizationAsync`
 
 <hr>
 
