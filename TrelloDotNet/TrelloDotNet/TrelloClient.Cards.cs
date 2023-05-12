@@ -110,7 +110,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get Card by its Id
+        /// Get a Card by its Id
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
