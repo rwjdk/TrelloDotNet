@@ -68,7 +68,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// The Lists on board based on their status
+        /// Get Lists on board based on their status
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
         /// <param name="filter">The Selected Filter</param>
@@ -80,7 +80,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get a specific List (Column) based on it's Id
+        /// Get a specific List (Column) based on its Id
         /// </summary>
         /// <param name="listId">Id of the List</param>
         /// <param name="cancellationToken">Cancellation Token</param>

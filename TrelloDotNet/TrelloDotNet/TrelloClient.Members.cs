@@ -162,7 +162,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get information about the Member that own the token used by this TrelloClient
+        /// Get information about the Member that owns the token used by this TrelloClient
         /// </summary>
         /// <returns>The Member</returns>
         public async Task<Member> GetTokenMemberAsync(CancellationToken cancellationToken = default)

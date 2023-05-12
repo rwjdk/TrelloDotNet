@@ -16,12 +16,12 @@
         public bool AllowDeleteOfBoards { get; set; }
 
         /// <summary>
-        /// Control if cards should retrieve Custom Fields when retrieving cards (WARNING: Non Get-Methods returning Card will NOT include Custom fields)
+        /// Control if cards should retrieve Custom Fields when retrieving cards (WARNING: Non-Get-Methods returning Card will NOT include Custom fields)
         /// </summary>
         public bool IncludeCustomFieldsInCardGetMethods { get; set; }
 
         /// <summary>
-        /// Control if cards should retrieve Attachments when retrieving cards (WARNING: Non Get-Methods returning Card will NOT include Attachments)
+        /// Control if cards should retrieve Attachments when retrieving cards (WARNING: Non-Get-Methods returning Card will NOT include Attachments)
         /// </summary>
         public bool IncludeAttachmentsInCardGetMethods { get; set; }
 

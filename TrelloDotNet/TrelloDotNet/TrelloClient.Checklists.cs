@@ -115,7 +115,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get list of Checklists that are used on cards on a specific Board
+        /// Get a list of Checklists that are used on cards on a specific Board
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
@@ -126,7 +126,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get list of Checklists that are used on a specific card
+        /// Get a list of Checklists that are used on a specific card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
@@ -137,7 +137,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Delete a Checklist (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// Delete a Checklist (WARNING: THERE IS NO WAY GOING BACK!!!)
         /// </summary>
         /// <param name="checklistId">The id of the Checklist to Delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>

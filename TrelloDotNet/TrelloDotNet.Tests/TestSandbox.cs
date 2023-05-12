@@ -1,4 +1,5 @@
-﻿using Xunit.Abstractions;
+﻿using TrelloDotNet.Model;
+using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests
 {
@@ -120,6 +121,9 @@ namespace TrelloDotNet.Tests
         {
             _output.WriteLine("PlaygroundTest");
             await Task.CompletedTask;
+
+            TrelloClientOptions
+
             /*
             var boardId = "63c939a5cea0cb006dc9e88b";
             var cardId = "63c939a5cea0cb006dc9e9dd";

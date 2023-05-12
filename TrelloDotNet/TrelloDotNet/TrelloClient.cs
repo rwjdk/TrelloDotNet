@@ -30,7 +30,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="apiKey">The Trello API Key you get on https://trello.com/power-ups/admin/</param>
         /// <param name="token">Your Authorization Token you generate get on https://trello.com/power-ups/admin/</param>
-        /// <param name="options">Various option for the client (if null default options will be used)</param>
+        /// <param name="options">Various options for the client (if null default options will be used)</param>
         /// <param name="httpClient">Optional HTTP Client if you wish to specify it on your own (else an internal static HttpClient will be used for re-use)</param>
         public TrelloClient(string apiKey, string token, TrelloClientOptions options = null, HttpClient httpClient = null)
         {

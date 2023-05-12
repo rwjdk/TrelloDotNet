@@ -150,7 +150,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// The cards on board based on their status regardless if they are on archived lists
+        /// Get the cards on board based on their status regardless if they are on archived lists
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
         /// <param name="filter">The Selected Filter</param>
@@ -175,7 +175,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Set Due Date on a card a Card
+        /// Set Due Date on a card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="dueDate">The Due Date (In UTC Time)</param>
@@ -190,7 +190,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Set Due Date on a card a Card
+        /// Set Due Date on a card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="startDate">The Start Date (In UTC Time)</param>
@@ -203,7 +203,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Set Start and Due Date on a card a Card
+        /// Set Start and Due Date on a card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="startDate">The Start Date (In UTC Time)</param>

@@ -7,7 +7,7 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Custom Post Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on you class to match Json Properties
+        /// Custom Post Method to be used on unexposed features of the API. Please use System.Text.Json.Serialization.JsonPropertyName on your class to match Json Properties
         /// </summary>
         /// <typeparam name="T">Object to Return</typeparam>
         /// <param name="urlSuffix">API Suffix (aka anything needed after https://api.trello.com/1/ but before that URI Parameters)</param>

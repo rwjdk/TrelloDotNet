@@ -43,14 +43,14 @@
 - Added `GetBoardsCurrentTokenCanAccessAsync`
 - Added `GetMembershipsOfBoardAsync` 
 - Added Automation Action: `RemoveLabelsFromCardAction`
-- It is now legal to have a null as Condition in Automation Engine (indicating there are no further conditions)
+- It is now legal to have a null as a Condition in Automation Engine (indicating there are no further conditions)
 
 <hr>
 
 ## 1.4.0 (3rd of April 2023)
 - Enhanced `UpdateCardAsync` so it now has the ability to Add/Update/Remove the Cover of a card
 - Added methods `AddCoverToCardAsync`, `UpdateCoverOnCardAsync`, and `RemoveCoverOnCardAsync`
-- Added quality of life methods to maintain webhooks by callback URL instead of Id
+- Added quality-of-life methods to maintain webhooks by callback URL instead of Id
 - Added RegEx option for string-comparison in Automation Engine
 - Added `CardUpdatedTrigger`to Automation Engine
 
@@ -63,7 +63,7 @@
 
 ## 1.3.0 (27th of March 2023)
 - Added Webhook Automation Engine that makes it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
-- WebhookAction now have reference to the TrelloClient and the sub-objects can get their Full Objects
+- WebhookAction now has reference to the TrelloClient and the sub-objects can get their Full Objects
 - Added struct 'WebhookActionTypes' that list all Types of Webhook events
 - Added support for Basic Events `OnDeleteCustomField`,`OnAddCustomField`,`OnUpdateCustomField` and `OnUpdateCustomFieldItem`
 - Added method `DeleteChecklistAsync`
@@ -87,7 +87,7 @@
 <hr>
 
 ## 1.2.0 (23rd of Feb. 2023)
-- Fixed that various methods were missing `Async` suffix so it was added (Sorry for this breaking change (oversight by me) but better now than later :-/ ... and it should be easy to fix) [COMPILE TIME BREAKING CHANGE]
+- Fixed that various methods were missing the `Async` suffix so it was added (Sorry for this breaking change (oversight by me) but better now than later :-/ ... and it should be easy to fix) [COMPILE TIME BREAKING CHANGE]
 - Overridden `ToString()` methods on Models are removed and `DebuggerDisplay` Attributes are now used instead.
 - Added properties `OrganizationId`, `EnterpriseId`, and `Pinned` to the Board Object
 - Added support for `Card Stickers` (CRUD).
