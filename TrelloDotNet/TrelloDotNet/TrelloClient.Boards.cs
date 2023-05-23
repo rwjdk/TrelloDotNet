@@ -39,7 +39,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// ReOpen a Board
+        /// ReOpen a Board that was previously archived
         /// </summary>
         /// <param name="boardId">The id of board that should be reopened</param>
         /// <param name="cancellationToken">Cancellation Token</param>
@@ -92,7 +92,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get the Boards that the specified member have access to
+        /// Get the Boards that the specified member has access to
         /// </summary>
         /// <param name="memberId">Id of the Member to find boards for</param>
         /// <param name="cancellationToken">Cancellation Token</param>

@@ -35,13 +35,13 @@ public class CardTests : TestBaseWithNewBoard
             //Create list to test cards on
             WaitToAvoidRateLimits();
             var cardList = await TrelloClient.AddListAsync(new List("List for Card Tests", BoardId));
-            
+
             AddOutput("TestAddCard", ref step, totalSteps);
             var addedCard = await TestAddCard(cardList, start, due, memberIds, allLabelsOnBoard);
 
             AddOutput("TestUpdateCard", ref step, totalSteps);
             var updateCard = await TestUpdateCard(addedCard);
-            
+
             AddOutput("TestGetCard", ref step, totalSteps);
             var getCard = await TestGetCard(addedCard, updateCard);
 
@@ -476,7 +476,7 @@ public class CardTests : TestBaseWithNewBoard
         Assert.Null(card.Cover.Color);
         card.Cover.Color = CardCoverColor.Blue;
         card.Cover.Size = CardCoverSize.Full;
-        
+
         var updatedCard = await TrelloClient.UpdateCardAsync(card);
         Assert.Equal(CardCoverColor.Blue, updatedCard.Cover.Color);
         Assert.Equal(CardCoverSize.Full, updatedCard.Cover.Size);

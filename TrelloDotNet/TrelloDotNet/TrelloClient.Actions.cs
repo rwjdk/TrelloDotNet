@@ -66,6 +66,9 @@ namespace TrelloDotNet
         /// <summary>
         /// Get the most recent Actions (Changelog Events) for an Organization
         /// </summary>
+        /// <remarks>
+        /// Only organization-specific actions will be returned. For the actions on the boards, see GetActionsOfBoardAsync
+        /// </remarks>
         /// <param name="organizationId">The Id of the Organization</param>
         /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes)</param>
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>

@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
-using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Webhook;
 
