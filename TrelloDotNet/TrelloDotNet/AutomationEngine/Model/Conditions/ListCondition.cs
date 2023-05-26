@@ -7,7 +7,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Conditions
 {
     /// <summary>
-    /// Condition that check if a card is on a certain list or the event involved a certain list
+    /// Condition that checks if a card is on a specific list or the event involved a specific list
     /// </summary>
     public class ListCondition : IAutomationCondition
     {

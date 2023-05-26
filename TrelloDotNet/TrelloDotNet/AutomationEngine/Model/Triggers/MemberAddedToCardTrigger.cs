@@ -7,7 +7,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// Trigger that occur when a Card get a new Member Added
+    /// Trigger that occurs when a Card gets a new Member Added
     /// </summary>
     public class MemberAddedToCardTrigger : IAutomationTrigger
     {

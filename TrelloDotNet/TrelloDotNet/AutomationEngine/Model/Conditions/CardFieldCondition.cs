@@ -7,7 +7,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Conditions
 {
     /// <summary>
-    /// Check if a Card have a certain value
+    /// Check if a Card Field has a particular value
     /// </summary>
     public class CardFieldCondition : IAutomationCondition
     {

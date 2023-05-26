@@ -7,7 +7,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Conditions
 {
     /// <summary>
-    /// Check if a Card have a certain Cover or not
+    /// Check if a Card has a specific Cover or not
     /// </summary>
     public class CardCoverCondition : IAutomationCondition
     {

@@ -6,7 +6,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Conditions
 {
     /// <summary>
-    /// Condition that check labels on a Card is present/not present
+    /// Condition that checks labels on a Card is present/not present
     /// </summary>
     public class LabelCondition : IAutomationCondition
     {

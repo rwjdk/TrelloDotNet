@@ -5,7 +5,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Actions
 {
     /// <summary>
-    /// This Automation Action Remove a Cover from a card
+    /// This Automation Action Removes a Cover from a card
     /// </summary>
     /// <remarks>
     /// This is often used to warn about something irregular on a Card, Example when it is moved to 'Done'

@@ -13,7 +13,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="checklist">The Checklist to add</param>
-        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case sensitive) exist and if so return that instead of creating a new</param>
+        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with the same name (case sensitive) exists and if so return that instead of creating a new</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>New or Existing Checklist with same name</returns>
         public async Task<Checklist> AddChecklistAsync(string cardId, Checklist checklist, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, CancellationToken cancellationToken = default)

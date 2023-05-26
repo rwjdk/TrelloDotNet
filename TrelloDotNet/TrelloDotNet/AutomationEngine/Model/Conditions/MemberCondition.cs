@@ -6,7 +6,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Conditions
 {
     /// <summary>
-    /// Condition that check Members on a Card is present/not present
+    /// Condition that checks Members on a Card is present/not present
     /// </summary>
     public class MemberCondition : IAutomationCondition
     {

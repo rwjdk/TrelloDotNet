@@ -5,7 +5,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// Trigger when a card is email to the board
+    /// Trigger when a card is emailed to the board
     /// </summary>
     public class CardEmailedTrigger : IAutomationTrigger
     {

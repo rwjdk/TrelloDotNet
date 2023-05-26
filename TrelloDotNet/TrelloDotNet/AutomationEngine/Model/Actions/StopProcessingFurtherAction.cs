@@ -5,7 +5,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Actions
 {
     /// <summary>
-    /// And action that will stop any further processing of automations after this one for the given Webhook Receive Request
+    /// An action that will stop any further processing of automations after this one for the given Webhook Receive Request
     /// </summary>
     public class StopProcessingFurtherAction : IAutomationAction
     {

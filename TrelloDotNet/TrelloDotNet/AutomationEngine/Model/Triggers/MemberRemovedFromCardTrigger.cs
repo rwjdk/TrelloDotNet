@@ -7,7 +7,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// Trigger that occur when a Card have a Member removed
+    /// Trigger that occurs when a Card has a Member removed
     /// </summary>
     public class MemberRemovedFromCardTrigger : IAutomationTrigger
     {

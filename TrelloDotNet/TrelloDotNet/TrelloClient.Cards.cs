@@ -100,7 +100,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Delete a Card (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseCard() for non-permanency
+        /// Delete a Card (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use ArchiveCardAsync() for non-permanency
         /// </summary>
         /// <param name="cardId">The id of the Card to Delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
@@ -124,7 +124,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get all open cards on un-archived lists
+        /// Get all open cards on un-archived lists on a board
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
         /// <param name="cancellationToken">CancellationToken</param>

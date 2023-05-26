@@ -7,7 +7,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Actions
 {
     /// <summary>
-    /// This Automation Action remove a specific Sticker from a card based on imageId
+    /// This Automation Action removes a specific Sticker from a card based on imageId
     /// </summary>
     public class RemoveStickerFromCardAction : IAutomationAction
     {

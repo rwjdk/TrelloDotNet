@@ -2,27 +2,27 @@
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
 ## 1.6.0 (12th of May 2023)
+- Added option to pass Cancellation Tokens to the API
 - Added `GetActionsOfBoardAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetActionsOfBoardAsync)]
 - Added `GetActionsOnCardAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetActionsOnCardAsync)]
 - Added `GetActionsForListAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetActionsForListAsync)]
 - Added `GetActionsForMemberAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetActionsForMemberAsync)]
 - Added `GetActionsForOrganizationAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetActionsForOrganizationsAsync)]
-- Added option to pass Cancellation Tokens to the API
-- Added `AddCommentToCardAction` for the Automation-engine
+- Added `AddCommentToCardAction` for the Automation-engine [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/AddCommentToCardAction)]
 - Automation Action `AddChecklistToCardAction` now have the option to add Items to existing Checklists with same name (Example two Definition of Done Automations for two different labels add their items to a single Checklist)
-- Added a `StopProcessingFurtherAction` to the automation-engine that allow you to conditionally stop any further processing for the specifc webhook call.
-- Added `GetCardsForMemberAsync`
-- Added `AddMemberToBoardAsync`
-- Added `RemoveMemberFromBoardAsync`
-- Added `UpdateMembershipTypeOfMemberOnBoardAsync`
-- Added support for `Organizations` CRUD (also know as Workspaces)
+- Added a `StopProcessingFurtherAction` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/StopProcessingFurtherAction)] to the automation-engine that allow you to conditionally stop any further processing for the specific webhook call.
+- Added `GetCardsForMemberAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsForMemberAsync)]
+- Added `AddMemberToBoardAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/AddMemberToBoardAsync)]
+- Added `RemoveMemberFromBoardAsync`  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveMemberFromBoardAsync)]
+- Added `UpdateMembershipTypeOfMemberOnBoardAsync`  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateMembershipTypeOfMemberOnBoardAsync)]
+- Added support for `Organizations` CRUD (also know as Workspaces)  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#organization-features)]
 - Added `GetBoardsInOrganization` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetBoardsInOrganization)]
-- Added `GetMembersOfOrganizationAsync`
+- Added `GetMembersOfOrganizationAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetMembersOfOrganizationAsync)]
 
 <hr>
 
 ## 1.5.2 (30th of March 2023)
-- Added `AddChecklistToCardIfLabelMatchAction` to make combination of creating checklists easier to maintain
+- Added `AddChecklistToCardIfLabelMatchAction` to make combination of creating checklists easier to maintain [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardIfLabelMatchAction)]
 
 <hr>
 
@@ -34,25 +34,25 @@
 ## 1.5.0 (27th of March 2023)
 - Fixed that 'Constraint' was spelled incorrectly (missing an 's') in 2 places (`ListConditionConstraint` and `CardMovedToListTriggerConstraint`) [COMPILE TIME BREAKING CHANGE] (sorry but better to change now than later ;-( ) 
 - Fixed that `CardCoverCondition` was not evaluated correctly in all scenarios
-- Added support for managing Labels on the Board
+- Added support for managing Labels on the Board [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#label-features)]
 - Fixed that `SetFieldsOnCardAction`did not update processing result (Executed and Skipped Actions counts)
-- Added support for managing Attachments
-- Added support to set/remove Attachment Cover on a Card
-- Added `UpdateChecklistItemAsync`
-- Added `GetBoardsForMemberAsync`
-- Added `GetBoardsCurrentTokenCanAccessAsync`
-- Added `GetMembershipsOfBoardAsync` 
-- Added Automation Action: `RemoveLabelsFromCardAction`
+- Added support for managing Attachments [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#attachment-features)]
+- Added support to set/remove Attachment Cover on a Card [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#cover-features)]
+- Added `UpdateChecklistItemAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateChecklistItemAsync)]
+- Added `GetBoardsForMemberAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetBoardsForMemberAsync)]
+- Added `GetBoardsCurrentTokenCanAccessAsync` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetBoardsCurrentTokenCanAccessAsync)]
+- Added `GetMembershipsOfBoardAsync`  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetMembershipsOfBoardAsync)] 
+- Added Automation Action: `RemoveLabelsFromCardAction` [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveLabelsFromCardAction)]
 - It is now legal to have a null as a Condition in Automation Engine (indicating there are no further conditions)
 
 <hr>
 
 ## 1.4.0 (3rd of April 2023)
-- Enhanced `UpdateCardAsync` so it now has the ability to Add/Update/Remove the Cover of a card
-- Added methods `AddCoverToCardAsync`, `UpdateCoverOnCardAsync`, and `RemoveCoverOnCardAsync`
-- Added quality-of-life methods to maintain webhooks by callback URL instead of Id
+- Enhanced `UpdateCardAsync` so it now has the ability to Add/Update/Remove the Cover of a card  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCardAsync)]
+- Added methods `AddCoverToCardAsync`, `UpdateCoverOnCardAsync`, and `RemoveCoverOnCardAsync`  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#cover-features)]
+- Added quality-of-life methods to maintain webhooks by callback URL instead of Id  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#wehook-features)]
 - Added RegEx option for string-comparison in Automation Engine
-- Added `CardUpdatedTrigger`to Automation Engine
+- Added `CardUpdatedTrigger`to Automation Engine  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/CardUpdatedTrigger)]
 
 <hr>
 
@@ -62,24 +62,24 @@
 <hr>
 
 ## 1.3.0 (27th of March 2023)
-- Added Webhook Automation Engine that makes it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
+- Added Webhook Automation Engine that makes it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/AutomationEngine)]
 - WebhookAction now has reference to the TrelloClient and the sub-objects can get their Full Objects
-- Added struct 'WebhookActionTypes' that list all Types of Webhook events
+- Added struct `WebhookActionTypes` that list all Types of Webhook events  [[More Info](https://github.com/rwjdk/TrelloDotNet/blob/main/TrelloDotNet/TrelloDotNet/Model/Webhook/WebhookActionTypes.cs)] 
 - Added support for Basic Events `OnDeleteCustomField`,`OnAddCustomField`,`OnUpdateCustomField` and `OnUpdateCustomFieldItem`
-- Added method `DeleteChecklistAsync`
+- Added method `DeleteChecklistAsync`  [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/DeleteChecklistAsync)]
 - Added `ListBefore` and `ListAfter` to `TrelloActionData`
-- Added method `GetTokenInformationAsync()` to get information about the Trello Token used for connecting
-- Added method `GetTokenMemberAsync()` that returns the user that owns the Trello Token used for connecting
-- Added support for Retrieving, setting, and removing Custom Field values of cards
-- Fixed various incorrect XML Summaries and parameter names (all nonbreaking changes)
+- Added method `GetTokenInformationAsync` to get information about the Trello Token used for connecting [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetTokenInformationAsync)]
+- Added method `GetTokenMemberAsync` that returns the user that owns the Trello Token used for connecting [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetTokenMemberAsync)]
+- Added support for Retrieving, setting, and removing Custom Field values of cards [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#custom-field-features)]
+- Fixed various incorrect XML Summaries and parameter names (all non-breaking changes)
 - Fixed that Null values in strings for an update of objects are now considered empty strings so you do not end up with 'null' values (aka the word 'null' as a string)
 
 <hr>
 
 ## 1.2.1 (25th of Feb. 2023)
 - Added generic WebHookNotification that does not care if Webhook returned from a Board, List, Card, etc
-- Added method `UpdateCommentActionAsync` for the ability to update Comments
-- Added methods `GetAllCommentsOnCardAsync` and `GetPagedCommentsOnCardAsync` for the ability to Get existing comments on a card
+- Added method `UpdateCommentActionAsync` for the ability to update Comments [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCommentActionAsync)]
+- Added methods `GetAllCommentsOnCardAsync` and `GetPagedCommentsOnCardAsync` for the ability to Get existing comments on a card [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/GetAllCommentsOnCardAsync)]
 - `AddChecklistAsync` will now add positions of check items automatically in the same order as the list if none is specified.
 - Fixed that `AddStickerToCardAsync` did not work as intended (You got an 'Invalid ImageId' error) due to a late refactoring and poor testing on my part (last time I skimp on integration-tests!) :-(
 - Fixed that `AddCommentAsync` had a wrong return object (Trello API is just weird and not consistent!)
@@ -90,8 +90,8 @@
 - Fixed that various methods were missing the `Async` suffix so it was added (Sorry for this breaking change (oversight by me) but better now than later :-/ ... and it should be easy to fix) [COMPILE TIME BREAKING CHANGE]
 - Overridden `ToString()` methods on Models are removed and `DebuggerDisplay` Attributes are now used instead.
 - Added properties `OrganizationId`, `EnterpriseId`, and `Pinned` to the Board Object
-- Added support for `Card Stickers` (CRUD).
-- Added support to add Comments on cards.
+- Added support for `Card Stickers` (CRUD). [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#sticker-features)]
+- Added support to add Comments on cards. [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#comments-features)]
 
 <hr>
 
@@ -106,7 +106,7 @@
 <hr>
 
 ## 1.1.0 (8th of Feb. 2023)
-- Added Webhook System (See video on how to get going [here](https://youtu.be/A3_B-SLBm_0))
+- Added Webhook System (See video on how to get going [here](https://youtu.be/A3_B-SLBm_0)) [[More Info](https://github.com/rwjdk/TrelloDotNet/wiki/WebHookDataReceiver)]
 - Added various 'Ease of use methods' to do common actions (For example add or remove Members/Labels from Cards)
 - Fixed that Trello icon edges where white
 - Added more detailed `README.md`
