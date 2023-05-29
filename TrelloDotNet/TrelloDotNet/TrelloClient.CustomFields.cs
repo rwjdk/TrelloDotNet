@@ -235,7 +235,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get Custom Fields for a Card
+        /// Get Custom Field Item Values for a Card
         /// </summary>
         /// <remarks>Tip: Use Extension methods GetCustomFieldValueAsXYZ for a handy way to get values</remarks>
         /// <param name="cardId">Id of the Card</param>

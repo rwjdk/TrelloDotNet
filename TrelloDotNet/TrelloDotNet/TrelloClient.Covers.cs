@@ -19,7 +19,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Add a Cover to a card. Tip: It is also possible to update the cover via UpdateCardAsync
+        /// Add a Cover to a card. Tip: It is also possible to add the cover via UpdateCardAsync
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="coverToAdd">The Cover to Add</param>
