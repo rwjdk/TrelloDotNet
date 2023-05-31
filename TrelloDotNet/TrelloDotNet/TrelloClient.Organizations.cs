@@ -21,7 +21,7 @@ namespace TrelloDotNet
         /// <summary>
         /// Create a new Organization (Workspace)
         /// </summary>
-        /// <param name="newOrganization">the new Organization</param>
+        /// <param name="newOrganization">The new Organization</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The New Organization</returns>
         public async Task<Organization> AddOrganizationAsync(Organization newOrganization, CancellationToken cancellationToken = default)
@@ -41,10 +41,10 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Delete a entire Organization include all Boards it contains (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// Delete an entire Organization including all Boards it contains (WARNING: THERE IS NO WAY GOING BACK!!!).
         /// </summary>
         /// <remarks>
-        /// As this is a major thing, there is a secondary confirm needed by setting: Options.AllowDeleteOfOrganizations = true
+        /// As this is a major thing, there is a secondary confirmation needed by setting: Options.AllowDeleteOfOrganizations = true
         /// </remarks>
         /// <param name="organizationId">The id of the Organization to Delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>

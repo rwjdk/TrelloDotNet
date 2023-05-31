@@ -38,7 +38,7 @@ namespace TrelloDotNet.Model.Webhook
         public string Description { get; set; }
 
         /// <summary>
-        /// The URL that the webhook should notify (Need to be a valid HTTPS URL that is reachable with a HEAD and POST request).
+        /// The URL that the webhook should notify (Need to be a valid HTTPS URL that is reachable with a HEAD and POST requests).
         /// </summary>
         [JsonPropertyName("callbackURL")]
         [QueryParameter]

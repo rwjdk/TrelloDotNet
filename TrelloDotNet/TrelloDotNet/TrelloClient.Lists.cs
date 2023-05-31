@@ -33,13 +33,13 @@ namespace TrelloDotNet
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", true));
         }
 
-        /// <summary>
-        /// Reopen a List (Send back to the board)
-        /// </summary>
-        /// <param name="listId">The id of list that should be Reopened</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Archived List</returns>
-        public async Task<List> ReOpenListAsync(string listId, CancellationToken cancellationToken = default)
+/// <summary>
+/// Reopen a List (Send back to the board)
+/// </summary>
+/// <param name="listId">The id of list that should be Reopened</param>
+/// <param name="cancellationToken">Cancellation Token</param>
+/// <returns>The Archived List</returns>
+public async Task<List> ReOpenListAsync(string listId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", false));
         }
@@ -59,7 +59,7 @@ namespace TrelloDotNet
         /// Move an entire list to another board
         /// </summary>
         /// <param name="listId">The id of the List to move</param>
-        /// <param name="newBoardId">The id of the board the list should be moved to [It need to be the long version of the boardId]</param>
+        /// <param name="newBoardId">The id of the board the list should be moved to [It needs to be the long version of the boardId]</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Updated List</returns>
         public async Task<List> MoveListToBoardAsync(string listId, string newBoardId, CancellationToken cancellationToken = default)

@@ -1,6 +1,14 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.6.1 (31st of May 2023)
+- Added Automation Trigger [`CheckItemStateUpdatedOnCardTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CheckItemStateUpdatedOnCardTrigger)
+- Added Automation Condition [`ChecklistItemsCompleteCondition`](https://github.com/rwjdk/TrelloDotNet/wiki/ChecklistItemsCompleteCondition)
+- Tweaked various documentation for spelling errors
+- This changelog now links to the [Wiki](https://github.com/rwjdk/TrelloDotNet/wiki)
+
+<hr>
+
 ## 1.6.0 (12th of May 2023)
 - Added option to pass [`Cancellation Tokens`](https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken) to the API
 - Added [`GetActionsOfBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetActionsOfBoardAsync)
@@ -18,7 +26,6 @@
 - Added Automation Action [`StopProcessingFurtherAction`](https://github.com/rwjdk/TrelloDotNet/wiki/StopProcessingFurtherAction) that allow you to conditionally stop any further processing for the specific webhook call.
 - Updated Automation Action [`AddChecklistToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardAction) to now have the option to add Items to existing Checklists with same name (Example two Definition of Done Automations for two different labels add their items to a single Checklist)
 - Added support for [`Organizations`](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#organization-features) (also know as Workspaces)  
-
 
 <hr>
 

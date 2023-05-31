@@ -32,7 +32,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get List of Stickers on a card
+        /// Get the List of Stickers on a card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="cancellationToken">Cancellation Token</param>

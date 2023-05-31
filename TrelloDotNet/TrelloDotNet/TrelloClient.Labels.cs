@@ -19,7 +19,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get List of Labels defined for a board
+        /// Get a list of Labels defined for a board
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
@@ -71,7 +71,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Remove a Label of a Card
+        /// Remove one or more Labels from a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
@@ -91,7 +91,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Remove all Labels of a Card
+        /// Remove all Labels from a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="cancellationToken">Cancellation Token</param>

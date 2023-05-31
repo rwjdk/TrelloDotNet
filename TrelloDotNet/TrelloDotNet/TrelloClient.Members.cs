@@ -9,13 +9,13 @@ namespace TrelloDotNet
 {
     public partial class TrelloClient
     {
-        /// <summary>
-        /// Get the Members (users) of a board
-        /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Members</returns>
-        public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
+/// <summary>
+/// Get the Members (users) of a board
+/// </summary>
+/// <param name="boardId">Id of the Board (in its long or short version)</param>
+/// <param name="cancellationToken">Cancellation Token</param>
+/// <returns>List of Members</returns>
+public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/", cancellationToken);
         }
@@ -84,7 +84,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Remove a Member of a Card
+        /// Remove one or more Members from a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="cancellation">Cancellation Token</param>
@@ -104,7 +104,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Remove all Members of a Card
+        /// Remove all Members from a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
@@ -171,7 +171,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get the Members (users) of an Organization
+        /// Get the Members (users) of an Organization (aka Workspace)
         /// </summary>
         /// <param name="organizationId">Id of the Organization</param>
         /// <param name="cancellationToken">Cancellation Token</param>

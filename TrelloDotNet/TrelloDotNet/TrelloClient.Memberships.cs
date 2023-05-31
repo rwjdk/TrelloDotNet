@@ -9,7 +9,7 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// The Membership Information for a board (aka if Users are Admin, Normal or Observer)
+        /// The Membership Information for a board (aka if Users are Admin, Normal, or Observer)
         /// </summary>
         /// <param name="boardId">Id of the Board that you wish information on</param>
         /// <param name="cancellationToken">Cancellation Token</param>
