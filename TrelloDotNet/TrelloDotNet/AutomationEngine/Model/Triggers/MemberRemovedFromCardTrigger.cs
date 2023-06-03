@@ -7,12 +7,12 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// Trigger that occurs when a Card has a Member removed
+    /// A Trigger that occurs when a Card has a Member removed
     /// </summary>
     public class MemberRemovedFromCardTrigger : IAutomationTrigger
     {
         /// <summary>
-        /// Set this to 'True' if you supplied names of Members instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
+        /// Set this to 'True' if you supplied the names of Members instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and less resilient to the renaming of things.
         /// </summary>
         public bool TreatMemberNameAsId { get; set; }
 

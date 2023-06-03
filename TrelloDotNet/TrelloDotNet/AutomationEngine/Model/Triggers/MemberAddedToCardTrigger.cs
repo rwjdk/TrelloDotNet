@@ -7,12 +7,12 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// Trigger that occurs when a Card gets a new Member Added
+    /// A Trigger that occurs when a Card gets a new Member Added
     /// </summary>
     public class MemberAddedToCardTrigger : IAutomationTrigger
     {
         /// <summary>
-        /// Set this to 'True' if you supplied usernames of Members instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
+        /// Set this to 'True' if you supplied the usernames of Members instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and less resilient to renaming things.
         /// </summary>
         public bool TreatMemberNameAsId { get; set; }
         

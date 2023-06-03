@@ -5,7 +5,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// Trigger when a card is Updated
+    /// Trigger when a card is Updated (This happens in various basic events so is kind of a catch all Trigger to things happening on a card)
     /// </summary>
     public class CardUpdatedTrigger : IAutomationTrigger
     {

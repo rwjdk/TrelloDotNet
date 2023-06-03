@@ -11,7 +11,7 @@ Welcome to TrelloDotNet; a modern .NET Implementation of the Trello API.
 ### Examples of Usage:
 
 ```cs
-TrelloClient client = new TrelloClient("APIKey", "TOKEN");
+TrelloClient client = new TrelloClient("APIKey", "TOKEN"); //IMPORTANT: Remember to not leave Key and Token in clear text!
 
 //Get a board
 Board board = await client.GetBoardAsync("<boardId>");
@@ -61,7 +61,11 @@ var addedChecklist = await client.AddChecklistAsync("<cardId>", newChecklist);
 
 
 ## On the subject of getting Ids from Trello
-- The easiest way to get Ids in Trello is to use the API itself or use the share buttons in the project
+- The easiest way to get Ids in Trello is to use this [Power-Up](https://trello.com/power-ups/646cc3622176aebf713bb7f8/api-developer-id-helper) to copy/paste them (Recommended)... 
+
+![API Developer ID Helper Power-Up](https://i.imgur.com/4FR6K2t.gif)
+
+- or use the API itself or use the share buttons in the project (require no Power-Up but more cumbersome)
 
 ![Trello Board](https://i.imgur.com/D6vxkrm.png)
 
