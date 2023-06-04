@@ -1,6 +1,10 @@
 # TrelloDotNet
 Welcome to TrelloDotNet; a modern .NET Implementation of the Trello API.
 
+## Features
+- A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) implementing the Trello API for CRUD operations on most Trello Features
+- An [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) and [Webhook Data Reciver](https://github.com/rwjdk/TrelloDotNet/wiki/Webhook-Data-Reciver) for handling Webhook Events from a Trello Board
+
 ## How to get started
 1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (dotnet add package TrelloDotNet)
 2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8)

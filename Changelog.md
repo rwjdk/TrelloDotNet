@@ -1,8 +1,9 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-##Unreleased
+## 1.6.2 (4th of June 2023)
 - Added Automation Action [`RemoveCardDataAction`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveCardDataAction)
+- Tweaked various documentation for spelling errors
 
 <hr>
 
@@ -66,7 +67,7 @@
 - Added [`RemoveCoverOnCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveCoverOnCardAsync)
 - Update [`UpdateCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCardAsync) so it now has the ability to Add/Update/Remove the Cover of a card
 - Added quality-of-life methods to maintain [`Webhooks`](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#wehook-features) by callback URL instead of Id
-- Added RegEx option for string-comparison in [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/AutomationEngine) Triggers and Conditions
+- Added RegEx option for string-comparison in [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) Triggers and Conditions
 - Added Automation Trigger [`CardUpdatedTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CardUpdatedTrigger)
 
 <hr>
@@ -77,7 +78,7 @@
 <hr>
 
 ## 1.3.0 (27th of March 2023)
-- Added [Webhook Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/AutomationEngine) that makes it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
+- Added [Webhook Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) that makes it even easier to consume Webhooks (just define your automation rules and give the engine the Webhook JSON and it does the rest :-))
 - `WebhookAction` now has reference to the TrelloClient and the sub-objects can get their Full Objects
 - Added struct [`WebhookActionTypes`](https://github.com/rwjdk/TrelloDotNet/blob/main/TrelloDotNet/TrelloDotNet/Model/Webhook/WebhookActionTypes.cs) that list all Types of Webhook events
 - Added support for Basic Events `OnDeleteCustomField`,`OnAddCustomField`,`OnUpdateCustomField` and `OnUpdateCustomFieldItem`
@@ -121,7 +122,7 @@
 <hr>
 
 ## 1.1.0 (8th of Feb. 2023)
-- Added [Webhook System](https://github.com/rwjdk/TrelloDotNet/wiki/WebHookDataReceiver) (See video on how to get going [here](https://youtu.be/A3_B-SLBm_0))
+- Added [Webhook System](https://github.com/rwjdk/TrelloDotNet/wiki/WebHook-Data-Receiver) (See video on how to get going [here](https://youtu.be/A3_B-SLBm_0))
 - Added various 'Ease of use methods' to do common actions (For example add or remove Members/Labels from Cards)
 - Fixed that Trello icon edges where white
 - Added more detailed `README.md`
