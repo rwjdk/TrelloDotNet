@@ -13,5 +13,14 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("action")]
         [JsonInclude]
         public WebhookAction Action { get; private set; }
+
+        /// <summary>
+        /// The Webhook that sent the notification
+        /// </summary>
+        [JsonPropertyName("webhook")]
+        [JsonInclude]
+        public Webhook Webhook { get; private set; }
+
+
     }
 }

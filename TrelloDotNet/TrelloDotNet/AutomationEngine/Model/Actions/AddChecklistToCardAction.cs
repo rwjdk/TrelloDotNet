@@ -15,12 +15,12 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
     public class AddChecklistToCardAction : IAutomationAction
     {
         /// <summary>
-        /// The Checklist Object to Add (if a checklist with same name is not already present)
+        /// The Checklist Object to Add (if a checklist with the same name is not already present)
         /// </summary>
         public Checklist ChecklistToAdd { get; set; }
 
         /// <summary>
-        /// By default a checklist is only added if it do not already exist. This determine if it already exist if the check-items should be added to the existing list or not
+        /// By default a checklist is only added if it does not already exist. This determines if it already exists if the check items should be added to the existing list or not
         /// </summary>
         public bool AddCheckItemsToExistingChecklist { get; set; }
 

@@ -7,7 +7,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Actions
 {
     /// <summary>
-    /// Remove one or more Labels
+    /// Remove one or more Labels from a card
     /// </summary>
     public class RemoveLabelsFromCardAction : IAutomationAction
     {
@@ -17,7 +17,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         public string[] LabelsIds { get; }
 
         /// <summary>
-        /// Set this to 'True' if you supplied names of labels instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
+        /// Set this to 'True' if you supplied the names of labels instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and less resilient to the renaming of things. 
         /// </summary>
         public bool TreatLabelNameAsId { get; set; }
 
@@ -62,6 +62,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             }
 
             await webhookAction.TrelloClient.RemoveLabelsFromCardAsync(webhookAction.Data.Card.Id, labelIdsToRemove);
+            processingResult.ActionsExecuted++;
         }
     }
 }

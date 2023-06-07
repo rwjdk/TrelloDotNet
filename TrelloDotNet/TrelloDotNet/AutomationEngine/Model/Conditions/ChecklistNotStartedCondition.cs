@@ -12,7 +12,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
     public class ChecklistNotStartedCondition : IAutomationCondition
     {
         /// <summary>
-        /// The name of the Checklist ot check
+        /// The name of the Checklist to check
         /// </summary>
         public string ChecklistNameToCheck { get; }
 

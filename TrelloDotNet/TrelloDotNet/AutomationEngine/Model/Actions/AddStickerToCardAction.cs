@@ -10,7 +10,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
     /// This Automation Action adds a specific Sticker to a card if it is not already present.
     /// </summary>
     /// <remarks>
-    /// This is often used to warn about something irregular on a Card, Example when it is moved to 'Done'
+    /// This is often used to warn about something irregular on a Card, for Example when it is moved to 'Done'
     /// </remarks>
     public class AddStickerToCardAction : IAutomationAction
     {

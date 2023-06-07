@@ -218,5 +218,19 @@ namespace TrelloDotNet
             card.DueComplete = dueComplete;
             return await UpdateCardAsync(card, cancellationToken);
         }
+
+        /// <summary>
+        /// Move a Card to a new list on the same board
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="newListId">Id of the List you wish to move it to</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<Card> MoveCardToListAsync(string cardId, string newListId, CancellationToken cancellationToken = default)
+        {
+            Card card = await GetCardAsync(cardId, cancellationToken);
+            card.ListId = newListId;
+            return await UpdateCardAsync(card, cancellationToken);
+        }
     }
 }

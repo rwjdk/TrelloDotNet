@@ -21,7 +21,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         public string[] ListIds { get; }
 
         /// <summary>
-        /// Set this to 'True' if you supplied names of Lists instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
+        /// Set this to 'True' if you supplied names of Lists instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and less resilient to the renaming of things.
         /// </summary>
         public bool TreatListNameAsId { get; set; }
 

@@ -33,7 +33,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         public DateTimeOffsetMatchCriteria DateTimeOffsetValueMatchCriteria { get; }
 
         /// <summary>
-        /// When checking date fields (Start and Due) indicate that the matching should only happen on Date Level
+        /// When checking date fields (Start and Due) indicate that the matching should only happen on Date Level (and not time as well)
         /// </summary>
         public bool MatchDateOnlyOnDateTimeOffsetFields { get; set; }
 

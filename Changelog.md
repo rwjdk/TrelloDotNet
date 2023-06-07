@@ -1,6 +1,16 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.6.3 (7th of June 2023)
+- Added Automation Action [`AddLabelsToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddLabelsToCardAction)
+- Added Automation Action [`AddMembersToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddMembersToCardAction)
+- Added Automation Action [`RemoveMembersFromCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveMembersFromCardAction)
+- Added the Webhook Object to the `WebhookNotification` (Trello recently exposed this feature)
+- Added [`MoveCardToListAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/MoveCardToListAsync) for greater discoverability how to do it (was already possible via `UpdateCardAsync`)
+- Tweaked various documentation for spelling errors
+
+<hr>
+
 ## 1.6.2 (4th of June 2023)
 - Added Automation Action [`RemoveCardDataAction`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveCardDataAction)
 - Tweaked various documentation for spelling errors

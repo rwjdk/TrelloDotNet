@@ -7,7 +7,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Model.Conditions
 {
     /// <summary>
-    /// Condition that check if a Card have one or more incomplete check-items on any of its checklists
+    /// Condition that checks if a Card has one or more incomplete check items on any of its checklists
     /// </summary>
     public class ChecklistItemsIncompleteCondition : IAutomationCondition
     {
