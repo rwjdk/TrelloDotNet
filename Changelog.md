@@ -1,6 +1,11 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.6.4 (9th of June 2023)
+- Added Automation Trigger [`CardMovedAwayFromListTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CardMovedAwayFromListTrigger)
+
+<hr>
+
 ## 1.6.3 (7th of June 2023)
 - Added Automation Action [`AddLabelsToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddLabelsToCardAction)
 - Added Automation Action [`AddMembersToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddMembersToCardAction)
