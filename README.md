@@ -1,3 +1,5 @@
+[![NuGet Badge](https://shields.io/nuget/v/TrelloDotNet)](https://www.nuget.org/packages/TrelloDotNet)
+
 # TrelloDotNet
 Welcome to TrelloDotNet; a modern .NET Implementation of the Trello API.
 
