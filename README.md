@@ -1,4 +1,12 @@
-[![NuGet Badge](https://shields.io/nuget/v/TrelloDotNet)](https://www.nuget.org/packages/TrelloDotNet)
+[![NuGet Badge](https://shields.io/nuget/v/TrelloDotNet)](https://www.nuget.org/packages/TrelloDotNet) 
+[![WIKI](https://img.shields.io/badge/ℹ️-Wiki-green)](https://github.com/rwjdk/TrelloDotNet/wiki)
+[![Changelog](https://img.shields.io/badge/ℹ️-Changelog-orange)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
+[![YouTube](https://img.shields.io/badge/ℹ️-YouTube-red)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
+[![Rest API](https://img.shields.io/badge/Trello-Rest_API-blue)](https://developer.atlassian.com/cloud/trello/rest/)
+[![API Keys](https://img.shields.io/badge/Trello-API_Key_+_Token-blueviolet)](https://trello.com/power-ups/admin/)
+[![Trello Developers LinkedIn Group](https://img.shields.io/badge/LinkedIn-Trello_Developers-0077B5)](https://www.linkedin.com/groups/12847286/)
+
+
 
 # TrelloDotNet
 Welcome to TrelloDotNet; a modern .NET Implementation of the Trello API.
