@@ -63,11 +63,15 @@ var addedChecklist = await client.AddChecklistAsync("<cardId>", newChecklist);
 - [Changelog](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
 
 ## Video Guides
-- [How to get your API-Key and Token](https://youtu.be/ndLSAD3StH8)
-- [How to Find ids on a Trello Board](https://youtu.be/aWYEg1wPVYY)
-- [How to use the TrelloDotNet NuGet Package](https://youtu.be/tf47BCkieus)
-- [How to work with Webhooks (Part 1: Setup)](https://youtu.be/A3_B-SLBm_0)
-- [How to work with Webhooks (Part 2: Receiving Events)](https://youtu.be/GsGKDDvuq40)
+- Trello Developer Fundamentals
+  - [How to get your API-Key and Token](https://youtu.be/ndLSAD3StH8)
+  - [How to Find ids on a Trello Board](https://youtu.be/aWYEg1wPVYY)
+- TrelloDotNet
+  - [How to use the TrelloDotNet NuGet Package](https://youtu.be/tf47BCkieus)
+  - [E-Learning Playlist](https://www.youtube.com/playlist?list=PLhGl0l5La4sZJxSCNYl0AfCagdRB_c8CD)
+  - Webhook
+    - [How to work with Webhooks (Part 1: Setup)](https://youtu.be/A3_B-SLBm_0)
+    - [How to work with Webhooks (Part 2: Receiving Events)](https://youtu.be/GsGKDDvuq40)
 
 ## Other handy links
 - Admin Center for API Keys and Tokens: https://trello.com/power-ups/admin/
