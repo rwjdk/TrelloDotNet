@@ -2,8 +2,8 @@
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
 ## 1.6.7 (5th of July 2023)
-- Change Project URL to point at the Wiki
-- A bit of restructure of the 
+- Change the Project URL to point at the Wiki
+- A bit of restructuring of the ReadMe
 
 <hr>
 
