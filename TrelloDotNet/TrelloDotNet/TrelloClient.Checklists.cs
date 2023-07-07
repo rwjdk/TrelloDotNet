@@ -145,5 +145,16 @@ namespace TrelloDotNet
         {
             await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}", cancellationToken);
         }
+
+        /// <summary>
+        /// Delete a Checklist Item from a checklist (WARNING: THERE IS NO WAY GOING BACK!!!)
+        /// </summary>
+        /// <param name="checklistId">The id of the Checklist</param>
+        /// <param name="checklistItemId">The id of the Checklist Item to delete</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteChecklistItemAsync(string checklistId, string checklistItemId, CancellationToken cancellationToken = default)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}/{UrlPaths.CheckItems}/{checklistItemId}", cancellationToken);
+        }
     }
 }
