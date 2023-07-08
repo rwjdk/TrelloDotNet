@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Model;
+using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine
 {
@@ -39,7 +41,7 @@ namespace TrelloDotNet.AutomationEngine
         public async Task<ProcessingResult> ProcessJsonFromWebhookAsync(ProcessingRequest request, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var data = _receiver.ConvertJsonToWebhookNotification(request.JsonFromWebhook);
+            WebhookNotification data = _receiver.ConvertJsonToWebhookNotification(request.JsonFromWebhook);
             var webhookAction = data.Action;
             var result = new ProcessingResult();
 
@@ -57,7 +59,7 @@ namespace TrelloDotNet.AutomationEngine
                 }
                 catch (Exception e)
                 {
-                    throw new AutomationException($"Error checking Trigger of type '{automation.Trigger.GetType()}' in automation '{automation.Name}'", e);
+                    throw new AutomationException($"Error checking Trigger of type '{automation.Trigger.GetType()}' in automation '{automation.Name}'{AddErrorContext(data)}", e);
                 }
 
                 var conditionsMet = true;
@@ -76,7 +78,7 @@ namespace TrelloDotNet.AutomationEngine
                         }
                         catch (Exception e)
                         {
-                            throw new AutomationException($"Error checking Condition of type '{x.GetType()}' in automation '{automation.Name}'", e);
+                            throw new AutomationException($"Error checking Condition of type '{x.GetType()}' in automation '{automation.Name}'{AddErrorContext(data)}", e);
                         }
                     }
                 }
@@ -98,7 +100,7 @@ namespace TrelloDotNet.AutomationEngine
                         }
                         catch (Exception e)
                         {
-                            throw new AutomationException($"Error performing Action of type '{actionAction.GetType()}' in automation '{automation.Name}'", e);
+                            throw new AutomationException($"Error performing Action of type '{actionAction.GetType()}' in automation '{automation.Name}'{AddErrorContext(data)}", e);
                         }
 
                     }
@@ -110,6 +112,18 @@ namespace TrelloDotNet.AutomationEngine
                 }
             }
             return result;
+        }
+
+        private string AddErrorContext(WebhookNotification webhookNotification)
+        {
+            try
+            {
+                return webhookNotification.Action.SummarizeEvent();
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
     }
 }

@@ -61,7 +61,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                     var checklistItemsMissing = ChecklistToAdd.Items.Where(checklistItem => existing.Items.All(x => x.Name != checklistItem.Name)).ToList();
                     if (checklistItemsMissing.Any())
                     {
-                        decimal maxPosition = existing.Items.Max(x => x.Position);
+                        decimal maxPosition = existing.Items.Any() ? existing.Items.Max(x => x.Position) : 1;
                         foreach (var checklistItem in checklistItemsMissing)
                         {
                             maxPosition += 1;

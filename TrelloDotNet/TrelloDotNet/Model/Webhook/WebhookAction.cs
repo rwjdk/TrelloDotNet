@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Webhook
@@ -122,6 +123,31 @@ namespace TrelloDotNet.Model.Webhook
             MemberRemovedFromCard,
             BoardUpdated,
             ListUpdated
+        }
+
+        internal string SummarizeEvent()
+        {
+            var context = new StringBuilder();
+            context.AppendLine();
+            context.AppendLine("Event-Context:");
+            context.AppendLine($"- Type: '{Type}'");
+            context.AppendLine($"- TranslationKey: '{Display?.TranslationKey}'");
+            if (Data?.Board != null)
+            {
+                context.AppendLine($"- Data > Board: '{Data.Board.Id} - {Data.Board.Name}'");
+            }
+
+            if (Data?.List != null)
+            {
+                context.AppendLine($"- Data > List: '{Data.List.Id} - {Data?.List.Name}'");
+            }
+
+            if (Data?.Card != null)
+            {
+                context.AppendLine($"- Data > Card: '{Data.Card.Id} - {Data.Card.Name}'");
+            }
+
+            return context.ToString();
         }
     }
 }
