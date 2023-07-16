@@ -1,6 +1,12 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## Unreleased
+- Added DebuggerDisplay to `Organization`
+- Increased Test-Coverage to 78%
+
+<hr>
+
 ## 1.6.9 (8th of July 2023)
 - Fixed that if you used option 'AddCheckItemsToExistingChecklist' in a `AddChecklistToCardAction` and a Checklist existed but had no items, the automation failed.
 - Added better error-context to the AutomationException (what Board, List and Card was involved in the event that caused the Exception)

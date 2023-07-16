@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Represent an Organization (also know as a Workspace)
     /// </summary>
+    [DebuggerDisplay("{DisplayName} ({Id})")]
     public class Organization
     {
         /// <summary>

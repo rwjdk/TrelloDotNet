@@ -36,6 +36,10 @@ public class CardTests : TestBaseWithNewBoard
             WaitToAvoidRateLimits();
             var cardList = await TrelloClient.AddListAsync(new List("List for Card Tests", BoardId));
 
+            AddOutput("TestAttachments", ref step, totalSteps);
+            await TestAttachments(cardList);
+            return;
+
             AddOutput("TestAddCard", ref step, totalSteps);
             var addedCard = await TestAddCard(cardList, start, due, memberIds, allLabelsOnBoard);
 
@@ -78,16 +82,54 @@ public class CardTests : TestBaseWithNewBoard
             AddOutput("TestCustomDelete", ref step, totalSteps);
             await TestCustomDelete(cardList);
 
+            AddOutput("TestCover", ref step, totalSteps);
+            await TestCovers(cardList);
+
             AddOutput("TestComments", ref step, totalSteps);
             await TestComments(cardList);
 
-            AddOutput("TestCover", ref step, totalSteps);
-            await TestCovers(cardList);
+            AddOutput("TestAttachments", ref step, totalSteps);
+            await TestAttachments(cardList);
         }
         finally
         {
             await DeleteBoard();
         }
+    }
+
+    private async Task TestAttachments(List cardList)
+    {
+        Card card = await TrelloClient.AddCardAsync(new Card(cardList.Id, "AttachmentTests"));
+        Attachment att1 = await TrelloClient.AddAttachmentToCardAsync(card.Id, new AttachmentUrlLink("https://www.rwj.dk", "Some webpage URL"));
+
+        await using Stream stream = File.Open("TestData" + Path.DirectorySeparatorChar + "TestImage.png", FileMode.Open);
+        var attachmentFileUpload = new AttachmentFileUpload(stream, "MyFileName.png", "SomeName");
+        Attachment att2 = await TrelloClient.AddAttachmentToCardAsync(card.Id, attachmentFileUpload, true);
+
+        try
+        {
+            TrelloClient.Options.IncludeAttachmentsInCardGetMethods = true;
+            Card cardAfterAttachments = await TrelloClient.GetCardAsync(card.Id);
+            Assert.Equal(2, cardAfterAttachments.Attachments.Count);
+            Assert.Equal(att2.Id, cardAfterAttachments.AttachmentCover);
+        }
+        finally
+        {
+            TrelloClient.Options.IncludeAttachmentsInCardGetMethods = false;
+        }
+        
+
+        
+
+        var attachments = await TrelloClient.GetAttachmentsOnCardAsync(card.Id);
+        Assert.Equal(2, attachments.Count);
+        Attachment attachment1 = attachments.Single(x=> x.Id == att1.Id);
+        Attachment attachment2 = attachments.Single(x=> x.Id == att2.Id);
+
+        Assert.Equal(att1.Url, attachment1.Url);
+        Assert.Equal(att1.Name, attachment1.Name);
+        Assert.Equal(att2.FileName, attachment2.FileName);
+        Assert.Equal(att2.Name, attachment2.Name);
     }
 
     private void AddOutput(string description, ref int step, int totalSteps)
@@ -465,8 +507,17 @@ public class CardTests : TestBaseWithNewBoard
         List<TrelloAction> commentsOnCardAfterDelete = await TrelloClient.GetPagedCommentsOnCardAsync(cardForComments.Id);
         Assert.Empty(commentsOnCardAfterDelete);
 
+
         List<TrelloAction> allCommentsOnCardAfterDelete = await TrelloClient.GetAllCommentsOnCardAsync(cardForComments.Id);
         Assert.Empty(allCommentsOnCardAfterDelete);
+
+        for (int i = 0; i < 51; i++)
+        {
+            await TrelloClient.AddCommentAsync(cardForComments.Id, new Comment("Comment " + i));
+        }
+
+        List<TrelloAction> moreThan50Comments = await TrelloClient.GetAllCommentsOnCardAsync(cardForComments.Id);
+        Assert.Equal(51, moreThan50Comments.Count);
     }
 
     private async Task TestCovers(List cardList)

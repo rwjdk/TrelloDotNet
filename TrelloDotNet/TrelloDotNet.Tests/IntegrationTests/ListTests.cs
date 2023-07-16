@@ -103,6 +103,17 @@ public class ListTests : TestBaseWithNewBoard
             WaitToAvoidRateLimits();
             var cardsOnListAfterMove = await TrelloClient.GetCardsInListAsync(listToMoveTo.Id);
             Assert.Equal(3, cardsOnListAfterMove.Count);
+
+            WaitToAvoidRateLimits();
+            //Move card from one list to another
+            List target = await TrelloClient.AddListAsync(new List("Target", BoardId));
+            await TrelloClient.MoveCardToListAsync(cardsOnListAfterMove[0].Id, target.Id);
+
+            var source = await TrelloClient.GetCardsInListAsync(listToMoveTo.Id);
+            Assert.Equal(2, source.Count);
+
+            var targetAfter = await TrelloClient.GetCardsInListAsync(target.Id);
+            Assert.Single(targetAfter);
         }
         finally
         {

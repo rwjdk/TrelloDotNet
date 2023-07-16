@@ -11,6 +11,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestData\TestImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestData\TestImage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
