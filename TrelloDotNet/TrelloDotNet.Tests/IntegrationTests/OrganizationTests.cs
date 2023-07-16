@@ -3,6 +3,7 @@ using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
+[Collection("Organization Management")] //In own collection to not overlap other tests
 public class OrganizationTests : TestBase
 {
     [Fact]

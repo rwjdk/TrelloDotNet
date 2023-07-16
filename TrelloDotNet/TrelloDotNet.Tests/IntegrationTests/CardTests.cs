@@ -20,7 +20,7 @@ public class CardTests : TestBaseWithNewBoard
         try
         {
             int step = 1;
-            const int totalSteps = 17;
+            const int totalSteps = 18;
             WaitToAvoidRateLimits();
             await CreateNewBoard();
             var member = (await TrelloClient.GetMembersOfBoardAsync(BoardId)).First();

@@ -57,8 +57,8 @@ namespace TrelloDotNet.Model
         /// Id of Organization
         /// </summary>
         [JsonPropertyName("idOrganization")]
-        [JsonInclude]
-        public string OrganizationId { get; private set; }
+        [QueryParameter(false)]
+        public string OrganizationId { get; set; }
 
         /// <summary>
         /// Id of Enterprise

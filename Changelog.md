@@ -3,7 +3,8 @@
 
 ## Unreleased
 - Added DebuggerDisplay to `Organization`
-- Increased Test-Coverage to 78%
+- Added option to set `OrganizationId` when creating a `Board`
+- Increased Test-Coverage to 78%.
 
 <hr>
 

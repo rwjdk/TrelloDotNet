@@ -14,7 +14,11 @@ public abstract class TestBaseWithNewBoard : TestBase
         var guid = Guid.NewGuid();
         BoardName = $"UnitTestBoard-{guid}";
         BoardDescription = $"BoardDescription-{guid}";
-        Board = await TrelloClient.AddBoardAsync(new Board(BoardName, BoardDescription));
+        var board = new Board(BoardName, BoardDescription)
+        {
+            OrganizationId = "63e0bdc4ab548c20ba689bf9"
+        };
+        Board = await TrelloClient.AddBoardAsync(board);
         BoardId = Board.Id;
         Assert.Equal(BoardName, Board.Name);
         Assert.Equal(BoardDescription, Board.Description);
