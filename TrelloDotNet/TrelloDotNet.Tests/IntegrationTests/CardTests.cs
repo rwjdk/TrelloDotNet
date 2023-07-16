@@ -36,10 +36,6 @@ public class CardTests : TestBaseWithNewBoard
             WaitToAvoidRateLimits();
             var cardList = await TrelloClient.AddListAsync(new List("List for Card Tests", BoardId));
 
-            AddOutput("TestAttachments", ref step, totalSteps);
-            await TestAttachments(cardList);
-            return;
-
             AddOutput("TestAddCard", ref step, totalSteps);
             var addedCard = await TestAddCard(cardList, start, due, memberIds, allLabelsOnBoard);
 
