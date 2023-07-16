@@ -11,8 +11,9 @@ public abstract class TestBaseWithNewBoard : TestBase
 
     public async Task CreateNewBoard()
     {
-        BoardName = $"UnitTestBoard-{DateTime.Now:yyyyMMddHHmmss}";
-        BoardDescription = $"BoardDescription-{DateTime.Now:yyyyMMddHHmmss}";
+        var guid = Guid.NewGuid();
+        BoardName = $"UnitTestBoard-{guid}";
+        BoardDescription = $"BoardDescription-{guid}";
         Board = await TrelloClient.AddBoardAsync(new Board(BoardName, BoardDescription));
         BoardId = Board.Id;
         Assert.Equal(BoardName, Board.Name);
