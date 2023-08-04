@@ -14,15 +14,15 @@ public class TestFixtureWithNewBoard : TestBase, IAsyncLifetime
 
     public async Task InitializeAsync()
     {
-        var organizationGuid = Guid.NewGuid();
-        OrganizationName = $"UnitTestOrganization-{organizationGuid}";
+        var organizationName = Guid.NewGuid().ToString();
+        OrganizationName = $"UnitTestOrganization-{organizationName}";
         Organization = await TrelloClient.AddOrganizationAsync(new Organization(OrganizationName));
         OrganizationId = Organization.Id;
         Assert.Equal(OrganizationName, Organization.DisplayName);
 
-        var boardGuid = Guid.NewGuid();
-        BoardName = $"UnitTestBoard-{boardGuid}";
-        BoardDescription = $"BoardDescription-{boardGuid}";
+        var boardName = Guid.NewGuid().ToString();
+        BoardName = $"UnitTestBoard-{boardName}";
+        BoardDescription = $"BoardDescription-{boardName}";
         var board = new Board(BoardName, BoardDescription)
         {
             OrganizationId = Organization.Id
@@ -37,7 +37,7 @@ public class TestFixtureWithNewBoard : TestBase, IAsyncLifetime
     {
         try
         {
-            TrelloClient.DeleteBoardAsync(BoardId).Wait();
+            await TrelloClient.DeleteBoardAsync(BoardId);
         }
         catch (Exception e)
         {
@@ -46,7 +46,7 @@ public class TestFixtureWithNewBoard : TestBase, IAsyncLifetime
         finally
         {
             TrelloClient.Options.AllowDeleteOfBoards = true;
-            TrelloClient.DeleteBoardAsync(BoardId).Wait();
+            await TrelloClient.DeleteBoardAsync(BoardId);
         }
 
         try

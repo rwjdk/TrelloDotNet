@@ -6,6 +6,7 @@ namespace TrelloDotNet.Tests;
 public abstract class TestBase
 {
     public TrelloClient TrelloClient;
+
     protected TestBase()
     {
         TrelloClient = GetClient();
