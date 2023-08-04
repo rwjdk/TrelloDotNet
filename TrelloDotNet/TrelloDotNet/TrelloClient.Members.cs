@@ -131,7 +131,7 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task AddMemberToBoardAsync(string boardId, string memberId, MembershipType membershipType, bool allowBillableGuest = false, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/{memberId}", cancellationToken,
+            await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/{memberId}", cancellationToken, 0,
                 new QueryParameter(@"type", membershipType.GetJsonPropertyName()),
                 new QueryParameter(@"allowBillableGuest", allowBillableGuest));
         }
@@ -145,7 +145,7 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task InviteMemberToBoardViaEmailAsync(string boardId, string email, MembershipType membershipType, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}", cancellationToken,
+            await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}", cancellationToken, 0,
                 new QueryParameter(@"type", membershipType.GetJsonPropertyName()),
                 new QueryParameter(@"email", email));
         }
@@ -158,7 +158,7 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task RemoveMemberFromBoardAsync(string boardId, string memberId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/{memberId}", cancellationToken);
+            await _apiRequestController.Delete($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/{memberId}", cancellationToken, 0);
         }
 
         /// <summary>

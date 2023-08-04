@@ -94,6 +94,7 @@ namespace TrelloDotNet
         {
             var newList = await GetListAsync(newListId, cancellationToken); //Get the new list's BoardId so the user do not need to provide it.
             await _apiRequestController.Post($"{UrlPaths.Lists}/{currentListId}/moveAllCards", cancellationToken,
+                0,
                 new QueryParameter(@"idBoard", newList.BoardId),
                 new QueryParameter(@"idList", newListId)
             );
@@ -106,7 +107,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}", cancellationToken);
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}", cancellationToken, 0);
         }
 
         /// <summary>

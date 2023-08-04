@@ -1,7 +1,9 @@
-﻿using Xunit.Abstractions;
+﻿using TrelloDotNet.Model;
+using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests;
 
+[Collection("Manual Tests")] //In own collection to not overlap other tests
 public class TestSandbox : TestBase
 {
     private readonly ITestOutputHelper _output;
@@ -23,59 +25,53 @@ public class TestSandbox : TestBase
     }
 
     [FactManualOnly]
-    public async Task DeleteAllBoardsWithUnitTestBoardPrefix()
+    public async Task CleanupEverythingFromUnitTests()
     {
         await Task.CompletedTask;
-        /*
+        
+        //Remove test-boards (comment in execution)
         TrelloClient.Options.AllowDeleteOfBoards = true;
         List<Board> boards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync();
-        foreach (var unitTestBoard in boards.Where(x => x.Name.StartsWith("UnitTestBoard")))
+        var unitTestBoards = boards.Where(x => x.Name.StartsWith("UnitTestBoard")).ToList();
+        foreach (var unitTestBoard in unitTestBoards)
         {
-            await TrelloClient.DeleteBoardAsync(unitTestBoard.Id);
+            //await TrelloClient.DeleteBoardAsync(unitTestBoard.Id);
         }
-
         TrelloClient.Options.AllowDeleteOfBoards = false;
-        }*/
+
+        //Remove test-workspaces (comment in execution)
+        TrelloClient.Options.AllowDeleteOfOrganizations = true;
+        List<Organization> orgranizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync();
+        var unitTestOrganizations = orgranizations.Where(x => x.DisplayName.StartsWith("UnitTestOrganization")).ToList();
+        foreach (var unitTestOrganization in unitTestOrganizations)
+        {
+            //await TrelloClient.DeleteOrganizationAsync(unitTestOrganization.Id);
+        }
+        TrelloClient.Options.AllowDeleteOfOrganizations = false;
+        
     }
 
     [FactManualOnly]
     public async Task DeleteAllWebhooks()
     {
         await Task.CompletedTask;
-        /*
+        //Delete all Webhooks (comment in execution)
         var webhooksForCurrentToken = await TrelloClient.GetWebhooksForCurrentTokenAsync();
         foreach (var webhook in webhooksForCurrentToken)
         {
-            await TrelloClient.DeleteWebhookAsync(webhook.Id);
-        }*/
-    }
-
-    [FactManualOnly]
-    public async Task UpdateWebhook()
-    {
-        await Task.CompletedTask;
-        //Webhook webhook = await TrelloClient.GetWebhookAsync("63e2892778670f4f7b7ffa2e");
-        //webhook.CallbackUrl = "https://4cf8-185-229-154-225.eu.ngrok.io/api/FunctionTrelloWebhookEndpointReceiver";
-        //var updatedWebhook = await TrelloClient.UpdateWebhookAsync(webhook);
-        //or
-        //await TrelloClient.UpdateWebhookByCallbackUrlAsync("https://old", "https://new");
+            //await TrelloClient.DeleteWebhookAsync(webhook.Id);
+        }
     }
 
     [FactManualOnly]
     public async Task CustomFieldsTests()
     {
         await Task.CompletedTask;
-        /*
-        int debug = 0;
-        /*card.AttachmentCover = null;
-        await TrelloClient.UpdateCardAsync(card);*/
-        //await TrelloClient.AddCoverToCardAsync(card.Id, new CardCover(card.Attachments[0].Id, CardCoverBrightness.Light));
-
         //NB: These are not part of the automated test-suite as that is linked to a free account that does not support custom fields
         /*
         var boardId = "641ddde2e37dc99ab1ccc988";
-        List<CustomField> customFieldsOnBoardAsync = await _trelloClient.GetCustomFieldsOnBoardAsync(boardId);
-        var card = (await _trelloClient.GetCardsOnBoardAsync(boardId)).First(); //Grab random card
+        List<CustomField> customFieldsOnBoardAsync = await TrelloClient.GetCustomFieldsOnBoardAsync(boardId);
+        var card = (await TrelloClient.GetCardsOnBoardAsync(boardId)).First(); //Grab random card
 
         //Sample set all custom fields on the board
         foreach (var customField in customFieldsOnBoardAsync)
@@ -83,47 +79,36 @@ public class TestSandbox : TestBase
             switch (customField.Type)
             {
                 case CustomFieldType.Checkbox:
-                    await _trelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, true); //Update Bool
+                    await TrelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, true); //Update Bool
                     bool? boolean = card.CustomFieldItems.GetCustomFieldValueAsBoolean(customField); //Get Bool
-                    await _trelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear Bool
+                    await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear Bool
                     break;
                 case CustomFieldType.Date:
-                    await _trelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, DateTimeOffset.Now); //Update Date
+                    await TrelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, DateTimeOffset.Now); //Update Date
                     DateTimeOffset? dateTimeOffset = card.CustomFieldItems.GetCustomFieldValueAsDateTimeOffset(customField); // Get Date
-                    await _trelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear Date
+                    await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear Date
                     break;
                 case CustomFieldType.List:
-                    await _trelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, customField.Options[0]); //Update ListOption
+                    await TrelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, customField.Options[0]); //Update ListOption
                     CustomFieldOption? listOption = card.CustomFieldItems.GetCustomFieldValueAsOption(customField); //Get ListOption (as Option)
                     string listOptionString = card.CustomFieldItems.GetCustomFieldValueAsString(customField); //Get ListOption as String value
-                    await _trelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear List Option
+                    await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear List Option
                     break;
                 case CustomFieldType.Number:
-                    await _trelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, 42); //Update Integer
-                    await _trelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, 42M); //Update Decimal
+                    await TrelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, 42); //Update Integer
+                    await TrelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, 42M); //Update Decimal
                     int? numberAsInteger = card.CustomFieldItems.GetCustomFieldValueAsInteger(customField); //Get Integer
                     decimal? numberAsDecimal = card.CustomFieldItems.GetCustomFieldValueAsDecimal(customField); //Get Decimal
-                    await _trelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear number
+                    await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear number
                     break;
                 case CustomFieldType.Text:
-                    await _trelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, "Hello World"); //Update String
+                    await TrelloClient.UpdateCustomFieldValueOnCardAsync(card.Id, customField, "Hello World"); //Update String
                     var stringValue = card.CustomFieldItems.GetCustomFieldValueAsString(customField); //Get String
-                    await _trelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear String
+                    await TrelloClient.ClearCustomFieldValueOnCardAsync(card.Id, customField); //Clear String
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }*/
-    }
-
-    [FactManualOnly]
-    public async Task PlaygroundTest()
-    {
-        _output.WriteLine("PlaygroundTest");
-        await Task.CompletedTask;
-        /*
-        var boardId = "63c939a5cea0cb006dc9e88b";
-        var cardId = "63c939a5cea0cb006dc9e9dd";
-        var memberId = "63d1239e857afaa8b003c633";*/
     }
 }

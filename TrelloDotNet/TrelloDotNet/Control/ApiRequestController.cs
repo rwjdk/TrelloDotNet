@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -31,38 +32,38 @@ namespace TrelloDotNet.Control
 
         internal async Task<T> Get<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
-            string json = await Get(suffix, cancellationToken, parameters);
+            string json = await Get(suffix, cancellationToken, 0, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<string> Get(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
+        internal async Task<string> Get(string suffix, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.GetAsync(uri, cancellationToken);
-            var content = await response.Content.ReadAsStringAsync();
+            var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
+                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => Get(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
-            return content; //Content is assumed JSON
+            return responseContent; //Content is assumed JSON
         }
 
         internal async Task<T> Post<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
-            string json = await Post(suffix, cancellationToken, parameters);
+            string json = await Post(suffix, cancellationToken, 0, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
         internal async Task<T> PostWithAttachmentFileUpload<T>(string suffix, AttachmentFileUpload attachmentFile, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
-            string json = await PostWithAttachmentFileUpload(suffix, attachmentFile, cancellationToken, parameters);
+            string json = await PostWithAttachmentFileUpload(suffix, attachmentFile, cancellationToken, 0, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<string> PostWithAttachmentFileUpload(string suffix, AttachmentFileUpload attachmentFile, CancellationToken cancellationToken, params QueryParameter[] parameters)
+        internal async Task<string> PostWithAttachmentFileUpload(string suffix, AttachmentFileUpload attachmentFile, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             using (var multipartFormContent = new MultipartFormDataContent())
@@ -72,60 +73,60 @@ namespace TrelloDotNet.Control
                 var responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new TrelloApiException(responseContent, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
+                    return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => PostWithAttachmentFileUpload(suffix, attachmentFile, cancellationToken, retry, parameters), retryCount, cancellationToken);
                 }
                 return responseContent; //Content is assumed JSON
             }
         }
 
-        internal async Task<string> Post(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
+        internal async Task<string> Post(string suffix, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PostAsync(uri, null, cancellationToken);
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
+                return await PreformRetryIfNeededOrThrow(uri, content, retry => Post(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
             return content; //Content is assumed JSON
         }
 
         internal async Task<T> Put<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
-            string json = await Put(suffix, cancellationToken, parameters);
+            string json = await Put(suffix, cancellationToken, 0, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<string> Put(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
+        internal async Task<string> Put(string suffix, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PutAsync(uri, null, cancellationToken);
-            var content = await response.Content.ReadAsStringAsync();
+            var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
+                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => Put(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
-            return content; //Content is assumed JSON
+            return responseContent; //Content is assumed JSON
         }
 
         internal async Task<T> PutWithJsonPayload<T>(string suffix, CancellationToken cancellationToken, string payload, params QueryParameter[] parameters)
         {
-            string json = await PutWithJsonPayload(suffix, cancellationToken, payload, parameters);
+            string json = await PutWithJsonPayload(suffix, cancellationToken, payload, 0, parameters);
             var @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
-        internal async Task<string> PutWithJsonPayload(string suffix, CancellationToken cancellationToken, string payload, params QueryParameter[] parameters)
+        internal async Task<string> PutWithJsonPayload(string suffix, CancellationToken cancellationToken, string payload, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PutAsync(uri, new StringContent(payload, Encoding.UTF8, "application/json"), cancellationToken);
-            var content = await response.Content.ReadAsStringAsync();
+            var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
+                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => PutWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
             }
-            return content; //Content is assumed JSON
+            return responseContent; //Content is assumed JSON
         }
 
         private string FormatExceptionUrlAccordingToClientOptions(string fullUrl)
@@ -160,15 +161,27 @@ namespace TrelloDotNet.Control
             return new Uri($@"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
         }
 
-        internal async Task Delete(string suffix, CancellationToken cancellationToken)
+        internal async Task<string> Delete(string suffix, CancellationToken cancellationToken, int retryCount)
         {
             var uri = BuildUri(suffix);
             var response = await _httpClient.DeleteAsync(uri, cancellationToken);
-            var content = await response.Content.ReadAsStringAsync();
+            var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new TrelloApiException(content, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message
+                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => Delete(suffix, cancellationToken, retry), retryCount, cancellationToken);
             }
+            return null;
+        }
+
+        private async Task<string> PreformRetryIfNeededOrThrow(Uri uri, string responseContent, Func<int,Task<string>> toRetry, int retryCount, CancellationToken cancellationToken)
+        {
+            if (responseContent.Contains("API_TOKEN_LIMIT_EXCEEDED") && retryCount <= _client.Options.MaxRetryCountForTokenLimitExceeded)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(_client.Options.DelayInSecondsToWaitInTokenLimitExceededRetry), cancellationToken);
+                retryCount++;
+                return await toRetry(retryCount);
+            }
+            throw new TrelloApiException(responseContent, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message       
         }
     }
 }

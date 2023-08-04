@@ -15,7 +15,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteLabelAsync(string labelId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Labels}/{labelId}", cancellationToken);
+            await _apiRequestController.Delete($"{UrlPaths.Labels}/{labelId}", cancellationToken, 0);
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteWebhookAsync(string webhookId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Webhooks}/{webhookId}", cancellationToken);
+            await _apiRequestController.Delete($"{UrlPaths.Webhooks}/{webhookId}", cancellationToken, 0);
         }
 
         /// <summary>

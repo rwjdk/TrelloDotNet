@@ -51,7 +51,7 @@ namespace TrelloDotNet
         /// <returns>JSON Representation of response</returns>
         public async Task<string> PostAsync(string urlSuffix, CancellationToken cancellationToken = default, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Post(urlSuffix, cancellationToken, parameters);
+            return await _apiRequestController.Post(urlSuffix, cancellationToken, 0, parameters);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace TrelloDotNet
         /// <returns>JSON Representation of response</returns>
         public async Task<string> PutAsync(string urlSuffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Put(urlSuffix, cancellationToken, parameters);
+            return await _apiRequestController.Put(urlSuffix, cancellationToken, 0, parameters);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace TrelloDotNet
         /// <returns>JSON Representation of response</returns>
         public async Task<string> PutAsync(string urlSuffix, string payload, CancellationToken cancellationToken = default, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.PutWithJsonPayload(urlSuffix, cancellationToken, payload, parameters);
+            return await _apiRequestController.PutWithJsonPayload(urlSuffix, cancellationToken, payload, 0, parameters);
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace TrelloDotNet
         /// <returns>JSON Representation of response</returns>
         public async Task<string> GetAsync(string urlSuffix, CancellationToken cancellationToken = default, params QueryParameter[] parameters)
         {
-            return await _apiRequestController.Get(urlSuffix, cancellationToken, parameters);
+            return await _apiRequestController.Get(urlSuffix, cancellationToken, 0, parameters);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteAsync(string urlSuffix, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete(urlSuffix, cancellationToken);
+            await _apiRequestController.Delete(urlSuffix, cancellationToken, 0);
         }
     }
 }

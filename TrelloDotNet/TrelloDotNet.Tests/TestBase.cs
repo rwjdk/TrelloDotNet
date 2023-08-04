@@ -5,7 +5,7 @@ namespace TrelloDotNet.Tests;
 
 public abstract class TestBase
 {
-    protected TrelloClient TrelloClient;
+    public TrelloClient TrelloClient;
     protected TestBase()
     {
         TrelloClient = GetClient();
@@ -22,6 +22,7 @@ public abstract class TestBase
             var apiKey = config["TrelloApiKey"];
             var token = config["TrelloToken"];
             var trelloClientOptions = new TrelloClientOptions(includeCustomFieldsInCardGetMethods: true);
+            trelloClientOptions.MaxRetryCountForTokenLimitExceeded = 10;
             return new TrelloClient(apiKey, token, trelloClientOptions);
         }
         catch (Exception)
@@ -30,15 +31,10 @@ public abstract class TestBase
         }
     }
 
-    protected void AssertTimeIsNow(DateTimeOffset? objectCreationTime)
+    public void AssertTimeIsNow(DateTimeOffset? objectCreationTime)
     {
         var beforeNow = objectCreationTime < DateTimeOffset.UtcNow.AddMinutes(1);
         var afterAMinuteAgo = objectCreationTime > DateTimeOffset.UtcNow.AddMinutes(-1);
         Assert.True(beforeNow && afterAMinuteAgo);
-    }
-
-    protected void WaitToAvoidRateLimits(int waitSeconds = 1)
-    {
-        Thread.Sleep(waitSeconds * 1000);
     }
 }

@@ -37,7 +37,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteCommentActionAsync(string commentActionId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Actions}/{commentActionId}", cancellationToken);
+            await _apiRequestController.Delete($"{UrlPaths.Actions}/{commentActionId}", cancellationToken, 0);
         }
 
 /// <summary>

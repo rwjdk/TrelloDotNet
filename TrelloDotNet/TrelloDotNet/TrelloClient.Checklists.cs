@@ -143,7 +143,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteChecklistAsync(string checklistId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}", cancellationToken);
+            await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}", cancellationToken, 0);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteChecklistItemAsync(string checklistId, string checklistItemId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}/{UrlPaths.CheckItems}/{checklistItemId}", cancellationToken);
+            await _apiRequestController.Delete($"{UrlPaths.Checklists}/{checklistId}/{UrlPaths.CheckItems}/{checklistItemId}", cancellationToken, 0);
         }
     }
 }

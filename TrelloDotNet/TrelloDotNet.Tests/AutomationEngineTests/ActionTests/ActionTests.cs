@@ -3,80 +3,27 @@ using TrelloDotNet.AutomationEngine.Model;
 using TrelloDotNet.AutomationEngine.Model.Actions;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Webhook;
-using Xunit.Abstractions;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests.ActionTests;
 
-public class ActionTests : TestBaseWithNewBoard
+public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly ITestOutputHelper _output;
+    private readonly string? _boardId;
 
-    public ActionTests(ITestOutputHelper output)
+    public ActionTests(TestFixtureWithNewBoard fixture)
     {
-        _output = output;
+        _boardId = fixture.BoardId;
     }
-
 
     [Fact]
-    public async Task ActionsTests()
+    public async Task TestRemoveChecklistToCardAction()
     {
-        try
-        {
-            int step = 1;
-            const int totalSteps = 7;
-            await CreateNewBoard();
-            var lists = await TrelloClient.GetListsOnBoardAsync(BoardId);
-
-            AddOutput("TestAddCoverOnCardAction", ref step, totalSteps);
-            await TestAddCoverOnCardAction(lists);
-
-            WaitToAvoidRateLimits(3);
-
-            AddOutput("TestRemoveChecklistToCardAction", ref step, totalSteps);
-            await TestRemoveChecklistToCardAction(lists);
-
-            WaitToAvoidRateLimits(3);
-
-            AddOutput("TestAddChecklistToCardAction", ref step, totalSteps);
-            await TestAddChecklistToCardAction(lists);
-
-            WaitToAvoidRateLimits(3);
-
-            AddOutput("TestAddStickerToCardAction", ref step, totalSteps);
-            await TestAddStickerToCardAction(lists);
-
-            WaitToAvoidRateLimits(3);
-
-            AddOutput("TestRemoveCoverFromCardAction", ref step, totalSteps);
-            await TestRemoveCoverFromCardAction(lists);
-
-            WaitToAvoidRateLimits(3);
-
-            AddOutput("TestSetFieldsOnCardAction", ref step, totalSteps);
-            await TestSetFieldsOnCardAction(lists);
-            
-            WaitToAvoidRateLimits(3);
-
-            AddOutput("TestRemoveStickerFromCardAction", ref step, totalSteps);
-            await TestRemoveStickerFromCardAction(lists);
-
-        }
-        finally
-        {
-            await DeleteBoard();
-        }
-    }
-
-    private async Task TestRemoveChecklistToCardAction(List<List> lists)
-    {
-        var aList = lists.First();
-        var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
+        var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card"));
         var checklist = new Checklist("My Checklist", new List<ChecklistItem> { new("A"), new("B") });
         await TrelloClient.AddChecklistAsync(card.Id, checklist);
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
-
-        WaitToAvoidRateLimits(3);
 
         IAutomationAction action = new RemoveChecklistFromCardAction(checklist.Name);
         await action.PerformActionAsync(webhookAction, processingResult);
@@ -90,25 +37,22 @@ public class ActionTests : TestBaseWithNewBoard
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
     }
 
-    private async Task TestAddChecklistToCardAction(List<List> lists)
+    [Fact]
+    public async Task TestAddChecklistToCardAction()
     {
-        var aList = lists.First();
-        var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
+        var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card"));
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
 
         var checklistToAdd = new Checklist("My Checklist", new List<ChecklistItem> { new("A"), new("B")});
         IAutomationAction action = new AddChecklistToCardAction(checklistToAdd);
 
-        WaitToAvoidRateLimits(3);
-
         await action.PerformActionAsync(webhookAction, processingResult);
         var checklists = await TrelloClient.GetChecklistsOnCardAsync(card.Id);
         Assert.Single(checklists);
         Assert.Equal(1, processingResult.ActionsExecuted);
         Assert.Equal(0, processingResult.ActionsSkipped);
-
-        WaitToAvoidRateLimits(3);
 
         await action.PerformActionAsync(webhookAction, processingResult);
         checklists = await TrelloClient.GetChecklistsOnCardAsync(card.Id);
@@ -119,10 +63,11 @@ public class ActionTests : TestBaseWithNewBoard
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
     }
 
-    private async Task TestAddStickerToCardAction(List<List> lists)
+    [Fact]
+    public async Task TestAddStickerToCardAction()
     {
-        var aList = lists.First();
-        var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
+        var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card"));
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
 
@@ -135,8 +80,6 @@ public class ActionTests : TestBaseWithNewBoard
         Assert.Equal(1, processingResult.ActionsExecuted);
         Assert.Equal(0, processingResult.ActionsSkipped);
 
-        WaitToAvoidRateLimits(3);
-
         await action.PerformActionAsync(webhookAction, processingResult);
         stickers = await TrelloClient.GetStickersOnCardAsync(card.Id);
         Assert.Single(stickers);
@@ -148,16 +91,15 @@ public class ActionTests : TestBaseWithNewBoard
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
     }
 
-    private async Task TestRemoveCoverFromCardAction(List<List> lists)
+    [Fact]
+    public async Task TestRemoveCoverFromCardAction()
     {
-        var aList = lists.First();
-        var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
+        var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card"));
         await TrelloClient.AddCoverToCardAsync(card.Id, new CardCover(CardCoverColor.Lime, CardCoverSize.Normal));
 
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
-
-        WaitToAvoidRateLimits(3);
 
         IAutomationAction action = new RemoveCoverFromCardAction();
         await action.PerformActionAsync(webhookAction, processingResult);
@@ -169,12 +111,13 @@ public class ActionTests : TestBaseWithNewBoard
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
     }
 
-    private async Task TestSetFieldsOnCardAction(List<List> lists)
+    [Fact]
+    public async Task TestSetFieldsOnCardAction()
     {
-        var aList = lists.First();
+        var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
         const string orgName = "Some Card";
         const string someDescription = "Some Description";
-        var card = await TrelloClient.AddCardAsync(new Card(aList.Id, orgName, someDescription));
+        var card = await TrelloClient.AddCardAsync(new Card(list.Id, orgName, someDescription));
         await TrelloClient.AddStickerToCardAsync(card.Id, new Sticker(StickerDefaultImageId.Check));
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
@@ -241,18 +184,17 @@ public class ActionTests : TestBaseWithNewBoard
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
     }
 
-    private async Task TestRemoveStickerFromCardAction(List<List> lists)
+    [Fact]
+    private async Task TestRemoveStickerFromCardAction()
     {
-        var aList = lists.First();
-        var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
+        var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card"));
         await TrelloClient.AddStickerToCardAsync(card.Id, new Sticker(StickerDefaultImageId.Check));
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
 
         IAutomationAction action = new RemoveStickerFromCardAction(StickerDefaultImageId.Check);
         await action.PerformActionAsync(webhookAction, processingResult);
-
-        WaitToAvoidRateLimits(3);
 
         action = new RemoveStickerFromCardAction("check"); //Second call to test no sticker exists
         await action.PerformActionAsync(webhookAction, processingResult); 
@@ -265,10 +207,11 @@ public class ActionTests : TestBaseWithNewBoard
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
     }
 
-    private async Task TestAddCoverOnCardAction(List<List> lists)
+    [Fact]
+    private async Task AddCoverOnCardAction()
     {
-        var aList = lists.First();
-        var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
+        var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card"));
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
 
@@ -283,11 +226,5 @@ public class ActionTests : TestBaseWithNewBoard
         Assert.Equal(0, processingResult.ActionsSkipped);
 
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
-    }
-
-    private void AddOutput(string description, ref int step, int totalSteps)
-    {
-        _output.WriteLine($"ActionTests - Step {step}/{totalSteps} - {description}");
-        step++;
     }
 }

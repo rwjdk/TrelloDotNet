@@ -12,7 +12,7 @@ public class OrganizationTests : TestBase
         string? id = null;
         try
         {
-            var displayName = Guid.NewGuid().ToString();
+            var displayName = "UnitTestOrganization-"+Guid.NewGuid();
             var input = new Organization(displayName);
             const string description = "Some Description";
             input.Description = description;

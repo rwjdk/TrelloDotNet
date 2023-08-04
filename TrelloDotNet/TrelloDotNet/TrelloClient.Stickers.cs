@@ -62,7 +62,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteStickerAsync(string cardId, string stickerId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}", cancellationToken);
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}", cancellationToken, 0);
         }
     }
 }

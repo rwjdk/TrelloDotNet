@@ -31,6 +31,16 @@
         public bool AllowDeleteOfOrganizations { get; set; }
 
         /// <summary>
+        /// Controls how many automated Retries the API should try in case if get an 'API_TOKEN_LIMIT_EXCEEDED' error from Trello (Default 3) set to -1 to disable the system
+        /// </summary>
+        public int MaxRetryCountForTokenLimitExceeded { get; set; }
+
+        /// <summary>
+        /// Controls how long in seconds system should wait between retries, should it receive an 'API_TOKEN_LIMIT_EXCEEDED' error from Trello (Default 1 sec)
+        /// </summary>
+        public double DelayInSecondsToWaitInTokenLimitExceededRetry { get; set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="apiCallExceptionOption">Control level of URL Details are shown in Exceptions from calls to the API</param>
@@ -38,18 +48,24 @@
         /// <param name="includeCustomFieldsInCardGetMethods">Control if cards should retrieve Custom Fields when retrieving cards (WARNING: Non Get-Methods returning Card will NOT include Custom fields)</param>
         /// <param name="includeAttachmentsInCardGetMethods">Control if cards should retrieve Attachments when retrieving cards (WARNING: Non Get-Methods returning Card will NOT include Attachments)</param>
         /// <param name="allowDeleteOfOrganizations">Controls if it is allowed to delete Organizations (secondary confirmation)</param>
+        /// <param name="maxRetryCountForTokenLimitExceeded">Controls how many automated Retries the API should try in case if get an 'API_TOKEN_LIMIT_EXCEEDED' error from Trello (Default 3) set to -1 to disable the system</param>
+        /// <param name="delayInSecondsToWaitInTokenLimitExceededRetry">Controls how long in seconds system should wait between retries, should it receive an 'API_TOKEN_LIMIT_EXCEEDED' error from Trello (Default 1 sec)</param>
         public TrelloClientOptions(
             ApiCallExceptionOption apiCallExceptionOption = ApiCallExceptionOption.IncludeUrlButMaskCredentials,
             bool allowDeleteOfBoards = false,
             bool includeCustomFieldsInCardGetMethods = false,
             bool includeAttachmentsInCardGetMethods = false,
-            bool allowDeleteOfOrganizations = false) 
+            bool allowDeleteOfOrganizations = false,
+            int maxRetryCountForTokenLimitExceeded = 3,
+            double delayInSecondsToWaitInTokenLimitExceededRetry = 1) 
         {
             ApiCallExceptionOption = apiCallExceptionOption;
             AllowDeleteOfBoards = allowDeleteOfBoards;
             IncludeCustomFieldsInCardGetMethods = includeCustomFieldsInCardGetMethods;
             IncludeAttachmentsInCardGetMethods = includeAttachmentsInCardGetMethods;
             AllowDeleteOfOrganizations = allowDeleteOfOrganizations;
+            MaxRetryCountForTokenLimitExceeded = maxRetryCountForTokenLimitExceeded;
+            DelayInSecondsToWaitInTokenLimitExceededRetry = delayInSecondsToWaitInTokenLimitExceededRetry;
         }
     }
 }

@@ -2,122 +2,126 @@
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-public class ListTests : TestBaseWithNewBoard
+public class ListTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    [Fact]
-    public async Task ListCrud()
+    private readonly string? _boardId;
+
+    public ListTests(TestFixtureWithNewBoard fixture)
     {
-        try
-        {
-            WaitToAvoidRateLimits();
-            await CreateNewBoard();
-            var listsBefore = await TrelloClient.GetListsOnBoardAsync(BoardId);
+        _boardId = fixture.BoardId;
+    }
 
-            //Add List Test
-            WaitToAvoidRateLimits();
-            var newListName = Guid.NewGuid().ToString();
-            var addedList = await TrelloClient.AddListAsync(new List(newListName, BoardId));
-            var listId = addedList.Id;
-            AssertTimeIsNow(addedList.Created);
-            Assert.False(addedList.Closed);
-            Assert.Equal(listId, addedList.Id);
-            Assert.Equal(newListName, addedList.Name);
-            Assert.False(addedList.Subscribed);
-            Assert.Null(addedList.SoftLimit);
+    [Fact]
+    public async Task AddList()
+    {
+        var name = Guid.NewGuid().ToString();
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        AssertTimeIsNow(addList.Created);
+        Assert.False(addList.Closed);
+        Assert.Equal(name, addList.Name);
+        Assert.False(addList.Subscribed);
+        Assert.Null(addList.SoftLimit);
+        var listsAfter = await TrelloClient.GetListsOnBoardAsync(_boardId);
+        var foundList = listsAfter.FirstOrDefault(x => x.Id == addList.Id);
+        Assert.NotNull(foundList);
+        Assert.Equal(name, foundList.Name);
+    }
 
-            //There are now one more list
-            WaitToAvoidRateLimits();
-            var listsAfter = await TrelloClient.GetListsOnBoardAsync(BoardId);
-            Assert.Equal(listsBefore.Count + 1, listsAfter.Count);
+    [Fact]
+    public async Task UpdateList()
+    {
+        var name = Guid.NewGuid().ToString();
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        var updatedName = Guid.NewGuid().ToString();
+        addList.Name = updatedName;
+        var updateList = await TrelloClient.UpdateListAsync(addList);
+        var getList = await TrelloClient.GetListAsync(addList.Id);
+        Assert.Equal(updatedName, getList.Name);
+        Assert.Equal(updateList.Name, getList.Name);
+    }
 
-            //New list is there
-            var newList = listsAfter.FirstOrDefault(x => x.Name == newListName);
-            Assert.NotNull(newList);
+    [Fact]
+    public async Task ArchiveAndReopenList()
+    {
+        var name = Guid.NewGuid().ToString();
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
 
-            //Update List
-            WaitToAvoidRateLimits();
-            var updatedName = Guid.NewGuid().ToString();
-            newList.Name = updatedName;
-            var newListUpdated = await TrelloClient.UpdateListAsync(newList);
-            var getnewListViaId = await TrelloClient.GetListAsync(listId);
-            Assert.Equal(updatedName, getnewListViaId.Name);
-            Assert.Equal(newListUpdated.Name, getnewListViaId.Name);
+        //Archive
+        var archivedList = await TrelloClient.ArchiveListAsync(addList.Id);
+        Assert.True(archivedList.Closed);
+        var listsAfter = await TrelloClient.GetListsOnBoardAsync(_boardId);
+        Assert.True(listsAfter.TrueForAll(x => x.Id != addList.Id));
+        Assert.True(listsAfter.TrueForAll(x => x.Name != name));
 
-            //Archive List
-            WaitToAvoidRateLimits();
-            var archivedList = await TrelloClient.ArchiveListAsync(newListUpdated.Id);
-            var listsAfterArchive = await TrelloClient.GetListsOnBoardAsync(BoardId);
-            Assert.True(archivedList.Closed);
-            Assert.Equal(listsBefore.Count, listsAfterArchive.Count);
-            Assert.True(listsAfterArchive.TrueForAll(x => x.Id != listId));
-            Assert.True(listsAfterArchive.TrueForAll(x => x.Name != updatedName));
+        //Check that there are a closed list
+        var closedLists = await TrelloClient.GetListsOnBoardFilteredAsync(_boardId, ListFilter.Closed);
+        List foundList = closedLists.Single(x => x.Id == addList.Id);
+        Assert.Equal(addList.Name, foundList.Name);
 
-            //Check that there are now one closed list
-            WaitToAvoidRateLimits();
-            var closedLists = await TrelloClient.GetListsOnBoardFilteredAsync(BoardId, ListFilter.Closed);
-            Assert.Single(closedLists);
-            Assert.Equal(listId, closedLists.First().Id);
-            Assert.Equal(updatedName, closedLists.First().Name);
+        //Re-open
+        var reopenedList = await TrelloClient.ReOpenListAsync(foundList.Id);
+        Assert.False(reopenedList.Closed);
+        Assert.Equal(addList.Id, reopenedList.Id);
+        Assert.Equal(name, reopenedList.Name);
 
-            //Reopen
-            WaitToAvoidRateLimits();
-            var reopenedList = await TrelloClient.ReOpenListAsync(listId);
-            Assert.False(reopenedList.Closed);
-            Assert.Equal(listId, reopenedList.Id);
-            Assert.Equal(updatedName, reopenedList.Name);
+        var listsAfterReopen = await TrelloClient.GetListsOnBoardAsync(_boardId);
+        Assert.Contains(listsAfterReopen, x => x.Id == reopenedList.Id);
+        Assert.Contains(listsAfterReopen, x => x.Name == name);
+    }
 
-            WaitToAvoidRateLimits();
-            var listsAfterReopen = await TrelloClient.GetListsOnBoardAsync(BoardId);
-            Assert.Equal(listsAfterArchive.Count + 1, listsAfterReopen.Count);
+    [Fact]
+    public async Task ArchiveAllCardsInList()
+    {
+        var name = Guid.NewGuid().ToString();
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        //Add some cards so we can test Archive All Cards In List
+        await TrelloClient.AddCardAsync(new Card(addList.Id, "C1"));
+        await TrelloClient.AddCardAsync(new Card(addList.Id, "C2"));
+        await TrelloClient.AddCardAsync(new Card(addList.Id, "C3"));
+        var cardsOnListAfterAdd = await TrelloClient.GetCardsInListAsync(addList.Id);
+        Assert.Equal(3, cardsOnListAfterAdd.Count);
+        await TrelloClient.ArchiveAllCardsInListAsync(addList.Id);
+        var cardsOnListAfterArchive = await TrelloClient.GetCardsInListAsync(addList.Id);
+        Assert.Empty(cardsOnListAfterArchive);
+    }
 
-            //Test: ArchiveAllCardsInListAsync
-            //Add some cards so we can test Archive All Cards In List
-            WaitToAvoidRateLimits();
-            await TrelloClient.AddCardAsync(new Card(reopenedList.Id, "C1"));
-            WaitToAvoidRateLimits();
-            await TrelloClient.AddCardAsync(new Card(reopenedList.Id, "C2"));
-            WaitToAvoidRateLimits();
-            await TrelloClient.AddCardAsync(new Card(reopenedList.Id, "C3"));
-            WaitToAvoidRateLimits();
-            var cardsOnListAfterAdd = await TrelloClient.GetCardsInListAsync(reopenedList.Id);
-            Assert.Equal(3, cardsOnListAfterAdd.Count);
-            WaitToAvoidRateLimits();
-            await TrelloClient.ArchiveAllCardsInListAsync(reopenedList.Id);
-            var cardsOnListAfterArchive = await TrelloClient.GetCardsInListAsync(reopenedList.Id);
-            Assert.Empty(cardsOnListAfterArchive);
+    [Fact]
+    public async Task MoveCardToList()
+    {
+        var sourceList = await TrelloClient.AddListAsync(new List("Source", _boardId));
+        var targetList = await TrelloClient.AddListAsync(new List("Target", _boardId));
 
-            //Test: Move All Cards In List
-            //Add some cards so we can test Archive All Cards In List
-            WaitToAvoidRateLimits();
-            await TrelloClient.AddCardAsync(new Card(reopenedList.Id, "C1"));
-            WaitToAvoidRateLimits();
-            await TrelloClient.AddCardAsync(new Card(reopenedList.Id, "C2"));
-            WaitToAvoidRateLimits();
-            await TrelloClient.AddCardAsync(new Card(reopenedList.Id, "C3"));
-            WaitToAvoidRateLimits();
-            //Add new list to move cards to
-            WaitToAvoidRateLimits();
-            var listToMoveTo = await TrelloClient.AddListAsync(new List("List to move to", BoardId));
-            WaitToAvoidRateLimits();
-            await TrelloClient.MoveAllCardsInListAsync(reopenedList.Id, listToMoveTo.Id);
-            WaitToAvoidRateLimits();
-            var cardsOnListAfterMove = await TrelloClient.GetCardsInListAsync(listToMoveTo.Id);
-            Assert.Equal(3, cardsOnListAfterMove.Count);
+        Card card1 = await TrelloClient.AddCardAsync(new Card(sourceList.Id, "C1"));
+        Card card2 = await TrelloClient.AddCardAsync(new Card(sourceList.Id, "C2"));
+        Card card3 = await TrelloClient.AddCardAsync(new Card(sourceList.Id, "C3"));
 
-            WaitToAvoidRateLimits();
-            //Move card from one list to another
-            List target = await TrelloClient.AddListAsync(new List("Target", BoardId));
-            await TrelloClient.MoveCardToListAsync(cardsOnListAfterMove[0].Id, target.Id);
+        await TrelloClient.MoveCardToListAsync(card2.Id, targetList.Id);
 
-            var source = await TrelloClient.GetCardsInListAsync(listToMoveTo.Id);
-            Assert.Equal(2, source.Count);
+        var sourceAfter = await TrelloClient.GetCardsInListAsync(sourceList.Id);
+        Assert.Equal(2, sourceAfter.Count);
+        Assert.Contains(sourceAfter, x => x.Id == card1.Id);
+        Assert.Contains(sourceAfter, x => x.Id == card3.Id);
+        
 
-            var targetAfter = await TrelloClient.GetCardsInListAsync(target.Id);
-            Assert.Single(targetAfter);
-        }
-        finally
-        {
-            await DeleteBoard();
-        }
+        var targetAfter = await TrelloClient.GetCardsInListAsync(targetList.Id);
+        Assert.Single(targetAfter);
+        Assert.Contains(targetAfter, x => x.Id == card2.Id);
+    }
+
+    [Fact]
+    public async Task MoveAllCardsInList()
+    {
+        var name = Guid.NewGuid().ToString();
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        //Add some cards so we can test Move All Cards In List
+        await TrelloClient.AddCardAsync(new Card(addList.Id, "C1"));
+        await TrelloClient.AddCardAsync(new Card(addList.Id, "C2"));
+        await TrelloClient.AddCardAsync(new Card(addList.Id, "C3"));
+
+        //Add new list to move cards to
+        var listToMoveTo = await TrelloClient.AddListAsync(new List("List to move to", _boardId));
+        await TrelloClient.MoveAllCardsInListAsync(addList.Id, listToMoveTo.Id);
+        var cardsOnListAfterMove = await TrelloClient.GetCardsInListAsync(listToMoveTo.Id);
+        Assert.Equal(3, cardsOnListAfterMove.Count);
     }
 }

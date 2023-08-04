@@ -72,7 +72,7 @@ namespace TrelloDotNet
         {
             if (Options.AllowDeleteOfBoards)
             {
-                await _apiRequestController.Delete($"{UrlPaths.Boards}/{boardId}", cancellationToken);
+                await _apiRequestController.Delete($"{UrlPaths.Boards}/{boardId}", cancellationToken, 0);
             }
             else
             {
@@ -101,7 +101,7 @@ namespace TrelloDotNet
         {
             return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Members}/{memberId}/boards", cancellationToken);
         }
-
+        
         /// <summary>
         /// Get the Boards that the token provided to the TrelloClient can Access
         /// </summary>

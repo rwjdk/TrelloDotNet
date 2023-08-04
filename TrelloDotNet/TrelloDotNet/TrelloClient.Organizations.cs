@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.Collections.Generic;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Model;
@@ -41,6 +42,27 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get the Organizations that the specified member has access to
+        /// </summary>
+        /// <param name="memberId">Id of the Member to find organizations for</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Organizations there is access to</returns>
+        public async Task<List<Organization>> GetOrganizationsForMemberAsync(string memberId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Organization>>($"{UrlPaths.Members}/{memberId}/organizations", cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the Organizations that the token provided to the TrelloClient can Access
+        /// </summary>
+        /// <returns>The Organizations there is access to</returns>
+        public async Task<List<Organization>> GetOrganizationsCurrentTokenCanAccessAsync(CancellationToken cancellationToken = default)
+        {
+            var tokenMember = await GetTokenMemberAsync(cancellationToken);
+            return await GetOrganizationsForMemberAsync(tokenMember.Id, cancellationToken);
+        }
+
+        /// <summary>
         /// Delete an entire Organization including all Boards it contains (WARNING: THERE IS NO WAY GOING BACK!!!).
         /// </summary>
         /// <remarks>
@@ -52,7 +74,7 @@ namespace TrelloDotNet
         {
             if (Options.AllowDeleteOfOrganizations)
             {
-                await _apiRequestController.Delete($"{UrlPaths.Organizations}/{organizationId}", cancellationToken);
+                await _apiRequestController.Delete($"{UrlPaths.Organizations}/{organizationId}", cancellationToken, 0);
             }
             else
             {
