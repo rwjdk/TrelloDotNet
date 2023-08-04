@@ -25,7 +25,7 @@ public class TestSandbox : TestBase
     }
 
     [FactManualOnly]
-    public async Task CleanupEverythingFromUnitTests()
+    public async Task CleanUpEverythingFromUnitTests()
     {
         await Task.CompletedTask;
         
@@ -35,17 +35,17 @@ public class TestSandbox : TestBase
         var unitTestBoards = boards.Where(x => x.Name.StartsWith("UnitTestBoard")).ToList();
         foreach (var unitTestBoard in unitTestBoards)
         {
-            //await TrelloClient.DeleteBoardAsync(unitTestBoard.Id);
+            //await TrelloClient.DeleteBoardAsync(unitTestBoard.Id); //Comment these lines out before commit
         }
         TrelloClient.Options.AllowDeleteOfBoards = false;
 
         //Remove test-workspaces (comment in execution)
         TrelloClient.Options.AllowDeleteOfOrganizations = true;
-        List<Organization> orgranizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync();
-        var unitTestOrganizations = orgranizations.Where(x => x.DisplayName.StartsWith("UnitTestOrganization")).ToList();
+        List<Organization> organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync();
+        var unitTestOrganizations = organizations.Where(x => x.DisplayName.StartsWith("UnitTestOrganization")).ToList();
         foreach (var unitTestOrganization in unitTestOrganizations)
         {
-            //await TrelloClient.DeleteOrganizationAsync(unitTestOrganization.Id);
+            //await TrelloClient.DeleteOrganizationAsync(unitTestOrganization.Id); //Comment these lines out before commit
         }
         TrelloClient.Options.AllowDeleteOfOrganizations = false;
         

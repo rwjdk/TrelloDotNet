@@ -21,8 +21,11 @@ public abstract class TestBase
 
             var apiKey = config["TrelloApiKey"];
             var token = config["TrelloToken"];
-            var trelloClientOptions = new TrelloClientOptions(includeCustomFieldsInCardGetMethods: true);
-            trelloClientOptions.MaxRetryCountForTokenLimitExceeded = 10;
+            var trelloClientOptions = new TrelloClientOptions(includeCustomFieldsInCardGetMethods: true)
+            {
+                MaxRetryCountForTokenLimitExceeded = 10,
+                DelayInSecondsToWaitInTokenLimitExceededRetry = 2
+            };
             return new TrelloClient(apiKey, token, trelloClientOptions);
         }
         catch (Exception)
