@@ -30,7 +30,7 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
                 await Task.Delay(1000);
                 att2 = await AddImageAttachment(card);
             }
-            catch (Exception e)
+            catch
             {
                 await Task.Delay(1000);
                 att2 = await AddImageAttachment(card);
