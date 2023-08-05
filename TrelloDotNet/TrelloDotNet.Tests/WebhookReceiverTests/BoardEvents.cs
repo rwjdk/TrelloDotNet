@@ -453,7 +453,6 @@ public class BoardEvents : TestBase
         receiver.BasicEvents.OnUpdateLabel += args => { _basicEventOnUpdateLabel = true; };
         receiver.BasicEvents.OnVoteOnCard += args => { _basicEventOnVoteOnCard = true; };
         receiver.BasicEvents.OnUnknownActionType += args => { _basicEventOnUnknownActionType = true; };
-        
     }
 
     private void AssertSmartEvents(params SmartEventsFired[] eventsFired)
@@ -537,8 +536,8 @@ public class BoardEvents : TestBase
 
     private string GetJsonFromSampleFile(string filename)
     {
-        string sampleJsonFolder = "SampleJson";
-        string webhookEventsFolder = "WebhookEvents";
+        const string sampleJsonFolder = "SampleJson";
+        const string webhookEventsFolder = "WebhookEvents";
         var assemblyLocation = Assembly.GetExecutingAssembly().Location;
         string path = Path.GetDirectoryName(assemblyLocation) +
                       Path.DirectorySeparatorChar +

@@ -85,12 +85,15 @@ namespace TrelloDotNet.Model.Webhook
             switch (scenario)
             {
                 case WebhookActionDummyCreationScenario.MoveCardToList:
+                case WebhookActionDummyCreationScenario.MoveCardAwayFromList:
                 case WebhookActionDummyCreationScenario.CardUpdated:
                     return WebhookActionTypes.UpdateCard;
                 case WebhookActionDummyCreationScenario.CardCreated:
                     return WebhookActionTypes.CreateCard;
                 case WebhookActionDummyCreationScenario.CardEmailed:
                     return WebhookActionTypes.EmailCard;
+                case WebhookActionDummyCreationScenario.CheckItemStateUpdated:
+                    return WebhookActionTypes.UpdateCheckItemStateOnCard;
                 case WebhookActionDummyCreationScenario.CardMovedToBoard:
                     return WebhookActionTypes.MoveCardToBoard;
                 case WebhookActionDummyCreationScenario.LabelAddedToCard:
@@ -113,6 +116,7 @@ namespace TrelloDotNet.Model.Webhook
         {
             MoveCardToList,
             NoListAfter,
+            NoListBefore,
             CardCreated,
             CardEmailed,
             CardMovedToBoard,
@@ -122,7 +126,9 @@ namespace TrelloDotNet.Model.Webhook
             LabelRemovedFromCard,
             MemberRemovedFromCard,
             BoardUpdated,
-            ListUpdated
+            ListUpdated,
+            MoveCardAwayFromList,
+            CheckItemStateUpdated
         }
 
         internal string SummarizeEvent()

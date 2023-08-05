@@ -27,39 +27,54 @@ public class TestSandbox : TestBase
     [FactManualOnly]
     public async Task CleanUpEverythingFromUnitTests()
     {
-        await Task.CompletedTask;
-        
-        //Remove test-boards (comment in execution)
+        // ReSharper disable once ConvertToConstant.Local
+        bool executeForReal = false;
+        //executeForReal = true; //Comment these lines out before commit
+
+        if (!executeForReal)
+        {
+            return;
+        }
+
+        //Remove test-boards
         TrelloClient.Options.AllowDeleteOfBoards = true;
         List<Board> boards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync();
         var unitTestBoards = boards.Where(x => x.Name.StartsWith("UnitTestBoard")).ToList();
         foreach (var unitTestBoard in unitTestBoards)
         {
-            //await TrelloClient.DeleteBoardAsync(unitTestBoard.Id); //Comment these lines out before commit
+            await TrelloClient.DeleteBoardAsync(unitTestBoard.Id);
         }
+
         TrelloClient.Options.AllowDeleteOfBoards = false;
 
-        //Remove test-workspaces (comment in execution)
+        //Remove test-workspaces
         TrelloClient.Options.AllowDeleteOfOrganizations = true;
         List<Organization> organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync();
         var unitTestOrganizations = organizations.Where(x => x.DisplayName.StartsWith("UnitTestOrganization")).ToList();
         foreach (var unitTestOrganization in unitTestOrganizations)
         {
-            //await TrelloClient.DeleteOrganizationAsync(unitTestOrganization.Id); //Comment these lines out before commit
+            await TrelloClient.DeleteOrganizationAsync(unitTestOrganization.Id);
         }
+
         TrelloClient.Options.AllowDeleteOfOrganizations = false;
-        
     }
 
     [FactManualOnly]
     public async Task DeleteAllWebhooks()
     {
-        await Task.CompletedTask;
+        // ReSharper disable once ConvertToConstant.Local
+        bool executeForReal = false;
+        //executeForReal = true; //Comment these lines out before commit
+
+        if (!executeForReal)
+        {
+            return;
+        }
         //Delete all Webhooks (comment in execution)
         var webhooksForCurrentToken = await TrelloClient.GetWebhooksForCurrentTokenAsync();
         foreach (var webhook in webhooksForCurrentToken)
         {
-            //await TrelloClient.DeleteWebhookAsync(webhook.Id);
+            await TrelloClient.DeleteWebhookAsync(webhook.Id);
         }
     }
 

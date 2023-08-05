@@ -32,6 +32,9 @@ public class OrganizationTests : TestBase
             get.Description = "Some other description";
             Organization updated = await TrelloClient.UpdateOrganizationAsync(added);
             Assert.Equal(added.Description, updated.Description);
+
+            var members = await TrelloClient.GetMembersOfOrganizationAsync(updated.Id);
+            Assert.Single(members);
         }
         finally
         {

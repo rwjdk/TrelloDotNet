@@ -3,19 +3,19 @@ using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-public class BoardDefaultTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
+public class BoardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly string? _boardId;
-    private readonly string? _boardName;
-    private readonly string? _boardDescription;
-    private readonly Board? _board;
+    private readonly string _boardId;
+    private readonly string _boardName;
+    private readonly string _boardDescription;
+    private readonly Board _board;
 
-    public BoardDefaultTests(TestFixtureWithNewBoard fixture)
+    public BoardTests(TestFixtureWithNewBoard fixture)
     {
-        _boardId = fixture.BoardId;
-        _board = fixture.Board;
-        _boardName = fixture.BoardName;
-        _boardDescription = fixture.BoardDescription;
+        _boardId = fixture.BoardId!;
+        _board = fixture.Board!;
+        _boardName = fixture.BoardName!;
+        _boardDescription = fixture.BoardDescription!;
     }
 
     [Fact]
@@ -134,18 +134,6 @@ public class BoardDefaultTests : TestBase, IClassFixture<TestFixtureWithNewBoard
     }
 
     [Fact]
-    public async Task RawGet()
-    {
-        //Raw JSON
-        var rawGet = await TrelloClient.GetAsync($"boards/{_boardId}");
-        Assert.NotNull(rawGet);
-
-        //Raw
-        var rawGetBoard = await TrelloClient.GetAsync<Board>($"boards/{_boardId}");
-        Assert.Equal(_boardId, rawGetBoard.Id);
-    }
-
-    [Fact]
     public async Task TokenInformation()
     {
         var tokenInformation = await TrelloClient.GetTokenInformationAsync();
@@ -173,5 +161,13 @@ public class BoardDefaultTests : TestBase, IClassFixture<TestFixtureWithNewBoard
         Assert.Single(memberships);
         Membership membership = memberships.Single(x => x.MemberId == tokenMember.Id);
         Assert.Equal(MembershipType.Admin, membership.MemberType);
+    }
+    
+    [Fact]
+    public async Task BoardsInOrganization()
+    {
+        var boards = await TrelloClient.GetBoardsInOrganization(_board.OrganizationId);
+        Assert.Single(boards);
+        Assert.Equal(_board.Id, boards.First().Id);
     }
 }

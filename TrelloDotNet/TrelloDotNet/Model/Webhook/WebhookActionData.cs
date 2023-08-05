@@ -152,6 +152,7 @@ namespace TrelloDotNet.Model.Webhook
                     list = null;
                     break;
                 case WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList:
+                case WebhookAction.WebhookActionDummyCreationScenario.MoveCardAwayFromList:
                     member = null;
                     checkItem = null;
                     checklist = null;
@@ -160,6 +161,9 @@ namespace TrelloDotNet.Model.Webhook
                     break;
                 case WebhookAction.WebhookActionDummyCreationScenario.NoListAfter:
                     listAfter = null;
+                    break;
+                case WebhookAction.WebhookActionDummyCreationScenario.NoListBefore:
+                    listBefore = null;
                     break;
                 case WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated:
                     card = null;

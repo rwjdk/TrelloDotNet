@@ -8,19 +8,17 @@ namespace TrelloDotNet.Tests.AutomationEngineTests.ConditionTests;
 
 public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly string? _boardId;
-    private readonly Board? _board;
+    private readonly Board _board;
 
     public ConditionTests(TestFixtureWithNewBoard fixture)
     {
-        _boardId = fixture.BoardId;
-        _board = fixture.Board;
+        _board = fixture.Board!;
     }
     
     [Fact]
     public async Task TestCardFieldCondition()
     {
-        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardCreated, cardToSimulate: card);
 
@@ -64,7 +62,7 @@ public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task TestLabelCondition()
     {
-        var labelsOfBoardAsync = await TrelloClient.GetLabelsOfBoardAsync(_boardId);
+        var labelsOfBoardAsync = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
 
         var label1 = labelsOfBoardAsync[0];
         label1.Name = "Hello";
@@ -88,7 +86,7 @@ public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         Assert.Equal(label3.Color, updateLabel3.Color);
         Assert.Equal(label3.Name, updateLabel3.Name);
 
-        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardCreated, cardToSimulate: card, boardToSimulate: _board);
 
@@ -112,11 +110,11 @@ public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task TestMemberCondition()
     {
-        var membersOfBoardAsync = await TrelloClient.GetMembersOfBoardAsync(_boardId);
+        var membersOfBoardAsync = await TrelloClient.GetMembersOfBoardAsync(_board.Id);
 
         var member1 = membersOfBoardAsync[0];
 
-        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardCreated, cardToSimulate: card, boardToSimulate: _board);
 
@@ -139,7 +137,7 @@ public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task TestChecklistIncompleteCondition()
     {
-        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
 
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardCreated, cardToSimulate: card);
@@ -187,7 +185,7 @@ public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task TestListCondition()
     {
-        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         WebhookAction? webhookActionWithList = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.ListUpdated, listToSimulate: aList);
         await TestListConditionForSpecificWebhookAction(aList, webhookActionWithList);
 
@@ -230,7 +228,7 @@ public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task TestCardCoverCondition()
     {
-        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardCreated, cardToSimulate: card);
 
@@ -261,7 +259,7 @@ public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task TestChecklistNotStartedCondition()
     {
-        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
 
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardCreated, cardToSimulate: card);
@@ -283,7 +281,7 @@ public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task TestChecklistItemsIncompleteCondition()
     {
-        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _boardId));
+        var aList = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(aList.Id, "Some Card"));
 
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardCreated, cardToSimulate: card);
@@ -303,6 +301,32 @@ public class ConditionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         checklist.Items[1].State = ChecklistItemState.Complete;
         await TrelloClient.UpdateChecklistItemAsync(card.Id, checklist.Items[1]);
         Assert.False(await condition.IsConditionMetAsync(webhookAction));
+
+        Assert.False(await condition.IsConditionMetAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated)));
+    }
+    
+    [Fact]
+    public async Task TestChecklistItemsCompleteCondition()
+    {
+        Card card = await AddDummyCard(_board.Id, "TestChecklistItemsCompleteCondition");
+
+        var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardCreated, cardToSimulate: card);
+        IAutomationCondition condition = new ChecklistItemsCompleteCondition();
+        Assert.True(await condition.IsConditionMetAsync(webhookAction));
+
+        await TrelloClient.AddChecklistAsync(card.Id, new Checklist("CheckList1"));
+        Assert.True(await condition.IsConditionMetAsync(webhookAction));
+
+        var checklist = await TrelloClient.AddChecklistAsync(card.Id, new Checklist("CheckList2", new List<ChecklistItem> { new("Item A"), new("Item B") }));
+        Assert.False(await condition.IsConditionMetAsync(webhookAction));
+
+        checklist.Items[0].State = ChecklistItemState.Complete;
+        await TrelloClient.UpdateChecklistItemAsync(card.Id, checklist.Items[0]);
+        Assert.False(await condition.IsConditionMetAsync(webhookAction));
+
+        checklist.Items[1].State = ChecklistItemState.Complete;
+        await TrelloClient.UpdateChecklistItemAsync(card.Id, checklist.Items[1]);
+        Assert.True(await condition.IsConditionMetAsync(webhookAction));
 
         Assert.False(await condition.IsConditionMetAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated)));
     }

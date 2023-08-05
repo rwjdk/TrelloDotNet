@@ -5,18 +5,17 @@ namespace TrelloDotNet.Tests.IntegrationTests;
 
 public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly string? _boardId;
+    private readonly Board _board;
 
     public CardTests(TestFixtureWithNewBoard fixture)
     {
-        _boardId = fixture.BoardId;
+        _board = fixture.Board!;
     }
 
     [Fact]
     public async Task Attachments()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
-        Card card = await TrelloClient.AddCardAsync(new Card(list.Id, "AttachmentTests"));
+        Card card = await AddDummyCard(_board.Id, "Attachments");
         Attachment att1 = await TrelloClient.AddAttachmentToCardAsync(card.Id, new AttachmentUrlLink("https://www.rwj.dk", "Some webpage URL"));
 
         await using Stream stream = File.Open("TestData" + Path.DirectorySeparatorChar + "TestImage.png", FileMode.Open);
@@ -44,12 +43,19 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         Assert.Equal(att1.Name, attachment1.Name);
         Assert.Equal(att2.FileName, attachment2.FileName);
         Assert.Equal(att2.Name, attachment2.Name);
+
+        await TrelloClient.DeleteAttachmentOnCardAsync(card.Id, attachment1.Id);
+        var attachmentsAfterDelete = await TrelloClient.GetAttachmentsOnCardAsync(card.Id);
+        Assert.Single(attachmentsAfterDelete);
+        attachment2 = attachmentsAfterDelete.Single(x => x.Id == att2.Id);
+        Assert.Equal(att2.FileName, attachment2.FileName);
+        Assert.Equal(att2.Name, attachment2.Name);
     }
     
     [Fact]
     public async Task GetCard()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         var inputCard = new Card(list.Id, Guid.NewGuid().ToString())
         {
             Due = DateTimeOffset.Now,
@@ -64,10 +70,10 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task AddCard()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
-        var member = (await TrelloClient.GetMembersOfBoardAsync(_boardId)).First();
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
+        var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
         var memberIds = new List<string> { member.Id };
-        var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_boardId);
+        var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
         DateTimeOffset? start = new DateTimeOffset(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc));
         DateTimeOffset? due = new DateTimeOffset(new DateTime(2099, 1, 1, 12, 0, 0, DateTimeKind.Utc));
         //Add Card
@@ -108,7 +114,7 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task UpdateCard()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         Card addedCard = await TrelloClient.AddCardAsync(new Card(list.Id, "X", "X"));
         //Update Card
         addedCard.DueComplete = true;
@@ -121,13 +127,13 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task Checklists()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         Card card = await TrelloClient.AddCardAsync(new Card(list.Id, "Card"));
 
-        var member = (await TrelloClient.GetMembersOfBoardAsync(_boardId)).First();
+        var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
         DateTimeOffset? due = new DateTimeOffset(new DateTime(2099, 1, 1, 12, 0, 0, DateTimeKind.Utc));
         
-        var checklists = await TrelloClient.GetChecklistsOnBoardAsync(_boardId);
+        var checklists = await TrelloClient.GetChecklistsOnBoardAsync(_board.Id);
         Assert.Empty(checklists);
 
         var checklistItems = new List<ChecklistItem>
@@ -176,52 +182,32 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         //Test adding a checklist with no items
         await TrelloClient.AddChecklistAsync(doneCard.Id, new Checklist("Empty Checklist"));
 
-        var checklistsNow = await TrelloClient.GetChecklistsOnBoardAsync(_boardId);
+        var checklistsNow = await TrelloClient.GetChecklistsOnBoardAsync(_board.Id);
         Assert.Equal(3, checklistsNow.Count);
 
+        await TrelloClient.DeleteChecklistItemAsync(checklistsNow[0].Id, checklistsNow[0].Items[0].Id);
+        var checklistsNowAfterOneDelete = await TrelloClient.GetChecklistsOnBoardAsync(_board.Id);
+        Assert.Equal(checklistsNow[0].Items.Count-1, checklistsNowAfterOneDelete[0].Items.Count);
+
         await TrelloClient.DeleteChecklistAsync(addedChecklist.Id);
-        var checklistsNow2 = await TrelloClient.GetChecklistsOnBoardAsync(_boardId);
+        var checklistsNow2 = await TrelloClient.GetChecklistsOnBoardAsync(_board.Id);
         Assert.Equal(2, checklistsNow2.Count);
     }
    
     [Fact]
     public async Task Delete()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         Card card = await TrelloClient.AddCardAsync(new Card(list.Id, "Card"));
         await TrelloClient.DeleteCardAsync(card.Id);
-        var cardsAfterDelete = await TrelloClient.GetCardsOnBoardAsync(_boardId);
+        var cardsAfterDelete = await TrelloClient.GetCardsOnBoardAsync(_board.Id);
         Assert.True(cardsAfterDelete.All(x=> x.Id != card.Id));
-    }
-    
-    [Fact]
-    public async Task RawPost()
-    {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
-        var rawPost = await TrelloClient.PostAsync("cards", new QueryParameter("name", "Card"), new QueryParameter("idList", list.Id));
-        Assert.NotNull(rawPost);
-
-        var rawPostCard = await TrelloClient.PostAsync<Card>("cards", new QueryParameter("name", "Card"), new QueryParameter("idList", list.Id));
-        Assert.NotNull(rawPostCard.Id);
-    }
-    
-    [Fact]
-    public async Task RawPut()
-    {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
-        Card card = await TrelloClient.AddCardAsync(new Card(list.Id, "Card"));
-
-        var rawUpdate = await TrelloClient.PutAsync($"cards/{card.Id}", new QueryParameter("desc", "New Description"));
-        Assert.NotNull(rawUpdate);
-
-        var rawUpdateCard = await TrelloClient.PutAsync<Card>($"cards/{card.Id}", new QueryParameter("desc", "New Description2"));
-        Assert.Equal("New Description2", rawUpdateCard.Description);
     }
     
     [Fact]
     public async Task ArchiveAndReopen()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
 
         //Archive and Reopen
         var cardForArchiveAndReopen = await TrelloClient.AddCardAsync(new Card(list.Id, "Card for archive and reopen"));
@@ -237,7 +223,7 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task Dates()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Test: Set dates
         var cardWithDates = await TrelloClient.AddCardAsync(new Card(list.Id, "Date Card"));
         DateTimeOffset testStartDate = new(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc));
@@ -258,8 +244,8 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task AddRemoveLabels()
     {
-        var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_boardId);
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Test: Add/Remove Labels
         var cardWithLabels = await TrelloClient.AddCardAsync(new Card(list.Id, "Label Card"));
         Assert.Empty(cardWithLabels.LabelIds);
@@ -283,8 +269,8 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task AddRemoveMembers()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
-        var member = (await TrelloClient.GetMembersOfBoardAsync(_boardId)).First();
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
+        var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
         var memberIds = new List<string> { member.Id };
         //Test: Add/Remove Members
         var cardWithMembers = await TrelloClient.AddCardAsync(new Card(list.Id, "Member Card"));
@@ -309,7 +295,7 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task CustomDelete()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Custom Delete
         var customDeleteCard = await TrelloClient.AddCardAsync(new Card(list.Id, "Custom Delete Card"));
 
@@ -319,7 +305,7 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task Stickers()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Test Sticker CRUD
         var cardForStickerTests = await TrelloClient.AddCardAsync(new Card(list.Id, "Sticker Tests"));
         var stickersPresentJustAfterAdd = await TrelloClient.GetStickersOnCardAsync(cardForStickerTests.Id);
@@ -365,7 +351,7 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task Comments()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Test Comments
         var cardForComments = await TrelloClient.AddCardAsync(new Card(list.Id, "Comments Tests"));
         // ReSharper disable once RedundantAssignment
@@ -410,7 +396,7 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     [Fact]
     public async Task Covers()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _boardId));
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Cover Tests"));
         Assert.Null(card.Cover.Color);
         card.Cover.Color = CardCoverColor.Blue;

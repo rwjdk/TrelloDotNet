@@ -8,7 +8,7 @@
 - Added option to set `OrganizationId` when creating a `Board`
 - API will now automatically retry failed request that get the 'API_TOKEN_LIMIT_EXCEEDED' error (retry up to 3 times wilth 1 second between). You can can change/disable this behaviour via the TrelloClientOptions if you like.
 - Rewritten all Tests to be faster and easier to maintain, while also be able to run on any Trello Account
-- Increased Test-Coverage to 78%.
+- Increased Automated Test-Coverage to 72% (TrelloClient = 88%, AutomationEngine = 68%, WebhookdataReceiver = 100%)
 
 <hr>
 
