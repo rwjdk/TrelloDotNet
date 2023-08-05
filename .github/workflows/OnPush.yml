@@ -28,15 +28,16 @@ jobs:
     - name: SetUserSecretsTrelloToken        
       run: dotnet user-secrets set TrelloToken ${{ secrets.TRELLOTOKEN }} --project TrelloDotNet/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
     - name: Test      
-      run: dotnet test --configuration Release --no-build --verbosity normal 
+      run: dotnet test --configuration Release --no-build --verbosity normal
         /p:CollectCoverage=true 
-        /p:CoverletOutput=TrelloDotNet/TrelloDotNet.Tests/TestResults/ 
+        /p:CoverletOutput=TestResults/ 
         /p:CoverletOutputFormat=lcov
       working-directory: TrelloDotNet/TrelloDotNet.Tests
     - name: Publish coverage report to coveralls.io   
       uses: coverallsapp/github-action@master   
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }} 
-        path-to-lcov: TrelloDotNet/TrelloDotNet.Tests/TestResults/coverage.info
+        path-to-lcov: TestResults/coverage.info
+        working-directory: TrelloDotNet/TrelloDotNet.Tests
     - name: Publish to NuGet if needed
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
