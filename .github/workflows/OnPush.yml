@@ -38,5 +38,5 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }} 
         path-to-lcov: TrelloDotNet/TrelloDotNet.Tests/TestResults/coverage.info
-    - name: Publish 
+    - name: Publish to NuGet if needed
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate

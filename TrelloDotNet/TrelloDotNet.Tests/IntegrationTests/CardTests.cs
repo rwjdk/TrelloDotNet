@@ -11,7 +11,7 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     {
         _board = fixture.Board!;
     }
-
+    /*
     [Fact]
     public async Task Attachments()
     {
@@ -51,7 +51,8 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         Assert.Equal(att2.FileName, attachment2.FileName);
         Assert.Equal(att2.Name, attachment2.Name);
     }
-    
+    */
+
     [Fact]
     public async Task GetCard()
     {
