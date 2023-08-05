@@ -30,14 +30,12 @@ jobs:
     - name: Test      
       run: dotnet test --configuration Release --no-build --verbosity normal
         /p:CollectCoverage=true 
-        /p:CoverletOutput=TestResults/ 
         /p:CoverletOutputFormat=lcov
       working-directory: TrelloDotNet/TrelloDotNet.Tests
     - name: Publish coverage report to coveralls.io   
       uses: coverallsapp/github-action@master   
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }} 
-        path-to-lcov: TestResults/coverage.info
-        working-directory: TrelloDotNet/TrelloDotNet.Tests
+        path-to-lcov: coverage.info
     - name: Publish to NuGet if needed
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
