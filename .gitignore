@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 /TrelloDotNet/TrelloDotNet.Tests/client-secrets.json
 /TrelloDotNet/.idea/.idea.TrelloDotNet/.idea
+/TrelloDotNet/TrelloDotNet.Tests/TestSandbox.cs
