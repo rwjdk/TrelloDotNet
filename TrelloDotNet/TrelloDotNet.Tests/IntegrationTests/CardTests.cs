@@ -11,7 +11,6 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     {
         _board = fixture.Board!;
     }
-    /*
     [Fact]
     public async Task Attachments()
     {
@@ -20,7 +19,18 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 
         await using Stream stream = File.Open("TestData" + Path.DirectorySeparatorChar + "TestImage.png", FileMode.Open);
         var attachmentFileUpload = new AttachmentFileUpload(stream, "MyFileName.png", "SomeName");
-        Attachment att2 = await TrelloClient.AddAttachmentToCardAsync(card.Id, attachmentFileUpload, true);
+
+        Attachment att2;
+        try
+        {
+            att2 = await TrelloClient.AddAttachmentToCardAsync(card.Id, attachmentFileUpload, true);
+        }
+        catch
+        {
+            //retry as this often fails in the Trello API
+            await Task.Delay(1000);
+            att2 = await TrelloClient.AddAttachmentToCardAsync(card.Id, attachmentFileUpload, true);
+        }
 
         try
         {
@@ -51,7 +61,6 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         Assert.Equal(att2.FileName, attachment2.FileName);
         Assert.Equal(att2.Name, attachment2.Name);
     }
-    */
 
     [Fact]
     public async Task GetCard()

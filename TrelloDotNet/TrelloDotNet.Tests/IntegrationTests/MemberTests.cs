@@ -5,10 +5,12 @@ namespace TrelloDotNet.Tests.IntegrationTests;
 public class MemberTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
     private readonly Board _board;
+    private readonly Organization _organization;
 
     public MemberTests(TestFixtureWithNewBoard fixture)
     {
         _board = fixture.Board!;
+        _organization = fixture.Organization!;
     }
 
     [Fact]
@@ -19,6 +21,22 @@ public class MemberTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         await TrelloClient.AddMembersToCardAsync(card.Id, member.Id);
         var cardForMember = await TrelloClient.GetCardsForMemberAsync(member.Id);
         Assert.Contains(cardForMember, x => x.Id == card.Id && x.ListId == list.Id);
+    }
+
+    [Fact]
+    public async Task GetBoardsForMember()
+    {
+        Member member = await TrelloClient.GetTokenMemberAsync();
+        var boards = await TrelloClient.GetBoardsForMemberAsync(member.Id);
+        Assert.Contains(boards, x => x.Id == _board.Id);
+    }
+    
+    [Fact]
+    public async Task GetOrganizationsForMember()
+    {
+        Member member = await TrelloClient.GetTokenMemberAsync();
+        var organizations = await TrelloClient.GetOrganizationsForMemberAsync(member.Id);
+        Assert.Contains(organizations, x => x.Id == _organization.Id);
     }
 
     [Fact]

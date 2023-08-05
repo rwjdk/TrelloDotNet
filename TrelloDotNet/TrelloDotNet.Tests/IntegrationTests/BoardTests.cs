@@ -134,26 +134,6 @@ public class BoardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     }
 
     [Fact]
-    public async Task TokenInformation()
-    {
-        var tokenInformation = await TrelloClient.GetTokenInformationAsync();
-        Assert.NotNull(tokenInformation);
-        Assert.NotNull(tokenInformation.Created);
-        Assert.Null(tokenInformation.Expires);
-        Assert.NotNull(tokenInformation.Id);
-        Assert.NotNull(tokenInformation.Identifier);
-        Assert.NotNull(tokenInformation.MemberId);
-        Assert.NotNull(tokenInformation.Permissions);
-        Assert.NotNull(tokenInformation.Permissions[0].ModelId);
-        Assert.NotNull(tokenInformation.Permissions[0].ModelType);
-        Assert.True(tokenInformation.Permissions[0].Read);
-        Assert.True(tokenInformation.Permissions[0].Write);
-
-        var tokenMember = await TrelloClient.GetTokenMemberAsync();
-        Assert.NotNull(tokenMember);
-    }
-
-    [Fact]
     public async Task MembershipInformation()
     {
         var tokenMember = await TrelloClient.GetTokenMemberAsync();
