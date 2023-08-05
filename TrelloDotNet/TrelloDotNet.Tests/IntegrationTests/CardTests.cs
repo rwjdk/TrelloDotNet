@@ -11,25 +11,30 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     {
         _board = fixture.Board!;
     }
+
     [Fact]
     public async Task Attachments()
     {
         Card card = await AddDummyCard(_board.Id, "Attachments");
         Attachment att1 = await TrelloClient.AddAttachmentToCardAsync(card.Id, new AttachmentUrlLink("https://www.rwj.dk", "Some webpage URL"));
 
-        await using Stream stream = File.Open("TestData" + Path.DirectorySeparatorChar + "TestImage.png", FileMode.Open);
-        var attachmentFileUpload = new AttachmentFileUpload(stream, "MyFileName.png", "SomeName");
-
         Attachment att2;
         try
         {
-            att2 = await TrelloClient.AddAttachmentToCardAsync(card.Id, attachmentFileUpload, true);
+            att2 = await AddImageAttachment(card);
         }
         catch
         {
-            //retry as this often fails in the Trello API
-            await Task.Delay(1000);
-            att2 = await TrelloClient.AddAttachmentToCardAsync(card.Id, attachmentFileUpload, true);
+            try
+            {
+                await Task.Delay(1000);
+                att2 = await AddImageAttachment(card);
+            }
+            catch (Exception e)
+            {
+                await Task.Delay(1000);
+                att2 = await AddImageAttachment(card);
+            }
         }
 
         try
@@ -60,6 +65,14 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         attachment2 = attachmentsAfterDelete.Single(x => x.Id == att2.Id);
         Assert.Equal(att2.FileName, attachment2.FileName);
         Assert.Equal(att2.Name, attachment2.Name);
+    }
+
+    private async Task<Attachment> AddImageAttachment(Card card)
+    {
+        await using Stream stream = File.Open("TestData" + Path.DirectorySeparatorChar + "TestImage.png", FileMode.Open);
+        var attachmentFileUpload = new AttachmentFileUpload(stream, "MyFileName.png", "SomeName");
+        Attachment att2 = await TrelloClient.AddAttachmentToCardAsync(card.Id, attachmentFileUpload, true);
+        return att2;
     }
 
     [Fact]
