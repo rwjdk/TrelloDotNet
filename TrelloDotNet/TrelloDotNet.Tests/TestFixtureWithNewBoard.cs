@@ -14,6 +14,9 @@ public class TestFixtureWithNewBoard : TestBase, IAsyncLifetime
 
     public async Task InitializeAsync()
     {
+        Assert.True(TrelloClient.Options.MaxRetryCountForTokenLimitExceeded > 0);
+        Assert.True(TrelloClient.Options.DelayInSecondsToWaitInTokenLimitExceededRetry > 0);
+
         var organizationName = Guid.NewGuid().ToString();
         OrganizationName = $"UnitTestOrganization-{organizationName}";
         Organization = await TrelloClient.AddOrganizationAsync(new Organization(OrganizationName));
@@ -31,6 +34,7 @@ public class TestFixtureWithNewBoard : TestBase, IAsyncLifetime
         BoardId = Board.Id;
         Assert.Equal(BoardName, Board.Name);
         Assert.Equal(BoardDescription, Board.Description);
+        Assert.Equal(OrganizationId, Board.OrganizationId);
     }
 
     public async Task DisposeAsync()

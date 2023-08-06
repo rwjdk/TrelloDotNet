@@ -18,6 +18,7 @@ public class BoardCustomTests : TestBase
             {
                 DefaultLabels = false,
                 DefaultLists = false,
+                WorkspaceId = null
             };
             var custom = new Board("UnitTestBoard-CustomTest")
             {

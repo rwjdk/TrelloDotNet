@@ -40,6 +40,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             }
 
             await webhookAction.TrelloClient.AddCommentAsync(webhookAction.Data.Card.Id, new Comment(Comment), CancellationToken.None);
+            processingResult.ActionsExecuted++;
         }
     }
 }

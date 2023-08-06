@@ -1,6 +1,12 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## Unreleased
+- Fixed that [`AddCommentToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddCommentToCardAction) did not increment property `ActionsExecuted` in `ProcessingResult`
+- Increased Test coverage
+
+<hr>
+
 ## 1.7.0 (5th of August 2023)
 - Added [`GetOrganizationsForMemberAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetOrganizationsForMemberAsync)
 - Added [`GetOrganizationsCurrentTokenCanAccessAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetOrganizationsCurrentTokenCanAccessAsync)

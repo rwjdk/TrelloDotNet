@@ -44,13 +44,13 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             }
             var trelloClient = webhookAction.TrelloClient;
 
-            var memberIdsToRemove = MemberIds;
+            var memberIdsToAdd = MemberIds;
 
             if (TreatMemberNameAsId)
             {
                 var allMembers = await webhookAction.TrelloClient.GetMembersOfBoardAsync(webhookAction.Data.Board.Id);
                 var idsFromNames = new List<string>();
-                foreach (var memberName in MemberIds) //Remember; here the 'Id's' are actually Names so we need to find the id's needed for removal
+                foreach (var memberName in MemberIds) //Remember; here the 'Id's' are actually Names so we need to find the id's needed for add
                 {
                     var member = allMembers.FirstOrDefault(x => x.FullName == memberName);
                     if (member != null)
@@ -59,12 +59,12 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                     }
                 }
 
-                memberIdsToRemove = idsFromNames.ToArray();
+                memberIdsToAdd = idsFromNames.ToArray();
             }
 
             var card = await webhookAction.Data.Card.GetAsync();
             bool updateNeeded = false;
-            foreach (var memberId in memberIdsToRemove)
+            foreach (var memberId in memberIdsToAdd)
             {
                 if (!card.MemberIds.Contains(memberId))
                 {

@@ -141,6 +141,8 @@ public class BoardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         Assert.Single(memberships);
         Membership membership = memberships.Single(x => x.MemberId == tokenMember.Id);
         Assert.Equal(MembershipType.Admin, membership.MemberType);
+        Assert.False(membership.Unconfirmed);
+        Assert.False(membership.Deactivated);
     }
     
     [Fact]

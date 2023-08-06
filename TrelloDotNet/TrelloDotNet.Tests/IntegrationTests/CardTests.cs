@@ -56,6 +56,16 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 
         Assert.Equal(att1.Url, attachment1.Url);
         Assert.Equal(att1.Name, attachment1.Name);
+        Assert.Equal(att1.IsUpload, attachment1.IsUpload);
+        Assert.Equal(att1.EdgeColor, attachment1.EdgeColor);
+        Assert.Equal(att1.Bytes, attachment1.Bytes);
+        Assert.Equal(att1.Position, attachment1.Position);
+        Assert.Equal(att1.Created, attachment1.Created);
+        Assert.Equal(att1.MemberId, attachment1.MemberId);
+        Assert.Equal(att1.MimeType, attachment1.MimeType);
+        Assert.Equal(att1.Date, attachment1.Date);
+
+
         Assert.Equal(att2.FileName, attachment2.FileName);
         Assert.Equal(att2.Name, attachment2.Name);
 
