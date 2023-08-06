@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/rwjdk/TrelloDotNet/badge.svg)](https://coveralls.io/github/rwjdk/TrelloDotNet)
 [![WIKI](https://img.shields.io/badge/ℹ️-Wiki-green)](https://github.com/rwjdk/TrelloDotNet/wiki)
 [![Changelog](https://img.shields.io/badge/ℹ️-Changelog-orange)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
-[![Coverage Status](https://coveralls.io/repos/github/rwjdk/TrelloDotNet/badge.svg)](https://coveralls.io/github/rwjdk/TrelloDotNet)
+[![Coverage Status](https://coveralls.io/repos/github/rwjdk/TrelloDotNet/badge.svg?kill_cache=1)](https://coveralls.io/github/rwjdk/TrelloDotNet)
 [![YouTube](https://img.shields.io/badge/ℹ️-YouTube-red)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
 [![Rest API](https://img.shields.io/badge/Trello-API_Docs-lightgray)](https://developer.atlassian.com/cloud/trello/rest/)
 [![API Keys](https://img.shields.io/badge/Trello-API_Admin-blueviolet)](https://trello.com/power-ups/admin/)
