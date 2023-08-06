@@ -35,5 +35,10 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }} 
         path-to-lcov: TrelloDotNet/TrelloDotNet.Tests/TestResults/coverage.info
+    - name: refresh coverage badge
+      uses: fjogeleit/http-request-action@master
+      with:
+        url: https://camo.githubusercontent.com/1ae428733ea1f72200b2c80be080094ce56d874faea6990590bdbca17285191f/68747470733a2f2f636f766572616c6c732e696f2f7265706f732f6769746875622f72776a646b2f5472656c6c6f446f744e65742f62616467652e737667
+        method: PURGE        
     - name: Publish to NuGet if needed
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
