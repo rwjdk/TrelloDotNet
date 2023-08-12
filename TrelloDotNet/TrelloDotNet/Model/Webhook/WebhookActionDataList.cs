@@ -28,7 +28,7 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         [JsonPropertyName("pos")]
         [JsonInclude]
-        public decimal Posistion { get; private set; }
+        public decimal Position { get; private set; }
 
         /// <summary>
         /// Get the Full List Object
@@ -53,7 +53,7 @@ namespace TrelloDotNet.Model.Webhook
                 {
                     Id = listToSimulate.Id,
                     Name = listToSimulate.Name,
-                    Posistion = listToSimulate.Position
+                    Position = listToSimulate.Position
                 };
             }
 
@@ -61,7 +61,7 @@ namespace TrelloDotNet.Model.Webhook
             {
                 Id = "63d1239e857afaa8b003c633",
                 Name = "MyList",
-                Posistion = 1
+                Position = 1
             };
         }
     }
