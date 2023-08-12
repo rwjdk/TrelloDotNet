@@ -1,8 +1,7 @@
 [![NuGet Badge](https://img.shields.io/nuget/v/TrelloDotNet)](https://www.nuget.org/packages/TrelloDotNet) 
-[![Coverage Status](https://coveralls.io/repos/github/rwjdk/TrelloDotNet/badge.svg)](https://coveralls.io/github/rwjdk/TrelloDotNet)
+[![Coverage Status](https://coveralls.io/repos/github/rwjdk/TrelloDotNet/badge.svg?kill_cache=1)](https://coveralls.io/github/rwjdk/TrelloDotNet)
 [![WIKI](https://img.shields.io/badge/ℹ️-Wiki-green)](https://github.com/rwjdk/TrelloDotNet/wiki)
 [![Changelog](https://img.shields.io/badge/ℹ️-Changelog-orange)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
-[![Coverage Status](https://coveralls.io/repos/github/rwjdk/TrelloDotNet/badge.svg?kill_cache=1)](https://coveralls.io/github/rwjdk/TrelloDotNet)
 [![YouTube](https://img.shields.io/badge/ℹ️-YouTube-red)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
 [![Rest API](https://img.shields.io/badge/Trello-API_Docs-lightgray)](https://developer.atlassian.com/cloud/trello/rest/)
 [![API Keys](https://img.shields.io/badge/Trello-API_Admin-blueviolet)](https://trello.com/power-ups/admin/)
@@ -19,7 +18,7 @@ Welcome to TrelloDotNet; a modern .NET Implementation of the Trello API.
 1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (dotnet add package TrelloDotNet)
 2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8)
 3. Create new instance of `TrelloDotNet.TrelloClient`
-4. Locate you Ids of you Boards, List and Cards (see video [here](https://youtu.be/aWYEg1wPVYY) or at the end on this ReadMe)
+4. Locate you Ids of your Boards, List, and Cards (see video [here](https://youtu.be/aWYEg1wPVYY) or at the end on this ReadMe)
 5. Use the TrelloClient based on the examples below and/or the [Wiki](https://github.com/rwjdk/TrelloDotNet/wiki).
 
 ### Examples of Usage:
