@@ -13,7 +13,7 @@
 		<PackageProjectUrl>https://github.com/rwjdk/TrelloDotNet/wiki</PackageProjectUrl>
 		<PackageIcon>trello.png</PackageIcon>
 		<PackageTags>trello;api;rest;trello api</PackageTags>
-		<Version>1.7.1</Version>
+		<Version>1.7.2</Version>
 		<Company>RWJDK</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReleaseNotes>Please see: https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md</PackageReleaseNotes>
