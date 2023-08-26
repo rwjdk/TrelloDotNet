@@ -4,6 +4,7 @@
 ## Unreleased
 - Added [`SearchAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchAsync)
 - Added [`SearchMembersAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchMembersAsync)
+- Added [`GetCommentReactions`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCommentReactions)
 
 <hr>
 

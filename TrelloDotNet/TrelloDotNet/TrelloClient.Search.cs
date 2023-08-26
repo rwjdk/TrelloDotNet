@@ -16,6 +16,7 @@ namespace TrelloDotNet
         /// </remarks>
         /// <param name="searchRequest">The Search Request</param>
         /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The Search-result</returns>
         public async Task<SearchResult> SearchAsync(SearchRequest searchRequest, CancellationToken cancellationToken = default)
         {
             List<string> modelTypes = new List<string>();
@@ -33,7 +34,7 @@ namespace TrelloDotNet
             }
 
 
-            List<QueryParameter> parameters = new List<QueryParameter>
+            var parameters = new List<QueryParameter>
             {
                 new QueryParameter("query", searchRequest.SearchTerm),
                 new QueryParameter("partial", searchRequest.PartialSearch),
@@ -94,6 +95,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="searchRequest">The Search-request</param>
         /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The List of Members from the search</returns>
         public async Task<List<Member>> SearchMembersAsync(SearchMemberRequest searchRequest, CancellationToken cancellationToken = default)
         {
             List<QueryParameter> parameters = new List<QueryParameter>

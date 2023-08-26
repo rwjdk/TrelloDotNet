@@ -81,5 +81,16 @@ public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId, C
                 new QueryParameter(@"filter", @"commentCard"),
                 new QueryParameter(@"page", page));
         }
+
+        /// <summary>
+        /// The reactions to a comment
+        /// </summary>
+        /// <param name="commentActionId">Id of the Comment (ActionId)</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The Reactions</returns>
+        public async Task<List<CommentReaction>> GetCommentReactions(string commentActionId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<CommentReaction>>($"{UrlPaths.Actions}/{commentActionId}/reactions", cancellationToken);
+        }
     }
 }
