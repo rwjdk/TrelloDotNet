@@ -1,6 +1,12 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## Unreleased
+- Added [`SearchAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchAsync)
+- Added [`SearchMembersAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchMembersAsync)
+
+<hr>
+
 ## 1.7.2 (23rd of August 2023)
 - Fixed that [`AddCommentToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddCommentToCardAction) did not increment property `ActionsExecuted` in `ProcessingResult`
 - Fixed incorrect spelling of property `Position` in `WebhookActionDataList` [COMPILE TIME BREAKING CHANGE]

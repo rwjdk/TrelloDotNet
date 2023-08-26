@@ -61,5 +61,10 @@
         /// organizations
         /// </summary>
         public const string Organizations = "organizations";
+
+        /// <summary>
+        /// search
+        /// </summary>
+        public const string Search = "search";
     }
 }
