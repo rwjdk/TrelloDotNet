@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -17,7 +18,7 @@ namespace TrelloDotNet.Model
         public string Id { get; private set; }
 
         /// <summary>
-        /// Full Name of the Member
+        /// The full name related to the account, if it is public.
         /// </summary>
         [JsonPropertyName("fullName")]
         [JsonInclude]
@@ -29,6 +30,27 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("username")]
         [JsonInclude]
         public string Username { get; private set; }
+
+        /// <summary>
+        /// The initials related to the account, if it is public.
+        /// </summary>
+        [JsonPropertyName("initials")]
+        [JsonInclude]
+        public string Initials { get; private set; }
+
+        /// <summary>
+        /// The url of this member's avatar
+        /// </summary>
+        [JsonPropertyName("avatarUrl")]
+        [JsonInclude]
+        public string AvatarUrl { get; private set; }
+
+        /// <summary>
+        /// Whether the user has confirmed their email address for their account.
+        /// </summary>
+        [JsonPropertyName("confirmed")]
+        [JsonInclude]
+        public bool Confirmed { get; private set; }
 
         internal static Member CreateDummy()
         {

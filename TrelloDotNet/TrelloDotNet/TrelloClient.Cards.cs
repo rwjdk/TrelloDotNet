@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.GetCardOptions;
 
 namespace TrelloDotNet
 {
@@ -125,6 +126,18 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get a Card by its Id
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="options">Options on how and what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Card</returns>
+        public async Task<Card> GetCardAsync(string cardId, GetCardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, options.GetParameters());
+        }
+
+        /// <summary>
         /// Get all open cards on un-archived lists on a board
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
@@ -133,8 +146,21 @@ namespace TrelloDotNet
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", cancellationToken,
-                new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
-                new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
+                new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
+                new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods)
+                );
+        }
+
+        /// <summary>
+        /// Get all open cards on un-archived lists on a board
+        /// </summary>
+        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="options">Options on how and what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls)</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>List of Cards</returns>
+        public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, GetCardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -148,6 +174,18 @@ namespace TrelloDotNet
             return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", cancellationToken,
                 new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
+        }
+
+        /// <summary>
+        /// Get all open cards on a specific list
+        /// </summary>
+        /// <param name="listId">Id of the List</param>
+        /// <param name="options">Options on how and what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Cards</returns>
+        public async Task<List<Card>> GetCardsInListAsync(string listId, GetCardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -165,6 +203,19 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get the cards on board based on their status regardless if they are on archived lists
+        /// </summary>
+        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="filter">The Selected Filter</param>
+        /// <param name="options">Options on how and what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls)</param> 
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Cards</returns>
+        public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, GetCardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters());
+        }
+
+        /// <summary>
         /// Get all Cards a Member is on (across multiple boards)
         /// </summary>
         /// <param name="memberId">Id of Member</param>
@@ -173,6 +224,18 @@ namespace TrelloDotNet
         public async Task<List<Card>> GetCardsForMemberAsync(string memberId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}", cancellationToken);
+        }
+
+        /// <summary>
+        /// Get all Cards a Member is on (across multiple boards)
+        /// </summary>
+        /// <param name="memberId">Id of Member</param>
+        /// <param name="options">Options on how and what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<List<Card>> GetCardsForMemberAsync(string memberId, GetCardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}", cancellationToken, options.GetParameters());
         }
 
         /// <summary>

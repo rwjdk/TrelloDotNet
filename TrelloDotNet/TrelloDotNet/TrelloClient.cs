@@ -12,12 +12,6 @@ namespace TrelloDotNet
     /// </summary>
     public partial class TrelloClient
     {
-        //Todo: Missing API Endpoints and Features:
-        
-        //todo: Management
-        //- Manage Custom Fields on board (CRUD)
-        //- Batch-system (why???) [https://developer.atlassian.com/cloud/trello/rest/api-group-batch/#api-batch-get]
-
         /// <summary>
         /// Options for the client
         /// </summary>

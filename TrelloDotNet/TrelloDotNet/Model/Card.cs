@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
+using TrelloDotNet.Model.Actions;
 
 namespace TrelloDotNet.Model
 {
@@ -186,11 +187,39 @@ namespace TrelloDotNet.Model
         public List<CustomFieldItem> CustomFieldItems { get; private set; }
 
         /// <summary>
-        /// Attachments of the Card (Only populated in Get Methods and if enabled in TrelloClientOptions)
+        /// Attachments of the Card (Only populated in Get Methods and if enabled in TrelloClientOptions or if GetCardOptions.IncludeAttachments is used)
         /// </summary>
         [JsonPropertyName("attachments")]
         [JsonInclude]
         public List<Attachment> Attachments { get; private set; }
+        
+        /// <summary>
+        /// Members of the Card (Only populated if GetCardOptions.IncludeMembers is used)
+        /// </summary>
+        [JsonPropertyName("members")]
+        [JsonInclude]
+        public List<Member> Members { get; private set; }
+        
+        /// <summary>
+        /// Board the Card is on (Only populated if GetCardOptions.IncludeBoard is used)
+        /// </summary>
+        [JsonPropertyName("board")]
+        [JsonInclude]
+        public Board Board { get; private set; }
+        
+        /// <summary>
+        /// List the Card is is (Only populated if GetCardOptions.IncludeList is used)
+        /// </summary>
+        [JsonPropertyName("list")]
+        [JsonInclude]
+        public List List { get; private set; }
+
+        /// <summary>
+        /// Actions of the Card (Only populated if Actions in GetCardOptions is included)
+        /// </summary>
+        [JsonPropertyName("actions")]
+        [JsonInclude]
+        public List<TrelloAction> Actions { get; private set; }
 
         /// <summary>
         /// Constructor (Common Card fields)

@@ -94,6 +94,5 @@ namespace TrelloDotNet
 
             return await _apiRequestController.Get<List<TrelloAction>>(suffix, cancellationToken, parameters.ToArray());
         }
-
     }
 }

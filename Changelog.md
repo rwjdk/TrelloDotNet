@@ -1,10 +1,13 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## Unreleased
+## 1.8.0 (27th of August 2023)
 - Added [`SearchAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchAsync)
 - Added [`SearchMembersAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchMembersAsync)
 - Added [`GetCommentReactions`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCommentReactions)
+- Added GetCardOptions that to all get-methods that return Cards. This allows more advanced control of what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls).
+- Added more properties on the `Member` object
+- Added more properties on the `Card` object
 
 <hr>
 
