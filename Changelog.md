@@ -5,7 +5,7 @@
 - Added [`SearchAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchAsync)
 - Added [`SearchMembersAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchMembersAsync)
 - Added [`GetCommentReactions`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCommentReactions)
-- Added GetCardOptions that to all get-methods that return Cards. This allows more advanced control of what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls).
+- Added GetCardOptions to all get-methods that return Cards. This allows more advanced control of what should be included on the cards (For example only a few fields to increase performance or more nested data to avoid more API calls).
 - Added more properties on the `Member` object
 - Added more properties on the `Card` object
 
