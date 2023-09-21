@@ -19,7 +19,7 @@ public class WebhookManagementTests : TestBase, IClassFixture<TestFixtureWithNew
             var currentWebhooks = await TrelloClient.GetWebhooksForCurrentTokenAsync();
 
             //Add Webhook
-            const string callbackUrl = "https://www.trello.com";
+            const string callbackUrl = "https://trello.com";
             var description = Guid.NewGuid().ToString();
             var webhook = new Webhook(description, callbackUrl, _boardId);
             var addedWebHook = await TrelloClient.AddWebhookAsync(webhook);
