@@ -2,6 +2,7 @@
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
 ## 1.9.0-alpha1 (21st of September 2023)
+- Automation Engine can now make automations with multiple triggers (Example do something when a 'Card is Created' OR 'Card is emailed')
 - Added GetBoardOptions to all get-methods that return Boards. This allows more advanced control of what should be included on the Board (For example only a few fields to increase performance or more nested data to avoid more API calls).
 - Added `IncludeChecklists` and `ChecklistFields` to GetCardOptions
 - Added more properties on the `Card` object

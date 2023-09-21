@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.AutomationEngine.Model;
 using TrelloDotNet.Model.Webhook;
 
@@ -46,10 +47,21 @@ namespace TrelloDotNet.AutomationEngine
 
             foreach (var automation in _automations)
             {
+                IAutomationTrigger triggerBeingChecked = null;
                 try
                 {
+                    var triggerMet = false;
                     cancellationToken.ThrowIfCancellationRequested();
-                    if (!await automation.Trigger.IsTriggerMetAsync(webhookAction))
+                    foreach (var trigger in automation.Triggers)
+                    {
+                        triggerBeingChecked = trigger;
+                        triggerMet = await trigger.IsTriggerMetAsync(webhookAction);
+                        if(triggerMet)
+                        {
+                            break;
+                        }
+                    }
+                    if (!triggerMet)
                     {
                         result.AddToLog($"Automation '{automation.Name}' was not processed as trigger was not met");
                         result.AutomationsSkipped++;
@@ -58,7 +70,11 @@ namespace TrelloDotNet.AutomationEngine
                 }
                 catch (Exception e)
                 {
-                    throw new AutomationException($"Error checking Trigger of type '{automation.Trigger.GetType()}' in automation '{automation.Name}'{AddErrorContext(data)}", e);
+                    if (triggerBeingChecked != null)
+                    {
+                        throw new AutomationException($"Error checking Trigger of type '{triggerBeingChecked.GetType()}' in automation '{automation.Name}'{AddErrorContext(data)}", e);
+                    }
+                    throw new AutomationException($"Error checking Trigger in automation '{automation.Name}'{AddErrorContext(data)}", e);
                 }
 
                 var conditionsMet = true;

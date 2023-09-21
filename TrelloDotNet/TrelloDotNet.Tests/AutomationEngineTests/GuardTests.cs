@@ -31,8 +31,22 @@ public class GuardTests : TestBase
     [Fact]
     public void AutomationNullTrigger()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => new Automation(null, null,null, null));
+        var exception = Assert.Throws<ArgumentNullException>(() => new Automation(null, trigger: null,null, null));
         Assert.StartsWith("Trigger can't be null", exception.Message);
+    }
+
+    [Fact]
+    public void AutomationNullTriggers()
+    {
+        var exception = Assert.Throws<ArgumentNullException>(() => new Automation(null, triggers: null,null, null));
+        Assert.StartsWith("Trigger can't be null", exception.Message);
+    }
+    
+    [Fact]
+    public void AutomationNoTriggers()
+    {
+        var exception = Assert.Throws<ArgumentException>(() => new Automation(null, triggers: new List<IAutomationTrigger>(),null, null));
+        Assert.StartsWith("You need at least one Trigger", exception.Message);
     }
 
     [Fact]
