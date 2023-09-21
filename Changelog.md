@@ -9,6 +9,7 @@
 - Added more properties on the `Board` object
 - Added Automation Trigger [`CardNameUpdatedTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CardNameUpdatedTrigger)
 - Added Automation Trigger [`ConvertToCardFromCheckItemTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/ConvertToCardFromCheckItemTrigger)
+- Performance optimized various `AutomationEngine` Conditions and one of the Actions by internally using the GetCardOptions system to only retrive absolute minimum needed data
 
 <hr>
 

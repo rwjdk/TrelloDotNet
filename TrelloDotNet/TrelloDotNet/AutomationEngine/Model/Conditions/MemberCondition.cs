@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
+using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Conditions
@@ -43,7 +45,10 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         /// <returns>If condition is met or not</returns>
         public async Task<bool> IsConditionMetAsync(WebhookAction webhookAction)
         {
-            var card = await webhookAction.Data.Card.GetAsync();
+            var card = await webhookAction.Data.Card.GetAsync(new GetCardOptions
+            {
+                CardFields = new CardFields("idMembers")
+            });
             var idsToCheck = MemberIds;
             if (TreatMemberNameAsId)
             {

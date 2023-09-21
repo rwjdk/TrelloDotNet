@@ -2,6 +2,8 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
+using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Conditions
@@ -111,7 +113,10 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
 
         private async Task<bool> CheckDueComplete(WebhookAction webhookAction)
         {
-            var card = await webhookAction.Data.Card.GetAsync();
+            var card = await webhookAction.Data.Card.GetAsync(new GetCardOptions
+            {
+                CardFields = new CardFields("dueComplete"),
+            });
             return CheckBool(card.DueComplete);
         }
 
@@ -137,7 +142,10 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         
         private async Task<bool> CheckDescription(WebhookAction webhookAction)
         {
-            var card = await webhookAction.Data.Card.GetAsync();
+            var card = await webhookAction.Data.Card.GetAsync(new GetCardOptions
+            {
+                CardFields = new CardFields("desc")
+            });
             return CheckString(card.Description);
         }
 
@@ -173,13 +181,19 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
 
         private async Task<bool> CheckStart(WebhookAction webhookAction)
         {
-            var card = await webhookAction.Data.Card.GetAsync();
+            var card = await webhookAction.Data.Card.GetAsync(new GetCardOptions
+            {
+                CardFields = new CardFields("start")
+            });
             return CheckDateTimeOffsetValue(card.Start);
         }
         
         private async Task<bool> CheckDue(WebhookAction webhookAction)
         {
-            var card = await webhookAction.Data.Card.GetAsync();
+            var card = await webhookAction.Data.Card.GetAsync(new GetCardOptions
+            {
+                CardFields = new CardFields("due")
+            });
             return CheckDateTimeOffsetValue(card.Due);
         }
 

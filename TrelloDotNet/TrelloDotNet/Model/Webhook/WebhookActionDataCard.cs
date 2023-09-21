@@ -3,6 +3,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Threading;
+using TrelloDotNet.Model.Options.GetCardOptions;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -117,6 +118,17 @@ namespace TrelloDotNet.Model.Webhook
         public async Task<Card> GetAsync(CancellationToken cancellationToken = default)
         {
             return await Parent.Parent.TrelloClient.GetCardAsync(Id, cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the Full Card Object
+        /// </summary>
+        /// <param name="options">Options</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Card</returns>
+        public async Task<Card> GetAsync(GetCardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await Parent.Parent.TrelloClient.GetCardAsync(Id, options, cancellationToken);
         }
 
         /// <summary>

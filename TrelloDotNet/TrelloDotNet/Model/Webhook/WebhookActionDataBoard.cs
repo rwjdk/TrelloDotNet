@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Model.Options.GetBoardOptions;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -38,6 +39,17 @@ namespace TrelloDotNet.Model.Webhook
         public async Task<Board> GetAsync(CancellationToken cancellationToken = default)
         {
             return await Parent.Parent.TrelloClient.GetBoardAsync(Id, cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the Full Board Object
+        ///  </summary>
+        /// <param name="options">Options</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Board</returns>
+        public async Task<Board> GetAsync(GetBoardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await Parent.Parent.TrelloClient.GetBoardAsync(Id, options, cancellationToken);
         }
 
         /// <summary>

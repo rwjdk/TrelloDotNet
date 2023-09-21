@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
+using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
@@ -37,7 +39,10 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 throw new AutomationException("Could not perform AddChecklistToCardIfLabelMatchAction as WebhookAction did not involve a Card");
             }
 
-            var card = await webhookAction.Data.Card.GetAsync();
+            var card = await webhookAction.Data.Card.GetAsync(new GetCardOptions
+            {
+                CardFields = new CardFields("labels")
+            });
 
             foreach (var checklistIfLabelMatch in AddChecklistActionsIfLabelsMatch)
             {
