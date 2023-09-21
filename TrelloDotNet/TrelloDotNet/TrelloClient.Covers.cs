@@ -28,7 +28,7 @@ namespace TrelloDotNet
         {
             if (coverToAdd == null)
             {
-                throw new TrelloApiException(@"Cover can't be null (If you trying to remove a cover see 'RemoveCoverFromCardAsync')", string.Empty);
+                throw new TrelloApiException("Cover can't be null (If you trying to remove a cover see 'RemoveCoverFromCardAsync')", string.Empty);
             }
 
             coverToAdd.PrepareForAddUpdate();
@@ -44,7 +44,7 @@ namespace TrelloDotNet
         /// <returns>The Card with the removed Cover</returns>
         public async Task<Card> RemoveCoverFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter(@"cover", string.Empty));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter("cover", string.Empty));
         }
     }
 }

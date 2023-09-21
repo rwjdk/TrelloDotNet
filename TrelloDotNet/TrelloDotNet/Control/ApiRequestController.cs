@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -68,7 +67,7 @@ namespace TrelloDotNet.Control
             var uri = BuildUri(suffix, parameters);
             using (var multipartFormContent = new MultipartFormDataContent())
             {
-                multipartFormContent.Add(new StreamContent(attachmentFile.Stream), name: @"file", fileName: attachmentFile.Filename);
+                multipartFormContent.Add(new StreamContent(attachmentFile.Stream), name: "file", fileName: attachmentFile.Filename);
                 var response = await _httpClient.PostAsync(uri, multipartFormContent, cancellationToken);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -145,7 +144,7 @@ namespace TrelloDotNet.Control
             }
         }
 
-        private static StringBuilder GetParametersAsString(QueryParameter[] parameters)
+        internal static StringBuilder GetParametersAsString(QueryParameter[] parameters)
         {
             StringBuilder parameterString = new StringBuilder();
             foreach (var parameter in parameters)
@@ -158,7 +157,7 @@ namespace TrelloDotNet.Control
 
         private Uri BuildUri(string suffix, params QueryParameter[] parameters)
         {
-            return new Uri($@"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
+            return new Uri($"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
         }
 
         internal async Task<string> Delete(string suffix, CancellationToken cancellationToken, int retryCount)

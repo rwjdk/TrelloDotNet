@@ -132,8 +132,8 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         public async Task AddMemberToBoardAsync(string boardId, string memberId, MembershipType membershipType, bool allowBillableGuest = false, CancellationToken cancellationToken = default)
         {
             await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/{memberId}", cancellationToken, 0,
-                new QueryParameter(@"type", membershipType.GetJsonPropertyName()),
-                new QueryParameter(@"allowBillableGuest", allowBillableGuest));
+                new QueryParameter("type", membershipType.GetJsonPropertyName()),
+                new QueryParameter("allowBillableGuest", allowBillableGuest));
         }
 
         /// <summary>
@@ -146,8 +146,8 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         public async Task InviteMemberToBoardViaEmailAsync(string boardId, string email, MembershipType membershipType, CancellationToken cancellationToken = default)
         {
             await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}", cancellationToken, 0,
-                new QueryParameter(@"type", membershipType.GetJsonPropertyName()),
-                new QueryParameter(@"email", email));
+                new QueryParameter("type", membershipType.GetJsonPropertyName()),
+                new QueryParameter("email", email));
         }
 
         /// <summary>

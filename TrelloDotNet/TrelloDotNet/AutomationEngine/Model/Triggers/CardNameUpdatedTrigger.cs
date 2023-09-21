@@ -1,26 +1,14 @@
 ﻿using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
-using TrelloDotNet.Model;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
-    /// Trigger that occurs when a Check-item on a Card Change State
+    /// Trigger when a card's name is Updated
     /// </summary>
-    public class CheckItemStateUpdatedOnCardTrigger : IAutomationTrigger
+    public class CardNameUpdatedTrigger : IAutomationTrigger
     {
-        private ChecklistItemState State { get; }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="state">What state should the check-items state be (or leave 'None' to catch both states)</param>
-        public CheckItemStateUpdatedOnCardTrigger(ChecklistItemState state = ChecklistItemState.None)
-        {
-            State = state;
-        }
-
         /// <summary>
         /// If the Trigger is met
         /// </summary>
@@ -32,17 +20,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
         public async Task<bool> IsTriggerMetAsync(WebhookAction webhookAction)
         {
             await Task.CompletedTask;
-            if (webhookAction.Type != WebhookActionTypes.UpdateCheckItemStateOnCard)
-            {
-                return false;
-            }
-
-            if (State != ChecklistItemState.None)
-            {
-                return webhookAction.Data?.CheckItem?.State == State;
-            }
-
-            return true;
+            return webhookAction.Type == WebhookActionTypes.UpdateCard && webhookAction.Data.Card.Name != webhookAction.Data.Old.Name;
         }
     }
 }

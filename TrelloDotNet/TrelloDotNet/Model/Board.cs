@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
+using TrelloDotNet.Model.Actions;
 
 namespace TrelloDotNet.Model
 {
@@ -78,6 +80,27 @@ namespace TrelloDotNet.Model
         /// Date the Board was created [stored in UTC]
         /// </summary>
         [JsonIgnore] public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
+
+        /// <summary>
+        /// Actions of the board (Only populated if Actions in GetBoardOptions is included)
+        /// </summary>
+        [JsonPropertyName("actions")]
+        [JsonInclude]
+        public List<TrelloAction> Actions { get; private set; }
+
+        /// <summary>
+        /// Cards on the board (Only populated if 'IncludeCards' in GetBoardOptions is set to a value other than None)
+        /// </summary>
+        [JsonPropertyName("cards")]
+        [JsonInclude]
+        public List<Card> Cards { get; private set; }
+        
+        /// <summary>
+        /// Labels on the board (Only populated if 'IncludeLabels' in GetBoardOptions is set to true)
+        /// </summary>
+        [JsonPropertyName("labels")]
+        [JsonInclude]
+        public List<Label> Labels { get; private set; }
 
         /// <summary>
         /// Constructor

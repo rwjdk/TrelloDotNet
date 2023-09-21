@@ -42,7 +42,7 @@ namespace TrelloDotNet
         /// <returns>The ReOpened Card</returns>
         public async Task<Card> ReOpenCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter(@"closed", false));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter("closed", false));
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace TrelloDotNet
             if (cardWithChanges.Cover == null)
             {
                 //Remove cover
-                parameters.Add(new QueryParameter(@"cover", ""));
+                parameters.Add(new QueryParameter("cover", ""));
             }
             else
             {
@@ -96,8 +96,8 @@ namespace TrelloDotNet
             var newList = await GetListAsync(newListId, cancellationToken); //Get the new list's BoardId so the user do not need to provide it.
             await _apiRequestController.Post($"{UrlPaths.Lists}/{currentListId}/moveAllCards", cancellationToken,
                 0,
-                new QueryParameter(@"idBoard", newList.BoardId),
-                new QueryParameter(@"idList", newListId)
+                new QueryParameter("idBoard", newList.BoardId),
+                new QueryParameter("idList", newListId)
             );
         }
 
@@ -120,8 +120,8 @@ namespace TrelloDotNet
         public async Task<Card> GetCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken,
-                new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
-                new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods)
+                new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
+                new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods)
             );
         }
 
@@ -172,8 +172,8 @@ namespace TrelloDotNet
         public async Task<List<Card>> GetCardsInListAsync(string listId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", cancellationToken,
-                new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
-                new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
+                new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
+                new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
 
         /// <summary>
@@ -198,8 +198,8 @@ namespace TrelloDotNet
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", cancellationToken,
-                new QueryParameter(@"customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
-                new QueryParameter(@"attachments", Options.IncludeAttachmentsInCardGetMethods));
+                new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
+                new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
 
         /// <summary>

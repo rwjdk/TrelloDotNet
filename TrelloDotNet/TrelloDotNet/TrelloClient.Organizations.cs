@@ -78,7 +78,7 @@ namespace TrelloDotNet
             }
             else
             {
-                throw new SecurityException(@"Deletion of Organizations are disabled via Options.AllowDeleteOfOrganizations (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back)");
+                throw new SecurityException("Deletion of Organizations are disabled via Options.AllowDeleteOfOrganizations (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back)");
             }
         }
     }

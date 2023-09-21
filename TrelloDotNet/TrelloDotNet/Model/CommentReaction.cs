@@ -29,7 +29,7 @@ namespace TrelloDotNet.Model
         public string CommentId { get; private set; }
 
         /// <summary>
-        /// The Id of the Emoji
+        /// The Id of the Emojis
         /// </summary>
         [JsonPropertyName("idEmoji")]
         [JsonInclude]
@@ -43,7 +43,7 @@ namespace TrelloDotNet.Model
         public Member Member { get; private set; }
 
         /// <summary>
-        /// The Emoji
+        /// The Emojis
         /// </summary>
         [JsonPropertyName("emoji")]
         [JsonInclude]

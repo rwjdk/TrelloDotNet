@@ -32,12 +32,12 @@ namespace TrelloDotNet
         {
             if (string.IsNullOrWhiteSpace(apiKey))
             {
-                throw new ArgumentException(@"You need to specify an API Key. Get it on page: https://trello.com/power-ups/admin/");
+                throw new ArgumentException("You need to specify an API Key. Get it on page: https://trello.com/power-ups/admin/");
             }
 
             if (string.IsNullOrWhiteSpace(token))
             {
-                throw new ArgumentException(@"You need to specify a Token. Generate it on page: https://trello.com/power-ups/admin/");
+                throw new ArgumentException("You need to specify a Token. Generate it on page: https://trello.com/power-ups/admin/");
             }
 
             if (httpClient != null)

@@ -1,6 +1,16 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.9.0-alpha1 (21st of September 2023)
+- Added GetBoardOptions to all get-methods that return Boards. This allows more advanced control of what should be included on the Board (For example only a few fields to increase performance or more nested data to avoid more API calls).
+- Added `IncludeChecklists` and `ChecklistFields` to GetCardOptions
+- Added more properties on the `Card` object
+- Added more properties on the `Board` object
+- Added Automation Trigger [`CardNameUpdatedTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CardNameUpdatedTrigger)
+- Added Automation Trigger [`ConvertToCardFromCheckItemTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/ConvertToCardFromCheckItemTrigger)
+
+<hr>
+
 ## 1.8.0 (27th of August 2023)
 - Added [`SearchAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchAsync)
 - Added [`SearchMembersAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/SearchMembersAsync)

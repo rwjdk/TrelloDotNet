@@ -64,7 +64,7 @@ namespace TrelloDotNet
                 case CustomFieldType.Number:
                 case CustomFieldType.Text:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'Date' can be set with a DateTimeOffset value");
+                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Date' can be set with a DateTimeOffset value");
             }
 
             await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
@@ -94,7 +94,7 @@ namespace TrelloDotNet
                 case CustomFieldType.List:
                 case CustomFieldType.Text:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'Number' can be set with a integer value");
+                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Number' can be set with a integer value");
             }
 
             await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
@@ -124,7 +124,7 @@ namespace TrelloDotNet
                 case CustomFieldType.List:
                 case CustomFieldType.Text:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'Number' can be set with a decimal value");
+                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'Number' can be set with a decimal value");
             }
 
             await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
@@ -159,7 +159,7 @@ namespace TrelloDotNet
                 case CustomFieldType.Number:
                 case CustomFieldType.Text:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(customField), @"Only a custom field of type 'List' can be set with a CustomFieldOption value");
+                    throw new ArgumentOutOfRangeException(nameof(customField), "Only a custom field of type 'List' can be set with a CustomFieldOption value");
             }
 
             await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);

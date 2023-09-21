@@ -27,7 +27,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<TrelloAction> UpdateCommentActionAsync(TrelloAction commentAction, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", cancellationToken, new QueryParameter(@"text", commentAction.Data.Text));
+            return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", cancellationToken, new QueryParameter("text", commentAction.Data.Text));
         }
 
         /// <summary>
@@ -78,8 +78,8 @@ public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId, C
         public async Task<List<TrelloAction>> GetPagedCommentsOnCardAsync(string cardId, int page = 0, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<TrelloAction>>($"{UrlPaths.Cards}/{cardId}/actions", cancellationToken,
-                new QueryParameter(@"filter", @"commentCard"),
-                new QueryParameter(@"page", page));
+                new QueryParameter("filter", "commentCard"),
+                new QueryParameter("page", page));
         }
 
         /// <summary>

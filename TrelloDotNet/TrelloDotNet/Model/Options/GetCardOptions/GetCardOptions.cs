@@ -34,15 +34,25 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         public bool IncludeMembers { get; set; }
 
         /// <summary>
+        /// Whether to return checklist objects for members on the card (Default: False)
+        /// </summary>
+        public bool IncludeChecklists { get; set; }
+
+        /// <summary>
         /// What member-fields to include if IncludeMembers are set to True
         /// </summary>
         public MemberFields MemberFields { get; set; }
+        
+        /// <summary>
+        /// What checklist-fields to include if IncludeChecklists are set to True
+        /// </summary>
+        public ChecklistFields ChecklistFields { get; set; }
 
         /// <summary>
         /// Whether to return Board object the card is on (Default: False)
         /// </summary>
         public bool IncludeBoard { get; set; }
-        
+
         /// <summary>
         /// Whether to return List object the card is in (Default: False)
         /// </summary>
@@ -75,15 +85,21 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
             {
                 parameters.Add(new QueryParameter("member_fields", string.Join(",", MemberFields.Fields)));
             }
-            
+
             if (BoardFields != null)
             {
                 parameters.Add(new QueryParameter("board_fields", string.Join(",", BoardFields.Fields)));
             }
-
+            
+            if (ChecklistFields != null)
+            {
+                parameters.Add(new QueryParameter("checklist_fields", string.Join(",", ChecklistFields.Fields)));
+            }
+            
             parameters.Add(new QueryParameter("members", IncludeMembers));
             parameters.Add(new QueryParameter("board", IncludeBoard));
             parameters.Add(new QueryParameter("list", IncludeList));
+            parameters.Add(new QueryParameter("checklists", IncludeChecklists ? "all" : "none"));
 
             switch (IncludeAttachments)
             {

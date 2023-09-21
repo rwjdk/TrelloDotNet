@@ -215,11 +215,18 @@ namespace TrelloDotNet.Model
         public List List { get; private set; }
 
         /// <summary>
-        /// Actions of the Card (Only populated if Actions in GetCardOptions is included)
+        /// Actions of the Card (Only populated if 'ActionTypes' in GetCardOptions is included)
         /// </summary>
         [JsonPropertyName("actions")]
         [JsonInclude]
         public List<TrelloAction> Actions { get; private set; }
+        
+        /// <summary>
+        /// Checklists of the Card (Only populated if GetCardOptions.IncludeChecklist is used)
+        /// </summary>
+        [JsonPropertyName("checklists")]
+        [JsonInclude]
+        public List<Checklist> Checklists { get; private set; }
 
         /// <summary>
         /// Constructor (Common Card fields)

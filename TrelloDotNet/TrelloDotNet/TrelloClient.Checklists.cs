@@ -86,7 +86,7 @@ namespace TrelloDotNet
 
             QueryParameter[] parameters =
             {
-                new QueryParameter(@"idChecklistSource", existingChecklistIdToCopyFrom)
+                new QueryParameter("idChecklistSource", existingChecklistIdToCopyFrom)
             };
             return await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", cancellationToken, parameters);
         }

@@ -4,6 +4,7 @@ using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.GetBoardOptions;
 
 namespace TrelloDotNet
 {
@@ -35,7 +36,7 @@ namespace TrelloDotNet
         /// <returns>The Closed Board</returns>
         public async Task<Board> CloseBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter(@"closed", true));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter("closed", true));
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace TrelloDotNet
         /// <returns>The ReOpened Board</returns>
         public async Task<Board> ReOpenBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter(@"closed", false));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter("closed", false));
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace TrelloDotNet
             }
             else
             {
-                throw new SecurityException(@"Deletion of Boards are disabled via Options.AllowDeleteOfBoards (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back: https://support.atlassian.com/trello/docs/deleting-a-board/)");
+                throw new SecurityException("Deletion of Boards are disabled via Options.AllowDeleteOfBoards (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back: https://support.atlassian.com/trello/docs/deleting-a-board/)");
             }
         }
 
@@ -92,6 +93,18 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get a Board by its Id
+        /// </summary>
+        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="options">Options on what should be included on the board</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Board</returns>
+        public async Task<Board> GetBoardAsync(string boardId, GetBoardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, options.GetParameters());
+        }
+
+        /// <summary>
         /// Get the Boards that the specified member has access to
         /// </summary>
         /// <param name="memberId">Id of the Member to find boards for</param>
@@ -101,7 +114,19 @@ namespace TrelloDotNet
         {
             return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Members}/{memberId}/boards", cancellationToken);
         }
-        
+
+        /// <summary>
+        /// Get the Boards that the specified member has access to
+        /// </summary>
+        /// <param name="memberId">Id of the Member to find boards for</param>
+        /// <param name="options">Options on what should be included on the board</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Active Boards there is access to</returns>
+        public async Task<List<Board>> GetBoardsForMemberAsync(string memberId, GetBoardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Members}/{memberId}/boards", cancellationToken, options.GetParameters());
+        }
+
         /// <summary>
         /// Get the Boards that the token provided to the TrelloClient can Access
         /// </summary>
@@ -113,6 +138,18 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get the Boards that the token provided to the TrelloClient can Access
+        /// <param name="options">Options on what should be included on the board</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// </summary>
+        /// <returns>The Active Boards there is access to</returns>
+        public async Task<List<Board>> GetBoardsCurrentTokenCanAccessAsync(GetBoardOptions options, CancellationToken cancellationToken = default)
+        {
+            var tokenMember = await GetTokenMemberAsync(cancellationToken);
+            return await GetBoardsForMemberAsync(tokenMember.Id, options, cancellationToken);
+        }
+
+        /// <summary>
         /// Get the Boards in an Organization
         /// </summary>
         /// <param name="organizationId">Id of the Organization</param>
@@ -121,6 +158,18 @@ namespace TrelloDotNet
         public async Task<List<Board>> GetBoardsInOrganization(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Boards}", cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the Boards in an Organization
+        /// </summary>
+        /// <param name="organizationId">Id of the Organization</param>
+        /// <param name="options">Options on what should be included on the board</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Active Boards in the Organization</returns>
+        public async Task<List<Board>> GetBoardsInOrganization(string organizationId, GetBoardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Boards}", cancellationToken, options.GetParameters());
         }
     }
 }

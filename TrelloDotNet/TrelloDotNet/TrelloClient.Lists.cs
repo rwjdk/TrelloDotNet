@@ -64,7 +64,7 @@ public async Task<List> ReOpenListAsync(string listId, CancellationToken cancell
         /// <returns>The Updated List</returns>
         public async Task<List> MoveListToBoardAsync(string listId, string newBoardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", cancellationToken, new QueryParameter(@"value", newBoardId));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", cancellationToken, new QueryParameter("value", newBoardId));
         }
 
         /// <summary>

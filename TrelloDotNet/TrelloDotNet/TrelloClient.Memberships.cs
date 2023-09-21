@@ -29,7 +29,7 @@ namespace TrelloDotNet
         public async Task UpdateMembershipTypeOfMemberOnBoardAsync(string boardId, string membershipId, MembershipType membershipType, CancellationToken cancellationToken = default)
         {
             await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/memberships/{membershipId}", cancellationToken, 0,
-                new QueryParameter(@"type", membershipType.GetJsonPropertyName()));
+                new QueryParameter("type", membershipType.GetJsonPropertyName()));
         }
     }
 }
