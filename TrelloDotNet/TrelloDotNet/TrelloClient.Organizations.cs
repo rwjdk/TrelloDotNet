@@ -2,6 +2,7 @@
 using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet
@@ -16,7 +17,7 @@ namespace TrelloDotNet
         /// <returns>The Organization</returns>
         public async Task<Organization> GetOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Organization>($"{UrlPaths.Organizations}/{organizationId}", cancellationToken);
+            return await _apiRequestController.Get<Organization>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken);
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace TrelloDotNet
         /// <returns>The Organizations there is access to</returns>
         public async Task<List<Organization>> GetOrganizationsForMemberAsync(string memberId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Organization>>($"{UrlPaths.Members}/{memberId}/organizations", cancellationToken);
+            return await _apiRequestController.Get<List<Organization>>(GetUrlBuilder.GetOrganizationsForMember(memberId), cancellationToken);
         }
 
         /// <summary>

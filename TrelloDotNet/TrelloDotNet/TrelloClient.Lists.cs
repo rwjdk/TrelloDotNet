@@ -33,13 +33,13 @@ namespace TrelloDotNet
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", true));
         }
 
-/// <summary>
-/// Reopen a List (Send back to the board)
-/// </summary>
-/// <param name="listId">The id of list that should be Reopened</param>
-/// <param name="cancellationToken">Cancellation Token</param>
-/// <returns>The Archived List</returns>
-public async Task<List> ReOpenListAsync(string listId, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Reopen a List (Send back to the board)
+        /// </summary>
+        /// <param name="listId">The id of list that should be Reopened</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Archived List</returns>
+        public async Task<List> ReOpenListAsync(string listId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", false));
         }
@@ -76,7 +76,7 @@ public async Task<List> ReOpenListAsync(string listId, CancellationToken cancell
         /// <returns>List of Cards</returns>
         public async Task<List<List>> GetListsOnBoardFilteredAsync(string boardId, ListFilter filter, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<List>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Lists}/{filter.GetJsonPropertyName()}", cancellationToken);
+            return await _apiRequestController.Get<List<List>>($"{GetUrlBuilder.GetListsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ public async Task<List> ReOpenListAsync(string listId, CancellationToken cancell
         /// <returns></returns>
         public async Task<List> GetListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List>($"{UrlPaths.Lists}/{listId}", cancellationToken);
+            return await _apiRequestController.Get<List>(GetUrlBuilder.GetList(listId), cancellationToken);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ public async Task<List> ReOpenListAsync(string listId, CancellationToken cancell
         /// <returns>List of Lists (Columns)</returns>
         public async Task<List<List>> GetListsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<List>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Lists}", cancellationToken);
+            return await _apiRequestController.Get<List<List>>(GetUrlBuilder.GetListsOnBoard(boardId), cancellationToken);
         }
     }
 }

@@ -1,7 +1,7 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## 1.9.0-alpha1 (21st of September 2023)
+## 1.9.0-alpha3 (21st of September 2023)
 - Automation Engine can now make automations with multiple triggers (Example do something when a 'Card is Created' OR 'Card is emailed')
 - Added GetBoardOptions to all get-methods that return Boards. This allows more advanced control of what should be included on the Board (For example only a few fields to increase performance or more nested data to avoid more API calls).
 - Added `IncludeChecklists` and `ChecklistFields` to GetCardOptions
@@ -10,6 +10,8 @@
 - Added Automation Trigger [`CardNameUpdatedTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CardNameUpdatedTrigger)
 - Added Automation Trigger [`ConvertToCardFromCheckItemTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/ConvertToCardFromCheckItemTrigger)
 - Performance optimized various `AutomationEngine` Conditions and one of the Actions by internally using the GetCardOptions system to only retrive absolute minimum needed data
+- Added Batch Get operations: [`GetBatchedDataAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetBatchedDataAsync), [`GetListsAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetListsAsync), [`GetCardsAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsAsync), [`GetBoardsAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetBoardsAsync), [`GetMembersAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetMembersAsync), [`GetOrganizationsAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetOrganizationsAsync) (more work but better performance)
+- Added [`GetUrlBuilder`](https://github.com/rwjdk/TrelloDotNet/wiki/GetUrlBuilder) to make it easier to build Trello Rest API Urls (for batch and generic requests)
 
 <hr>
 

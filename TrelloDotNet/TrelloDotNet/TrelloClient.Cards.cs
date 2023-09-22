@@ -119,7 +119,7 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> GetCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken,
+            return await _apiRequestController.Get<Card>(GetUrlBuilder.GetCard(cardId), cancellationToken,
                 new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods)
             );
@@ -134,7 +134,7 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> GetCardAsync(string cardId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, options.GetParameters());
+            return await _apiRequestController.Get<Card>(GetUrlBuilder.GetCard(cardId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", cancellationToken,
+            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken,
                 new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods)
                 );
@@ -160,7 +160,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/", cancellationToken, options.GetParameters());
+            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", cancellationToken,
+            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken,
                 new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
@@ -185,7 +185,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/", cancellationToken, options.GetParameters());
+            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", cancellationToken,
+            return await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken,
                 new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods));
         }
@@ -212,7 +212,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/{filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters());
+            return await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace TrelloDotNet
         /// <returns></returns>
         public async Task<List<Card>> GetCardsForMemberAsync(string memberId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}", cancellationToken);
+            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsForMember(memberId), cancellationToken);
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace TrelloDotNet
         /// <returns></returns>
         public async Task<List<Card>> GetCardsForMemberAsync(string memberId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}", cancellationToken, options.GetParameters());
+            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsForMember(memberId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>

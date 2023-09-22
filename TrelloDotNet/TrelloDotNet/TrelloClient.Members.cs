@@ -17,7 +17,7 @@ namespace TrelloDotNet
 /// <returns>List of Members</returns>
 public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/", cancellationToken);
+            return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfBoard(boardId), cancellationToken);
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         /// <returns>List of Members</returns>
         public async Task<List<Member>> GetMembersOfCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Members}/", cancellationToken);
+            return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfCard(cardId), cancellationToken);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         /// <returns>The Member</returns>
         public async Task<Member> GetMemberAsync(string memberId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Member>($"{UrlPaths.Members}/{memberId}", cancellationToken);
+            return await _apiRequestController.Get<Member>(GetUrlBuilder.GetMember(memberId), cancellationToken);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         /// <returns>The Member</returns>
         public async Task<Member> GetTokenMemberAsync(CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Member>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/member", cancellationToken);
+            return await _apiRequestController.Get<Member>(GetUrlBuilder.GetTokenMember(_apiRequestController.Token), cancellationToken);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         /// <returns>List of Members</returns>
         public async Task<List<Member>> GetMembersOfOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Members}/", cancellationToken);
+            return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfOrganization(organizationId), cancellationToken);
         }
     }
 }

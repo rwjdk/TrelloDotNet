@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet
@@ -39,7 +40,7 @@ namespace TrelloDotNet
         /// <returns>The List of Stickers</returns>
         public async Task<List<Sticker>> GetStickersOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Sticker>>($"{UrlPaths.Cards}/{cardId}/stickers", cancellationToken);
+            return await _apiRequestController.Get<List<Sticker>>(GetUrlBuilder.GetStickersOnCard(cardId), cancellationToken);
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace TrelloDotNet
         /// <returns>The Sticker</returns>
         public async Task<Sticker> GetStickerAsync(string cardId, string stickerId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers/{stickerId}", cancellationToken);
+            return await _apiRequestController.Get<Sticker>(GetUrlBuilder.GetSticker(cardId, stickerId), cancellationToken);
         }
 
         /// <summary>

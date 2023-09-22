@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options.GetBoardOptions;
 
@@ -89,7 +90,7 @@ namespace TrelloDotNet
         /// <returns>The Board</returns>
         public async Task<Board> GetBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken);
+            return await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken);
         }
 
         /// <summary>
@@ -101,7 +102,7 @@ namespace TrelloDotNet
         /// <returns>The Board</returns>
         public async Task<Board> GetBoardAsync(string boardId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, options.GetParameters());
+            return await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace TrelloDotNet
         /// <returns>The Active Boards there is access to</returns>
         public async Task<List<Board>> GetBoardsForMemberAsync(string memberId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Members}/{memberId}/boards", cancellationToken);
+            return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsForMember(memberId), cancellationToken);
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace TrelloDotNet
         /// <returns>The Active Boards there is access to</returns>
         public async Task<List<Board>> GetBoardsForMemberAsync(string memberId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Members}/{memberId}/boards", cancellationToken, options.GetParameters());
+            return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsForMember(memberId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -157,7 +158,7 @@ namespace TrelloDotNet
         /// <returns>The Active Boards in the Organization</returns>
         public async Task<List<Board>> GetBoardsInOrganization(string organizationId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Boards}", cancellationToken);
+            return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsInOrganization(organizationId), cancellationToken);
         }
 
         /// <summary>
@@ -169,7 +170,7 @@ namespace TrelloDotNet
         /// <returns>The Active Boards in the Organization</returns>
         public async Task<List<Board>> GetBoardsInOrganization(string organizationId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Board>>($"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Boards}", cancellationToken, options.GetParameters());
+            return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsInOrganization(organizationId), cancellationToken, options.GetParameters());
         }
     }
 }

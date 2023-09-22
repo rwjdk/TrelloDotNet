@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
 
@@ -18,7 +19,7 @@ namespace TrelloDotNet
         /// <returns>List of most Recent Trello Actions</returns>
         public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
-            return await GetActionsFromSuffix($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
+            return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnBoard(boardId), filter, limit, cancellationToken);
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace TrelloDotNet
         /// <returns>List of most Recent Trello Actions</returns>
         public async Task<List<TrelloAction>> GetActionsOnCardAsync(string cardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
-            return await GetActionsFromSuffix($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
+            return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnCard(cardId), filter, limit, cancellationToken);
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace TrelloDotNet
         /// <returns>List of most Recent Trello Actions</returns>
         public async Task<List<TrelloAction>> GetActionsForListAsync(string listId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
-            return await GetActionsFromSuffix($"{UrlPaths.Lists}/{listId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
+            return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForList(listId), filter, limit, cancellationToken);
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace TrelloDotNet
         /// <returns>List of most Recent Trello Actions</returns>
         public async Task<List<TrelloAction>> GetActionsForMemberAsync(string memberId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
-            return await GetActionsFromSuffix($"{UrlPaths.Members}/{memberId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
+            return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForMember(memberId), filter, limit, cancellationToken);
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace TrelloDotNet
         /// <returns>List of most Recent Trello Actions</returns>
         public async Task<List<TrelloAction>> GetActionsForOrganizationsAsync(string organizationId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
-            return await GetActionsFromSuffix($"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Actions}", filter, limit, cancellationToken);
+            return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForOrganization(organizationId), filter, limit, cancellationToken);
         }
 
         private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, List<string> filter, int limit, CancellationToken cancellationToken = default)

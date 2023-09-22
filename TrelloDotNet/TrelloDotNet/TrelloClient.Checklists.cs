@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet
@@ -111,7 +112,7 @@ namespace TrelloDotNet
         /// <returns>The Checklist</returns>
         public Task<Checklist> GetChecklistAsync(string checkListId, CancellationToken cancellationToken = default)
         {
-            return _apiRequestController.Get<Checklist>($"{UrlPaths.Checklists}/{checkListId}", cancellationToken);
+            return _apiRequestController.Get<Checklist>(GetUrlBuilder.GetChecklist(checkListId), cancellationToken);
         }
 
         /// <summary>
@@ -122,7 +123,7 @@ namespace TrelloDotNet
         /// <returns>List of Checklists</returns>
         public async Task<List<Checklist>> GetChecklistsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Checklist>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Checklists}", cancellationToken);
+            return await _apiRequestController.Get<List<Checklist>>(GetUrlBuilder.GetChecklistsOnBoard(boardId), cancellationToken);
         }
 
         /// <summary>
@@ -133,7 +134,7 @@ namespace TrelloDotNet
         /// <returns>The Checklists</returns>
         public async Task<List<Checklist>> GetChecklistsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Checklist>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", cancellationToken);
+            return await _apiRequestController.Get<List<Checklist>>(GetUrlBuilder.GetChecklistsOnCard(cardId), cancellationToken);
         }
 
         /// <summary>

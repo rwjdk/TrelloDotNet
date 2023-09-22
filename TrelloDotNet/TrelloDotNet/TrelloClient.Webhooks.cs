@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet
@@ -74,7 +75,7 @@ namespace TrelloDotNet
         /// <returns>List of Webhooks</returns>
         public async Task<List<Webhook>> GetWebhooksForCurrentTokenAsync(CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Webhook>>($"{UrlPaths.Tokens}/{_apiRequestController.Token}/webhooks", cancellationToken);
+            return await _apiRequestController.Get<List<Webhook>>(GetUrlBuilder.GetWebhooksForToken(_apiRequestController.Token), cancellationToken);
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace TrelloDotNet
         /// <returns>The Webhook</returns>
         public async Task<Webhook> GetWebhookAsync(string webhookId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Webhook>($"{UrlPaths.Webhooks}/{webhookId}", cancellationToken);
+            return await _apiRequestController.Get<Webhook>(GetUrlBuilder.GetWebhook(webhookId), cancellationToken);
         }
 
         /// <summary>

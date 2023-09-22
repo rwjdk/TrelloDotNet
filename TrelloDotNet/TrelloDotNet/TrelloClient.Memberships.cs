@@ -16,7 +16,7 @@ namespace TrelloDotNet
         /// <returns>The List of Memberships</returns>
         public async Task<List<Membership>> GetMembershipsOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Membership>>($"{UrlPaths.Boards}/{boardId}/memberships", cancellationToken);
+            return await _apiRequestController.Get<List<Membership>>(GetUrlBuilder.GetMembershipsOfBoard(boardId), cancellationToken);
         }
 
         /// <summary>

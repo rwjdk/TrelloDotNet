@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet
@@ -243,7 +244,7 @@ namespace TrelloDotNet
         /// <returns>The Custom Fields</returns>
         public async Task<List<CustomFieldItem>> GetCustomFieldItemsForCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<CustomFieldItem>>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.CustomFieldItems}", cancellationToken);
+            return await _apiRequestController.Get<List<CustomFieldItem>>(GetUrlBuilder.GetCustomFieldItemsForCard(cardId), cancellationToken);
         }
 
         /// <summary>
@@ -254,7 +255,7 @@ namespace TrelloDotNet
         /// <returns>List of CustomFields</returns>
         public async Task<List<CustomField>> GetCustomFieldsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<CustomField>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.CustomFields}", cancellationToken);
+            return await _apiRequestController.Get<List<CustomField>>(GetUrlBuilder.GetCustomFieldsOnBoard(boardId), cancellationToken);
         }
     }
 }

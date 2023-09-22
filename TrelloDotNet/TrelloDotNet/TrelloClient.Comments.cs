@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
 
@@ -77,7 +78,7 @@ public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId, C
         /// <returns>List of Comments</returns>
         public async Task<List<TrelloAction>> GetPagedCommentsOnCardAsync(string cardId, int page = 0, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<TrelloAction>>($"{UrlPaths.Cards}/{cardId}/actions", cancellationToken,
+            return await _apiRequestController.Get<List<TrelloAction>>(GetUrlBuilder.GetActionsOnCard(cardId), cancellationToken,
                 new QueryParameter("filter", "commentCard"),
                 new QueryParameter("page", page));
         }
@@ -90,7 +91,7 @@ public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId, C
         /// <returns>The Reactions</returns>
         public async Task<List<CommentReaction>> GetCommentReactions(string commentActionId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<CommentReaction>>($"{UrlPaths.Actions}/{commentActionId}/reactions", cancellationToken);
+            return await _apiRequestController.Get<List<CommentReaction>>(GetUrlBuilder.GetCommentReactions(commentActionId), cancellationToken);
         }
     }
 }

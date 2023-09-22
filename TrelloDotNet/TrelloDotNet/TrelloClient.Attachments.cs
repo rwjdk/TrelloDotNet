@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet
@@ -15,7 +16,7 @@ namespace TrelloDotNet
         /// <returns>The Attachments</returns>
         public async Task<List<Attachment>> GetAttachmentsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Attachment>>($"{UrlPaths.Cards}/{cardId}/attachments", cancellationToken);
+            return await _apiRequestController.Get<List<Attachment>>(GetUrlBuilder.GetAttachmentsOnCard(cardId), cancellationToken);
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteAttachmentOnCardAsync(string cardId, string attachmentId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/attachments/{attachmentId}", cancellationToken, 0);
+            await _apiRequestController.Delete(GetUrlBuilder.GetAttachmentOnCard(cardId, attachmentId), cancellationToken, 0);
         }
 
         /// <summary>

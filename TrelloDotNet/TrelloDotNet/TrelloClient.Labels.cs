@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet
@@ -26,7 +27,7 @@ namespace TrelloDotNet
         /// <returns>List of Labels</returns>
         public async Task<List<Label>> GetLabelsOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Label>>($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Labels}", cancellationToken);
+            return await _apiRequestController.Get<List<Label>>(GetUrlBuilder.GetLabelsOfBoard(boardId), cancellationToken);
         }
 
         /// <summary>
