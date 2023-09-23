@@ -1,29 +1,28 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Batch
 {
     /// <summary>
-    /// Represent a Batch-result 
+    /// Represent a batch-result
     /// </summary>
     public class BatchResult
     {
         /// <summary>
-        /// The number of the URLs sent that resulted in failure (not 200 return)
+        /// The generic data back as a JSON Element (Use GetData&lt;T&gt; to deserialize the data)
         /// </summary>
-        public int ErrorCount => Results.Count(x => x.StatusCode != 200);
-        /// <summary>
-        /// The results of the BatchRequest
-        /// </summary>
-        public List<BatchResultForUrl> Results { get; set; }
+        [JsonPropertyName("200")]
+        [JsonInclude]
+        public JsonElement Data { get; private set; }
 
         /// <summary>
-        /// Constructor
+        /// Get the data of the result deserialized
         /// </summary>
-        /// <param name="results">The results of the BatchRequest</param>
-        public BatchResult(List<BatchResultForUrl> results)
+        /// <typeparam name="T">The type to deserialize to</typeparam>
+        /// <returns></returns>
+        public T GetData<T>()
         {
-            Results = results;
+            return Data.Deserialize<T>();
         }
     }
 }

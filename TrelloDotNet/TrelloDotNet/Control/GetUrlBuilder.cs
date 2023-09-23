@@ -1,4 +1,7 @@
-﻿namespace TrelloDotNet.Control
+﻿using TrelloDotNet.Model.Options.GetBoardOptions;
+using TrelloDotNet.Model.Options.GetCardOptions;
+
+namespace TrelloDotNet.Control
 {
     /// <summary>
     /// Utility to build the the needed URL Suffixes to call the Trello Rest API
@@ -80,70 +83,77 @@
         /// boards/{boardId}
         /// </summary>
         /// <param name="boardId">Id of the Board</param>
+        /// <param name="options">Options</param>
         /// <returns>The URL Suffix</returns>
-        public static string GetBoard(string boardId)
+        public static string GetBoard(string boardId, GetBoardOptions options = null)
         {
-            return $"{UrlPaths.Boards}/{boardId}";
+            return $"{UrlPaths.Boards}/{boardId}"+AddGetBoardOptions(options);
         }
 
         /// <summary>
         /// members/{memberId}/boards/
         /// </summary>
         /// <param name="memberId">Id of the Member</param>
+        /// <param name="options">Options</param>
         /// <returns>The URL Suffix</returns>
-        public static string GetBoardsForMember(string memberId)
+        public static string GetBoardsForMember(string memberId, GetBoardOptions options = null)
         {
-            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Boards}/";
+            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Boards}/"+AddGetBoardOptions(options);
         }
 
         /// <summary>
         /// organizations/{organizationId}/boards
         /// </summary>
         /// <param name="organizationId">Id of the Organization</param>
+        /// <param name="options">Options</param>
         /// <returns>The URL Suffix</returns>
-        public static string GetBoardsInOrganization(string organizationId)
+        public static string GetBoardsInOrganization(string organizationId, GetBoardOptions options = null)
         {
-            return $"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Boards}";
+            return $"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Boards}"+AddGetBoardOptions(options);
         }
 
         /// <summary>
         /// cards/{cardId}
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
+        /// <param name="options">Options</param>
         /// <returns>The URL Suffix</returns>
-        public static string GetCard(string cardId)
+        public static string GetCard(string cardId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Cards}/{cardId}";
+            return $"{UrlPaths.Cards}/{cardId}"+AddGetCardOptions(options);
         }
 
         /// <summary>
         /// boards/{boardId}/cards
         /// </summary>
         /// <param name="boardId">Id of the Board</param>
+        /// <param name="options">Options</param>
         /// <returns>The URL Suffix</returns>
-        public static string GetCardsOnBoard(string boardId)
+        public static string GetCardsOnBoard(string boardId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/";
+            return $"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/"+AddGetCardOptions(options);
         }
 
         /// <summary>
         /// lists/{listId}/cards
         /// </summary>
         /// <param name="listId">Id of the List</param>
+        /// <param name="options">Options</param>
         /// <returns>The URL Suffix</returns>
-        public static string GetCardsInList(string listId)
+        public static string GetCardsInList(string listId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/";
+            return $"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/"+AddGetCardOptions(options);
         }
 
         /// <summary>
         /// members/{memberId}/cards/
         /// </summary>
         /// <param name="memberId">Id of the Member</param>
+        /// <param name="options">Options</param>
         /// <returns>The URL Suffix</returns>
-        public static string GetCardsForMember(string memberId)
+        public static string GetCardsForMember(string memberId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}/";
+            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}/"+AddGetCardOptions(options);
         }
 
         /// <summary>
@@ -355,6 +365,16 @@
         public static string GetWebhook(string webhookId)
         {
             return $"{UrlPaths.Webhooks}/{webhookId}";
+        }
+
+        private static string AddGetCardOptions(GetCardOptions options)
+        {
+            return options != null ? ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1).ToString() : string.Empty;
+        }
+        
+        private static string AddGetBoardOptions(GetBoardOptions options)
+        {
+            return options != null ? ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1).ToString() : string.Empty;
         }
     }
 }
