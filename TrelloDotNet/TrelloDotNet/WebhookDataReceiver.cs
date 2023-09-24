@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 using TrelloDotNet.Control.Webhook;
 using TrelloDotNet.Model.Webhook;
 
@@ -10,30 +13,61 @@ namespace TrelloDotNet
     public class WebhookDataReceiver
     {
         private readonly TrelloClient _trelloClient;
+        private readonly byte[] _secret;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="trelloClient">The base TrelloClient</param>
-        public WebhookDataReceiver(TrelloClient trelloClient)
+        /// <param name="secret">
+        /// The client secret you get on https://trello.com/power-ups/admin/.
+        /// When passing a secret, signature validation will be turned on for calls to <see cref="ProcessJsonIntoEvents"/>.
+        /// </param>
+        public WebhookDataReceiver(TrelloClient trelloClient, string secret = null)
         {
             _trelloClient = trelloClient;
+            
+            if (!string.IsNullOrEmpty(secret))
+            {
+                _secret = Encoding.ASCII.GetBytes(secret);
+            }
         }
 
         /// <summary>
         /// Class that can turn data from an into events based on what the data contain
         /// </summary>
         /// <param name="json">The raw incoming JSON</param>
+        /// <param name="signature">Signature from X-Trello-Webhook header for signature validation</param>
+        /// <param name="webhookUrl">Webhook URL for signature validation</param>
         /// <returns>If the Event was processed (aka it was a supported event)</returns>
-        public async void ProcessJsonIntoEvents(string json)
+        public async void ProcessJsonIntoEvents(string json, string signature = null, string webhookUrl = null)
         {
             if (string.IsNullOrWhiteSpace(json))
             {
-                return; //Most Likely the Head Call when setting up webhook - Just ignore
+                return; // Most Likely the Head Call when setting up webhook - Just ignore
+            }
+
+            if (_secret != null && !ValidateSignature(json, signature, webhookUrl))
+            {
+                return; // Invalid signature
             }
             var webhookNotification = JsonSerializer.Deserialize<WebhookNotification>(json);
             BasicEvents.FireEvent(webhookNotification.Action);
             await SmartEvents.FireEvent(webhookNotification.Action, _trelloClient);
+        }
+
+        private string Base64Digest(string data)
+        {
+            var hmac = new HMACSHA1(_secret);
+            var digest = hmac.ComputeHash(Encoding.UTF8.GetBytes(data));
+            return Convert.ToBase64String(digest);
+        }
+
+        private bool ValidateSignature(string json, string signature, string webhookUrl)
+        {
+            var content = json + webhookUrl;
+            var hash = Base64Digest(content);
+            return hash == signature;
         }
 
         /// <summary>
