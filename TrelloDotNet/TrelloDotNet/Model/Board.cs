@@ -75,7 +75,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("pinned")]
         [JsonInclude]
         public bool Pinned { get; private set; }
-
+        
         /// <summary>
         /// Date the Board was created [stored in UTC]
         /// </summary>
@@ -109,7 +109,6 @@ namespace TrelloDotNet.Model
         {
             //Serialization
         }
-
 
         /// <summary>
         /// Constructor

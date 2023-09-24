@@ -1,4 +1,7 @@
-﻿namespace TrelloDotNet.Model.Options
+﻿using System.Linq;
+using TrelloDotNet.Control;
+
+namespace TrelloDotNet.Model.Options
 {
     /// <summary>
     /// Represent Checklist-Fields to include
@@ -22,6 +25,15 @@
         public ChecklistFields(params string[] fields)
         {
             Fields = fields;
+        }
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="fields">The checklist-fields to include</param>
+        public ChecklistFields(params ChecklistFieldsType[] fields)
+        {
+            Fields = fields.Select(x => x.GetJsonPropertyName()).ToArray();
         }
     }
 }

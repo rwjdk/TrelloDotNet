@@ -157,7 +157,8 @@ namespace TrelloDotNet.Control
 
         private Uri BuildUri(string suffix, params QueryParameter[] parameters)
         {
-            return new Uri($"{BaseUrl}{suffix}?key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
+            string separator = suffix.Contains("?") ? "&" : "?";
+            return new Uri($"{BaseUrl}{suffix}{separator}key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
         }
 
         internal async Task<string> Delete(string suffix, CancellationToken cancellationToken, int retryCount)

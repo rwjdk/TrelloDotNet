@@ -1,7 +1,7 @@
 # Changelog: 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## 1.9.0-alpha4 (23st of September 2023)
+## 1.9.0-alpha5 (24st of September 2023)
 - Automation Engine can now make automations with multiple triggers (Example do something when a 'Card is Created' OR 'Card is emailed')
 - Added GetBoardOptions to all get-methods that return Boards. This allows more advanced control of what should be included on the Board (For example only a few fields to increase performance or more nested data to avoid more API calls).
 - Added `IncludeChecklists` and `ChecklistFields` to GetCardOptions
@@ -13,6 +13,8 @@
 - Added Batch Get operations: [`ExecuteBatchedRequestAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/ExecuteBatchedRequestAsync), [`GetListsAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetListsAsync), [`GetCardsAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsAsync), [`GetBoardsAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetBoardsAsync), [`GetMembersAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetMembersAsync), [`GetOrganizationsAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetOrganizationsAsync) (more work but better performance)
 - Added [`GetUrlBuilder`](https://github.com/rwjdk/TrelloDotNet/wiki/GetUrlBuilder) to make it easier to build Trello Rest API Urls (for batch and generic requests)
 - Added Generic Automation [`Trigger`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericTrigger), [`Condition`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericCondition) and [`Action`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericAction) that can use Func instead of needing to make custom implementations
+- Fixed that you could not make a custom request if the suffix contained a ? (aka you used some of the optional API features)
+- Fields in `GetCardOptions` and `GetBoardOptions` can now alternatively be set via enums instead of strings
 
 <hr>
 

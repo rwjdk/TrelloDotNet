@@ -1,4 +1,7 @@
-﻿namespace TrelloDotNet.Model.Options
+﻿using System.Linq;
+using TrelloDotNet.Control;
+
+namespace TrelloDotNet.Model.Options
 {
     /// <summary>
     /// Represent Card-Fields to include
@@ -22,6 +25,15 @@
         public CardFields(params string[] fields)
         {
             Fields = fields;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="fields">Type of Field to include</param>
+        public CardFields(params CardFieldsType[] fields)
+        {
+            Fields = fields.Select(x => x.GetJsonPropertyName()).ToArray();
         }
     }
 }
