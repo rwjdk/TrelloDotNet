@@ -1,7 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using TrelloDotNet.Control.Webhook;
 using TrelloDotNet.Model.Webhook;
 
@@ -13,24 +10,14 @@ namespace TrelloDotNet
     public class WebhookDataReceiver
     {
         private readonly TrelloClient _trelloClient;
-        private readonly byte[] _secret;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="trelloClient">The base TrelloClient</param>
-        /// <param name="secret">
-        /// The client secret you get on https://trello.com/power-ups/admin/.
-        /// When passing a secret, signature validation will be turned on for calls to <see cref="ProcessJsonIntoEvents"/>.
-        /// </param>
-        public WebhookDataReceiver(TrelloClient trelloClient, string secret = null)
+        public WebhookDataReceiver(TrelloClient trelloClient)
         {
             _trelloClient = trelloClient;
-            
-            if (!string.IsNullOrEmpty(secret))
-            {
-                _secret = Encoding.ASCII.GetBytes(secret);
-            }
         }
 
         /// <summary>
@@ -47,27 +34,14 @@ namespace TrelloDotNet
                 return; // Most Likely the Head Call when setting up webhook - Just ignore
             }
 
-            if (_secret != null && !ValidateSignature(json, signature, webhookUrl))
+            if (_trelloClient.Options.Secret != null 
+                && !WebhookSignatureValidator.ValidateSignature(json, signature, webhookUrl, _trelloClient.Options.Secret))
             {
                 return; // Invalid signature
             }
             var webhookNotification = JsonSerializer.Deserialize<WebhookNotification>(json);
             BasicEvents.FireEvent(webhookNotification.Action);
             await SmartEvents.FireEvent(webhookNotification.Action, _trelloClient);
-        }
-
-        private string Base64Digest(string data)
-        {
-            var hmac = new HMACSHA1(_secret);
-            var digest = hmac.ComputeHash(Encoding.UTF8.GetBytes(data));
-            return Convert.ToBase64String(digest);
-        }
-
-        private bool ValidateSignature(string json, string signature, string webhookUrl)
-        {
-            var content = json + webhookUrl;
-            var hash = Base64Digest(content);
-            return hash == signature;
         }
 
         /// <summary>

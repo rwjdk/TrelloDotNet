@@ -39,6 +39,11 @@
         /// Controls how long in seconds system should wait between retries, should it receive an 'API_TOKEN_LIMIT_EXCEEDED' error from Trello (Default 1 sec)
         /// </summary>
         public double DelayInSecondsToWaitInTokenLimitExceededRetry { get; set; }
+        
+        /// <summary>
+        /// Trello API secret for Webhook signature validation
+        /// </summary>
+        public string Secret { get; set; }
 
         /// <summary>
         /// Constructor
@@ -50,6 +55,10 @@
         /// <param name="allowDeleteOfOrganizations">Controls if it is allowed to delete Organizations (secondary confirmation)</param>
         /// <param name="maxRetryCountForTokenLimitExceeded">Controls how many automated Retries the API should try in case if get an 'API_TOKEN_LIMIT_EXCEEDED' error from Trello (Default 3) set to -1 to disable the system</param>
         /// <param name="delayInSecondsToWaitInTokenLimitExceededRetry">Controls how long in seconds system should wait between retries, should it receive an 'API_TOKEN_LIMIT_EXCEEDED' error from Trello (Default 1 sec)</param>
+        /// <param name="secret">
+        /// Trello API secret for Webhook signature validation.
+        /// When passing a secret, signature validation will be turned on for all incoming Webhooks.
+        /// </param>
         public TrelloClientOptions(
             ApiCallExceptionOption apiCallExceptionOption = ApiCallExceptionOption.IncludeUrlButMaskCredentials,
             bool allowDeleteOfBoards = false,
@@ -57,7 +66,8 @@
             bool includeAttachmentsInCardGetMethods = false,
             bool allowDeleteOfOrganizations = false,
             int maxRetryCountForTokenLimitExceeded = 3,
-            double delayInSecondsToWaitInTokenLimitExceededRetry = 1) 
+            double delayInSecondsToWaitInTokenLimitExceededRetry = 1,
+            string secret = null) 
         {
             ApiCallExceptionOption = apiCallExceptionOption;
             AllowDeleteOfBoards = allowDeleteOfBoards;
@@ -66,6 +76,7 @@
             AllowDeleteOfOrganizations = allowDeleteOfOrganizations;
             MaxRetryCountForTokenLimitExceeded = maxRetryCountForTokenLimitExceeded;
             DelayInSecondsToWaitInTokenLimitExceededRetry = delayInSecondsToWaitInTokenLimitExceededRetry;
+            Secret = secret;
         }
     }
 }

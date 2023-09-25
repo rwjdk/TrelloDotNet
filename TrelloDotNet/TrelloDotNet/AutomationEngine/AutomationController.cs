@@ -15,6 +15,7 @@ namespace TrelloDotNet.AutomationEngine
     {
         private readonly Automation[] _automations;
         private readonly WebhookDataReceiver _receiver;
+        private readonly TrelloClient _trelloClient;
 
         /// <summary>
         /// Constructor
@@ -27,9 +28,9 @@ namespace TrelloDotNet.AutomationEngine
                 throw new ArgumentNullException(nameof(configuration), "You did not provide a configuration");
             }
 
-            var trelloClient = configuration.TrelloClient;
+            _trelloClient = configuration.TrelloClient;
             _automations = configuration.Automations;
-            _receiver = new WebhookDataReceiver(trelloClient);
+            _receiver = new WebhookDataReceiver(_trelloClient);
         }
 
         /// <summary>
@@ -41,6 +42,13 @@ namespace TrelloDotNet.AutomationEngine
         public async Task<ProcessingResult> ProcessJsonFromWebhookAsync(ProcessingRequest request, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+
+            if (_trelloClient.Options.Secret != null
+                && !WebhookSignatureValidator.ValidateSignature(request.JsonFromWebhook, request.Signature, request.WebhookUrl, _trelloClient.Options.Secret))
+            {
+                throw new AutomationException("Webhook Signature Validation failed");
+            }
+            
             WebhookNotification data = _receiver.ConvertJsonToWebhookNotification(request.JsonFromWebhook);
             var webhookAction = data.Action;
             var result = new ProcessingResult();
