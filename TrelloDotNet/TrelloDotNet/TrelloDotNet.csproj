@@ -8,15 +8,15 @@
 		<RepositoryUrl>https://github.com/rwjdk/TrelloDotNet</RepositoryUrl>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Authors>Rasmus Wulff Jensen</Authors>
-		<Description>A simple, modern .NET based implementation of the Trello API. Support both .NET Core/5/6/7 and .NET Framework</Description>
+		<Description>.NET wrapper of the Trello REST API (CRUD + Receiving Webhooks for Board Automation)</Description>
 		<Copyright></Copyright>
 		<PackageProjectUrl>https://github.com/rwjdk/TrelloDotNet/wiki</PackageProjectUrl>
 		<PackageIcon>trello.png</PackageIcon>
-		<PackageTags>trello;api;rest;trello api</PackageTags>
-		<Version>1.9.0-alpha.5</Version>
+		<PackageTags>trello api rest restful dotNet wrapper webhook automation</PackageTags>
+		<Version>1.9.0-preview.1</Version>
 		<Company>RWJDK</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageReleaseNotes>Please see: https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md</PackageReleaseNotes>
+		<PackageReleaseNotes>https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

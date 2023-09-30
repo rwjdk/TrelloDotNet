@@ -1,24 +1,21 @@
-[![NuGet Badge](https://img.shields.io/nuget/v/TrelloDotNet)](https://www.nuget.org/packages/TrelloDotNet) 
-[![Coverage Status](https://coveralls.io/repos/github/rwjdk/TrelloDotNet/badge.svg?kill_cache=1)](https://coveralls.io/github/rwjdk/TrelloDotNet)
-[![WIKI](https://img.shields.io/badge/ℹ️-Wiki-green)](https://github.com/rwjdk/TrelloDotNet/wiki)
-[![Changelog](https://img.shields.io/badge/ℹ️-Changelog-orange)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
-[![YouTube](https://img.shields.io/badge/ℹ️-YouTube-red)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
-[![Rest API](https://img.shields.io/badge/Trello-API_Docs-lightgray)](https://developer.atlassian.com/cloud/trello/rest/)
-[![API Keys](https://img.shields.io/badge/Trello-API_Admin-blueviolet)](https://trello.com/power-ups/admin/)
-[![Trello Developers LinkedIn Group](https://img.shields.io/badge/LinkedIn-Trello_Devs-0077B5)](https://www.linkedin.com/groups/12847286/)
+[![Changelog](https://img.shields.io/badge/NuGet-Package-blue)](https://www.nuget.org/packages/TrelloDotNet)
+[![Changelog](https://img.shields.io/badge/-Changelog-blue)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
+[![WIKI](https://img.shields.io/badge/Documentation-Wiki-darkred)](https://github.com/rwjdk/TrelloDotNet/wiki)
+[![YouTube](https://img.shields.io/badge/-YouTube-darkred)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
+[![Rest API](https://img.shields.io/badge/Trello_API-Reference-red)](https://developer.atlassian.com/cloud/trello/rest/)
+[![API Keys](https://img.shields.io/badge/-Admin-red)](https://trello.com/power-ups/admin/)
 
-# TrelloDotNet
-Welcome to TrelloDotNet; a modern .NET Implementation of the Trello API.
+Welcome to `TrelloDotNet` - a .NET wrapper of the Trello REST API.
 
 ## Features
-- A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) implementing the Trello API for CRUD operations on most Trello Features
+- A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on most Trello features
 - An [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) and [Webhook Data Reciver](https://github.com/rwjdk/TrelloDotNet/wiki/Webhook-Data-Reciver) for handling Webhook Events from a Trello Board
 
 ## Getting Started
 1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (dotnet add package TrelloDotNet)
 2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8)
 3. Create new instance of `TrelloDotNet.TrelloClient`
-4. Locate you Ids of your Boards, List, and Cards (see video [here](https://youtu.be/aWYEg1wPVYY) or at the end on this ReadMe)
+4. Locate you Ids of your Boards, List, and Cards (see video [here](https://youtu.be/es84INLIiKI) or at the end on this ReadMe)
 5. Use the TrelloClient based on the examples below and/or the [Wiki](https://github.com/rwjdk/TrelloDotNet/wiki).
 
 ### Examples of Usage:
@@ -61,7 +58,7 @@ Checklist addedChecklist = await client.AddChecklistAsync("<cardId>", newCheckli
 ## Video Guides
 - Trello Developer Fundamentals
   - [How to get your API-Key and Token](https://youtu.be/ndLSAD3StH8)
-  - [How to Find ids on a Trello Board](https://youtu.be/aWYEg1wPVYY)
+  - [How to Find ids on a Trello Board](https://youtu.be/es84INLIiKI)
 - TrelloDotNet
   - [How to use the TrelloDotNet NuGet Package](https://youtu.be/tf47BCkieus)
   - [E-Learning Playlist](https://www.youtube.com/playlist?list=PLhGl0l5La4sZJxSCNYl0AfCagdRB_c8CD)
@@ -95,8 +92,5 @@ Alternative use the share buttons in the project (require no Power-Up but more c
 The Export looks like this (search for id or use a tool to pretty-print the JSON to get a better view)
 
 ![JSON Example](https://i.imgur.com/qDJgzNz.png)
-
-## More info, bugs, or questions?
-Visit the Github Page: https://github.com/rwjdk/TrelloDotNet
 
 *Have Fun* :-)
