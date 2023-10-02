@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Emit;
+using System.Xml.Linq;
 using TrelloDotNet.AutomationEngine;
 using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.AutomationEngine.Model;
@@ -83,6 +84,10 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         Assert.Equal($"My Checklist {card.Id} | {card.Name}", checklists[0].Name);
         Assert.Equal($"A | {card.Id} | {card.Name}", checklists[0].Items[0].Name);
         Assert.Equal($"B | {card.Id} | {card.Name}", checklists[0].Items[1].Name);
+        Assert.Equal("My Checklist **ID** | **NAME**", checklistToAdd.Name);
+        Assert.Equal("A | **ID** | **NAME**", checklistToAdd.Items[0].Name);
+        Assert.Equal("B | **ID** | **NAME**", checklistToAdd.Items[1].Name);
+
         Assert.Equal(1, processingResult.ActionsExecuted);
         Assert.Equal(0, processingResult.ActionsSkipped);
     }

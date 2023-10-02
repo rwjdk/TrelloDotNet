@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.Model;
@@ -47,10 +49,8 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             }
             var cardId = webhookAction.Data.Card.Id;
 
-            var clone = new Checklist(ChecklistToAdd.Name, ChecklistToAdd.Items.ToList())
-            {
-                Position = ChecklistToAdd.Position
-            };
+            string checklistToAddAsJson = JsonSerializer.Serialize(ChecklistToAdd);
+            var clone = JsonSerializer.Deserialize<Checklist>(checklistToAddAsJson);
             clone.Name = clone.Name.Replace("**ID**", webhookAction.Data.Card.Id).Replace("**NAME**", webhookAction.Data.Card.Name);
             foreach (ChecklistItem item in clone.Items)
             {
