@@ -1,13 +1,11 @@
-﻿using System;
-using System.Diagnostics.Metrics;
+﻿using System.Reflection.Emit;
 using TrelloDotNet.AutomationEngine;
 using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.AutomationEngine.Model;
 using TrelloDotNet.AutomationEngine.Model.Actions;
 using TrelloDotNet.Model;
-using TrelloDotNet.Model.Actions;
 using TrelloDotNet.Model.Webhook;
-using static System.Collections.Specialized.BitVector32;
+using Label = TrelloDotNet.Model.Label;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests.ActionTests;
 
@@ -509,6 +507,56 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         var checklists = await TrelloClient.GetChecklistsOnCardAsync(card.Id);
         Assert.Single(checklists);
         Assert.Contains(checklists, x => x.Name == "My Checklist1");
+
+        await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task AddChecklistToCardIfLabelMatchActionWithExclude(bool treatLabelNameAsId)
+    {
+        var labels = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
+        Label label3 = labels[3];
+        Label label4 = labels[4];
+        Label label5 = labels[5];
+        label3.Name = Guid.NewGuid().ToString();
+        label3 = await TrelloClient.UpdateLabelAsync(label3);
+        label4.Name = Guid.NewGuid().ToString();
+        label4 = await TrelloClient.UpdateLabelAsync(label4);
+        label5.Name = Guid.NewGuid().ToString();
+        label5 = await TrelloClient.UpdateLabelAsync(label5);
+
+        Card card = await AddDummyCard(_board.Id, "AddChecklistToCardIfLabelMatchAction");
+        await TrelloClient.AddLabelsToCardAsync(card.Id, label3.Id);
+        await TrelloClient.AddLabelsToCardAsync(card.Id, label4.Id);
+        await TrelloClient.AddLabelsToCardAsync(card.Id, label5.Id);
+
+        var processingResult = new ProcessingResult();
+        var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card, boardToSimulate: _board);
+
+        AddChecklistToCardIfLabelMatchAction action;
+        if (treatLabelNameAsId)
+        {
+            action = new AddChecklistToCardIfLabelMatchAction(
+                new AddChecklistToCardIfLabelMatch(new[] { label3.Name }, new AddChecklistToCardAction(new Checklist("My Checklist1"))) { TreatLabelNameAsId = true },
+                new AddChecklistToCardIfLabelMatch(new[] { label4.Name }, new[] { label5.Name }, new AddChecklistToCardAction(new Checklist("My Checklist2"))) { TreatLabelNameAsId = true }
+            );
+        }
+        else
+        {
+            action = new AddChecklistToCardIfLabelMatchAction(
+                new AddChecklistToCardIfLabelMatch(label3.Id, new AddChecklistToCardAction(new Checklist("My Checklist1"))) { TreatLabelNameAsId = false },
+                new AddChecklistToCardIfLabelMatch(label4.Id, label5.Id, new AddChecklistToCardAction(new Checklist("My Checklist2"))) { TreatLabelNameAsId = false }
+            );
+        }
+
+        await action.PerformActionAsync(webhookAction, processingResult);
+
+        var checklists = await TrelloClient.GetChecklistsOnCardAsync(card.Id);
+        Assert.Single(checklists);
+        Assert.Contains(checklists, x => x.Name == "My Checklist1");
+
 
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
     }

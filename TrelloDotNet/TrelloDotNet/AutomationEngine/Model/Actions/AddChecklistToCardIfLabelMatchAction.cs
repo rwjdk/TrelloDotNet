@@ -44,6 +44,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 CardFields = new CardFields("labels")
             });
 
+
             foreach (var checklistIfLabelMatch in AddChecklistActionsIfLabelsMatch)
             {
                 foreach (var labelId in checklistIfLabelMatch.LabelIdsToMatch)
@@ -52,16 +53,33 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                     {
                         if (card.Labels.Any(x => x.Name == labelId))
                         {
-                            await PerformActions(checklistIfLabelMatch.AddChecklistToCardActions, webhookAction, processingResult);
-                            break; //No more labels should be checked
+                            var proceed = true;
+                            if (checklistIfLabelMatch.LabelIdsThatCantBePresent.Any())
+                            {
+                                proceed = !checklistIfLabelMatch.LabelIdsThatCantBePresent.Any(labelThatCantBePresent => card.Labels.Any(x => x.Name == labelThatCantBePresent));
+                            }
+                            if (proceed)
+                            {
+                                await PerformActions(checklistIfLabelMatch.AddChecklistToCardActions, webhookAction, processingResult);
+                                break; //No more labels should be checked
+                            }
                         }
                     }
                     else
                     {
                         if (card.Labels.Any(x => x.Id == labelId))
                         {
-                            await PerformActions(checklistIfLabelMatch.AddChecklistToCardActions, webhookAction, processingResult);
-                            break; //No more labels should be checked
+                            var proceed = true;
+                            if (checklistIfLabelMatch.LabelIdsThatCantBePresent.Any())
+                            {
+                                proceed = !checklistIfLabelMatch.LabelIdsThatCantBePresent.Any(labelThatCantBePresent => card.Labels.Any(x => x.Id == labelThatCantBePresent));
+                            }
+
+                            if (proceed)
+                            {
+                                await PerformActions(checklistIfLabelMatch.AddChecklistToCardActions, webhookAction, processingResult);
+                                break; //No more labels should be checked
+                            }
                         }
                     }
                 }

@@ -1,7 +1,7 @@
 # Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## 1.9.0-preview.1 (30rd of September 2023)
+## 1.9.0-preview.2 (2nd of October 2023)
 #### General
 - Tweaked the format of the README
 - Tweaked the description, release-notes and tags of the NuGet Package
@@ -23,6 +23,7 @@
 - Added Generic Automation [`Trigger`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericTrigger), [`Condition`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericCondition) and [`Action`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericAction) that can use Func instead of needing to make custom implementations
 - Automation Engine can now make automations with multiple triggers (Example do something when a 'Card is Created' OR 'Card is emailed')
 - Performance optimized various `AutomationEngine` Conditions and one of the Actions by internally using the GetCardOptions system to only retrive absolute minimum needed data 
+- `AddChecklistToCardIfLabelMatchAction` now support both Include and Exclude Macthing (example: If this label is present and this is not then add checklist)
 
 <hr>
 
