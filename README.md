@@ -1,4 +1,4 @@
-[![Changelog](https://img.shields.io/badge/NuGet-Package-blue)](https://www.nuget.org/packages/TrelloDotNet)
+[![NuGet](https://img.shields.io/badge/Code-NuGet-blue)](https://www.nuget.org/packages/TrelloDotNet)
 [![Changelog](https://img.shields.io/badge/-Changelog-blue)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
 [![WIKI](https://img.shields.io/badge/Documentation-Wiki-darkred)](https://github.com/rwjdk/TrelloDotNet/wiki)
 [![YouTube](https://img.shields.io/badge/-YouTube-darkred)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)

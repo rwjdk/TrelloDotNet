@@ -46,19 +46,29 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 throw new AutomationException("Could not perform AddChecklistToCardAction as WebhookAction did not involve a Card");
             }
             var cardId = webhookAction.Data.Card.Id;
+
+            var clone = new Checklist(ChecklistToAdd.Name, ChecklistToAdd.Items.ToList())
+            {
+                Position = ChecklistToAdd.Position
+            };
+            clone.Name = clone.Name.Replace("**ID**", webhookAction.Data.Card.Id).Replace("**NAME**", webhookAction.Data.Card.Name);
+            foreach (ChecklistItem item in clone.Items)
+            {
+                item.Name = item.Name.Replace("**ID**", webhookAction.Data.Card.Id).Replace("**NAME**", webhookAction.Data.Card.Name);
+            }
             var existingOnCard = await webhookAction.TrelloClient.GetChecklistsOnCardAsync(cardId);
-            var existing = existingOnCard.FirstOrDefault(x => x.Name == ChecklistToAdd.Name);
+            var existing = existingOnCard.FirstOrDefault(x => x.Name == clone.Name);
             if (existing == null)
             {
-                await webhookAction.TrelloClient.AddChecklistAsync(cardId, ChecklistToAdd);
-                processingResult.AddToLog($"Added Checklist '{ChecklistToAdd.Name}' to card '{webhookAction.Data.Card.Name}'");
+                await webhookAction.TrelloClient.AddChecklistAsync(cardId, clone);
+                processingResult.AddToLog($"Added Checklist '{clone.Name}' to card '{webhookAction.Data.Card.Name}'");
                 processingResult.ActionsExecuted++;
             }
             else
             {
                 if (AddCheckItemsToExistingChecklist)
                 {
-                    var checklistItemsMissing = ChecklistToAdd.Items.Where(checklistItem => existing.Items.All(x => x.Name != checklistItem.Name)).ToList();
+                    var checklistItemsMissing = clone.Items.Where(checklistItem => existing.Items.All(x => x.Name != checklistItem.Name)).ToList();
                     if (checklistItemsMissing.Any())
                     {
                         decimal maxPosition = existing.Items.Any() ? existing.Items.Max(x => x.Position) : 1;
@@ -74,13 +84,13 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                     }
                     else
                     {
-                        processingResult.AddToLog($"SKIPPED: Checklist '{ChecklistToAdd.Name}' was already on card '{webhookAction.Data.Card.Name}' and no items missing");
+                        processingResult.AddToLog($"SKIPPED: Checklist '{clone.Name}' was already on card '{webhookAction.Data.Card.Name}' and no items missing");
                         processingResult.ActionsSkipped++;
                     }
                 }
                 else
                 {
-                    processingResult.AddToLog($"SKIPPED: Checklist '{ChecklistToAdd.Name}' was already on card '{webhookAction.Data.Card.Name}'");
+                    processingResult.AddToLog($"SKIPPED: Checklist '{clone.Name}' was already on card '{webhookAction.Data.Card.Name}'");
                     processingResult.ActionsSkipped++;
                 }
             }

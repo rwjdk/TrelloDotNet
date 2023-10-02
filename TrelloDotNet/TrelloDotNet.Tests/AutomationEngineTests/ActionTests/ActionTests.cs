@@ -65,6 +65,27 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
     }
+    
+    [Fact]
+    public async Task TestAddChecklistToCardActionWithKeywords()
+    {
+        var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
+        var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card"));
+        var processingResult = new ProcessingResult();
+        var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
+
+        var checklistToAdd = new Checklist("My Checklist **ID** | **NAME**", new List<ChecklistItem> { new("A | **ID** | **NAME**"), new("B | **ID** | **NAME**") });
+        IAutomationAction action = new AddChecklistToCardAction(checklistToAdd);
+
+        await action.PerformActionAsync(webhookAction, processingResult);
+        var checklists = await TrelloClient.GetChecklistsOnCardAsync(card.Id);
+        Assert.Single(checklists);
+        Assert.Equal($"My Checklist {card.Id} | {card.Name}", checklists[0].Name);
+        Assert.Equal($"A | {card.Id} | {card.Name}", checklists[0].Items[0].Name);
+        Assert.Equal($"B | {card.Id} | {card.Name}", checklists[0].Items[1].Name);
+        Assert.Equal(1, processingResult.ActionsExecuted);
+        Assert.Equal(0, processingResult.ActionsSkipped);
+    }
 
     [Fact]
     public async Task TestAddChecklistToCardActionToExsitingList()
