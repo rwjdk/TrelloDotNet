@@ -49,13 +49,21 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             }
             var cardId = webhookAction.Data.Card.Id;
 
+            if (ChecklistToAdd.Items == null)
+            {
+                ChecklistToAdd.Items = new List<ChecklistItem>();
+            }
             string checklistToAddAsJson = JsonSerializer.Serialize(ChecklistToAdd);
             var clone = JsonSerializer.Deserialize<Checklist>(checklistToAddAsJson);
-            clone.Name = clone.Name.Replace("**ID**", webhookAction.Data.Card.Id).Replace("**NAME**", webhookAction.Data.Card.Name);
+            if (clone.Name != null)
+            {
+                clone.Name = clone.Name.Replace("**ID**", webhookAction.Data.Card.Id).Replace("**NAME**", webhookAction.Data.Card.Name);
+            }
             foreach (ChecklistItem item in clone.Items)
             {
                 item.Name = item.Name.Replace("**ID**", webhookAction.Data.Card.Id).Replace("**NAME**", webhookAction.Data.Card.Name);
             }
+
             var existingOnCard = await webhookAction.TrelloClient.GetChecklistsOnCardAsync(cardId);
             var existing = existingOnCard.FirstOrDefault(x => x.Name == clone.Name);
             if (existing == null)
