@@ -4,8 +4,8 @@
 ## 1.9.0 (3nd of October 2023)
 #### General
 - Tweaked the format of the README
-- Tweaked the description, release-notes and tags of the NuGet Package
-- This changelog now have sub-sections "General", "TrelloClient", "Automation Engine" and "Webhook Receiver" to better allow you to focus on the parts you use of the package
+- Tweaked the description, release-notes, and tags of the NuGet Package
+- This changelog now has sub-sections "General", "TrelloClient", "Automation Engine" and "Webhook Receiver" to better allow you to focus on the parts you use of the package
 
 #### TrelloClient
 - Added GetBoardOptions to all get-methods that return Boards. This allows more advanced control of what should be included on the Board (For example only a few fields to increase performance or more nested data to avoid more API calls).
@@ -22,10 +22,10 @@
 - Added Automation Trigger [`CardNameUpdatedTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CardNameUpdatedTrigger)
 - Added Automation Trigger [`ConvertToCardFromCheckItemTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/ConvertToCardFromCheckItemTrigger)
 - Added Generic Automation [`Trigger`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericTrigger), [`Condition`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericCondition) and [`Action`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericAction) that can use Func instead of needing to make custom implementations
-- Automation Engine can now make automations with multiple triggers (Example do something when a 'Card is Created' OR 'Card is emailed')
-- Performance optimized various `AutomationEngine` Conditions and one of the Actions by internally using the GetCardOptions system to only retrive absolute minimum needed data 
-- `AddChecklistToCardIfLabelMatchAction` now support both Include and Exclude Macthing (example: If this label is present and this is not then add checklist)
-- Added that Automation Action [`AddChecklistToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardAction) can use `**ID**` and `**NAME**` in name of checklist and checklist items to on the fly get them replace by card's name and id
+- Automation Engine can now make automations with multiple triggers (For example do something when a 'Card is Created' OR 'Card is emailed')
+- Performance optimized various `AutomationEngine` Conditions and one of the Actions by internally using the GetCardOptions system to only the absolute minimum needed data 
+- `AddChecklistToCardIfLabelMatchAction` now supports both Include and Exclude Matching (example: If this label is present and this is not then add checklist)
+- Added that Automation Action [`AddChecklistToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardAction) can use `**ID**` and `**NAME**` in the name of checklist and checklist items to on the fly get them to replace by card's name and id
 
 #### Webhook Receiver
 - Added option to use [Webhook Signature Validation](https://developer.atlassian.com/cloud/trello/guides/rest-api/webhooks/#webhook-signatures) (Thanks to **[compujuckel](https://github.com/compujuckel)** for the contribution 💪) - [PR#26](https://github.com/rwjdk/TrelloDotNet/pull/26)
@@ -70,8 +70,8 @@
 
 ## 1.6.9 (8th of July 2023)
 #### Automation Engine
-- Fixed that if you used option 'AddCheckItemsToExistingChecklist' in a `AddChecklistToCardAction` and a Checklist existed but had no items, the automation failed.
-- Added better error-context to the AutomationException (what Board, List and Card was involved in the event that caused the Exception)
+- Fixed that if you used option 'AddCheckItemsToExistingChecklist' in an `AddChecklistToCardAction` and a Checklist existed but had no items, the automation failed.
+- Added better error context to the AutomationException (what Board, List, and Card was involved in the event that caused the Exception)
 
 <hr>
 
@@ -101,7 +101,7 @@
 <hr>
 
 ## 1.6.3 (7th of June 2023)
-#### Genereal
+#### General
 - Tweaked various documentation for spelling errors
  
 #### TrelloClient
@@ -155,8 +155,8 @@
 
 #### Automation Engine
 - Added Automation Action [`AddCommentToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddCommentToCardAction)
-- Added Automation Action [`StopProcessingFurtherAction`](https://github.com/rwjdk/TrelloDotNet/wiki/StopProcessingFurtherAction) that allow you to conditionally stop any further processing for the specific webhook call.
-- Updated Automation Action [`AddChecklistToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardAction) to now have the option to add Items to existing Checklists with same name (Example two Definition of Done Automations for two different labels add their items to a single Checklist)
+- Added Automation Action [`StopProcessingFurtherAction`](https://github.com/rwjdk/TrelloDotNet/wiki/StopProcessingFurtherAction) that allows you to conditionally stop any further processing for the specific webhook call.
+- Updated Automation Action [`AddChecklistToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardAction) to now have the option to add Items to existing Checklists with the same name (Example two Definition of Done Automations for two different labels add their items to a single Checklist)
 
 <hr>
 
@@ -185,7 +185,7 @@
 #### Automation Engine
 - Added Automation Action [`RemoveLabelsFromCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveLabelsFromCardAction)
 - It is now legal to have a null as a Condition in Automation Engine (indicating there are no further conditions)
-- Fixed that 'Constraint' was spelled incorrectly (missing an 's') in 2 places (`ListConditionConstraint` and `CardMovedToListTriggerConstraint`) [COMPILE TIME BREAKING CHANGE] (sorry but better to change now than later ;-( ) 
+- Fixed that 'Constraint' was spelled incorrectly (missing an 's') in 2 places (`ListConditionConstraint` and `CardMovedToListTriggerConstraint`) [COMPILE TIME BREAKING CHANGE] (sorry but better to change now than later;-( ) 
 - Fixed that [`CardCoverCondition`](https://github.com/rwjdk/TrelloDotNet/wiki/CardCoverCondition) was not evaluated correctly in all scenarios
 - Fixed that [`SetFieldsOnCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/SetFieldsOnCardAction) did not update processing result (Executed and Skipped Actions counts)
 
@@ -226,7 +226,7 @@
 #### Webhook Receiver
 - `WebhookAction` now has reference to the TrelloClient and the sub-objects can get their Full Objects
 - Added struct [`WebhookActionTypes`](https://github.com/rwjdk/TrelloDotNet/blob/main/TrelloDotNet/TrelloDotNet/Model/Webhook/WebhookActionTypes.cs) that list all Types of Webhook events
-- Added support for Basic Events `OnDeleteCustomField`,`OnAddCustomField`,`OnUpdateCustomField` and `OnUpdateCustomFieldItem`
+- Added support for Basic Events `OnDeleteCustomField`, `OnAddCustomField`, `OnUpdateCustomField` and `OnUpdateCustomFieldItem`
 - Added `ListBefore` and `ListAfter` to `TrelloActionData`
 
 <hr>
@@ -272,7 +272,7 @@
 ## 1.1.0 (8th of Feb. 2023)
 #### General
 - Added [Webhook System](https://github.com/rwjdk/TrelloDotNet/wiki/WebHook-Data-Receiver) (See video on how to get going [here](https://youtu.be/A3_B-SLBm_0))
-- Fixed that Trello icon edges where white
+- Fixed the Trello icon edges where white
 - Added more detailed `README.md`
 
 #### TrelloClient
