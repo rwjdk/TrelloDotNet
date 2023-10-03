@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System;
-using System.Linq;
+﻿using System.Linq;
 using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model.Options

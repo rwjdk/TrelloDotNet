@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Text.Json.Serialization;
-using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model
 {
