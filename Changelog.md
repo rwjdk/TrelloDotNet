@@ -1,7 +1,7 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## 1.9.0-preview.3 (2nd of October 2023)
+## 1.9.0 (3nd of October 2023)
 #### General
 - Tweaked the format of the README
 - Tweaked the description, release-notes and tags of the NuGet Package
@@ -18,7 +18,7 @@
 - Fixed that you could not make a custom request if the suffix contained a ? (aka you used some of the optional API features)
 
 #### Automation Engine 
-- Added option to use [Webhook Signature Validation](https://developer.atlassian.com/cloud/trello/guides/rest-api/webhooks/#webhook-signatures) (Thanks to **[compujuckel](https://github.com/compujuckel)** to the contribution 💪) - [PR#26](https://github.com/rwjdk/TrelloDotNet/pull/26)
+- Added option to use [Webhook Signature Validation](https://developer.atlassian.com/cloud/trello/guides/rest-api/webhooks/#webhook-signatures) (Thanks to **[compujuckel](https://github.com/compujuckel)** for the contribution 💪) - [PR#26](https://github.com/rwjdk/TrelloDotNet/pull/26)
 - Added Automation Trigger [`CardNameUpdatedTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CardNameUpdatedTrigger)
 - Added Automation Trigger [`ConvertToCardFromCheckItemTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/ConvertToCardFromCheckItemTrigger)
 - Added Generic Automation [`Trigger`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericTrigger), [`Condition`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericCondition) and [`Action`](https://github.com/rwjdk/TrelloDotNet/wiki/GenericAction) that can use Func instead of needing to make custom implementations
@@ -28,7 +28,7 @@
 - Added that Automation Action [`AddChecklistToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardAction) can use `**ID**` and `**NAME**` in name of checklist and checklist items to on the fly get them replace by card's name and id
 
 #### Webhook Receiver
-- Added option to use [Webhook Signature Validation](https://developer.atlassian.com/cloud/trello/guides/rest-api/webhooks/#webhook-signatures) (Thanks to **[compujuckel](https://github.com/compujuckel)** to the contribution 💪) - [PR#26](https://github.com/rwjdk/TrelloDotNet/pull/26)
+- Added option to use [Webhook Signature Validation](https://developer.atlassian.com/cloud/trello/guides/rest-api/webhooks/#webhook-signatures) (Thanks to **[compujuckel](https://github.com/compujuckel)** for the contribution 💪) - [PR#26](https://github.com/rwjdk/TrelloDotNet/pull/26)
 
 <hr>
 
