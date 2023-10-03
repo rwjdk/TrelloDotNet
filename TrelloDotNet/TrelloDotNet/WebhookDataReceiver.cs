@@ -24,13 +24,22 @@ namespace TrelloDotNet
         /// Class that can turn data from an into events based on what the data contain
         /// </summary>
         /// <param name="json">The raw incoming JSON</param>
+        /// <param name="signature">Signature from X-Trello-Webhook header for signature validation</param>
+        /// <param name="webhookUrl">Webhook URL for signature validation</param>
         /// <returns>If the Event was processed (aka it was a supported event)</returns>
-        public async void ProcessJsonIntoEvents(string json)
+        public async void ProcessJsonIntoEvents(string json, string signature = null, string webhookUrl = null)
         {
             if (string.IsNullOrWhiteSpace(json))
             {
-                return; //Most Likely the Head Call when setting up webhook - Just ignore
+                return; // Most Likely the Head Call when setting up webhook - Just ignore
             }
+
+            if ((!string.IsNullOrEmpty(signature) || !string.IsNullOrEmpty(webhookUrl))
+                && !WebhookSignatureValidator.ValidateSignature(json, signature, webhookUrl, _trelloClient.Options.Secret))
+            {
+                return; // Invalid signature
+            }
+            
             var webhookNotification = JsonSerializer.Deserialize<WebhookNotification>(json);
             BasicEvents.FireEvent(webhookNotification.Action);
             await SmartEvents.FireEvent(webhookNotification.Action, _trelloClient);
