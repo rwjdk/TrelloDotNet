@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace TrelloDotNet
+namespace TrelloDotNet.Control.Webhook
 {
     internal static class WebhookSignatureValidator
     {
@@ -15,10 +15,14 @@ namespace TrelloDotNet
 
         internal static bool ValidateSignature(string json, string signature, string webhookUrl, string secret)
         {
-            if (string.IsNullOrEmpty(json) || string.IsNullOrEmpty(signature) || string.IsNullOrEmpty(webhookUrl) || string.IsNullOrEmpty(secret))
-            {
-                return false;
-            }
+            if (json == null)
+                throw new ArgumentNullException(nameof(json));
+            if (signature == null)
+                throw new ArgumentNullException(nameof(signature));
+            if (webhookUrl == null)
+                throw new ArgumentNullException(nameof(webhookUrl));
+            if (secret == null)
+                throw new ArgumentNullException(nameof(secret), "You must provide an API secret to use Webhook Signature Validation. Please set TrelloClientOptions.Secret");
             
             var payloadLength = Encoding.UTF8.GetByteCount(json) + Encoding.UTF8.GetByteCount(webhookUrl);
             var payloadBytes = new byte[payloadLength];

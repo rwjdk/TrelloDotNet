@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.AutomationEngine.Model;
+using TrelloDotNet.Control.Webhook;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine
@@ -42,16 +43,18 @@ namespace TrelloDotNet.AutomationEngine
         public async Task<ProcessingResult> ProcessJsonFromWebhookAsync(ProcessingRequest request, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            
+            var result = new ProcessingResult();
 
-            if (_trelloClient.Options.Secret != null
+            if ((!string.IsNullOrEmpty(request.Signature) || !string.IsNullOrEmpty(request.WebhookUrl))
                 && !WebhookSignatureValidator.ValidateSignature(request.JsonFromWebhook, request.Signature, request.WebhookUrl, _trelloClient.Options.Secret))
             {
-                throw new AutomationException("Webhook Signature Validation failed");
+                result.AddToLog("Webhook Signature Validation failed, skipping automations");
+                return result;
             }
             
             WebhookNotification data = _receiver.ConvertJsonToWebhookNotification(request.JsonFromWebhook);
             var webhookAction = data.Action;
-            var result = new ProcessingResult();
 
             foreach (var automation in _automations)
             {

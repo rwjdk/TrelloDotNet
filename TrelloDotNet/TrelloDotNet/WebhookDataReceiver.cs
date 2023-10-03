@@ -34,11 +34,12 @@ namespace TrelloDotNet
                 return; // Most Likely the Head Call when setting up webhook - Just ignore
             }
 
-            if (_trelloClient.Options.Secret != null 
+            if ((!string.IsNullOrEmpty(signature) || !string.IsNullOrEmpty(webhookUrl))
                 && !WebhookSignatureValidator.ValidateSignature(json, signature, webhookUrl, _trelloClient.Options.Secret))
             {
                 return; // Invalid signature
             }
+            
             var webhookNotification = JsonSerializer.Deserialize<WebhookNotification>(json);
             BasicEvents.FireEvent(webhookNotification.Action);
             await SmartEvents.FireEvent(webhookNotification.Action, _trelloClient);
