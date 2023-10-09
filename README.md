@@ -1,6 +1,6 @@
 [![NuGet](https://img.shields.io/badge/Code-NuGet-blue)](https://www.nuget.org/packages/TrelloDotNet)
-[![Changelog](https://img.shields.io/badge/-Changelog-blue)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
 [![WIKI](https://img.shields.io/badge/Documentation-Wiki-darkred)](https://github.com/rwjdk/TrelloDotNet/wiki)
+[![Changelog](https://img.shields.io/badge/-Changelog-darkred)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
 [![YouTube](https://img.shields.io/badge/-YouTube-darkred)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
 [![Rest API](https://img.shields.io/badge/Trello_API-Reference-red)](https://developer.atlassian.com/cloud/trello/rest/)
 [![API Keys](https://img.shields.io/badge/-Admin-red)](https://trello.com/power-ups/admin/)
