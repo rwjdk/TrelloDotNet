@@ -13,7 +13,7 @@
 		<PackageProjectUrl>https://github.com/rwjdk/TrelloDotNet/wiki</PackageProjectUrl>
 		<PackageIcon>trello.png</PackageIcon>
 		<PackageTags>trello api rest restful dotNet wrapper webhook automation</PackageTags>
-		<Version>1.9.0</Version>
+		<Version>1.9.1</Version>
 		<Company>RWJDK</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReleaseNotes>https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md</PackageReleaseNotes>

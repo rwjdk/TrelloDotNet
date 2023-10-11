@@ -1,6 +1,16 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.9.1 (11th of October 2023)
+#### Automation Engine 
+- Added Automation Trigger [`AddChecklistToCardTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardTrigger)
+- Added Automation Trigger [`CreateCheckItemTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CreateCheckItemTrigger)
+- Added Automation Trigger [`DeleteCheckItemTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/DeleteCheckItemTrigger)
+- Added Automation Trigger [`RemoveChecklistFromCardTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveChecklistFromCardTrigger)
+- Added Automation Trigger [`UpdateCheckItemTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCheckItemTrigger)
+
+<hr>
+
 ## 1.9.0 (3nd of October 2023)
 #### General
 - Tweaked the format of the README
