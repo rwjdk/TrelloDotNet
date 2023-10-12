@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
+using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
@@ -41,7 +43,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 throw new AutomationException("Could not perform RemoveCardDataAction as WebhookAction did not involve a Card");
             }
             var card = await webhookAction.Data.Card.GetAsync();
-            bool updateNeeded = false;
+            var queryParametersToUpdate = new List<QueryParameter>();
             foreach (var dataType in DataToRemove)
             {
                 switch (dataType)
@@ -50,49 +52,49 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         if (card.Start != null)
                         {
                             card.Start = null;
-                            updateNeeded = true;
+                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Start.GetJsonPropertyName(), (DateTimeOffset?)null));
                         }
                         break;
                     case RemoveCardDataType.DueDate:
                         if (card.Due != null)
                         {
                             card.Due = null;
-                            updateNeeded = true;
+                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), (DateTimeOffset?)null));
                         }
                         break;
                     case RemoveCardDataType.DueComplete:
                         if (card.DueComplete)
                         {
                             card.DueComplete = false;
-                            updateNeeded = true;
+                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.DueComplete.GetJsonPropertyName(), false));
                         }
                         break;
                     case RemoveCardDataType.Description:
                         if (!string.IsNullOrWhiteSpace(card.Description))
                         {
                             card.Description = null;
-                            updateNeeded = true;
+                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Description.GetJsonPropertyName(), string.Empty));
                         }
                         break;
                     case RemoveCardDataType.AllLabels:
                         if (card.LabelIds.Any())
                         {
                             card.LabelIds = new List<string>();
-                            updateNeeded = true;
+                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.LabelIds.GetJsonPropertyName(), new List<string>()));
                         }
                         break;
                     case RemoveCardDataType.AllMembers:
                         if (card.MemberIds.Any())
                         {
                             card.MemberIds = new List<string>();
-                            updateNeeded = true;
+                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), new List<string>()));
                         }
                         break;
                     case RemoveCardDataType.Cover:
                         if (card.Cover != null && (card.Cover.Color != null || card.Cover.BackgroundImageId != null))
                         {
                             card.Cover = null;
-                            updateNeeded = true;
+                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Cover.GetJsonPropertyName(), (string)null));
                         }
                         break;
                     case RemoveCardDataType.AllChecklists:
@@ -128,10 +130,10 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 }
             }
 
-            if (updateNeeded)
+            if (queryParametersToUpdate.Any())
             {
                 processingResult.ActionsExecuted++;
-                await webhookAction.TrelloClient.UpdateCardAsync(card);
+                await webhookAction.TrelloClient.UpdateCardAsync(card.Id, queryParametersToUpdate);
             }
             else
             {

@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using TrelloDotNet.AutomationEngine.Model;
+using TrelloDotNet.AutomationEngine.Model.Actions;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetCardOptions;
 
 namespace TrelloDotNet
@@ -54,25 +57,35 @@ namespace TrelloDotNet
         public async Task<Card> UpdateCardAsync(Card cardWithChanges, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(cardWithChanges).ToList();
+            CardCover cardCover = cardWithChanges.Cover;
+            var payload = GeneratePayloadForCoverUpdate(cardCover, parameters);
+
+            return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", cancellationToken, payload, parameters.ToArray());
+        }
+
+        private static string GeneratePayloadForCoverUpdate(CardCover cardCover, List<QueryParameter> parameters)
+        {
             //Special code for Cover
             string payload = string.Empty;
-            if (cardWithChanges.Cover == null)
+            if (cardCover == null)
             {
                 //Remove cover
                 parameters.Add(new QueryParameter("cover", ""));
             }
             else
             {
-                cardWithChanges.Cover.PrepareForAddUpdate();
-                if (cardWithChanges.Cover.Color != null || cardWithChanges.Cover.BackgroundImageId != null)
+                cardCover.PrepareForAddUpdate();
+                if (cardCover.Color != null || cardCover.BackgroundImageId != null)
                 {
-                    parameters.Remove(parameters.First(x => x.Name == "idAttachmentCover")); //This parameter can't be there while a cover is added
+                    QueryParameter queryParameter = parameters.FirstOrDefault(x => x.Name == "idAttachmentCover");
+                    if (queryParameter != null)
+                    {
+                        parameters.Remove(queryParameter); //This parameter can't be there while a cover is added
+                    }
                 }
-
-                payload = $"{{\"cover\":{JsonSerializer.Serialize(cardWithChanges.Cover)}}}";
+                payload = $"{{\"cover\":{JsonSerializer.Serialize(cardCover)}}}";
             }
-
-            return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", cancellationToken, payload, parameters.ToArray());
+            return payload;
         }
 
         /// <summary>
@@ -247,10 +260,11 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<Card> SetDueDateOnCardAsync(string cardId, DateTimeOffset dueDate, bool dueComplete = false, CancellationToken cancellationToken = default)
         {
-            var card = await GetCardAsync(cardId, cancellationToken);
-            card.Due = dueDate;
-            card.DueComplete = dueComplete;
-            return await UpdateCardAsync(card, cancellationToken);
+            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), dueDate),
+                new QueryParameter(CardFieldsType.DueComplete.GetJsonPropertyName(), dueComplete)
+            }, cancellationToken);
         }
 
         /// <summary>
@@ -261,9 +275,10 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<Card> SetStartDateOnCardAsync(string cardId, DateTimeOffset startDate, CancellationToken cancellationToken = default)
         {
-            var card = await GetCardAsync(cardId, cancellationToken);
-            card.Start = startDate;
-            return await UpdateCardAsync(card, cancellationToken);
+            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.Start.GetJsonPropertyName(), startDate)
+            }, cancellationToken);
         }
 
         /// <summary>
@@ -276,11 +291,12 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param> 
         public async Task<Card> SetStartDateAndDueDateOnCardAsync(string cardId, DateTimeOffset startDate, DateTimeOffset dueDate, bool dueComplete = false, CancellationToken cancellationToken = default)
         {
-            var card = await GetCardAsync(cardId, cancellationToken);
-            card.Start = startDate;
-            card.Due = dueDate;
-            card.DueComplete = dueComplete;
-            return await UpdateCardAsync(card, cancellationToken);
+            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.Start.GetJsonPropertyName(), startDate),
+                new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), dueDate),
+                new QueryParameter(CardFieldsType.DueComplete.GetJsonPropertyName(), dueComplete),
+            }, cancellationToken);
         }
 
         /// <summary>
@@ -292,9 +308,31 @@ namespace TrelloDotNet
         /// <returns></returns>
         public async Task<Card> MoveCardToListAsync(string cardId, string newListId, CancellationToken cancellationToken = default)
         {
-            Card card = await GetCardAsync(cardId, cancellationToken);
-            card.ListId = newListId;
-            return await UpdateCardAsync(card, cancellationToken);
+            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.ListId.GetJsonPropertyName(), newListId)
+            }, cancellationToken);
+        }
+
+        /// <summary>
+        /// Update one or more specific fields on a card (compared to a full update of all fields with UpdateCard)
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="parameters">The Specific Parameters to set</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        public async Task<Card> UpdateCardAsync(string cardId, List<QueryParameter> parameters, CancellationToken cancellationToken = default)
+        {
+            QueryParameter coverParameter = parameters.FirstOrDefault(x => x.Name == "cover");
+            if (coverParameter != null && !string.IsNullOrWhiteSpace(coverParameter.GetRawStringValue()))
+            {
+                parameters.Remove(coverParameter);
+                CardCover cover = JsonSerializer.Deserialize<CardCover>(coverParameter.GetRawStringValue());
+                var payload = GeneratePayloadForCoverUpdate(cover, parameters);
+                return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, payload, parameters.ToArray());
+            }
+
+            //Special Cover Card
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, parameters.ToArray());
         }
     }
 }

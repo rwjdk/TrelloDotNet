@@ -62,7 +62,7 @@ namespace TrelloDotNet.Control
                 else if (updateablePropertyType == typeof(List<string>))
                 {
                     var list = (List<string>)rawValue;
-                    parameters.Add(list == null ? new QueryParameter(jsonPropertyName.Name, string.Empty) : new QueryParameter(jsonPropertyName.Name, string.Join(",", list)));
+                    parameters.Add(list == null ? new QueryParameter(jsonPropertyName.Name, string.Empty) : new QueryParameter(jsonPropertyName.Name, list));
                 }
                 else if (updateablePropertyType.BaseType == typeof(Enum))
                 {

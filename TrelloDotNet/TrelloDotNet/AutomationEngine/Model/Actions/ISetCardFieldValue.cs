@@ -13,5 +13,12 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         /// <param name="card">The Card to set the values on</param>
         /// <returns>If card was modified (aka need to be updated against the API)</returns>
         bool SetIfNeeded(Card card);
+
+        /// <summary>
+        /// Get a Query Parameter representing the change (or null if not needed)
+        /// </summary>
+        /// <param name="card">Card to apply the change to</param>
+        /// <returns>Query parameter of null</returns>
+        QueryParameter GetQueryParameter(Card card);
     }
 }

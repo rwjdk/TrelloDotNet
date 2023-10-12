@@ -1,6 +1,15 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.9.2 (12th of October 2023)
+#### General
+- All internal usage of `UpdateCardAsync` now uses the new 'partial update'-variant described below for better performance and more secure async usage in the Automation Engine
+
+#### TrelloClient
+- Added overload to [`UpdateCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCardAsync) that instead of a full update with a card can do partial updates with only the parameters you provide
+
+<hr>
+
 ## 1.9.1 (11th of October 2023)
 #### Automation Engine 
 - Added Automation Trigger [`AddChecklistToCardTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardTrigger)

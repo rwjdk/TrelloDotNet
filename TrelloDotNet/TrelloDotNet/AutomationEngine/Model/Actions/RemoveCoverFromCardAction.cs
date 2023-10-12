@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
+using TrelloDotNet.Control;
+using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
@@ -25,9 +29,10 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 throw new AutomationException("Could not perform RemoveCoverFromCardAction as WebhookAction did not involve a Card");
             }
             var trelloClient = webhookAction.TrelloClient;
-            var card = await webhookAction.Data.Card.GetAsync();
-            card.Cover = null;
-            await trelloClient.UpdateCardAsync(card);
+            await trelloClient.UpdateCardAsync(webhookAction.Data.Card.Id, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.Cover.GetJsonPropertyName(), (string)null)
+            });
             processingResult.AddToLog($"Removed Cover from Card '{webhookAction.Data.Card.Name}'");
             processingResult.ActionsExecuted++;
         }

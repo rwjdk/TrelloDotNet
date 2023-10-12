@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text.Json;
+using TrelloDotNet.Control;
+using TrelloDotNet.Model.Options;
 
 namespace TrelloDotNet.Model
 {
@@ -30,6 +34,18 @@ namespace TrelloDotNet.Model
             Name = name;
             Type = QueryParameterType.String;
             _valueAsObject = value;
+        }
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of the Parameter</param>
+        /// <param name="value">Value of the Parameter</param>
+        public QueryParameter(string name, List<string> value)
+        {
+            Name = name;
+            Type = QueryParameterType.String;
+            _valueAsObject = value != null ? string.Join(",", value) : null;
         }
 
         /// <summary>
@@ -106,6 +122,11 @@ namespace TrelloDotNet.Model
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        internal string GetRawStringValue()
+        {
+            return _valueAsObject?.ToString();
         }
     }
 }

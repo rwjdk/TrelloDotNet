@@ -1,5 +1,7 @@
 ﻿using System;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
 {
@@ -42,6 +44,12 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             }
 
             return false;
+        }
+
+        /// <inheritdoc />
+        public QueryParameter GetQueryParameter(Card card)
+        {
+            return SetIfNeeded(card) ? new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), card.Due) : null;
         }
 
         /// <summary>

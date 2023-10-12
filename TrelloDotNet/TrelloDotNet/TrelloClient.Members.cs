@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
 
 namespace TrelloDotNet
 {
@@ -70,7 +71,10 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
 
             //Need update
             card.MemberIds.AddRange(missing);
-            return await UpdateCardAsync(card, cancellationToken);
+            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(),  card.MemberIds)
+            }, cancellationToken);
         }
 
         /// <summary>
@@ -87,11 +91,11 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         /// Remove one or more Members from a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
-        /// <param name="cancellation">Cancellation Token</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         /// <param name="memberIdsToRemove">One or more Ids of Members to remove</param>
-        public async Task<Card> RemoveMembersFromCardAsync(string cardId, CancellationToken cancellation = default, params string[] memberIdsToRemove)
+        public async Task<Card> RemoveMembersFromCardAsync(string cardId, CancellationToken cancellationToken = default, params string[] memberIdsToRemove)
         {
-            var card = await GetCardAsync(cardId, cancellation);
+            var card = await GetCardAsync(cardId, cancellationToken);
             var toRemove = memberIdsToRemove.Where(x => card.MemberIds.Contains(x)).ToList();
             if (toRemove.Count == 0)
             {
@@ -100,7 +104,10 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
 
             //Need update
             card.MemberIds = card.MemberIds.Except(toRemove).ToList();
-            return await UpdateCardAsync(card, cancellation);
+            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(),  card.MemberIds)
+            }, cancellationToken);
         }
 
         /// <summary>
@@ -110,15 +117,10 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<Card> RemoveAllMembersFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            var card = await GetCardAsync(cardId, cancellationToken);
-            if (card.MemberIds.Any())
+            return await UpdateCardAsync(cardId, new List<QueryParameter>
             {
-                //Need update
-                card.MemberIds = new List<string>();
-                return await UpdateCardAsync(card, cancellationToken);
-            }
-
-            return card;
+                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), new List<string>())
+            }, cancellationToken);
         }
 
         /// <summary>

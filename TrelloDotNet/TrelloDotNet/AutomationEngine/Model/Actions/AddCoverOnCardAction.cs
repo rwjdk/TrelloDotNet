@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
+using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
@@ -40,9 +44,10 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 throw new AutomationException("Could not perform AddCoverOnCardAction as WebhookAction did not involve a Card");
             }
             var trelloClient = webhookAction.TrelloClient;
-            var card = await webhookAction.Data.Card.GetAsync();
-            card.Cover = CardCoverToAdd;
-            await trelloClient.UpdateCardAsync(card);
+            await trelloClient.UpdateCardAsync(webhookAction.Data.Card.Id, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.Cover.GetJsonPropertyName(), JsonSerializer.Serialize(CardCoverToAdd))
+            });
             processingResult.AddToLog($"Updated Card '{webhookAction.Data.Card.Name}' with new Cover");
             processingResult.ActionsExecuted++;
         }

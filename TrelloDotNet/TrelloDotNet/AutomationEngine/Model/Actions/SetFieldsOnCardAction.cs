@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
@@ -35,19 +38,21 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 throw new AutomationException("Could not perform SetFieldsOnCardAction as WebhookAction did not involve a Card");
             }
             var card = await webhookAction.Data.Card.GetAsync();
-            bool updateNeeded = false;
+            var queryParametersToAdd = new List<QueryParameter>();
             foreach (var fieldValue in FieldValues)
             {
-                if (fieldValue.SetIfNeeded(card))
+                QueryParameter queryParameter = fieldValue.GetQueryParameter(card);
+                if (queryParameter != null)
                 {
-                    updateNeeded = true;
+                    queryParametersToAdd.Add(queryParameter);
                 }
+
             }
 
-            if (updateNeeded)
+            if (queryParametersToAdd.Any())
             {
                 processingResult.ActionsExecuted++;
-                await webhookAction.TrelloClient.UpdateCardAsync(card);
+                await webhookAction.TrelloClient.UpdateCardAsync(card.Id, queryParametersToAdd);
             }
             else
             {

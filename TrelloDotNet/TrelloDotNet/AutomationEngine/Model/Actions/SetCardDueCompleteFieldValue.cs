@@ -1,4 +1,6 @@
-﻿using TrelloDotNet.Model;
+﻿using TrelloDotNet.Control;
+using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
 {
@@ -21,6 +23,12 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         {
             card.DueComplete = Value;
             return true;
+        }
+
+        /// <inheritdoc />
+        public QueryParameter GetQueryParameter(Card card)
+        {
+            return SetIfNeeded(card) ? new QueryParameter(CardFieldsType.DueComplete.GetJsonPropertyName(), card.DueComplete) : null;
         }
 
         /// <summary>
