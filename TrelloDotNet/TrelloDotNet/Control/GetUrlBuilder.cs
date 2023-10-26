@@ -367,6 +367,26 @@ namespace TrelloDotNet.Control
             return $"{UrlPaths.Webhooks}/{webhookId}";
         }
 
+        /// <summary>
+        /// cards/{cardId}/pluginData
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <returns>The URL Suffix</returns>
+        public static string GetPluginDataOnCard(string cardId)
+        {
+            return $"{UrlPaths.Cards}/{cardId}/pluginData";
+        }
+        
+        /// <summary>
+        /// boards/{boardId}/pluginData
+        /// </summary>
+        /// <param name="boardId">Id of the Board</param>
+        /// <returns>The URL Suffix</returns>
+        public static string GetPluginDataOfBoard(string boardId)
+        {
+            return $"{UrlPaths.Boards}/{boardId}/pluginData";
+        }
+
         private static string AddGetCardOptions(GetCardOptions options)
         {
             return options != null ? ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1).ToString() : string.Empty;

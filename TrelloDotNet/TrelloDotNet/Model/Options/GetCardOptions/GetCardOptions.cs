@@ -59,6 +59,11 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         public bool IncludeList { get; set; }
 
         /// <summary>
+        /// Whether to return Plugin object of the card (Default: False)
+        /// </summary>
+        public bool IncludePluginData { get; set; }
+
+        /// <summary>
         /// What board-fields to include if IncludeBoard are set to True
         /// </summary>
         public BoardFields BoardFields { get; set; }
@@ -100,6 +105,7 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
             parameters.Add(new QueryParameter("board", IncludeBoard));
             parameters.Add(new QueryParameter("list", IncludeList));
             parameters.Add(new QueryParameter("checklists", IncludeChecklists ? "all" : "none"));
+            parameters.Add(new QueryParameter("pluginData", IncludePluginData));
 
             switch (IncludeAttachments)
             {

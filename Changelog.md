@@ -1,6 +1,13 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.9.3 (26th of October 2023)
+#### TrelloClient
+- Added option to get `PluginData` on a card via `GetCardOptions`
+- Added option to get `PluginData` of a board via `GetBoardOptions`
+- Added [`GetPluginDataOnCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOnCardAsync)
+- Added [`GetPluginDataOfBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOfBoardAsync)
+
 ## 1.9.2 (12th of October 2023)
 #### General
 - All internal usage of `UpdateCardAsync` now uses the new 'partial update'-variant described below for better performance and more secure async usage in the Automation Engine

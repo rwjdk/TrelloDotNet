@@ -103,6 +103,13 @@ namespace TrelloDotNet.Model
         public List<Label> Labels { get; private set; }
 
         /// <summary>
+        /// Plugin data of the Board (Only populated if GetBoardOptions.IncludePluginData is used)
+        /// </summary>
+        [JsonPropertyName("pluginData")]
+        [JsonInclude]
+        public List<PluginData> PluginData { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public Board()

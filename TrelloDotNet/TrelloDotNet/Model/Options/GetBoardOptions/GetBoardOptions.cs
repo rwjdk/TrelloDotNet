@@ -33,7 +33,11 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         /// </summary>
         public CardFields CardFields { get; set; }
 
-
+        /// <summary>
+        /// Whether to return Plugin object of the card (Default: False)
+        /// </summary>
+        public bool IncludePluginData { get; set; }
+        
         internal QueryParameter[] GetParameters()
         {
             List<QueryParameter> parameters = new List<QueryParameter>();
@@ -55,6 +59,7 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
 
             parameters.Add(new QueryParameter("cards", IncludeCards.GetJsonPropertyName()));
             parameters.Add(new QueryParameter("labels", IncludeLabels ? "all" : "none"));
+            parameters.Add(new QueryParameter("pluginData", IncludePluginData));
 
             return parameters.ToArray();
         }

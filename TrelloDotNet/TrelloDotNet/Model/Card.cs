@@ -229,6 +229,13 @@ namespace TrelloDotNet.Model
         public List<Checklist> Checklists { get; private set; }
 
         /// <summary>
+        /// Plugin data of the Card (Only populated if GetCardOptions.IncludePluginData is used)
+        /// </summary>
+        [JsonPropertyName("pluginData")]
+        [JsonInclude]
+        public List<PluginData> PluginData { get; private set; }
+        
+        /// <summary>
         /// Constructor (Common Card fields)
         /// </summary>
         /// <param name="listId">Id of list to add the card to</param>
