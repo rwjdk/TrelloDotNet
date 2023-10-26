@@ -5,7 +5,7 @@
 [![Rest API](https://img.shields.io/badge/Trello_API-Reference-red)](https://developer.atlassian.com/cloud/trello/rest/)
 [![API Keys](https://img.shields.io/badge/-Admin-red)](https://trello.com/power-ups/admin/)
 
-Welcome to `TrelloDotNet` - a .NET wrapper of the Trello REST API.
+Welcome to TrelloDotNet - a .NET wrapper of the Trello REST API.
 
 ## Features
 - A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on most Trello features
@@ -14,14 +14,14 @@ Welcome to `TrelloDotNet` - a .NET wrapper of the Trello REST API.
 ## Getting Started
 1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (dotnet add package TrelloDotNet)
 2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8)
-3. Create new instance of `TrelloDotNet.TrelloClient`
+3. Create new instance of the `TrelloClient` (located in namespace 'TrelloDotNet')
 4. Locate you Ids of your Boards, List, and Cards (see video [here](https://youtu.be/es84INLIiKI) or at the end on this ReadMe)
 5. Use the TrelloClient based on the examples below and/or the [Wiki](https://github.com/rwjdk/TrelloDotNet/wiki).
 
 ### Examples of Usage:
 
 ```cs
-TrelloClient client = new TrelloClient("APIKey", "TOKEN"); //IMPORTANT: Remember to NOT leave Key and Token in clear text!
+TrelloClient client = new TrelloDotNet.TrelloClient("APIKey", "TOKEN"); //IMPORTANT: Remember to NOT leave Key and Token in clear text!
 
 //Get a board
 Board board = await client.GetBoardAsync("<boardId>");
