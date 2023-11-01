@@ -267,6 +267,16 @@ namespace TrelloDotNet.Control
         }
 
         /// <summary>
+        /// cards/{cardId}/membersVoted
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <returns>The URL Suffix</returns>
+        public static string GetMembersWhoVotedOnOfCard(string cardId)
+        {
+            return $"{UrlPaths.Cards}/{cardId}/membersVoted";
+        }
+
+        /// <summary>
         /// members/{memberId}
         /// </summary>
         /// <param name="memberId">Id of the Member</param>

@@ -44,9 +44,19 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         public MemberFields MemberFields { get; set; }
         
         /// <summary>
+        /// What member-fields to include if IncludeMemberVotes are set to True
+        /// </summary>
+        public MemberFields MembersVotedFields { get; set; }
+        
+        /// <summary>
         /// What checklist-fields to include if IncludeChecklists are set to True
         /// </summary>
         public ChecklistFields ChecklistFields { get; set; }
+
+        /// <summary>
+        /// What stickers-fields to include if IncludeStickers are set to True
+        /// </summary>
+        public StickerFields StickerFields { get; set; }
 
         /// <summary>
         /// Whether to return Board object the card is on (Default: False)
@@ -62,6 +72,21 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         /// Whether to return Plugin object of the card (Default: False)
         /// </summary>
         public bool IncludePluginData { get; set; }
+
+        /// <summary>
+        /// Whether to return Sticker objects of the card (Default: False)
+        /// </summary>
+        public bool IncludeStickers { get; set; }
+        
+        /// <summary>
+        /// Whether to return MemberVotes objects of the card (Default: False)
+        /// </summary>
+        public bool IncludeMemberVotes { get; set; }
+        
+        /// <summary>
+        /// Whether to return CustomFieldsItem objects of the card (Default: False)
+        /// </summary>
+        public bool IncludeCustomFieldItems { get; set; }
 
         /// <summary>
         /// What board-fields to include if IncludeBoard are set to True
@@ -100,12 +125,25 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
             {
                 parameters.Add(new QueryParameter("checklist_fields", string.Join(",", ChecklistFields.Fields)));
             }
+
+            if (StickerFields != null)
+            {
+                parameters.Add(new QueryParameter("sticker_fields", string.Join(",", StickerFields.Fields)));
+            }
+
+            if (MembersVotedFields != null)
+            {
+                parameters.Add(new QueryParameter("memberVoted_fields", string.Join(",", MembersVotedFields.Fields)));
+            }
             
             parameters.Add(new QueryParameter("members", IncludeMembers));
             parameters.Add(new QueryParameter("board", IncludeBoard));
             parameters.Add(new QueryParameter("list", IncludeList));
             parameters.Add(new QueryParameter("checklists", IncludeChecklists ? "all" : "none"));
             parameters.Add(new QueryParameter("pluginData", IncludePluginData));
+            parameters.Add(new QueryParameter("stickers", IncludeStickers));
+            parameters.Add(new QueryParameter("customFieldItems", IncludeCustomFieldItems));
+            parameters.Add(new QueryParameter("membersVoted", IncludeMemberVotes));
 
             switch (IncludeAttachments)
             {

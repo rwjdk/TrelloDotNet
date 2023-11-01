@@ -1,12 +1,25 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.9.4 (1st. of November 2023)
+#### TrelloClient
+- Added option to get `Stickers` on a card via `GetCardOptions` 
+- Added option to get `CustomFieldItems` on a card via `GetCardOptions`
+- Added option to get `MemberVotes` on a card via `GetCardOptions`
+- Added [`AddVoteToCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/AddVoteToCardAsync)
+- Added [`RemoveVoteFromCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveVoteFromCardAsync)
+- Added [`GetMembersWhoVotedOnCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetMembersWhoVotedOnCardAsync)
+
+<hr>
+
 ## 1.9.3 (26th of October 2023)
 #### TrelloClient
 - Added option to get `PluginData` on a card via `GetCardOptions`
 - Added option to get `PluginData` of a board via `GetBoardOptions`
 - Added [`GetPluginDataOnCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOnCardAsync)
 - Added [`GetPluginDataOfBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOfBoardAsync)
+
+<hr>
 
 ## 1.9.2 (12th of October 2023)
 #### General

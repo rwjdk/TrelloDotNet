@@ -83,9 +83,14 @@ namespace TrelloDotNet.Model.Options
         [JsonPropertyName("idChecklists")] ChecklistIds,
 
         /// <summary>
-        /// Ids of members that should be assigned to the card
+        /// Ids of members assigned to the card
         /// </summary>
         [JsonPropertyName("idMembers")] MemberIds,
+
+        /// <summary>
+        /// Ids of members that voted on the card
+        /// </summary>
+        [JsonPropertyName("idMembersVoted")] MembersVotedIds,
 
         /// <summary>
         /// Id of the image attachment of this card to use as its cover
