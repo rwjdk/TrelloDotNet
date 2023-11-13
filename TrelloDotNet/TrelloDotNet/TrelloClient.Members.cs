@@ -10,15 +10,26 @@ namespace TrelloDotNet
 {
     public partial class TrelloClient
     {
-/// <summary>
-/// Get the Members (users) of a board
-/// </summary>
-/// <param name="boardId">Id of the Board (in its long or short version)</param>
-/// <param name="cancellationToken">Cancellation Token</param>
-/// <returns>List of Members</returns>
-public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Get the Members (users) of a board
+        /// </summary>
+        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Members</returns>
+        public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfBoard(boardId), cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the Members (users) who voted on a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Members who voted</returns>
+        public async Task<List<Member>> GetMembersWhoVotedOnCardAsync(string cardId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersWhoVotedOnOfCard(cardId), cancellationToken);
         }
 
         /// <summary>
@@ -181,6 +192,28 @@ public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, Cancellat
         public async Task<List<Member>> GetMembersOfOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfOrganization(organizationId), cancellationToken);
+        }
+
+        /// <summary>
+        /// Add a member vote to a card
+        /// </summary>
+        /// <param name="cardId">The cardId to add the vote to</param>
+        /// <param name="memberId">The id of the member that cast the vote</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task AddVoteToCardAsync(string cardId, string memberId, CancellationToken cancellationToken = default)
+        {
+            await _apiRequestController.Post($"{UrlPaths.Cards}/{cardId}/membersVoted", cancellationToken, 0, new QueryParameter("value", memberId));
+        }
+
+        /// <summary>
+        /// Remove a member vote from a card
+        /// </summary>
+        /// <param name="cardId">The cardId to add the vote to</param>
+        /// <param name="memberId">The id of the member that cast the vote</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task RemoveVoteFromCardAsync(string cardId, string memberId, CancellationToken cancellationToken = default)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/membersVoted/{memberId}", cancellationToken, 0);
         }
     }
 }

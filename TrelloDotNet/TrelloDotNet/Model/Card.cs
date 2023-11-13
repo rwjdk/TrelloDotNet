@@ -149,6 +149,13 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("idMembers")]
         [QueryParameter]
         public List<string> MemberIds { get; set; }
+        
+        /// <summary>
+        /// Ids of members that voted on this card
+        /// </summary>
+        [JsonPropertyName("idMembersVoted")]
+        [JsonInclude]
+        public List<string> MembersVotedIds { get; private set; }
 
         /// <summary>
         /// Id of the image attachment of this card to use as its cover
@@ -201,6 +208,13 @@ namespace TrelloDotNet.Model
         public List<Member> Members { get; private set; }
         
         /// <summary>
+        /// Members that voted for the Card (Only populated if GetCardOptions.IncludeMemberVotes is used)
+        /// </summary>
+        [JsonPropertyName("membersVoted")]
+        [JsonInclude]
+        public List<Member> MembersVoted { get; private set; }
+        
+        /// <summary>
         /// Board the Card is on (Only populated if GetCardOptions.IncludeBoard is used)
         /// </summary>
         [JsonPropertyName("board")]
@@ -235,6 +249,15 @@ namespace TrelloDotNet.Model
         [JsonInclude]
         public List<PluginData> PluginData { get; private set; }
 
+        /// <summary>
+        /// Stickers of the Card (Only populated if GetCardOptions.IncludeStickers is used)
+        /// </summary>
+        [JsonPropertyName("stickers")]
+        [JsonInclude]
+        public List<Sticker> Stickers { get; private set; }
+
+
+        
         /// <summary>
         /// The named position of the Card in the list: Top or Bottom
         /// </summary>
