@@ -1,12 +1,21 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.9.4 (13th of November 2023)
+#### TrelloClient
+- Added option to Add/Update with named positions (Top or Bottom) on `Cards`, `Lists`, `Attachments`, `Checklists` and `Checklist Items`
+- Added [`UpdateChecklistAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateChecklistAsync)
+
+<hr>
+
 ## 1.9.3 (26th of October 2023)
 #### TrelloClient
 - Added option to get `PluginData` on a card via `GetCardOptions`
 - Added option to get `PluginData` of a board via `GetBoardOptions`
 - Added [`GetPluginDataOnCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOnCardAsync)
 - Added [`GetPluginDataOfBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOfBoardAsync)
+
+<hr>
 
 ## 1.9.2 (12th of October 2023)
 #### General

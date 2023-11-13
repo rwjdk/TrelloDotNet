@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
@@ -45,6 +46,22 @@ namespace TrelloDotNet
                 parameters.Add(new QueryParameter("name", attachmentUrlLink.Name));
             }
 
+            if (attachmentUrlLink.NamedPosition.HasValue)
+            {
+                switch (attachmentUrlLink.NamedPosition.Value)
+                {
+                    case NamedPosition.Top:
+                        parameters.Add(new QueryParameter("pos", "bottom")); //NB: Trello have an mis-implementation where these are reversed on attachments so however wrong this looks, it is correct
+                    break;
+                    case NamedPosition.Bottom:
+                        parameters.Add(new QueryParameter("pos", "top")); //NB: Trello have an mis-implementation where these are reversed on attachments so however wrong this looks, it is correct
+                        break;
+                    default:
+                        parameters.Add(new QueryParameter("pos", Convert.ToInt32(attachmentUrlLink.NamedPosition.Value)));
+                        break;
+                };
+            }
+
             return await _apiRequestController.Post<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", cancellationToken, parameters.ToArray());
         }
 
@@ -68,7 +85,7 @@ namespace TrelloDotNet
             {
                 parameters.Add(new QueryParameter("setCover", "true"));
             }
-
+            
             return await _apiRequestController.PostWithAttachmentFileUpload<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", attachmentFileUpload, cancellationToken, parameters.ToArray());
         }
     }

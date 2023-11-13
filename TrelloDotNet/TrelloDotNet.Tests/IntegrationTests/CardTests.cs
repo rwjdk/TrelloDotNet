@@ -209,8 +209,8 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         //Assert.Equal(member.Id, itemC.MemberId); //This will fail on a free version of Trello so commented out
 
         var doneCard = await TrelloClient.AddCardAsync(new Card(list.Id, "Card 2"));
-        await TrelloClient.AddChecklistAsync(doneCard.Id, addedChecklist.Id, true);
-        await TrelloClient.AddChecklistAsync(doneCard.Id, addedChecklist.Id, true);
+        await TrelloClient.AddChecklistAsync(doneCard.Id, addedChecklist.Id, true, null);
+        await TrelloClient.AddChecklistAsync(doneCard.Id, addedChecklist.Id, true, null);
 
         //Test adding a checklist with no items
         await TrelloClient.AddChecklistAsync(doneCard.Id, new Checklist("Empty Checklist"));

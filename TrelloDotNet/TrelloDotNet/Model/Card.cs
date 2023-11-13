@@ -234,7 +234,13 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("pluginData")]
         [JsonInclude]
         public List<PluginData> PluginData { get; private set; }
-        
+
+        /// <summary>
+        /// The named position of the Card in the list: Top or Bottom
+        /// </summary>
+        [JsonIgnore]
+        public NamedPosition? NamedPosition { internal get; set; }
+
         /// <summary>
         /// Constructor (Common Card fields)
         /// </summary>

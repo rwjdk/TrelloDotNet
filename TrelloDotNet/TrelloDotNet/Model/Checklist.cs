@@ -45,6 +45,12 @@ namespace TrelloDotNet.Model
         public List<ChecklistItem> Items { get; set; }
 
         /// <summary>
+        /// The named position of the Checklist: Top or Bottom
+        /// </summary>
+        [JsonIgnore]
+        public NamedPosition? NamedPosition { internal get; set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="name">Name of the Checklist</param>

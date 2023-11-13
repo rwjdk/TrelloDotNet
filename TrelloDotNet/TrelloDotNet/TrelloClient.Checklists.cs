@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +33,7 @@ namespace TrelloDotNet
             }
 
             var checklistParameters = _queryParametersBuilder.GetViaQueryParameterAttributes(template);
+            _queryParametersBuilder.AdjustForNamedPosition(checklistParameters, checklist.NamedPosition);
             var newChecklist = await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", cancellationToken, checklistParameters);
 
             if (template.Items == null)
@@ -56,7 +58,12 @@ namespace TrelloDotNet
 
         internal async Task AddCheckItemsAsync(Checklist existingChecklist, params ChecklistItem[] checkItemsToAdd)
         {
-            foreach (var checkItemParameters in checkItemsToAdd.Select(item => _queryParametersBuilder.GetViaQueryParameterAttributes(item)))
+            foreach (var checkItemParameters in checkItemsToAdd.Select(item =>
+                     {
+                         var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(item);
+                         _queryParametersBuilder.AdjustForNamedPosition(parameters, item.NamedPosition);
+                         return parameters;
+                     }))
             {
                 existingChecklist.Items.Add(await _apiRequestController.Post<ChecklistItem>($"{UrlPaths.Checklists}/{existingChecklist.Id}/{UrlPaths.CheckItems}", CancellationToken.None, checkItemParameters));
             }
@@ -71,6 +78,20 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>New Checklist</returns>
         public async Task<Checklist> AddChecklistAsync(string cardId, string existingChecklistIdToCopyFrom, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, CancellationToken cancellationToken = default)
+        {
+            return await AddChecklistAsync(cardId, existingChecklistIdToCopyFrom, ignoreIfAChecklistWithThisNameAlreadyExist, null, cancellationToken);
+        }
+
+        /// <summary>
+        /// Add a Checklist to the card based on an existing checklist (as a copy)
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="existingChecklistIdToCopyFrom">Id of an existing Checklist that should be added to the card as a new copy</param>
+        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case sensitive) exist and if so return that instead of creating a new</param>
+        /// <param name="namedPosition">Named position of the checklist (Top or Bottom)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>New Checklist</returns>
+        public async Task<Checklist> AddChecklistAsync(string cardId, string existingChecklistIdToCopyFrom, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, NamedPosition? namedPosition = null, CancellationToken cancellationToken = default)
         {
             if (ignoreIfAChecklistWithThisNameAlreadyExist)
             {
@@ -89,7 +110,43 @@ namespace TrelloDotNet
             {
                 new QueryParameter("idChecklistSource", existingChecklistIdToCopyFrom)
             };
+            _queryParametersBuilder.AdjustForNamedPosition(parameters, namedPosition);
             return await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", cancellationToken, parameters);
+        }
+
+        /// <summary>
+        /// Update a checklists name and/or position
+        /// </summary>
+        /// <param name="checklistId">Id of the Checklist</param>
+        /// <param name="newName">The new Name or null if you do not wish to change it</param>
+        /// <param name="namedPosition">The new position or null if you do not wish to change it</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Checklist</returns>
+        public async Task<Checklist> UpdateChecklistAsync(string checklistId, string newName = null, NamedPosition? namedPosition = null, CancellationToken cancellationToken = default)
+        {
+            var parameters = new List<QueryParameter>();
+            if (!string.IsNullOrWhiteSpace(newName))
+            {
+                parameters.Add(new QueryParameter("name", newName));
+            }
+
+            if (namedPosition.HasValue)
+            {
+                switch (namedPosition.Value)
+                {
+                    case NamedPosition.Top:
+                        parameters.Add(new QueryParameter("pos", "top"));
+                        break;
+                    case NamedPosition.Bottom:
+                        parameters.Add(new QueryParameter("pos", "bottom"));
+                        break;
+                    default:
+                        parameters.Add(new QueryParameter("pos", Convert.ToInt32(namedPosition.Value)));
+                        break;
+                };
+            }
+
+            return await _apiRequestController.Put<Checklist>($"{UrlPaths.Checklists}/{checklistId}", cancellationToken, parameters.ToArray());
         }
 
         /// <summary>
@@ -101,7 +158,9 @@ namespace TrelloDotNet
         /// <returns>The Updated Checklist Item</returns>
         public async Task<ChecklistItem> UpdateChecklistItemAsync(string cardId, ChecklistItem item, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<ChecklistItem>($"{UrlPaths.Cards}/{cardId}/checkItem/{item.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(item));
+            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(item);
+            _queryParametersBuilder.AdjustForNamedPosition(parameters, item.NamedPosition);
+            return await _apiRequestController.Put<ChecklistItem>($"{UrlPaths.Cards}/{cardId}/checkItem/{item.Id}", cancellationToken, parameters);
         }
 
         /// <summary>

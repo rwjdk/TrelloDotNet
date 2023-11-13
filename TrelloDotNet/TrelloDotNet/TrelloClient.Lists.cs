@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
@@ -19,7 +21,9 @@ namespace TrelloDotNet
         /// <returns>The Create list</returns>
         public async Task<List> AddListAsync(List list, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Post<List>($"{UrlPaths.Lists}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(list));
+            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(list);
+            _queryParametersBuilder.AdjustForNamedPosition(parameters, list.NamedPosition);
+            return await _apiRequestController.Post<List>($"{UrlPaths.Lists}", cancellationToken, parameters);
         }
 
         /// <summary>
@@ -52,7 +56,9 @@ namespace TrelloDotNet
         /// <returns>The Updated List</returns>
         public async Task<List> UpdateListAsync(List listWithChanges, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listWithChanges.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges));
+            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges);
+            _queryParametersBuilder.AdjustForNamedPosition(parameters, listWithChanges.NamedPosition);
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listWithChanges.Id}", cancellationToken, parameters);
         }
 
         /// <summary>

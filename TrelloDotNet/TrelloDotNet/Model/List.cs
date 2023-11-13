@@ -67,6 +67,12 @@ namespace TrelloDotNet.Model
         public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
 
         /// <summary>
+        /// The named position of the List: Top (Most Leftmost) or Bottom (Most Rightmost)
+        /// </summary>
+        [JsonIgnore]
+        public NamedPosition? NamedPosition { internal get; set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public List()

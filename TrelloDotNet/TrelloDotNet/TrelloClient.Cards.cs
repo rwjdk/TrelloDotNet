@@ -23,7 +23,9 @@ namespace TrelloDotNet
         /// <returns>The Added Card</returns>
         public async Task<Card> AddCardAsync(Card card, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(card));
+            QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(card);
+            _queryParametersBuilder.AdjustForNamedPosition(parameters, card.NamedPosition);
+            return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
         }
 
         /// <summary>
@@ -58,8 +60,8 @@ namespace TrelloDotNet
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(cardWithChanges).ToList();
             CardCover cardCover = cardWithChanges.Cover;
+            _queryParametersBuilder.AdjustForNamedPosition(parameters, cardWithChanges.NamedPosition);
             var payload = GeneratePayloadForCoverUpdate(cardCover, parameters);
-
             return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", cancellationToken, payload, parameters.ToArray());
         }
 

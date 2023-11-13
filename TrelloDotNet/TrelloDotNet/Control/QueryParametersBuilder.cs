@@ -76,5 +76,30 @@ namespace TrelloDotNet.Control
 
             return parameters.ToArray();
         }
+
+        internal void AdjustForNamedPosition(IEnumerable<QueryParameter> parameters, NamedPosition? namedPosition)
+        {
+            if (!namedPosition.HasValue)
+            {
+                return;
+            }
+
+            QueryParameter parameter = parameters.FirstOrDefault(x => x.Name == "pos");
+            if (parameter != null)
+            {
+                parameter.Type = QueryParameterType.String;
+                switch (namedPosition.Value)
+                {
+                    case NamedPosition.Top:
+                        parameter.SetRawValue("top");
+                        break;
+                    case NamedPosition.Bottom:
+                        parameter.SetRawValue("bottom");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
     }
 }

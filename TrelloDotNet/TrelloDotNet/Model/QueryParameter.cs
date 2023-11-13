@@ -14,7 +14,7 @@ namespace TrelloDotNet.Model
     [DebuggerDisplay("{Name} (Type: {Type})")]
     public class QueryParameter
     {
-        private readonly object _valueAsObject;
+        private object _valueAsObject;
         /// <summary>
         /// Name of the Parameter (found on Trello API reference page: https://developer.atlassian.com/cloud/trello/rest)
         /// </summary>
@@ -22,7 +22,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Type of the parameter
         /// </summary>
-        public QueryParameterType Type { get; }
+        public QueryParameterType Type { get; set; }
 
         /// <summary>
         /// Constructor
@@ -127,6 +127,11 @@ namespace TrelloDotNet.Model
         internal string GetRawStringValue()
         {
             return _valueAsObject?.ToString();
+        }
+
+        internal void SetRawValue(object value)
+        {
+            _valueAsObject = value;
         }
     }
 }
