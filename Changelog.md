@@ -1,6 +1,13 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.9.5 (13th of November 2023)
+#### TrelloClient
+- Added option to Add/Update with named positions (Top or Bottom) on `Cards`, `Lists`, `Attachments`, `Checklists` and `Checklist Items`
+- Added [`UpdateChecklistAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateChecklistAsync)
+
+<hr>
+
 ## 1.9.4 (1st. of November 2023)
 #### TrelloClient
 - Added option to get `Stickers` on a card via `GetCardOptions` 
@@ -9,13 +16,6 @@
 - Added [`AddVoteToCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/AddVoteToCardAsync)
 - Added [`RemoveVoteFromCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveVoteFromCardAsync)
 - Added [`GetMembersWhoVotedOnCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetMembersWhoVotedOnCardAsync)
-
-<hr>
-
-## 1.9.4 (13th of November 2023)
-#### TrelloClient
-- Added option to Add/Update with named positions (Top or Bottom) on `Cards`, `Lists`, `Attachments`, `Checklists` and `Checklist Items`
-- Added [`UpdateChecklistAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateChecklistAsync)
 
 <hr>
 
