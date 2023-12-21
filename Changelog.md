@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.9.6 (22nd of December 2023)
+#### General
+- Better nuget description and tags
+
+<hr>
+
 ## 1.9.5 (13th of November 2023)
 #### TrelloClient
 - Added option to Add/Update with named positions (Top or Bottom) on `Cards`, `Lists`, `Attachments`, `Checklists` and `Checklist Items`
