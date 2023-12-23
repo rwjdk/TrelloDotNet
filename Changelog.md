@@ -10,6 +10,8 @@
 - Added Member Properties `Email` and `MemberType`
 - Added Properties on Member to the various Avatar URLs (30x30, 50x50, 170x170 pixels and the original image)
 
+<hr>
+
 ## 1.9.6 (22nd of December 2023)
 #### General
 - Better nuget description and tags
