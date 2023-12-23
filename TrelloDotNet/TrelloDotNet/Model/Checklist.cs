@@ -37,7 +37,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("pos")]
         [QueryParameter]
         public decimal Position { get; set; }
-        
+
         /// <summary>
         /// The items of the Checklist
         /// </summary>

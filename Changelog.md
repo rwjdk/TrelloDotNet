@@ -1,6 +1,15 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.9.7 (23rd of December 2023)
+#### TrelloClient
+- Added a set of handy Checklist Extensions on single and collection of checklists (`GetNumberOfItems`, `GetNumberOfCompletedItems`,`GetNumberOfIncompleteItems`, `IsAllComplete`,`IsAnyIncomplete`)
+- Added advanced version of [`MoveCardToListAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/MoveCardToListAsync) that accept additional options for the move (Position and NamedPosition)
+- Added [`MoveCardToBoard`](https://github.com/rwjdk/TrelloDotNet/wiki/MoveCardToBoard)
+- Added `GetMemberOption` overloads to the various member-get methods
+- Added Member Properties `Email` and `MemberType`
+- Added Properties on Member to the various Avatar URLs (30x30, 50x50, 170x170 pixels and the original image)
+
 ## 1.9.6 (22nd of December 2023)
 #### General
 - Better nuget description and tags

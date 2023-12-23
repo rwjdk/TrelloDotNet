@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.GetMemberOptions;
 
 namespace TrelloDotNet
 {
@@ -22,6 +23,18 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get the Members (users) of a board
+        /// </summary>
+        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="options">Option for what data to include on the Member</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Members</returns>
+        public async Task<List<Member>> GetMembersOfBoardAsync(string boardId, GetMemberOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfBoard(boardId), cancellationToken, options.GetParameters());
+        }
+
+        /// <summary>
         /// Get the Members (users) who voted on a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
@@ -33,6 +46,18 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get the Members (users) who voted on a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="options">Option for what data to include on the Member</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Members who voted</returns>
+        public async Task<List<Member>> GetMembersWhoVotedOnCardAsync(string cardId, GetMemberOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersWhoVotedOnOfCard(cardId), cancellationToken, options.GetParameters());
+        }
+
+        /// <summary>
         /// Get the Members (users) of a Card
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
@@ -41,6 +66,18 @@ namespace TrelloDotNet
         public async Task<List<Member>> GetMembersOfCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfCard(cardId), cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the Members (users) of a Card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="options">Option for what data to include on the Member</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Members</returns>
+        public async Task<List<Member>> GetMembersOfCardAsync(string cardId, GetMemberOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfCard(cardId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -84,7 +121,7 @@ namespace TrelloDotNet
             card.MemberIds.AddRange(missing);
             return await UpdateCardAsync(cardId, new List<QueryParameter>
             {
-                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(),  card.MemberIds)
+                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), card.MemberIds)
             }, cancellationToken);
         }
 
@@ -117,7 +154,7 @@ namespace TrelloDotNet
             card.MemberIds = card.MemberIds.Except(toRemove).ToList();
             return await UpdateCardAsync(cardId, new List<QueryParameter>
             {
-                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(),  card.MemberIds)
+                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), card.MemberIds)
             }, cancellationToken);
         }
 
@@ -184,6 +221,17 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get information about the Member that owns the token used by this TrelloClient
+        /// <param name="options">Option for what data to include on the Member</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// </summary>
+        /// <returns>The Member</returns>
+        public async Task<Member> GetTokenMemberAsync(GetMemberOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<Member>(GetUrlBuilder.GetTokenMember(_apiRequestController.Token), cancellationToken, options.GetParameters());
+        }
+
+        /// <summary>
         /// Get the Members (users) of an Organization (aka Workspace)
         /// </summary>
         /// <param name="organizationId">Id of the Organization</param>
@@ -192,6 +240,18 @@ namespace TrelloDotNet
         public async Task<List<Member>> GetMembersOfOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfOrganization(organizationId), cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the Members (users) of an Organization (aka Workspace)
+        /// </summary>
+        /// <param name="organizationId">Id of the Organization</param>
+        /// <param name="options">Option for what data to include on the Member</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Members</returns>
+        public async Task<List<Member>> GetMembersOfOrganizationAsync(string organizationId, GetMemberOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Member>>(GetUrlBuilder.GetMembersOfOrganization(organizationId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>

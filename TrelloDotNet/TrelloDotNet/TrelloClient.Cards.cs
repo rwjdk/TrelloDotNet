@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using TrelloDotNet.AutomationEngine.Model;
-using TrelloDotNet.AutomationEngine.Model.Actions;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.MoveCardToBoardOptions;
+using TrelloDotNet.Model.Options.MoveCardToListOptions;
 
 namespace TrelloDotNet
 {
@@ -85,8 +85,10 @@ namespace TrelloDotNet
                         parameters.Remove(queryParameter); //This parameter can't be there while a cover is added
                     }
                 }
+
                 payload = $"{{\"cover\":{JsonSerializer.Serialize(cardCover)}}}";
             }
+
             return payload;
         }
 
@@ -163,7 +165,7 @@ namespace TrelloDotNet
             return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken,
                 new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods)
-                );
+            );
         }
 
         /// <summary>
@@ -317,6 +319,37 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Move a Card to a new list on the same board
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="newListId">Id of the List you wish to move it to</param>
+        /// <param name="options">Additional optional Options for the Move</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<Card> MoveCardToListAsync(string cardId, string newListId, MoveCardToListOptions options, CancellationToken cancellationToken = default)
+        {
+            var parameters = new List<QueryParameter> { new QueryParameter(CardFieldsType.ListId.GetJsonPropertyName(), newListId) };
+            if (options.NamedPositionOnNewList.HasValue)
+            {
+                switch (options.NamedPositionOnNewList.Value)
+                {
+                    case NamedPosition.Top:
+                        parameters.Add(new QueryParameter("pos", "top"));
+                        break;
+                    case NamedPosition.Bottom:
+                        parameters.Add(new QueryParameter("pos", "bottom"));
+                        break;
+                }
+            }
+            else if (options.PositionOnNewList.HasValue)
+            {
+                parameters.Add(new QueryParameter(CardFieldsType.Position.GetJsonPropertyName(), options.PositionOnNewList.Value));
+            }
+
+            return await UpdateCardAsync(cardId, parameters, cancellationToken);
+        }
+
+        /// <summary>
         /// Update one or more specific fields on a card (compared to a full update of all fields with UpdateCard)
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
@@ -335,6 +368,191 @@ namespace TrelloDotNet
 
             //Special Cover Card
             return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Move the Card to the top of its current list
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Card</returns>
+        public async Task<Card> MoveCardToTopOfCurrentListAsync(string cardId, CancellationToken cancellationToken = default)
+        {
+            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.Position.GetJsonPropertyName(), "top")
+            }, cancellationToken);
+        }
+
+        /// <summary>
+        /// Move the Card to the bottom of its current list
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Card</returns>
+        public async Task<Card> MoveCardToBottomOfCurrentListAsync(string cardId, CancellationToken cancellationToken = default)
+        {
+            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.Position.GetJsonPropertyName(), "bottom")
+            }, cancellationToken);
+        }
+
+        /// <summary>
+        /// Move a Card to another board
+        /// </summary>
+        /// <param name="cardId">The Id of the Card to Move</param>
+        /// <param name="newBoardId">The ID of the New Board that the card should be moved to</param>
+        /// <param name="options">Additional Options for the move like what list the card should end up on the new board and what happens to labels and members</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<Card> MoveCardToBoard(string cardId, string newBoardId, MoveCardToBoardOptions options, CancellationToken cancellationToken = default)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), "You need to pass an options object to confirm the various options that are invovled with moving a card between boards");
+            }
+
+            List<QueryParameter> parameters = new List<QueryParameter> { new QueryParameter(CardFieldsType.BoardId.GetJsonPropertyName(), newBoardId) };
+            var newListId = options.NewListId;
+            if (string.IsNullOrWhiteSpace(newListId))
+            {
+                //No list specified, so we need to find the first list on the board
+                newListId = (await GetListsOnBoardAsync(newBoardId, cancellationToken)).OrderBy(x => x.Position).FirstOrDefault()?.Id;
+            }
+
+            parameters.Add(new QueryParameter(CardFieldsType.ListId.GetJsonPropertyName(), newListId));
+
+            if (options.NamedPositionOnNewList.HasValue)
+            {
+                switch (options.NamedPositionOnNewList.Value)
+                {
+                    case NamedPosition.Top:
+                        parameters.Add(new QueryParameter("pos", "top"));
+                        break;
+                    case NamedPosition.Bottom:
+                        parameters.Add(new QueryParameter("pos", "bottom"));
+                        break;
+                }
+            }
+            else if (options.PositionOnNewList.HasValue)
+            {
+                parameters.Add(new QueryParameter(CardFieldsType.Position.GetJsonPropertyName(), options.PositionOnNewList.Value));
+            }
+
+            Card card = await GetCardAsync(cardId, new GetCardOptions
+            {
+                CardFields = new CardFields(CardFieldsType.MemberIds, CardFieldsType.LabelIds, CardFieldsType.Labels)
+            }, cancellationToken);
+
+            switch (options.MemberOptions)
+            {
+                case MoveCardToBoardOptionsMemberOptions.KeepMembersAlsoOnNewBoardAndRemoveRest:
+                    var existingMemberIdsOnNewBoard = (await GetMembersOfBoardAsync(newBoardId, cancellationToken)).Select(x => x.Id);
+                    card.MemberIds = card.MemberIds.Intersect(existingMemberIdsOnNewBoard).ToList();
+                    break;
+                case MoveCardToBoardOptionsMemberOptions.RemoveAllMembersOnCard:
+                    card.MemberIds.Clear();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (card.LabelIds.Any())
+            {
+                card.LabelIds.Clear();
+                switch (options.LabelOptions)
+                {
+                    case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndCreateMissing:
+                    {
+                        var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                        foreach (Label cardLabel in card.Labels)
+                        {
+                            Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name && x.Color == cardLabel.Color);
+                            if (existingLabel != null)
+                            {
+                                card.LabelIds.Add(existingLabel.Id);
+                            }
+                            else
+                            {
+                                //Label need to be added
+                                Label newLabel = await AddLabelAsync(new Label(newBoardId, cardLabel.Name, cardLabel.Color), cancellationToken);
+                                card.LabelIds.Add(newLabel.Id);
+                            }
+                        }
+
+                        break;
+                    }
+                    case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndRemoveMissing:
+                    {
+                        var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                        foreach (Label cardLabel in card.Labels)
+                        {
+                            Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name && x.Color == cardLabel.Color);
+                            if (existingLabel != null)
+                            {
+                                card.LabelIds.Add(existingLabel.Id);
+                            }
+                        }
+
+                        break;
+                    }
+                    case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndCreateMissing:
+                    {
+                        var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                        foreach (Label cardLabel in card.Labels)
+                        {
+                            Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name);
+                            if (existingLabel != null)
+                            {
+                                card.LabelIds.Add(existingLabel.Id);
+                            }
+                            else
+                            {
+                                //Label need to be added
+                                Label newLabel = await AddLabelAsync(new Label(newBoardId, cardLabel.Name, cardLabel.Color), cancellationToken);
+                                card.LabelIds.Add(newLabel.Id);
+                            }
+                        }
+
+                        break;
+                    }
+                    case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndRemoveMissing:
+                    {
+                        var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                        foreach (Label cardLabel in card.Labels)
+                        {
+                            Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name);
+                            if (existingLabel != null)
+                            {
+                                card.LabelIds.Add(existingLabel.Id);
+                            }
+                        }
+
+                        break;
+                    }
+                    case MoveCardToBoardOptionsLabelOptions.RemoveAllLabelsOnCard:
+                        //No more Work needed
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            parameters.Add(new QueryParameter(CardFieldsType.LabelIds.GetJsonPropertyName(), card.LabelIds));
+            parameters.Add(new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), card.MemberIds));
+
+            if (options.RemoveDueDate)
+            {
+                parameters.Add(new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), (DateTimeOffset?)null));
+            }
+
+            if (options.RemoveStartDate)
+            {
+                parameters.Add(new QueryParameter(CardFieldsType.Start.GetJsonPropertyName(), (DateTimeOffset?)null));
+            }
+
+            return await UpdateCardAsync(cardId, parameters, cancellationToken);
         }
     }
 }
