@@ -6,6 +6,7 @@
 - Added option to get Label Colors as Enum (`LabelColor`) Value and `ColorInfo` that explains the labels color in RBG and #Hex Value
 
 <hr>
+
 ## 1.9.7 (23rd of December 2023)
 #### TrelloClient
 - Added a set of handy Checklist Extensions on single and collection of checklists (`GetNumberOfItems`, `GetNumberOfCompletedItems`,`GetNumberOfIncompleteItems`, `IsAllComplete`,`IsAnyIncomplete`)
