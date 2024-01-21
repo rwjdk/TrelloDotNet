@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
@@ -26,11 +27,23 @@ namespace TrelloDotNet.Model
         public string Name { get; set; }
 
         /// <summary>
-        /// Color of the Label (Valid values: yellow, purple, blue, red, green, orange, black, sky, pink, lime)
+        /// Color of the Label (Valid values: yellow, purple, blue, red, green, orange, black, sky, pink, lime (+ _light and _dark variants))
         /// </summary>
         [JsonPropertyName("color")]
         [QueryParameter]
         public string Color { get; set; }
+
+        /// <summary>
+        /// Color as Enum
+        /// </summary>
+        [JsonIgnore]
+        public LabelColor ColorAsEnum => Enum.GetValues(typeof(LabelColor)).Cast<LabelColor>().FirstOrDefault(x => x.GetJsonPropertyName() == Color);
+
+        /// <summary>
+        /// Color as Info
+        /// </summary>
+        [JsonIgnore]
+        public LabelColorInfo ColorAsInfo => ColorAsEnum.GetColorInfo();
 
         /// <summary>
         /// Id of the Board the Label belong to
@@ -43,7 +56,8 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// When the Label was created [stored in UTC]
         /// </summary>
-        [JsonIgnore] public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
+        [JsonIgnore]
+        public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
 
         /// <summary>
         /// Constructor
