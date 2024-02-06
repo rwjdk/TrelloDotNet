@@ -177,7 +177,28 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken, options.GetParameters());
+            if (options.IncludeList)
+            {
+                if (options.CardFields != null && !options.CardFields.Fields.Contains("idList"))
+                {
+                    options.CardFields.Fields = options.CardFields.Fields.Union(new List<string>
+                    {
+                        "idList"
+                    }).ToArray();
+                }
+            }
+
+            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken, options.GetParameters());
+            if (options.IncludeList)
+            {
+                var lists = await GetListsOnBoardAsync(boardId, cancellationToken);
+                foreach (Card card in cards)
+                {
+                    card.List = lists.FirstOrDefault(x => x.Id == card.ListId);
+                }
+            }
+
+            return cards;
         }
 
         /// <summary>
@@ -202,7 +223,18 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken, options.GetParameters());
+            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken, options.GetParameters());
+            if (options.IncludeList)
+            {
+                var list = await GetListAsync(listId, cancellationToken);
+                foreach (Card card in cards)
+                {
+                    card.ListId = listId;
+                    card.List = list;
+                }
+            }
+
+            return cards;
         }
 
         /// <summary>
@@ -229,7 +261,28 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters());
+            if (options.IncludeList)
+            {
+                if (options.CardFields != null && !options.CardFields.Fields.Contains("idList"))
+                {
+                    options.CardFields.Fields = options.CardFields.Fields.Union(new List<string>
+                    {
+                        "idList"
+                    }).ToArray();
+                }
+            }
+
+            var cards = await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters());
+            if (options.IncludeList)
+            {
+                var lists = await GetListsOnBoardAsync(boardId, cancellationToken);
+                foreach (Card card in cards)
+                {
+                    card.List = lists.FirstOrDefault(x => x.Id == card.ListId);
+                }
+            }
+
+            return cards;
         }
 
         /// <summary>
@@ -252,7 +305,42 @@ namespace TrelloDotNet
         /// <returns></returns>
         public async Task<List<Card>> GetCardsForMemberAsync(string memberId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsForMember(memberId), cancellationToken, options.GetParameters());
+            if (options.IncludeList)
+            {
+                if (options.CardFields != null && !options.CardFields.Fields.Contains("idList"))
+                {
+                    options.CardFields.Fields = options.CardFields.Fields.Union(new List<string>
+                    {
+                        "idList"
+                    }).ToArray();
+                }
+
+                if (options.CardFields != null && !options.CardFields.Fields.Contains("idBoard"))
+                {
+                    options.CardFields.Fields = options.CardFields.Fields.Union(new List<string>
+                    {
+                        "idBoard"
+                    }).ToArray();
+                }
+            }
+
+            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsForMember(memberId), cancellationToken, options.GetParameters());
+            if (options.IncludeList)
+            {
+                var boardsToGetListsFor = cards.Select(x => x.BoardId).Distinct().ToArray();
+                List<List> lists = new List<List>();
+                foreach (var boardId in boardsToGetListsFor)
+                {
+                    lists.AddRange(await GetListsOnBoardAsync(boardId, cancellationToken));
+                }
+
+                foreach (Card card in cards)
+                {
+                    card.List = lists.FirstOrDefault(x => x.Id == card.ListId);
+                }
+            }
+
+            return cards;
         }
 
         /// <summary>

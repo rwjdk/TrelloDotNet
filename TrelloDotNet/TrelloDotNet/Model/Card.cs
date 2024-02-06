@@ -149,7 +149,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("idMembers")]
         [QueryParameter]
         public List<string> MemberIds { get; set; }
-        
+
         /// <summary>
         /// Ids of members that voted on this card
         /// </summary>
@@ -199,34 +199,34 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("attachments")]
         [JsonInclude]
         public List<Attachment> Attachments { get; private set; }
-        
+
         /// <summary>
         /// Members of the Card (Only populated if GetCardOptions.IncludeMembers is used)
         /// </summary>
         [JsonPropertyName("members")]
         [JsonInclude]
         public List<Member> Members { get; private set; }
-        
+
         /// <summary>
         /// Members that voted for the Card (Only populated if GetCardOptions.IncludeMemberVotes is used)
         /// </summary>
         [JsonPropertyName("membersVoted")]
         [JsonInclude]
         public List<Member> MembersVoted { get; private set; }
-        
+
         /// <summary>
         /// Board the Card is on (Only populated if GetCardOptions.IncludeBoard is used)
         /// </summary>
         [JsonPropertyName("board")]
         [JsonInclude]
         public Board Board { get; private set; }
-        
+
         /// <summary>
         /// List the Card is is (Only populated if GetCardOptions.IncludeList is used)
         /// </summary>
         [JsonPropertyName("list")]
         [JsonInclude]
-        public List List { get; private set; }
+        public List List { get; internal set; }
 
         /// <summary>
         /// Actions of the Card (Only populated if 'ActionTypes' in GetCardOptions is included)
@@ -234,7 +234,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("actions")]
         [JsonInclude]
         public List<TrelloAction> Actions { get; private set; }
-        
+
         /// <summary>
         /// Checklists of the Card (Only populated if GetCardOptions.IncludeChecklist is used)
         /// </summary>
@@ -257,7 +257,6 @@ namespace TrelloDotNet.Model
         public List<Sticker> Stickers { get; private set; }
 
 
-        
         /// <summary>
         /// The named position of the Card in the list: Top or Bottom
         /// </summary>

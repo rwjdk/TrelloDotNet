@@ -11,7 +11,7 @@ namespace TrelloDotNet.Model.Options
         /// <summary>
         /// Fields to include
         /// </summary>
-        internal string[] Fields { get; }
+        internal string[] Fields { get; set; }
 
         /// <summary>
         /// All Fields
