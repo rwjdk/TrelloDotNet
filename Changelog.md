@@ -1,9 +1,10 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## Unreleased
+## 1.9.9 (16th of February 2024)
 #### General
 - Methods [`GetCardsOnBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardAsync), [`GetCardsOnBoardFilteredAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardFilteredAsync), [`GetCardsInListAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsInListAsync), [`GetCardsForMemberAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsForMemberAsync) will now correctly include the `List` a card is on if specified in the `GetCardOptions`
+- Fixed that membertype 'ghost' was not supported
 
 <hr>
 
