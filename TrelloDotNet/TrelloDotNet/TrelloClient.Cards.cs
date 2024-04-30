@@ -25,7 +25,12 @@ namespace TrelloDotNet
         {
             QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(card);
             _queryParametersBuilder.AdjustForNamedPosition(parameters, card.NamedPosition);
-            return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
+            var result = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
+            if (card.Cover != null)
+            {
+                return await AddCoverToCardAsync(result.Id, card.Cover, cancellationToken);
+            }
+            return result;
         }
 
         /// <summary>

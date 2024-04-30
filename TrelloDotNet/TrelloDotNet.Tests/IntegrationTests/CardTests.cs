@@ -115,13 +115,20 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
             allLabelsOnBoard[1].Id,
             allLabelsOnBoard[2].Id
         };
-        var addedCard = await TrelloClient.AddCardAsync(new Card(list.Id, "Card", "Description", start, due, false, labelIds, memberIds));
+        var input = new Card(list.Id, "Card", "Description", start, due, false, labelIds, memberIds)
+        {
+            Cover = new CardCover(CardCoverColor.Blue, CardCoverSize.Normal)
+        };
+        var addedCard = await TrelloClient.AddCardAsync(input);
         AssertTimeIsNow(addedCard.Created);
         AssertTimeIsNow(addedCard.LastActivity);
         Assert.Equal("Card", addedCard.Name);
         Assert.Equal("Description", addedCard.Description);
         Assert.Equal(start, addedCard.Start);
         Assert.Equal(due, addedCard.Due);
+        Assert.NotNull(addedCard.Cover);
+        Assert.Equal(CardCoverColor.Blue, addedCard.Cover.Color);
+        Assert.Equal(CardCoverSize.Normal, addedCard.Cover.Size);
         Assert.False(addedCard.DueComplete);
         Assert.Equal(2, addedCard.Labels.Count);
         Assert.Equal(allLabelsOnBoard[1].Color, addedCard.Labels[0].Color);
@@ -134,11 +141,10 @@ public class CardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         Assert.NotNull(addedCard.Cover);
         Assert.Equal(CardCoverSize.Normal, addedCard.Cover.Size);
         Assert.Equal(CardCoverBrightness.Dark, addedCard.Cover.Brightness);
-        Assert.Null(addedCard.Cover.Color);
-        Assert.Null(addedCard.Cover.BackgroundImageId);
         Assert.Null(addedCard.Cover.BackgroundImageId);
         Assert.Empty(addedCard.ChecklistIds);
         Assert.Null(addedCard.CustomFieldItems);
+        
 
         var membersOfCardAsync = await TrelloClient.GetMembersOfCardAsync(addedCard.Id);
         Assert.Single(membersOfCardAsync);
