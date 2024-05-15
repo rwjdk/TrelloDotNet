@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.10.1 (15th of May 2024)
+#### General
+- Exposed Text as TrelloAction Old value
+
+<hr/>
+
 ## 1.10.0 (30th of April 2024)
 #### General
 - Fixed [Issue #30](https://github.com/rwjdk/TrelloDotNet/issues/30) that if you provided a Cover to [`AddCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardAsync) it would not add the cover
