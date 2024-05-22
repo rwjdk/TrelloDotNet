@@ -30,6 +30,7 @@ namespace TrelloDotNet
             {
                 return await AddCoverToCardAsync(result.Id, card.Cover, cancellationToken);
             }
+
             return result;
         }
 
@@ -193,6 +194,17 @@ namespace TrelloDotNet
                 }
             }
 
+            if (options.IncludeBoard)
+            {
+                if (options.CardFields != null && !options.CardFields.Fields.Contains("idBoard"))
+                {
+                    options.CardFields.Fields = options.CardFields.Fields.Union(new List<string>
+                    {
+                        "idBoard"
+                    }).ToArray();
+                }
+            }
+
             var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken, options.GetParameters());
             if (options.IncludeList)
             {
@@ -200,6 +212,15 @@ namespace TrelloDotNet
                 foreach (Card card in cards)
                 {
                     card.List = lists.FirstOrDefault(x => x.Id == card.ListId);
+                }
+            }
+
+            if (options.IncludeBoard)
+            {
+                var board = await GetBoardAsync(boardId, cancellationToken);
+                foreach (Card card in cards)
+                {
+                    card.Board = board;
                 }
             }
 
@@ -228,6 +249,17 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options.IncludeBoard)
+            {
+                if (options.CardFields != null && !options.CardFields.Fields.Contains("idBoard"))
+                {
+                    options.CardFields.Fields = options.CardFields.Fields.Union(new List<string>
+                    {
+                        "idBoard"
+                    }).ToArray();
+                }
+            }
+
             var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken, options.GetParameters());
             if (options.IncludeList)
             {
@@ -238,6 +270,16 @@ namespace TrelloDotNet
                     card.List = list;
                 }
             }
+
+            if (options.IncludeBoard && cards.Count > 0)
+            {
+                var board = await GetBoardAsync(cards[0].BoardId, cancellationToken);
+                foreach (Card card in cards)
+                {
+                    card.Board = board;
+                }
+            }
+
 
             return cards;
         }
@@ -329,6 +371,17 @@ namespace TrelloDotNet
                 }
             }
 
+            if (options.IncludeBoard)
+            {
+                if (options.CardFields != null && !options.CardFields.Fields.Contains("idBoard"))
+                {
+                    options.CardFields.Fields = options.CardFields.Fields.Union(new List<string>
+                    {
+                        "idBoard"
+                    }).ToArray();
+                }
+            }
+
             var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsForMember(memberId), cancellationToken, options.GetParameters());
             if (options.IncludeList)
             {
@@ -342,6 +395,16 @@ namespace TrelloDotNet
                 foreach (Card card in cards)
                 {
                     card.List = lists.FirstOrDefault(x => x.Id == card.ListId);
+                }
+            }
+
+            if (options.IncludeBoard)
+            {
+                var boardIds = cards.Select(x => x.BoardId).Distinct().ToList();
+                var boards = await GetBoardsAsync(boardIds, cancellationToken);
+                foreach (Card card in cards)
+                {
+                    card.Board = boards.FirstOrDefault(x => x.Id == card.BoardId);
                 }
             }
 

@@ -219,10 +219,10 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("board")]
         [JsonInclude]
-        public Board Board { get; private set; }
+        public Board Board { get; internal set; }
 
         /// <summary>
-        /// List the Card is is (Only populated if GetCardOptions.IncludeList is used)
+        /// List of the Card (Only populated if GetCardOptions.IncludeList is used)
         /// </summary>
         [JsonPropertyName("list")]
         [JsonInclude]
