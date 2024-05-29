@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.10.3 (29th of May 2024)
+#### General
+- Added options `TypeOfBoardsToInclude` and `IncludeLists` to `GetBoardOptions`
+
+<hr/>
+
 ## 1.10.2 (22nd of May 2024)
 #### General
 - Using GetCardOptions on methods [`GetCardsOnBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/), [`GetCardsInListAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/) and [`GetCardsForMember`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsForMember) now correctly get the Board if `IncludeBoard` option is used

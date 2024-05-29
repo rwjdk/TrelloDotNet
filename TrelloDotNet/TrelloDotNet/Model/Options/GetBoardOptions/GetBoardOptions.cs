@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model.Options.GetBoardOptions
@@ -14,9 +16,19 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         public ActionTypesToInclude ActionsTypes { get; set; }
 
         /// <summary>
+        /// Filter of various Boards (Default: All)
+        /// </summary>
+        public GetBoardOptionsTypesOfBoardsToInclude TypesOfBoardsToInclude { get; set; } = GetBoardOptionsTypesOfBoardsToInclude.All;
+
+        /// <summary>
         /// Whether to return Cards on the board (Default: None) [NOTE: This option only works when retrieving a single board. On methods 'GetBoardsForMemberAsync', 'GetBoardsCurrentTokenCanAccessAsync' and 'GetBoardsInOrganization' it have no effect]
         /// </summary>
         public GetBoardOptionsIncludeCards IncludeCards { get; set; }
+
+        /// <summary>
+        /// Whether to return Lists on the board (Default: None)
+        /// </summary>
+        public GetBoardOptionsIncludeLists IncludeLists { get; set; }
 
         /// <summary>
         /// Whether to return Labels on the board (Default: False)
@@ -37,7 +49,7 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         /// Whether to return Plugin object of the card (Default: False)
         /// </summary>
         public bool IncludePluginData { get; set; }
-        
+
         internal QueryParameter[] GetParameters()
         {
             List<QueryParameter> parameters = new List<QueryParameter>();
@@ -57,6 +69,14 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
                 parameters.Add(new QueryParameter("actions", string.Join(",", ActionsTypes.ActionTypes)));
             }
 
+            if (TypesOfBoardsToInclude != GetBoardOptionsTypesOfBoardsToInclude.All)
+            {
+                var selected = Enum.GetValues(TypesOfBoardsToInclude.GetType()).Cast<Enum>().Where(TypesOfBoardsToInclude.HasFlag).ToArray();
+
+                parameters.Add(new QueryParameter("filter", string.Join(",", selected.Select(x => x.GetJsonPropertyName()))));
+            }
+
+            parameters.Add(new QueryParameter("lists", IncludeLists.GetJsonPropertyName()));
             parameters.Add(new QueryParameter("cards", IncludeCards.GetJsonPropertyName()));
             parameters.Add(new QueryParameter("labels", IncludeLabels ? "all" : "none"));
             parameters.Add(new QueryParameter("pluginData", IncludePluginData));

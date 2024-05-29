@@ -33,14 +33,14 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("desc")]
         [QueryParameter]
         public string Description { get; set; }
-        
+
         /// <summary>
         /// URL for the Board
         /// </summary>
         [JsonPropertyName("url")]
         [JsonInclude]
         public string Url { get; private set; }
-        
+
         /// <summary>
         /// Short Version URL for the Board
         /// </summary>
@@ -75,11 +75,12 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("pinned")]
         [JsonInclude]
         public bool Pinned { get; private set; }
-        
+
         /// <summary>
         /// Date the Board was created [stored in UTC]
         /// </summary>
-        [JsonIgnore] public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
+        [JsonIgnore]
+        public DateTimeOffset? Created => IdToCreatedHelper.GetCreatedFromId(Id);
 
         /// <summary>
         /// Actions of the board (Only populated if Actions in GetBoardOptions is included)
@@ -94,13 +95,20 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("cards")]
         [JsonInclude]
         public List<Card> Cards { get; private set; }
-        
+
         /// <summary>
         /// Labels on the board (Only populated if 'IncludeLabels' in GetBoardOptions is set to true)
         /// </summary>
         [JsonPropertyName("labels")]
         [JsonInclude]
         public List<Label> Labels { get; private set; }
+
+        /// <summary>
+        /// Lists on the board (Only populated if 'IncludeLists' in GetBoardOptions is set)
+        /// </summary>
+        [JsonPropertyName("lists")]
+        [JsonInclude]
+        public List<List> Lists { get; private set; }
 
         /// <summary>
         /// Plugin data of the Board (Only populated if GetBoardOptions.IncludePluginData is used)
