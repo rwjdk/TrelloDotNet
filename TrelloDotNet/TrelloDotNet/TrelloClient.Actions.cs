@@ -17,13 +17,12 @@ namespace TrelloDotNet
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <param name="page">The page of results for actions</param>
-        /// <param name="reactions">Whether to show reactions on comments or not</param>
         /// <param name="before">An Action ID</param>
         /// <param name="since">An Action ID</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default, int page = 0, bool reactions = false, string before = null, string since = null)
+        public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default, int page = 0, string before = null, string since = null)
         {
-            return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnBoard(boardId), filter, limit, cancellationToken, page, reactions, before, since);
+            return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnBoard(boardId), filter, limit, cancellationToken, page, before, since);
         }
 
         /// <summary>
@@ -84,7 +83,7 @@ namespace TrelloDotNet
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForOrganization(organizationId), filter, limit, cancellationToken);
         }
 
-        private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, List<string> filter, int limit, CancellationToken cancellationToken = default, int page = 0, bool reactions = true, string before = null, string since = null)
+        private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, List<string> filter, int limit, CancellationToken cancellationToken = default, int page = 0, string before = null, string since = null)
         {
             var parameters = new List<QueryParameter>();
             if (filter != null)
@@ -100,11 +99,6 @@ namespace TrelloDotNet
             if (page > 0)
             {
                 parameters.Add(new QueryParameter("page", page));
-            }
-            
-            if (reactions)
-            {
-                parameters.Add(new QueryParameter("reactions", true));
             }
             
             if (before != null)
