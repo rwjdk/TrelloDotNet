@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.10.4 (22nd of June 2024)
+#### General
+- Added pagination options `Page`, `Before` and `Since` to [`GetActionsOfBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetActionsOfBoardAsync) (Thanks to **[mashbrno](https://github.com/mashbrno)** for the contribution 💪) - [PR#37](https://github.com/rwjdk/TrelloDotNet/pull/37)
+
+<hr/>
+
 ## 1.10.3 (29th of May 2024)
 #### General
 - Added options `TypeOfBoardsToInclude` and `IncludeLists` to `GetBoardOptions`
@@ -9,7 +15,7 @@
 
 ## 1.10.2 (22nd of May 2024)
 #### General
-- Using GetCardOptions on methods [`GetCardsOnBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/), [`GetCardsInListAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/) and [`GetCardsForMember`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsForMember) now correctly get the Board if `IncludeBoard` option is used
+- Using GetCardOptions on methods [`GetCardsOnBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardAsync), [`GetCardsInListAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/) and [`GetCardsForMember`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsForMember) now correctly get the Board if `IncludeBoard` option is used
 
 <hr/>
 
