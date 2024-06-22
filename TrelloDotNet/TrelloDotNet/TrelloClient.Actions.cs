@@ -16,10 +16,13 @@ namespace TrelloDotNet
         /// <param name="filter">A set of event-types to filter by (You can see a list of event in TrelloDotNet.Model.Webhook.WebhookActionTypes)</param>
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="page">The page of results for actions</param>
+        /// <param name="before">An Action ID</param>
+        /// <param name="since">An Action ID</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
+        public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default, int page = 0, string before = null, string since = null)
         {
-            return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnBoard(boardId), filter, limit, cancellationToken);
+            return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnBoard(boardId), filter, limit, cancellationToken, page, before, since);
         }
 
         /// <summary>
@@ -80,7 +83,7 @@ namespace TrelloDotNet
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForOrganization(organizationId), filter, limit, cancellationToken);
         }
 
-        private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, List<string> filter, int limit, CancellationToken cancellationToken = default)
+        private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, List<string> filter, int limit, CancellationToken cancellationToken = default, int page = 0, string before = null, string since = null)
         {
             var parameters = new List<QueryParameter>();
             if (filter != null)
@@ -91,6 +94,21 @@ namespace TrelloDotNet
             if (limit > 0)
             {
                 parameters.Add(new QueryParameter("limit", limit));
+            }
+            
+            if (page > 0)
+            {
+                parameters.Add(new QueryParameter("page", page));
+            }
+            
+            if (before != null)
+            {
+                parameters.Add(new QueryParameter("before", before));
+            }
+            
+            if (since != null)
+            {
+                parameters.Add(new QueryParameter("since", since));
             }
 
             return await _apiRequestController.Get<List<TrelloAction>>(suffix, cancellationToken, parameters.ToArray());
