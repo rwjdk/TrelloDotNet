@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.10.5 (10th of July 2024)
+#### General
+- Bumped System.Text.Json dependency to version 8.0.4 due to [Security Vulnerability CVE-2024-30105](https://github.com/rwjdk/TrelloDotNet/security/dependabot/1) in previous version)
+
+<hr/>
+
 ## 1.10.4 (22nd of June 2024)
 #### General
 - Added pagination options `Page`, `Before` and `Since` to [`GetActionsOfBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetActionsOfBoardAsync) (Thanks to **[mashbrno](https://github.com/mashbrno)** for the contribution 💪) - [PR#37](https://github.com/rwjdk/TrelloDotNet/pull/37)
