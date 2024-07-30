@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.10.6 (30th of July 2024)
+#### General
+- Added Sourcelink to Nuget Package (So you can debug source code directly)
+
+<hr/>
+
 ## 1.10.5 (10th of July 2024)
 #### General
 - Bumped System.Text.Json dependency to version 8.0.4 due to [Security Vulnerability CVE-2024-30105](https://github.com/rwjdk/TrelloDotNet/security/dependabot/1) in previous version)
