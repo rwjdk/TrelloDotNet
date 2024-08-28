@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.10.7 (28th of August 2024)
+#### Automation Engine
+- Added optional `SubType` to [UpdateCardTrigger]()
+
+<hr/>
+
 ## 1.10.6 (30th of July 2024)
 #### General
 - Added Sourcelink to Nuget Package (So you can debug source code directly)
@@ -14,37 +20,37 @@
 <hr/>
 
 ## 1.10.4 (22nd of June 2024)
-#### General
+#### TrelloClient
 - Added pagination options `Page`, `Before` and `Since` to [`GetActionsOfBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetActionsOfBoardAsync) (Thanks to **[mashbrno](https://github.com/mashbrno)** for the contribution 💪) - [PR#37](https://github.com/rwjdk/TrelloDotNet/pull/37)
 
 <hr/>
 
 ## 1.10.3 (29th of May 2024)
-#### General
+#### TrelloClient
 - Added options `TypeOfBoardsToInclude` and `IncludeLists` to `GetBoardOptions`
 
 <hr/>
 
 ## 1.10.2 (22nd of May 2024)
-#### General
+#### TrelloClient
 - Using GetCardOptions on methods [`GetCardsOnBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardAsync), [`GetCardsInListAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/) and [`GetCardsForMember`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsForMember) now correctly get the Board if `IncludeBoard` option is used
 
 <hr/>
 
 ## 1.10.1 (15th of May 2024)
-#### General
+#### Automation engine
 - Exposed Text as TrelloAction Old value
 
 <hr/>
 
 ## 1.10.0 (30th of April 2024)
-#### General
+#### TrelloClient
 - Fixed [Issue #30](https://github.com/rwjdk/TrelloDotNet/issues/30) that if you provided a Cover to [`AddCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardAsync) it would not add the cover
 
 <hr>
 
 ## 1.9.9 (16th of February 2024)
-#### General
+#### TrelloClient
 - Methods [`GetCardsOnBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardAsync), [`GetCardsOnBoardFilteredAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardFilteredAsync), [`GetCardsInListAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsInListAsync), [`GetCardsForMemberAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsForMemberAsync) will now correctly include the `List` a card is on if specified in the `GetCardOptions`
 - Fixed that membertype 'ghost' was not supported
 
