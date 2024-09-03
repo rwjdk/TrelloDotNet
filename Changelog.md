@@ -1,9 +1,14 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.10.8 (3rd of September 2024)
+#### TrelloClient
+- Added `LastLogin` and `LastActivity` to `Member` object
+<hr/>
+
 ## 1.10.7 (28th of August 2024)
 #### Automation Engine
-- Added optional `SubType` to [UpdateCardTrigger]()
+- Added optional `SubType` to [UpdateCardTrigger](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCardTrigger)
 
 <hr/>
 

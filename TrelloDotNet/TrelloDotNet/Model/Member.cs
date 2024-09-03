@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
@@ -78,6 +79,20 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("email")]
         [JsonInclude]
         public string Email { get; private set; }
+
+        /// <summary>
+        /// Last Interaction Datetime (did something in the system)
+        /// </summary>
+        [JsonPropertyName("dateLastImpression")]
+        [JsonInclude]
+        public DateTimeOffset? LastActivity { get; private set; }
+
+        /// <summary>
+        /// Last Login Datetime (visited Trello.com)
+        /// </summary>
+        [JsonPropertyName("dateLastActive")]
+        [JsonInclude]
+        public DateTimeOffset? LastLogin { get; private set; }
 
         /// <summary>
         /// The Type of the Members (admin, normal, observer) [only populated if field is included in GetMemberOptions]

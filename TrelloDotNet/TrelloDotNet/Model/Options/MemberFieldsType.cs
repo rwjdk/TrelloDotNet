@@ -10,36 +10,55 @@ namespace TrelloDotNet.Model.Options
         /// <summary>
         /// The full name related to the account, if it is public.
         /// </summary>
-        [JsonPropertyName("fullName")] FullName,
+        [JsonPropertyName("fullName")]
+        FullName,
 
         /// <summary>
         /// Username of the Member
         /// </summary>
-        [JsonPropertyName("username")] Username,
+        [JsonPropertyName("username")]
+        Username,
 
         /// <summary>
         /// The initials related to the account, if it is public.
         /// </summary>
-        [JsonPropertyName("initials")] Initials,
+        [JsonPropertyName("initials")]
+        Initials,
 
         /// <summary>
         /// The url of this member's avatar
         /// </summary>
-        [JsonPropertyName("avatarUrl")] AvatarUrl,
+        [JsonPropertyName("avatarUrl")]
+        AvatarUrl,
 
         /// <summary>
         /// Whether the user has confirmed their email address for their account.
         /// </summary>
-        [JsonPropertyName("confirmed")] Confirmed,
+        [JsonPropertyName("confirmed")]
+        Confirmed,
 
         /// <summary>
         /// Email of Member
         /// </summary>
-        [JsonPropertyName("email")] Email,
+        [JsonPropertyName("email")]
+        Email,
 
         /// <summary>
         /// Type Member (admin, normal, observer)
         /// </summary>
-        [JsonPropertyName("memberType")] MemberType,
+        [JsonPropertyName("memberType")]
+        MemberType,
+
+        /// <summary>
+        /// Last time of activity (did something in Trello)
+        /// </summary>
+        [JsonPropertyName("dateLastImpression")]
+        LastActivityDate,
+
+        /// <summary>
+        /// Last time of user logged in
+        /// </summary>
+        [JsonPropertyName("dateLastActive")]
+        LastLoginDate,
     }
 }
