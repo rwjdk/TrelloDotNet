@@ -40,6 +40,14 @@ namespace TrelloDotNet.Model
         public string BoardId { get; set; }
 
         /// <summary>
+        /// Id of the Board the list belong to
+        /// </summary>
+        [JsonPropertyName("color")]
+        [QueryParameter]
+        [JsonConverter(typeof(EnumViaJsonPropertyConverter<ListColor>))]
+        public ListColor Color { get; set; }
+
+        /// <summary>
         /// The position of the List on the Board
         /// </summary>
         [JsonPropertyName("pos")]

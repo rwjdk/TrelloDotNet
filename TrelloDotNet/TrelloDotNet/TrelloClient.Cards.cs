@@ -527,6 +527,17 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Update one or more specific fields on a card (compared to a full update of all fields with UpdateCard)
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="valuesToUpdate">The Specific values to set</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        public async Task<Card> UpdateCardAsync(string cardId, List<CardUpdate> valuesToUpdate, CancellationToken cancellationToken = default)
+        {
+            return await UpdateCardAsync(cardId, valuesToUpdate.Select(x => x.ToQueryParameter()).ToList(), cancellationToken);
+        }
+
+        /// <summary>
         /// Move the Card to the top of its current list
         /// </summary>
         /// <param name="cardId">Id of the Card</param>

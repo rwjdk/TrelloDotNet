@@ -1,6 +1,13 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.10.9 (17th of September 2024)
+#### TrelloClient
+- Added option to add/update `Color` on `List` (Only Paid Trello Plans support this feature)
+- Added overload of [UpdateCard](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCard) that is more simple and intuative to use (no need to know magic strings) ([Issue #35](https://github.com/rwjdk/TrelloDotNet/issues/35))
+
+<hr/>
+
 ## 1.10.8 (3rd of September 2024)
 #### TrelloClient
 - Added `LastLogin` and `LastActivity` to `Member` object

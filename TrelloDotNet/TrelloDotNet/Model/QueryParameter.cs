@@ -15,14 +15,29 @@ namespace TrelloDotNet.Model
     public class QueryParameter
     {
         private object _valueAsObject;
+
         /// <summary>
         /// Name of the Parameter (found on Trello API reference page: https://developer.atlassian.com/cloud/trello/rest)
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
         /// Type of the parameter
         /// </summary>
         public QueryParameterType Type { get; set; }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of the Parameter</param>
+        /// <param name="valueAsObject">Value of the Parameter</param>
+        /// <param name="type">Type of Parameter</param>
+        internal QueryParameter(string name, QueryParameterType type, object valueAsObject)
+        {
+            Name = name;
+            Type = type;
+            _valueAsObject = valueAsObject;
+        }
 
         /// <summary>
         /// Constructor
@@ -35,7 +50,7 @@ namespace TrelloDotNet.Model
             Type = QueryParameterType.String;
             _valueAsObject = value;
         }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -97,6 +112,78 @@ namespace TrelloDotNet.Model
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of the Parameter</param>
+        /// <param name="value">Value of the Parameter</param>
+        public QueryParameter(CardFieldsType name, string value)
+        {
+            Name = name.GetJsonPropertyName();
+            Type = QueryParameterType.String;
+            _valueAsObject = value;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of the Parameter</param>
+        /// <param name="value">Value of the Parameter</param>
+        public QueryParameter(CardFieldsType name, List<string> value)
+        {
+            Name = name.GetJsonPropertyName();
+            Type = QueryParameterType.String;
+            _valueAsObject = value != null ? string.Join(",", value) : null;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of the Parameter</param>
+        /// <param name="value">Value of the Parameter</param>
+        public QueryParameter(CardFieldsType name, decimal? value)
+        {
+            Name = name.GetJsonPropertyName();
+            Type = QueryParameterType.Decimal;
+            _valueAsObject = value;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of the Parameter</param>
+        /// <param name="value">Value of the Parameter</param>
+        public QueryParameter(CardFieldsType name, bool? value)
+        {
+            Name = name.GetJsonPropertyName();
+            Type = QueryParameterType.Boolean;
+            _valueAsObject = value;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of the Parameter</param>
+        /// <param name="value">Value of the Parameter</param>
+        public QueryParameter(CardFieldsType name, int? value)
+        {
+            Name = name.GetJsonPropertyName();
+            Type = QueryParameterType.Integer;
+            _valueAsObject = value;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">Name of the Parameter</param>
+        /// <param name="value">Value of the Parameter</param>
+        public QueryParameter(CardFieldsType name, DateTimeOffset? value)
+        {
+            Name = name.GetJsonPropertyName();
+            Type = QueryParameterType.DateTimeOffset;
+            _valueAsObject = value;
+        }
+
+        /// <summary>
         /// Get string-base-formatted version of the URI Parameter value
         /// </summary>
         /// <returns>Formatted string-value</returns>
@@ -107,6 +194,7 @@ namespace TrelloDotNet.Model
             {
                 return "null";
             }
+
             switch (Type)
             {
                 case QueryParameterType.String:
