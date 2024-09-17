@@ -17,7 +17,7 @@ namespace TrelloDotNet.Model
         public string Id { get; private set; }
 
         /// <summary>
-        /// The value of the Custom Id (Depending on it's type)
+        /// The value of the Custom Id (Depending on its type)
         /// </summary>
         [JsonPropertyName("value")]
         [JsonInclude]

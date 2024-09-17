@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.0 (17th of September 2024)
+#### TrelloClient
+- Added options on `CustomFieldItemValue` to get the raw Custom Field Values as String/DateTimeOffset?/Decimal?/Bool (so you do not need to parse them yourself)
+
+<hr/>
+
 ## 1.10.9 (17th of September 2024)
 #### TrelloClient
 - Added option to add/update `Color` on `List` (Only Paid Trello Plans support this feature)
