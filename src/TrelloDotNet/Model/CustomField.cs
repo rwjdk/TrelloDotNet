@@ -62,7 +62,7 @@ namespace TrelloDotNet.Model
         public string ModelType { get; private set; }
 
         /// <summary>
-        /// FieldGroup (From Trello Docs (https://developer.atlassian.com/cloud/trello/guides/rest-api/getting-started-with-custom-fields/): In order for us to accommodate grouping field values across boards, we needed a way to determine whether or not "different" custom fields should be considered the "same". We have proposed a "matching" logic relies on a generating a unique hash property on the CustomField entity named fieldGroup. The hash (SHA256) is composed of the following custom field entity properties name, and type. The hash is generated when a field is created and re-generated when the field is updated. By comparing the hashes of two fields, we can roughly determine whether the fields are similar enough that we would consider them the same.)
+        /// FieldGroup (From Trello Docs (https://developer.atlassian.com/cloud/trello/guides/rest-api/getting-started-with-custom-fields/): In order for us to accommodate grouping field values across boards, we needed a way to determine whether "different" custom fields should be considered the "same". We have proposed a "matching" logic relies on a generating a unique hash property on the CustomField entity named fieldGroup. The hash (SHA256) is composed of the following custom field entity properties name, and type. The hash is generated when a field is created and re-generated when the field is updated. By comparing the hashes of two fields, we can roughly determine whether the fields are similar enough that we would consider them the same.)
         /// </summary>
         [JsonPropertyName("fieldGroup")]
         [JsonInclude]
@@ -76,12 +76,12 @@ namespace TrelloDotNet.Model
         public CustomFieldDisplay Display { get; private set; }
 
         /// <summary>
-        /// If the Field Is Suggested (Not documented in docs what this represent :-( )
+        /// If the Field Is Suggested (Not documented in docs what this represents :-( )
         /// </summary>
         [JsonPropertyName("isSuggestedField")]
         [JsonInclude]
         public bool IsSuggestedField { get; private set; }
-        
+
         /// <summary>
         /// Options of the Custom field (Only present for Custom Fields of Type 'List')
         /// </summary>

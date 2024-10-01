@@ -3,7 +3,7 @@
 namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// Attribute applied to the models various properties to indicate they add add/updateable
+    /// Attribute applied to the models various properties to indicate they are add/updateable
     /// </summary>
     internal class QueryParameterAttribute : Attribute
     {

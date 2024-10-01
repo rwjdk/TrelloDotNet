@@ -2,14 +2,9 @@
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-public class ListTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
+public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly string? _boardId;
-
-    public ListTests(TestFixtureWithNewBoard fixture)
-    {
-        _boardId = fixture.BoardId;
-    }
+    private readonly string? _boardId = fixture.BoardId;
 
     [Fact]
     public async Task AddList()
@@ -101,7 +96,7 @@ public class ListTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         Assert.Equal(2, sourceAfter.Count);
         Assert.Contains(sourceAfter, x => x.Id == card1.Id);
         Assert.Contains(sourceAfter, x => x.Id == card3.Id);
-        
+
 
         var targetAfter = await TrelloClient.GetCardsInListAsync(targetList.Id);
         Assert.Single(targetAfter);

@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet.Model
 {
     /// <summary>
@@ -12,11 +14,13 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("all")]
         All,
+
         /// <summary>
         /// Only Closed (Archived) cards
         /// </summary>
         [JsonPropertyName("closed")]
         Closed,
+
         /// <summary>
         /// Only open cards (including those on archived lists)
         /// </summary>

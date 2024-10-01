@@ -6,6 +6,8 @@ using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet
 {
     public partial class TrelloClient
@@ -41,13 +43,13 @@ namespace TrelloDotNet
             await _apiRequestController.Delete($"{UrlPaths.Actions}/{commentActionId}", cancellationToken, 0);
         }
 
-/// <summary>
-/// Get All Comments on a Card
-/// </summary>
-/// <param name="cardId">Id of Card</param>
-/// <param name="cancellationToken">Cancellation Token</param>
-/// <returns>List of Comments</returns>
-public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Get All Comments on a Card
+        /// </summary>
+        /// <param name="cardId">Id of Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Comments</returns>
+        public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             var result = new List<TrelloAction>();
             int page = 0;

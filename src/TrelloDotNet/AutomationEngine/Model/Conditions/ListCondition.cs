@@ -15,13 +15,14 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         /// The constraint of the Condition
         /// </summary>
         public ListConditionConstraint Constraint { get; }
+
         /// <summary>
         /// The Ids of the List or Lists to check. Tip: These can be List-names instead of Ids if you set 'TreatListNameAsId' to True
         /// </summary>
         public string[] ListIds { get; }
 
         /// <summary>
-        /// Set this to 'True' if you supplied names of Lists instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and less resilient to the renaming of things.
+        /// Set this to 'True' if you supplied names of Lists instead of the Ids. While this is more convenient, it will, in certain cases, be slightly slower and less resilient to the renaming of things.
         /// </summary>
         public bool TreatListNameAsId { get; set; }
 
@@ -56,7 +57,6 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                
             }
 
             if (webhookAction.Data?.Card != null)
@@ -87,6 +87,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                         throw new ArgumentOutOfRangeException();
                 }
             }
+
             return false;
         }
     }

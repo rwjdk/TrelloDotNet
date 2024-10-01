@@ -1,6 +1,4 @@
-﻿using System.Reflection.Emit;
-using System.Xml.Linq;
-using TrelloDotNet.AutomationEngine;
+﻿using TrelloDotNet.AutomationEngine;
 using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.AutomationEngine.Model;
 using TrelloDotNet.AutomationEngine.Model.Actions;
@@ -10,21 +8,16 @@ using Label = TrelloDotNet.Model.Label;
 
 namespace TrelloDotNet.Tests.AutomationEngineTests.ActionTests;
 
-public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
+public class ActionTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly Board _board;
-
-    public ActionTests(TestFixtureWithNewBoard fixture)
-    {
-        _board = fixture.Board!;
-    }
+    private readonly Board _board = fixture.Board!;
 
     [Fact]
     public async Task TestRemoveChecklistToCardAction()
     {
         var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card"));
-        var checklist = new Checklist("My Checklist", new List<ChecklistItem> { new("A"), new("B") });
+        var checklist = new Checklist("My Checklist", [new("A"), new("B")]);
         await TrelloClient.AddChecklistAsync(card.Id, checklist);
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
@@ -49,7 +42,7 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
 
-        var checklistToAdd = new Checklist("My Checklist", new List<ChecklistItem> { new("A"), new("B") });
+        var checklistToAdd = new Checklist("My Checklist", [new("A"), new("B")]);
         IAutomationAction action = new AddChecklistToCardAction(checklistToAdd);
 
         await action.PerformActionAsync(webhookAction, processingResult);
@@ -66,7 +59,7 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
 
         await Assert.ThrowsAsync<AutomationException>(async () => await action.PerformActionAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.BoardUpdated), processingResult));
     }
-    
+
     [Fact]
     public async Task TestAddChecklistToCardActionWithKeywords()
     {
@@ -75,7 +68,7 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
 
-        var checklistToAdd = new Checklist("My Checklist **ID** | **NAME**", new List<ChecklistItem> { new("A | **ID** | **NAME**"), new("B | **ID** | **NAME**") });
+        var checklistToAdd = new Checklist("My Checklist **ID** | **NAME**", [new("A | **ID** | **NAME**"), new("B | **ID** | **NAME**")]);
         IAutomationAction action = new AddChecklistToCardAction(checklistToAdd);
 
         await action.PerformActionAsync(webhookAction, processingResult);
@@ -97,11 +90,11 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
     {
         var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card"));
-        await TrelloClient.AddChecklistAsync(card.Id, new Checklist("My Checklist", new List<ChecklistItem> { new("C") }));
+        await TrelloClient.AddChecklistAsync(card.Id, new Checklist("My Checklist", [new("C")]));
         var processingResult = new ProcessingResult();
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated, cardToSimulate: card);
 
-        var checklistToAdd = new Checklist("My Checklist", new List<ChecklistItem> { new("A"), new("B") });
+        var checklistToAdd = new Checklist("My Checklist", [new("A"), new("B")]);
         IAutomationAction action = new AddChecklistToCardAction(checklistToAdd)
         {
             AddCheckItemsToExistingChecklist = true,
@@ -300,7 +293,7 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
             DueComplete = true,
             Start = DateTimeOffset.Now,
             Description = "My Description",
-            MemberIds = new List<string> { member.Id },
+            MemberIds = [member.Id],
             LabelIds = labels.Take(2).Select(x => x.Id).ToList()
         });
         await TrelloClient.AddCoverToCardAsync(card.Id, new CardCover(CardCoverColor.Black, CardCoverSize.Full));
@@ -325,7 +318,7 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
             RemoveCardDataType.DueComplete,
             RemoveCardDataType.DueDate,
             RemoveCardDataType.StartDate
-            );
+        );
         await action.PerformActionAsync(webhookAction, processingResult);
 
         TrelloClient.Options.IncludeAttachmentsInCardGetMethods = true;
@@ -388,7 +381,7 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card")
         {
-            MemberIds = new List<string> { member.Id }
+            MemberIds = [member.Id]
         });
 
         var processingResult = new ProcessingResult();
@@ -445,7 +438,7 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Some Card")
         {
-            LabelIds = new List<string> { label.Id }
+            LabelIds = [label.Id]
         });
 
         var processingResult = new ProcessingResult();
@@ -516,8 +509,8 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         if (treatLabelNameAsId)
         {
             action = new AddChecklistToCardIfLabelMatchAction(
-                new AddChecklistToCardIfLabelMatch(new[] { label1.Name }, new AddChecklistToCardAction(new Checklist("My Checklist1"))) { TreatLabelNameAsId = true },
-                new AddChecklistToCardIfLabelMatch(new[] { label2.Name }, new AddChecklistToCardAction(new Checklist("My Checklist2"))) { TreatLabelNameAsId = true }
+                new AddChecklistToCardIfLabelMatch([label1.Name], new AddChecklistToCardAction(new Checklist("My Checklist1"))) { TreatLabelNameAsId = true },
+                new AddChecklistToCardIfLabelMatch([label2.Name], new AddChecklistToCardAction(new Checklist("My Checklist2"))) { TreatLabelNameAsId = true }
             );
         }
         else
@@ -565,8 +558,8 @@ public class ActionTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         if (treatLabelNameAsId)
         {
             action = new AddChecklistToCardIfLabelMatchAction(
-                new AddChecklistToCardIfLabelMatch(new[] { label3.Name }, new AddChecklistToCardAction(new Checklist("My Checklist1"))) { TreatLabelNameAsId = true },
-                new AddChecklistToCardIfLabelMatch(new[] { label4.Name }, new[] { label5.Name }, new AddChecklistToCardAction(new Checklist("My Checklist2"))) { TreatLabelNameAsId = true }
+                new AddChecklistToCardIfLabelMatch([label3.Name], new AddChecklistToCardAction(new Checklist("My Checklist1"))) { TreatLabelNameAsId = true },
+                new AddChecklistToCardIfLabelMatch([label4.Name], [label5.Name], new AddChecklistToCardAction(new Checklist("My Checklist2"))) { TreatLabelNameAsId = true }
             );
         }
         else

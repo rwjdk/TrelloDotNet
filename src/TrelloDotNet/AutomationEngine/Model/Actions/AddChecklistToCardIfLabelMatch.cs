@@ -11,19 +11,19 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         /// Label Ids to check if any of them are on the card
         /// </summary>
         public string[] LabelIdsToMatch { get; }
-        
+
         /// <summary>
         /// Label Ids to check is not present on the card (if present do not add checklist)
         /// </summary>
         public string[] LabelIdsThatCantBePresent { get; }
-        
+
         /// <summary>
         /// Actions to perform if one or more labels exist on the card
         /// </summary>
         public AddChecklistToCardAction[] AddChecklistToCardActions { get; }
 
         /// <summary>
-        /// Set this to 'True' if you supplied names of labels instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
+        /// Set this to 'True' if you supplied names of labels instead of the Ids. While this is more convenient, it will, in certain cases, be slightly slower and are less resilient to renaming of things.
         /// </summary>
         public bool TreatLabelNameAsId { get; set; }
 

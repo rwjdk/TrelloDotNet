@@ -2,16 +2,10 @@
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-public class MemberTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
+public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly Board _board;
-    private readonly Organization _organization;
-
-    public MemberTests(TestFixtureWithNewBoard fixture)
-    {
-        _board = fixture.Board!;
-        _organization = fixture.Organization!;
-    }
+    private readonly Board _board = fixture.Board!;
+    private readonly Organization _organization = fixture.Organization!;
 
     [Fact]
     public async Task GetCardsForMember()
@@ -30,7 +24,7 @@ public class MemberTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         var boards = await TrelloClient.GetBoardsForMemberAsync(member.Id);
         Assert.Contains(boards, x => x.Id == _board.Id);
     }
-    
+
     [Fact]
     public async Task GetOrganizationsForMember()
     {
@@ -51,7 +45,7 @@ public class MemberTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         var memberships = await TrelloClient.GetMembershipsOfBoardAsync(_board.Id);
         Assert.Contains(memberships, x => x.MemberId == memberId && x.MemberType == MembershipType.Normal);
         Membership membership = memberships.Single(x => x.MemberId == memberId && x.MemberType == MembershipType.Normal);
-        
+
         await TrelloClient.UpdateMembershipTypeOfMemberOnBoardAsync(_board.Id, membership.Id, MembershipType.Admin);
 
         var membershipsAfter = await TrelloClient.GetMembershipsOfBoardAsync(_board.Id);
@@ -60,13 +54,11 @@ public class MemberTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         await TrelloClient.RemoveMemberFromBoardAsync(_board.Id, memberId);
 
         var membersAfter = await TrelloClient.GetMembersOfBoardAsync(_board.Id);
-        Assert.True(membersAfter.All(x=> x.Id != memberId));
+        Assert.True(membersAfter.All(x => x.Id != memberId));
 
         await TrelloClient.InviteMemberToBoardViaEmailAsync(_board.Id, "rwj_test1@outlook.com", MembershipType.Normal);
 
         var membersAfterInvite = await TrelloClient.GetMembersOfBoardAsync(_board.Id);
         Assert.Contains(membersAfterInvite, x => x.Id == memberId);
     }
-
-
 }

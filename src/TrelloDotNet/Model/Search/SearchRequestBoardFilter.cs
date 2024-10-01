@@ -1,4 +1,6 @@
-﻿namespace TrelloDotNet.Model.Search
+﻿// ReSharper disable UnusedMember.Global
+
+namespace TrelloDotNet.Model.Search
 {
     /// <summary>
     /// Filter what specific boards should be included in the search (Tip: Use SearchRequestBoardFilter.Mine to only search your boards)
@@ -9,6 +11,7 @@
         /// Ids of Boards to search in
         /// </summary>
         public string[] BoardIds { get; }
+
         /// <summary>
         /// Predefined Filter that include 'Mine' Boards
         /// </summary>

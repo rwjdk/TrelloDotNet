@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
@@ -18,7 +16,7 @@ namespace TrelloDotNet
         /// </remarks>
         /// <param name="list">List to add</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Create list</returns>
+        /// <returns>The Created list</returns>
         public async Task<List> AddListAsync(List list, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(list);

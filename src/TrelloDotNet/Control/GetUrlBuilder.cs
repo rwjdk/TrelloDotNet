@@ -4,7 +4,7 @@ using TrelloDotNet.Model.Options.GetCardOptions;
 namespace TrelloDotNet.Control
 {
     /// <summary>
-    /// Utility to build the the needed URL Suffixes to call the Trello Rest API
+    /// Utility to build the needed URL Suffixes to call the Trello Rest API
     /// </summary>
     public static class GetUrlBuilder
     {
@@ -19,7 +19,7 @@ namespace TrelloDotNet.Control
         }
 
         /// <summary>
-        /// cards}/{cardId}/actions
+        /// cards/{cardId}/actions
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <returns>The URL Suffix</returns>
@@ -87,7 +87,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetBoard(string boardId, GetBoardOptions options = null)
         {
-            return $"{UrlPaths.Boards}/{boardId}"+AddGetBoardOptions(options);
+            return $"{UrlPaths.Boards}/{boardId}" + AddGetBoardOptions(options);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetBoardsForMember(string memberId, GetBoardOptions options = null)
         {
-            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Boards}/"+AddGetBoardOptions(options);
+            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Boards}/" + AddGetBoardOptions(options);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetBoardsInOrganization(string organizationId, GetBoardOptions options = null)
         {
-            return $"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Boards}"+AddGetBoardOptions(options);
+            return $"{UrlPaths.Organizations}/{organizationId}/{UrlPaths.Boards}" + AddGetBoardOptions(options);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetCard(string cardId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Cards}/{cardId}"+AddGetCardOptions(options);
+            return $"{UrlPaths.Cards}/{cardId}" + AddGetCardOptions(options);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetCardsOnBoard(string boardId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/"+AddGetCardOptions(options);
+            return $"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/" + AddGetCardOptions(options);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetCardsInList(string listId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/"+AddGetCardOptions(options);
+            return $"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/" + AddGetCardOptions(options);
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetCardsForMember(string memberId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}/"+AddGetCardOptions(options);
+            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}/" + AddGetCardOptions(options);
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace TrelloDotNet.Control
         }
 
         /// <summary>
-        /// boards/{boardId}/labels"
+        /// boards/{boardId}/labels
         /// </summary>
         /// <param name="boardId">Id of the Board</param>
         /// <returns>The URL Suffix</returns>
@@ -386,7 +386,7 @@ namespace TrelloDotNet.Control
         {
             return $"{UrlPaths.Cards}/{cardId}/pluginData";
         }
-        
+
         /// <summary>
         /// boards/{boardId}/pluginData
         /// </summary>
@@ -401,7 +401,7 @@ namespace TrelloDotNet.Control
         {
             return options != null ? ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1).ToString() : string.Empty;
         }
-        
+
         private static string AddGetBoardOptions(GetBoardOptions options)
         {
             return options != null ? ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1).ToString() : string.Empty;

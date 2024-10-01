@@ -9,9 +9,6 @@ on:
 
 jobs:
   build:
-    defaults:
-      run:
-        working-directory: TrelloDotNet
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -25,5 +22,3 @@ jobs:
       run: dotnet restore TrelloDotNet.sln
     - name: Build
       run: dotnet build --no-restore
-#    - name: Test
-#      run: dotnet test --no-build --verbosity normal

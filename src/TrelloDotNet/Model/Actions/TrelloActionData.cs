@@ -21,7 +21,7 @@ namespace TrelloDotNet.Model.Actions
         [JsonPropertyName("card")]
         [JsonInclude]
         public TrelloActionDataCard Card { get; private set; }
-        
+
         /// <summary>
         /// Simplified Board of the Action
         /// </summary>
@@ -56,7 +56,7 @@ namespace TrelloDotNet.Model.Actions
         [JsonPropertyName("list")]
         [JsonInclude]
         public TrelloActionDataList List { get; private set; }
-        
+
         /// <summary>
         /// Simplified ListBefore of the Action (present on card moved to new List)
         /// </summary>
@@ -84,14 +84,14 @@ namespace TrelloDotNet.Model.Actions
         [JsonPropertyName("checkItem")]
         [JsonInclude]
         public TrelloActionDataCheckItem CheckItem { get; private set; }
-        
+
         /// <summary>
         /// Member Data Object
         /// </summary>
         [JsonPropertyName("member")]
         [JsonInclude]
         public TrelloActionDataMember Member { get; private set; }
-        
+
         /// <summary>
         /// Attachment Data Object
         /// </summary>
@@ -114,7 +114,7 @@ namespace TrelloDotNet.Model.Actions
         public TrelloActionDataOld Old { get; private set; }
 
         /// <summary>
-        /// The Type of an added member (Only there when event is 'addMemberToBoard')
+        /// The Type of added member (Only there when event is 'addMemberToBoard')
         /// </summary>
         [JsonPropertyName("memberType")]
         [JsonInclude]

@@ -3,6 +3,8 @@ using TrelloDotNet.Control;
 using TrelloDotNet.Model.Options.GetBoardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet.Model.Batch
 {
     /// <summary>
@@ -14,7 +16,7 @@ namespace TrelloDotNet.Model.Batch
         /// GET Url for the request
         /// </summary>
         public string Url { get; set; }
-        
+
         /// <summary>
         /// The Action that should handle what to do with the data
         /// </summary>
@@ -43,7 +45,7 @@ namespace TrelloDotNet.Model.Batch
         }
 
         /// <summary>
-        /// cards}/{cardId}/actions
+        /// cards/{cardId}/actions
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="action">The action to deal with the batch-result</param>
@@ -337,7 +339,7 @@ namespace TrelloDotNet.Model.Batch
         }
 
         /// <summary>
-        /// boards/{boardId}/labels"
+        /// boards/{boardId}/labels
         /// </summary>
         /// <param name="boardId">Id of the Board</param>
         /// <param name="action">The action to deal with the batch-result</param>
@@ -501,6 +503,5 @@ namespace TrelloDotNet.Model.Batch
         {
             return new BatchRequest(GetUrlBuilder.GetWebhook(webhookId), action);
         }
-
     }
 }

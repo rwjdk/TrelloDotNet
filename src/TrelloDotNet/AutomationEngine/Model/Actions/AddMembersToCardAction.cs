@@ -20,7 +20,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         public string[] MemberIds { get; }
 
         /// <summary>
-        /// Set this to 'True' if you supplied names of members instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and are less resilient to renaming of things.
+        /// Set this to 'True' if you supplied names of members instead of the Ids. While this is more convenient, it will, in certain cases, be slightly slower and are less resilient to renaming of things.
         /// </summary>
         public bool TreatMemberNameAsId { get; set; }
 
@@ -45,6 +45,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             {
                 throw new AutomationException("Could not perform AddMembersToCardAction as WebhookAction did not involve a Card");
             }
+
             var trelloClient = webhookAction.TrelloClient;
 
             var memberIdsToAdd = MemberIds;

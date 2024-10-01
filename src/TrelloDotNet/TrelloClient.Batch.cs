@@ -11,6 +11,8 @@ using TrelloDotNet.Model.Batch;
 using TrelloDotNet.Model.Options.GetBoardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet
 {
     public partial class TrelloClient
@@ -126,6 +128,7 @@ namespace TrelloDotNet
             {
                 throw new TrelloApiException($"{batchResult.ErrorCount} of {batchResult.Results.Count} batched results failed: {string.Join(" | ", errors)}", string.Empty);
             }
+
             return batchResult.Results.Select(x => x.StatusCode == 200 ? x.GetData<T>() : default).ToList();
         }
 
@@ -154,6 +157,7 @@ namespace TrelloDotNet
                 {
                     results[i].Url = urls[i + batchResultForUrls.Count];
                 }
+
                 batchResultForUrls.AddRange(results);
             }
 
@@ -163,7 +167,7 @@ namespace TrelloDotNet
         /// <summary>
         /// Make a generic set of Batch request of type GET data
         /// </summary>
-        /// <param name="requests">Request, each with an URL and an action for what to do with the result data</param>
+        /// <param name="requests">Request, each with a URL and an action for what to do with the result data</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task ExecuteBatchedRequestAsync(List<BatchRequest> requests, CancellationToken cancellationToken = default)
         {
@@ -191,11 +195,12 @@ namespace TrelloDotNet
                 {
                     throw new Exception($"Error getting Trello data: {string.Join(" | ", batchResult.Errors)}");
                 }
-                
+
                 for (int i = 0; i < results.Count; i++)
                 {
                     requests[i + batchResultForUrls.Count].Action.Invoke(results[i]);
                 }
+
                 batchResultForUrls.AddRange(results);
             }
         }

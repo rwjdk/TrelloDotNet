@@ -86,7 +86,7 @@ namespace TrelloDotNet.Model.Webhook
         public WebhookActionDataMember Member { get; set; }
 
         /// <summary>
-        /// The Type of an added member (Only there when event is 'addMemberToBoard')
+        /// The Type of added member (Only there when event is 'addMemberToBoard')
         /// </summary>
         [JsonPropertyName("memberType")]
         [JsonInclude]
@@ -188,14 +188,17 @@ namespace TrelloDotNet.Model.Webhook
             {
                 webhookActionData.Member.Parent = webhookActionData;
             }
+
             if (webhookActionData.Card != null)
             {
                 webhookActionData.Card.Parent = webhookActionData;
             }
+
             if (webhookActionData.Board != null)
             {
                 webhookActionData.Board.Parent = webhookActionData;
             }
+
             if (webhookActionData.Checklist != null)
             {
                 webhookActionData.Checklist.Parent = webhookActionData;
@@ -210,10 +213,12 @@ namespace TrelloDotNet.Model.Webhook
             {
                 webhookActionData.ListAfter.Parent = webhookActionData;
             }
+
             if (webhookActionData.List != null)
             {
                 webhookActionData.List.Parent = webhookActionData;
             }
+
             return webhookActionData;
         }
     }

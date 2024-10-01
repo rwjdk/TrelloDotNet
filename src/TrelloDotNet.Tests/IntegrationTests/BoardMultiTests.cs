@@ -2,16 +2,10 @@
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-public class BoardMultiTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
+public class BoardMultiTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly string? _boardId;
-    private readonly string? _organizationId;
-
-    public BoardMultiTests(TestFixtureWithNewBoard fixture)
-    {
-        _boardId = fixture.BoardId;
-        _organizationId = fixture.OrganizationId;
-    }
+    private readonly string? _boardId = fixture.BoardId;
+    private readonly string? _organizationId = fixture.OrganizationId;
 
     [Fact]
     public async Task ListCanBeMovedToAnotherBoard()

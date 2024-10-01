@@ -11,6 +11,8 @@ using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.MoveCardToBoardOptions;
 using TrelloDotNet.Model.Options.MoveCardToListOptions;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet
 {
     public partial class TrelloClient

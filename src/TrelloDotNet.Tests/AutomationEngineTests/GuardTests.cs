@@ -1,5 +1,4 @@
 ﻿using TrelloDotNet.AutomationEngine;
-using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.AutomationEngine.Model;
 using TrelloDotNet.Tests.AutomationEngineTests.SampleTriggers;
 
@@ -27,25 +26,25 @@ public class GuardTests : TestBase
         var exception = Assert.Throws<ArgumentException>(() => new Configuration(TrelloClient));
         Assert.StartsWith("You need to provide at least one Automation", exception.Message);
     }
-    
+
     [Fact]
     public void AutomationNullTrigger()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => new Automation(null, trigger: null,null, null));
+        var exception = Assert.Throws<ArgumentNullException>(() => new Automation(null, trigger: null, null, null));
         Assert.StartsWith("Trigger can't be null", exception.Message);
     }
 
     [Fact]
     public void AutomationNullTriggers()
     {
-        var exception = Assert.Throws<ArgumentNullException>(() => new Automation(null, triggers: null,null, null));
+        var exception = Assert.Throws<ArgumentNullException>(() => new Automation(null, triggers: null, null, null));
         Assert.StartsWith("Trigger can't be null", exception.Message);
     }
-    
+
     [Fact]
     public void AutomationNoTriggers()
     {
-        var exception = Assert.Throws<ArgumentException>(() => new Automation(null, triggers: new List<IAutomationTrigger>(),null, null));
+        var exception = Assert.Throws<ArgumentException>(() => new Automation(null, triggers: [], null, null));
         Assert.StartsWith("You need at least one Trigger", exception.Message);
     }
 
@@ -59,7 +58,7 @@ public class GuardTests : TestBase
     [Fact]
     public void AutomationNoActions()
     {
-        var exception = Assert.Throws<ArgumentException>(() => new Automation(null, new AlwaysTrueTrigger(), null, new List<IAutomationAction>()));
+        var exception = Assert.Throws<ArgumentException>(() => new Automation(null, new AlwaysTrueTrigger(), null, []));
         Assert.StartsWith("You need at least one action", exception.Message);
     }
 }

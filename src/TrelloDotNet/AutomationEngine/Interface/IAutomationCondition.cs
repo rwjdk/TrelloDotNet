@@ -4,7 +4,7 @@ using TrelloDotNet.Model.Webhook;
 namespace TrelloDotNet.AutomationEngine.Interface
 {
     /// <summary>
-    /// Interface for an condition-implementation
+    /// Interface for a condition-implementation
     /// </summary>
     public interface IAutomationCondition
     {

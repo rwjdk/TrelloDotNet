@@ -17,7 +17,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         public string[] LabelsIds { get; }
 
         /// <summary>
-        /// Set this to 'True' if you supplied the names of labels instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and less resilient to the renaming of things. 
+        /// Set this to 'True' if you supplied the names of labels instead of the Ids. While this is more convenient, it will, in certain cases, be slightly slower and less resilient to the renaming of things. 
         /// </summary>
         public bool TreatLabelNameAsId { get; set; }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Text.Json;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model.Options;
 

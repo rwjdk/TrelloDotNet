@@ -12,10 +12,10 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
     public class LabelAddedToCardTrigger : IAutomationTrigger
     {
         /// <summary>
-        /// Set this to 'True' if you supplied the names of labels instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and less resilient to renaming things.
+        /// Set this to 'True' if you supplied the names of labels instead of the Ids. While this is more convenient, it will, in certain cases, be slightly slower and less resilient to renaming things.
         /// </summary>
         public bool TreatLabelNameAsId { get; set; }
-        
+
         /// <summary>
         /// The Constraint of the Trigger
         /// </summary>

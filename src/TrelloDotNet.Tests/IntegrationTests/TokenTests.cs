@@ -2,16 +2,10 @@
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-public class TokenTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
+public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly Board _board;
-    private readonly Organization _organization;
-
-    public TokenTests(TestFixtureWithNewBoard fixture)
-    {
-        _board = fixture.Board!;
-        _organization = fixture.Organization!;
-    }
+    private readonly Board _board = fixture.Board!;
+    private readonly Organization _organization = fixture.Organization!;
 
     [Fact]
     public async Task GetBoardsCurrentTokenCanAccess()
@@ -19,7 +13,7 @@ public class TokenTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         var boards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync();
         Assert.Contains(boards, x => x.Id == _board.Id);
     }
-    
+
     [Fact]
     public async Task GetOrganizationsCurrentTokenCanAccess()
     {

@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet.Model.Options
 {
     /// <summary>
@@ -12,26 +14,31 @@ namespace TrelloDotNet.Model.Options
         /// </summary>
         [JsonPropertyName("top")]
         Top,
+
         /// <summary>
         /// Left position of the sticker on the card
         /// </summary>
         [JsonPropertyName("left")]
         Left,
+
         /// <summary>
         /// z-index of the sticker on the card
         /// </summary>
         [JsonPropertyName("zIndex")]
         ZIndex,
+
         /// <summary>
         /// Rotations of the sticker on the card
         /// </summary>
         [JsonPropertyName("rotate")]
         Rotate,
+
         /// <summary>
         /// Id of the image used for the sticker
         /// </summary>
         [JsonPropertyName("image")]
         ImageId,
+
         /// <summary>
         /// URL of the image used for the sticker
         /// </summary>

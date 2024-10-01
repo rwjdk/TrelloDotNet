@@ -1,4 +1,6 @@
-﻿namespace TrelloDotNet.Model.Search
+﻿// ReSharper disable UnusedMember.Global
+
+namespace TrelloDotNet.Model.Search
 {
     /// <summary>
     /// Object representing a Search Request for Organizations, Boards and Cards
@@ -9,8 +11,9 @@
         /// The search query with a length of 1 to 16384 characters
         /// </summary>
         public string SearchTerm { get; set; }
+
         /// <summary>
-        /// By default, Trello searches for each word in your query against exactly matching words within Member content. Specifying partial to be true means that we will look for content that starts with any of the words in your query. If you are looking for a Card titled "My Development Status Report", by default you would need to search for "Development". If you have partial enabled, you will be able to search for "dev" but not "velopment".
+        /// By default, Trello searches for each word in your query against exactly matching words within Member content. Specifying partial to be true means that we will look for content that starts with any of the words in your query. If you are looking for a Card titled "My Development Status Report", by default you would need to search for "Development". If you have partially enabled, you will be able to search for "dev" but not "velopment".
         /// <remarks>
         /// Default: false
         /// </remarks>
@@ -81,7 +84,7 @@
         /// The page of results for cards (Crude Pagination). Maximum: 100, Default: 0
         /// </summary>
         public int? CardPage { get; set; }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

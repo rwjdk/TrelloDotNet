@@ -3,7 +3,7 @@
 namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// Represent an Comment Reaction
+    /// Represent a Comment Reaction
     /// </summary>
     public class CommentReaction
     {

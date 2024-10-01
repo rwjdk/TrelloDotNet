@@ -12,6 +12,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         /// </summary>
         /// <param name="card">The Card to set the values on</param>
         /// <returns>If card was modified (aka need to be updated against the API)</returns>
+        // ReSharper disable once UnusedMemberInSuper.Global
         bool SetIfNeeded(Card card);
 
         /// <summary>

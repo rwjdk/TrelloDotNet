@@ -18,11 +18,11 @@ namespace TrelloDotNet.Model.Options
         /// Include all fields 
         /// </summary>
         public static BoardFields All => new BoardFields("all");
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="fields">'all' or any any of these: https://developer.atlassian.com/cloud/trello/guides/rest-api/object-definitions/#board-object</param>
+        /// <param name="fields">'all' or any of these: https://developer.atlassian.com/cloud/trello/guides/rest-api/object-definitions/#board-object</param>
         public BoardFields(params string[] fields)
         {
             Fields = fields;

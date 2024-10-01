@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet.Model
 {
     /// <summary>
@@ -10,21 +12,25 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Administrator
         /// </summary>
-        [JsonPropertyName("admin")] Admin,
+        [JsonPropertyName("admin")]
+        Admin,
 
         /// <summary>
         /// Normal User
         /// </summary>
-        [JsonPropertyName("normal")] Normal,
+        [JsonPropertyName("normal")]
+        Normal,
 
         /// <summary>
         /// Observer User 
         /// </summary>
-        [JsonPropertyName("observer")] Observer,
+        [JsonPropertyName("observer")]
+        Observer,
 
         /// <summary>
         /// Ghost User  (Not yet joined)
         /// </summary>
-        [JsonPropertyName("ghost")] Ghost
+        [JsonPropertyName("ghost")]
+        Ghost
     }
 }

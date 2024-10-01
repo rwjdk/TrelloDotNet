@@ -16,13 +16,14 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         /// The constraints of the condition
         /// </summary>
         public LabelConditionConstraint Constraint { get; set; }
+
         /// <summary>
         /// The Ids of the label or Labels to check. Tip: These can be Label-names instead of Ids if you set 'TreatLabelNameAsId' to True
         /// </summary>
         public string[] LabelIds { get; set; }
 
         /// <summary>
-        /// Set this to 'True' if you supplied the names of labels instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and less resilient to the renaming of things.
+        /// Set this to 'True' if you supplied the names of labels instead of the Ids. While this is more convenient, it will, in certain cases, be slightly slower and less resilient to the renaming of things.
         /// </summary>
         public bool TreatLabelNameAsId { get; set; }
 
@@ -52,8 +53,9 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
             if (TreatLabelNameAsId)
             {
                 var allLabels = await webhookAction.TrelloClient.GetLabelsOfBoardAsync(webhookAction.Data.Board.Id);
-                labelIdsToCheck = allLabels.Where(x => LabelIds.Contains(x.Name)).Select(x=> x.Id).ToArray();
+                labelIdsToCheck = allLabels.Where(x => LabelIds.Contains(x.Name)).Select(x => x.Id).ToArray();
             }
+
             switch (Constraint)
             {
                 case LabelConditionConstraint.AnyOfThesePresent:

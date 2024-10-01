@@ -3,7 +3,7 @@
 namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// Type of a Custom Field
+    /// Type of Custom Field
     /// </summary>
     public enum CustomFieldType
     {
@@ -12,26 +12,29 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("checkbox")]
         Checkbox,
+
         /// <summary>
         /// None
         /// </summary>
         [JsonPropertyName("date")]
         Date,
+
         /// <summary>
         /// None
         /// </summary>
         [JsonPropertyName("list")]
         List,
+
         /// <summary>
         /// None
         /// </summary>
         [JsonPropertyName("number")]
         Number,
+
         /// <summary>
         /// None
         /// </summary>
         [JsonPropertyName("text")]
         Text
-
     }
 }

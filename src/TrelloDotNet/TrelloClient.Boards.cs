@@ -7,6 +7,8 @@ using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options.GetBoardOptions;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet
 {
     public partial class TrelloClient

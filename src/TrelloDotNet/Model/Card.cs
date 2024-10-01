@@ -5,6 +5,8 @@ using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model.Actions;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet.Model
 {
     /// <summary>
@@ -120,7 +122,7 @@ namespace TrelloDotNet.Model
         /// The labels (in details) that are on the card
         /// </summary>
         /// <remarks>
-        /// NB: This is not updateable. Instead update what labels should be included via the 'LabelIds' property in update scenarios
+        /// NB: This is not updateable. Instead, update what labels should be included via the 'LabelIds' property in update scenarios
         /// </remarks>
         [JsonPropertyName("labels")]
         [JsonInclude]
@@ -137,7 +139,7 @@ namespace TrelloDotNet.Model
         /// Ids of the Checklists on the card
         /// </summary>
         /// <remarks>
-        /// NB: This is not Updateable here. Instead use the dedicated methods for the action
+        /// NB: This is not Updateable here. Instead, use the dedicated methods for the action
         /// </remarks>
         [JsonPropertyName("idChecklists")]
         [JsonInclude]

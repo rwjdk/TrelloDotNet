@@ -3,14 +3,9 @@ using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-public class RawCallTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
+public class RawCallTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly Board _board;
-
-    public RawCallTests(TestFixtureWithNewBoard fixture)
-    {
-        _board = fixture.Board!;
-    }
+    private readonly Board _board = fixture.Board!;
 
     [Fact]
     public async Task RawExceptionThrowsIncludeUrlButMaskCredentials()

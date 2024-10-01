@@ -22,7 +22,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         public Checklist ChecklistToAdd { get; set; }
 
         /// <summary>
-        /// By default a checklist is only added if it does not already exist. This determines if it already exists if the check items should be added to the existing list or not
+        /// By default, a checklist is only added if it does not already exist. This determines if it already exists if the check items should be added to the existing list or not
         /// </summary>
         public bool AddCheckItemsToExistingChecklist { get; set; }
 
@@ -47,18 +47,21 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             {
                 throw new AutomationException("Could not perform AddChecklistToCardAction as WebhookAction did not involve a Card");
             }
+
             var cardId = webhookAction.Data.Card.Id;
 
             if (ChecklistToAdd.Items == null)
             {
                 ChecklistToAdd.Items = new List<ChecklistItem>();
             }
+
             string checklistToAddAsJson = JsonSerializer.Serialize(ChecklistToAdd);
             var clone = JsonSerializer.Deserialize<Checklist>(checklistToAddAsJson);
             if (clone.Name != null)
             {
                 clone.Name = clone.Name.Replace("**ID**", webhookAction.Data.Card.Id).Replace("**NAME**", webhookAction.Data.Card.Name);
             }
+
             foreach (ChecklistItem item in clone.Items)
             {
                 item.Name = item.Name.Replace("**ID**", webhookAction.Data.Card.Id).Replace("**NAME**", webhookAction.Data.Card.Name);

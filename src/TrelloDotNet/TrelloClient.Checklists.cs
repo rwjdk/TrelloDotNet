@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet
 {
     public partial class TrelloClient
@@ -15,7 +17,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="checklist">The Checklist to add</param>
-        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with the same name (case sensitive) exists and if so return that instead of creating a new</param>
+        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with the same name (case-sensitive) exists and if so return that instead of creating a new</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>New or Existing Checklist with same name</returns>
         public async Task<Checklist> AddChecklistAsync(string cardId, Checklist checklist, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, CancellationToken cancellationToken = default)
@@ -74,7 +76,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="existingChecklistIdToCopyFrom">Id of an existing Checklist that should be added to the card as a new copy</param>
-        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case sensitive) exist and if so return that instead of creating a new</param>
+        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case-sensitive) exist and if so return that instead of creating a new</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>New Checklist</returns>
         public async Task<Checklist> AddChecklistAsync(string cardId, string existingChecklistIdToCopyFrom, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, CancellationToken cancellationToken = default)
@@ -87,7 +89,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="existingChecklistIdToCopyFrom">Id of an existing Checklist that should be added to the card as a new copy</param>
-        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case sensitive) exist and if so return that instead of creating a new</param>
+        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case-sensitive) exist and if so return that instead of creating a new</param>
         /// <param name="namedPosition">Named position of the checklist (Top or Bottom)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>New Checklist</returns>
@@ -143,7 +145,7 @@ namespace TrelloDotNet
                     default:
                         parameters.Add(new QueryParameter("pos", Convert.ToInt32(namedPosition.Value)));
                         break;
-                };
+                }
             }
 
             return await _apiRequestController.Put<Checklist>($"{UrlPaths.Checklists}/{checklistId}", cancellationToken, parameters.ToArray());

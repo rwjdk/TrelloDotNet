@@ -20,7 +20,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Change the membership-type of a member Member on a board (Example make them Admin)
+        /// Change the membership-type of a Member on a board (Example make them Admin)
         /// </summary>
         /// <param name="boardId">Id of the Board</param>
         /// <param name="membershipId">Id of the Member's Membership (NB: This is NOT the memberId..., you get this via method 'GetMembershipsOfBoardAsync')</param>

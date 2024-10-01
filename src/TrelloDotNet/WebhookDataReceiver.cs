@@ -39,7 +39,7 @@ namespace TrelloDotNet
             {
                 return; // Invalid signature
             }
-            
+
             var webhookNotification = JsonSerializer.Deserialize<WebhookNotification>(json);
             BasicEvents.FireEvent(webhookNotification.Action);
             await SmartEvents.FireEvent(webhookNotification.Action, _trelloClient);
@@ -65,26 +65,32 @@ namespace TrelloDotNet
             {
                 action.Data.Board.Parent = action.Data;
             }
+
             if (action.Data.Card != null)
             {
                 action.Data.Card.Parent = action.Data;
             }
+
             if (action.Data.List != null)
             {
                 action.Data.List.Parent = action.Data;
             }
+
             if (action.Data.ListAfter != null)
             {
                 action.Data.ListAfter.Parent = action.Data;
             }
+
             if (action.Data.ListBefore != null)
             {
                 action.Data.ListBefore.Parent = action.Data;
             }
+
             if (action.Data.Checklist != null)
             {
                 action.Data.Checklist.Parent = action.Data;
             }
+
             if (action.Data.Member != null)
             {
                 action.Data.Member.Parent = action.Data;
@@ -145,7 +151,7 @@ namespace TrelloDotNet
         public WebhookDataReceiverBasicEvents BasicEvents { get; } = new WebhookDataReceiverBasicEvents();
 
         /// <summary>
-        /// Curated common events that most integrations need (aka much easier to use, but might not have the specific type event you need (ask on github for more events)) 
+        /// Curated common events that most integrations need (aka much easier to use, but might not have the specific type event you need (ask on GitHub for more events)) 
         /// </summary>
         public WebhookDataReceiverSmartEvents SmartEvents { get; } = new WebhookDataReceiverSmartEvents();
     }

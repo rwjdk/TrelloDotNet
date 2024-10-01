@@ -18,8 +18,7 @@ public class TrelloConstructorTests
     public void OptionWithOwnHttpClient()
     {
 #pragma warning disable IDE0059
-        var unused = new TrelloClient("1", "2", null, new HttpClient());
+        _ = new TrelloClient("1", "2", null, new HttpClient());
 #pragma warning restore IDE0059
-
     }
 }

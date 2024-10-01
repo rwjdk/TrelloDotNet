@@ -3,6 +3,8 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet.Model
 {
     /// <summary>
@@ -23,6 +25,7 @@ namespace TrelloDotNet.Model
             {
                 return null;
             }
+
             switch (customField.Type)
             {
                 case CustomFieldType.Number:
@@ -45,6 +48,7 @@ namespace TrelloDotNet.Model
             {
                 return null;
             }
+
             switch (customField.Type)
             {
                 case CustomFieldType.Number:
@@ -67,6 +71,7 @@ namespace TrelloDotNet.Model
             {
                 return null;
             }
+
             switch (customField.Type)
             {
                 case CustomFieldType.Checkbox:
@@ -89,6 +94,7 @@ namespace TrelloDotNet.Model
             {
                 return null;
             }
+
             switch (customField.Type)
             {
                 case CustomFieldType.Date:
@@ -112,6 +118,7 @@ namespace TrelloDotNet.Model
             {
                 return null;
             }
+
             switch (customField.Type)
             {
                 case CustomFieldType.List:
@@ -134,6 +141,7 @@ namespace TrelloDotNet.Model
             {
                 return null;
             }
+
             switch (customField.Type)
             {
                 case CustomFieldType.Checkbox:

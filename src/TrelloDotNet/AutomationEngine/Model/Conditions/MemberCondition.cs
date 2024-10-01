@@ -16,14 +16,14 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         /// The constraints of the condition
         /// </summary>
         public MemberConditionConstraint Constraint { get; set; }
-        
+
         /// <summary>
         /// The Ids of the Member or Members to check. Tip: These can be Member-names instead of Ids if you set 'TreatMemberNameAsId' to True
         /// </summary>
         public string[] MemberIds { get; set; }
 
         /// <summary>
-        /// Set this to 'True' if you supplied the names of members instead of the Ids. While this is more convenient, it will in certain cases be slightly slower and less resilient to the renaming of things.
+        /// Set this to 'True' if you supplied the names of members instead of the Ids. While this is more convenient, it will, in certain cases, be slightly slower and less resilient to the renaming of things.
         /// </summary>
         public bool TreatMemberNameAsId { get; set; }
 
@@ -53,8 +53,9 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
             if (TreatMemberNameAsId)
             {
                 var allMembers = await webhookAction.TrelloClient.GetMembersOfBoardAsync(webhookAction.Data.Board.Id);
-                idsToCheck = allMembers.Where(x => MemberIds.Contains(x.FullName)).Select(x=> x.Id).ToArray();
+                idsToCheck = allMembers.Where(x => MemberIds.Contains(x.FullName)).Select(x => x.Id).ToArray();
             }
+
             switch (Constraint)
             {
                 case MemberConditionConstraint.AnyOfThesePresent:

@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Search;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet
 {
     public partial class TrelloClient
@@ -24,10 +26,12 @@ namespace TrelloDotNet
             {
                 modelTypes.Add("organizations");
             }
+
             if (searchRequest.SearchBoards)
             {
                 modelTypes.Add("boards");
             }
+
             if (searchRequest.SearchCards)
             {
                 modelTypes.Add("cards");
@@ -42,6 +46,7 @@ namespace TrelloDotNet
             };
 
             #region Boards-options
+
             if (searchRequest.BoardFilter != null)
             {
                 parameters.Add(new QueryParameter("idBoards", string.Join(",", searchRequest.BoardFilter.BoardIds)));
@@ -56,16 +61,20 @@ namespace TrelloDotNet
             {
                 parameters.Add(new QueryParameter("boards_limit", searchRequest.BoardLimit.Value));
             }
+
             #endregion
 
             #region Organization-options
+
             if (searchRequest.OrganizationFilter != null)
             {
                 parameters.Add(new QueryParameter("idOrganizations", string.Join(",", searchRequest.OrganizationFilter.OrganizationIds)));
             }
+
             #endregion
 
             #region Card-options
+
             if (searchRequest.CardFilter != null)
             {
                 parameters.Add(new QueryParameter("idCards", string.Join(",", searchRequest.CardFilter.CardIds)));
@@ -80,11 +89,12 @@ namespace TrelloDotNet
             {
                 parameters.Add(new QueryParameter("cards_limit", searchRequest.CardLimit.Value));
             }
-            
+
             if (searchRequest.CardPage.HasValue)
             {
                 parameters.Add(new QueryParameter("cards_page", searchRequest.CardPage.Value));
             }
+
             #endregion
 
             return await _apiRequestController.Get<SearchResult>(UrlPaths.Search, cancellationToken, parameters.ToArray());

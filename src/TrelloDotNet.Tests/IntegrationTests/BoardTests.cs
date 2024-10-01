@@ -3,26 +3,18 @@ using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
-public class BoardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
+public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly string _boardId;
-    private readonly string _boardName;
-    private readonly string _boardDescription;
-    private readonly Board _board;
-
-    public BoardTests(TestFixtureWithNewBoard fixture)
-    {
-        _boardId = fixture.BoardId!;
-        _board = fixture.Board!;
-        _boardName = fixture.BoardName!;
-        _boardDescription = fixture.BoardDescription!;
-    }
+    private readonly string _boardId = fixture.BoardId!;
+    private readonly string _boardName = fixture.BoardName!;
+    private readonly string _boardDescription = fixture.BoardDescription!;
+    private readonly Board _board = fixture.Board!;
 
     [Fact]
     public void DefaultBoardData()
     {
         //Check Create date
-        AssertTimeIsNow(_board!.Created);
+        AssertTimeIsNow(_board.Created);
 
         Assert.False(_board.Closed);
         Assert.NotEmpty(_board.ShortUrl);
@@ -144,7 +136,7 @@ public class BoardTests : TestBase, IClassFixture<TestFixtureWithNewBoard>
         Assert.False(membership.Unconfirmed);
         Assert.False(membership.Deactivated);
     }
-    
+
     [Fact]
     public async Task BoardsInOrganization()
     {

@@ -17,7 +17,7 @@ namespace TrelloDotNet.Model.Webhook
 
 
         /// <summary>
-        /// Number of consecutive Failures (Will auto-disable if it ever reach 1000)
+        /// Number of consecutive Failures (Will auto-disable if it ever reaches 1000)
         /// </summary>
         [JsonPropertyName("consecutiveFailures")]
         [JsonInclude]

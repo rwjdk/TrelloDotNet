@@ -4,6 +4,8 @@ using System.Threading;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet
 {
     public partial class TrelloClient

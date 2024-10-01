@@ -2,6 +2,8 @@
 using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.Model.Webhook;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet.AutomationEngine.Model.Triggers
 {
     /// <summary>
