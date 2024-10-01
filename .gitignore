@@ -348,6 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-/TrelloDotNet/TrelloDotNet.Tests/client-secrets.json
-/TrelloDotNet/.idea/.idea.TrelloDotNet/.idea
-/TrelloDotNet/TrelloDotNet.Tests/TestSandbox.cs
+/src/TrelloDotNet.Tests/client-secrets.json
+/src/.idea/.idea.TrelloDotNet/.idea
