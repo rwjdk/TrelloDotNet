@@ -5,7 +5,7 @@
 [![Rest API](https://img.shields.io/badge/Trello_API-Reference-red)](https://developer.atlassian.com/cloud/trello/rest/)
 [![API Keys](https://img.shields.io/badge/-Admin-red)](https://trello.com/power-ups/admin/)
 
-Welcome to TrelloDotNet - a .NET wrapper of the Trello REST API.
+TrelloDotNet - a .NET wrapper of the Trello REST API.
 
 ## Features
 - A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on most Trello features
