@@ -18,10 +18,8 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore TrelloDotNet.sln
-      working-directory: src
     - name: Build
       run: dotnet build --configuration Release --no-restore
-      working-directory: src
     - name: SetUserSecretsTrelloApiKey        
       run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOAPIKEY }} --project scr/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
     - name: SetUserSecretsTrelloToken        
