@@ -9,10 +9,12 @@
         /// Include attachments
         /// </summary>
         True,
+
         /// <summary>
         /// Do not include attachments
         /// </summary>
         False,
+
         /// <summary>
         /// Only include attachments that are used as cover on the cards
         /// </summary>

@@ -14,6 +14,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         /// Value to set
         /// </summary>
         public DateTimeOffset? Value { get; }
+
         /// <summary>
         /// The criteria of when to use the Set Value
         /// </summary>
@@ -38,6 +39,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         card.Due = Value;
                         return true;
                     }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

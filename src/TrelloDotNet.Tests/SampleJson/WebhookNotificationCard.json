@@ -33,7 +33,7 @@
     "dueReminder": 5,
     "email": null,
     "idBoard": "63d128787441d05619f44dbe",
-    "idChecklists": [ "63e2af230b9295aa94254886" ],
+    "idChecklists": ["63e2af230b9295aa94254886"],
     "idList": "63d9942f12260e27b257d067",
     "idMembers": [],
     "idMembersVoted": [],
@@ -59,7 +59,7 @@
         "color": "yellow_light"
       }
     ],
-    "idLabels": [ "63d128782f36f2348afaf01d", "63da8bfd53f1561554e42bb6", "63d128782f36f2348afaf01f" ],
+    "idLabels": ["63d128782f36f2348afaf01d", "63da8bfd53f1561554e42bb6", "63d128782f36f2348afaf01f"],
     "manualCoverAttachment": true,
     "name": "new name2",
     "pos": 131071,

@@ -68,6 +68,7 @@ namespace TrelloDotNet.Model.Webhook
                     ShortLink = boardToSimulate.ShortUrl
                 };
             }
+
             return new WebhookActionDataBoard()
             {
                 Id = "63d128787441d05619f44dbe",

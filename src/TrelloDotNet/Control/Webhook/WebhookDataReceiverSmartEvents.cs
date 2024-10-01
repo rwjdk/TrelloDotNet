@@ -63,6 +63,7 @@ namespace TrelloDotNet.Control.Webhook
                             OnDueCardIsMarkedAsComplete?.Invoke(new WebhookSmartEventDueMarkedAsComplete(action));
                         }
                     }
+
                     break;
                 case "updateCheckItemStateOnCard":
                     //OnChecklistComplete
@@ -75,32 +76,36 @@ namespace TrelloDotNet.Control.Webhook
                             OnChecklistComplete?.Invoke(new WebhookSmartEventChecklistComplete(action));
                         }
                     }
+
                     break;
                 case "addMemberToCard":
                     if (OnMemberAddedToCard != null && action.Data.Member != null)
                     {
                         OnMemberAddedToCard?.Invoke(new WebhookSmartEventMemberAdded(action));
                     }
+
                     break;
                 case "removeMemberFromCard":
                     if (OnMemberRemovedFromCard != null && action.Data.Member != null)
                     {
                         OnMemberRemovedFromCard?.Invoke(new WebhookSmartEventMemberRemoved(action));
                     }
+
                     break;
                 case "addLabelToCard":
                     if (OnLabelAddedToCard != null && action.Data.Label != null)
                     {
                         OnLabelAddedToCard?.Invoke(new WebhookSmartEventLabelAdded(action));
                     }
+
                     break;
                 case "removeLabelFromCard":
                     if (OnLabelRemovedFromCard != null && action.Data.Label != null)
                     {
                         OnLabelRemovedFromCard?.Invoke(new WebhookSmartEventLabelRemoved(action));
                     }
-                    break;
 
+                    break;
             }
         }
     }

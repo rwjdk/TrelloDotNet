@@ -14,6 +14,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         /// Value to set (Tip: You can use the keyword '**DESCRIPTION**' to append in current description)
         /// </summary>
         public string Value { get; }
+
         /// <summary>
         /// The criteria of when to use the Set Value
         /// </summary>
@@ -37,10 +38,12 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         card.Description = Value;
                         return true;
                     }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             return false;
         }
 

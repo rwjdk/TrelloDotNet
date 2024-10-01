@@ -17,18 +17,22 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
         /// The Card Field to Check 
         /// </summary>
         public CardField FieldToCheck { get; }
+
         /// <summary>
         /// The constraint the field should be checked on
         /// </summary>
         public CardFieldConditionConstraint Constraint { get; }
+
         /// <summary>
         /// The Value of the Field (stored as an object)
         /// </summary>
         public object Value { get; }
+
         /// <summary>
         /// What String match-criteria should be used when Constraint is 'Value'
         /// </summary>
         public StringMatchCriteria StringValueMatchCriteria { get; }
+
         /// <summary>
         /// What DateTimeOffset match-criteria should be used when Constraint is 'Value'
         /// </summary>
@@ -139,7 +143,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
             var name = webhookAction.Data.Card.Name;
             return CheckString(name);
         }
-        
+
         private async Task<bool> CheckDescription(WebhookAction webhookAction)
         {
             var card = await webhookAction.Data.Card.GetAsync(new GetCardOptions
@@ -187,7 +191,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
             });
             return CheckDateTimeOffsetValue(card.Start);
         }
-        
+
         private async Task<bool> CheckDue(WebhookAction webhookAction)
         {
             var card = await webhookAction.Data.Card.GetAsync(new GetCardOptions
@@ -214,6 +218,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Conditions
                             {
                                 return valueOnCard.HasValue && valueOnCard.Value.Date == dateTimeOffsetValue.Date; //Check to date level
                             }
+
                             return valueOnCard?.ToString("yyyyMMdd_HHmm") == dateTimeOffsetValue.ToString("yyyyMMdd_HHmm"); //Check down to minute-level
                         case DateTimeOffsetMatchCriteria.After:
                             return valueOnCard.HasValue && valueOnCard.Value > dateTimeOffsetValue;

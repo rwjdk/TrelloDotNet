@@ -12,11 +12,13 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("null")]
         None = 0,
+
         /// <summary>
         /// Normal (aka a colored bar at the top)
         /// </summary>
         [JsonPropertyName("normal")]
         Normal,
+
         /// <summary>
         /// Full (aka entire card is filled with the color)
         /// </summary>

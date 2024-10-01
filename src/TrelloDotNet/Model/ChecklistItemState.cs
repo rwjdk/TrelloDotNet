@@ -12,11 +12,13 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("null")]
         None = 0,
+
         /// <summary>
         /// incomplete
         /// </summary>
         [JsonPropertyName("incomplete")]
         Incomplete,
+
         /// <summary>
         /// complete
         /// </summary>

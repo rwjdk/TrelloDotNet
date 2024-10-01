@@ -209,7 +209,7 @@ public class BoardEvents : TestBase
         AssertSmartEvents(SmartEventsFired.MemberAddedToCard);
         Assert.True(_basicEventOnAddMemberToCard);
     }
-    
+
     [Fact]
     public void RemoveMemberFromCard()
     {
@@ -235,7 +235,7 @@ public class BoardEvents : TestBase
         AssertSmartEvents(SmartEventsFired.MemberRemovedFromCard);
         Assert.True(_basicEventOnRemoveMemberFromCard);
     }
-    
+
     [Fact]
     public void MoveCardToList()
     {
@@ -259,10 +259,10 @@ public class BoardEvents : TestBase
         SubscribeToEventsProcessAndWait(receiver, json);
 
         AssertSmartEvents(SmartEventsFired.CardMovedToNewList);
-        
+
         Assert.True(_basicEventOnUpdateCard);
-    }    
-    
+    }
+
     [Fact]
     public void MarkDueAsComplete()
     {
@@ -286,7 +286,7 @@ public class BoardEvents : TestBase
         SubscribeToEventsProcessAndWait(receiver, json);
 
         AssertSmartEvents(SmartEventsFired.DueCardIsMarkedAsComplete);
-        
+
         Assert.True(_basicEventOnUpdateCard);
     }
 
@@ -313,7 +313,7 @@ public class BoardEvents : TestBase
         SubscribeToEventsProcessAndWait(receiver, json);
 
         AssertSmartEvents(SmartEventsFired.LabelAddedToCard);
-        
+
         Assert.True(_basicEventOnAddLabelToCard);
     }
 
@@ -340,7 +340,7 @@ public class BoardEvents : TestBase
         SubscribeToEventsProcessAndWait(receiver, json);
 
         AssertSmartEvents(SmartEventsFired.LabelRemovedFromCard);
-        
+
         Assert.True(_basicEventOnRemoveLabelFromCard);
     }
 
@@ -465,7 +465,7 @@ public class BoardEvents : TestBase
         Assert.Equal(eventsFired.Contains(SmartEventsFired.MemberAddedToCard), _smartEventOnMemberAddedToCard);
         Assert.Equal(eventsFired.Contains(SmartEventsFired.MemberRemovedFromCard), _smartEventOnMemberRemovedFromCard);
     }
-    
+
     private void SubscribeToSmartEvents(WebhookDataReceiver receiver)
     {
         receiver.SmartEvents.OnCardMovedToNewList += args =>
@@ -589,4 +589,3 @@ public class BoardEvents : TestBase
         Position
     }
 }
-

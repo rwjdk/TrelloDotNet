@@ -9,18 +9,22 @@
         /// String
         /// </summary>
         String,
+
         /// <summary>
         /// Boolean (true/false)
         /// </summary>
         Boolean,
+
         /// <summary>
         /// Integer
         /// </summary>
         Integer,
+
         /// <summary>
         /// DateTimeOffset
         /// </summary>
         DateTimeOffset,
+
         /// <summary>
         /// Decimal
         /// </summary>

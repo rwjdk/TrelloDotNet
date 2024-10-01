@@ -18,7 +18,7 @@ public class CardCoverTests
         Assert.Null(cardCover.Size);
         Assert.Null(cardCover.Brightness);
     }
-    
+
     [Fact]
     public void Constructors()
     {

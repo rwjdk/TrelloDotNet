@@ -33,9 +33,9 @@
     "dueReminder": null,
     "email": null,
     "idBoard": "63d128787441d05619f44dbe",
-    "idChecklists": [ "63da9e9c3db9eb3f6196724d", "63da9eacf7834d47adfbf11d" ],
+    "idChecklists": ["63da9e9c3db9eb3f6196724d", "63da9eacf7834d47adfbf11d"],
     "idList": "63d128787441d05619f44dc5",
-    "idMembers": [ "63d1239e857afaa8b003c633" ],
+    "idMembers": ["63d1239e857afaa8b003c633"],
     "idMembersVoted": [],
     "idShort": 2,
     "idAttachmentCover": null,
@@ -59,7 +59,7 @@
         "color": "green"
       }
     ],
-    "idLabels": [ "63da8bfd53f1561554e42bb6", "63d128782f36f2348afaf01f", "63d128782f36f2348afaf01d" ],
+    "idLabels": ["63da8bfd53f1561554e42bb6", "63d128782f36f2348afaf01f", "63d128782f36f2348afaf01d"],
     "manualCoverAttachment": true,
     "name": "Card 2",
     "pos": 65535,
@@ -79,7 +79,8 @@
           "_id": "63da849c852420982d42a539",
           "id": "63da849c852420982d42a539",
           "scaled": true,
-          "url": "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
+          "url":
+            "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
           "bytes": 4169,
           "height": 100,
           "width": 67
@@ -88,7 +89,8 @@
           "_id": "63da849c852420982d42a53a",
           "id": "63da849c852420982d42a53a",
           "scaled": true,
-          "url": "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/128x192/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
+          "url":
+            "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/128x192/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
           "bytes": 4902,
           "height": 192,
           "width": 128
@@ -97,7 +99,8 @@
           "_id": "63da849c852420982d42a53b",
           "id": "63da849c852420982d42a53b",
           "scaled": true,
-          "url": "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/320x480/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
+          "url":
+            "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/320x480/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
           "bytes": 8260,
           "height": 480,
           "width": 320
@@ -106,7 +109,8 @@
           "_id": "63da849c852420982d42a53c",
           "id": "63da849c852420982d42a53c",
           "scaled": true,
-          "url": "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
+          "url":
+            "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/640x960/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
           "bytes": 16142,
           "height": 960,
           "width": 640
@@ -115,7 +119,8 @@
           "_id": "63da849c852420982d42a53d",
           "id": "63da849c852420982d42a53d",
           "scaled": true,
-          "url": "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/683x1024/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
+          "url":
+            "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/683x1024/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
           "bytes": 17658,
           "height": 1024,
           "width": 683
@@ -124,7 +129,8 @@
           "_id": "63da849c852420982d42a53e",
           "id": "63da849c852420982d42a53e",
           "scaled": true,
-          "url": "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/853x1280/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
+          "url":
+            "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/853x1280/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
           "bytes": 24020,
           "height": 1280,
           "width": 853
@@ -133,7 +139,8 @@
           "_id": "63da849c852420982d42a540",
           "id": "63da849c852420982d42a540",
           "scaled": true,
-          "url": "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/1066x1600/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
+          "url":
+            "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/1066x1600/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
           "bytes": 34647,
           "height": 1600,
           "width": 1066
@@ -142,7 +149,8 @@
           "_id": "63da849c852420982d42a53f",
           "id": "63da849c852420982d42a53f",
           "scaled": true,
-          "url": "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/1280x1920/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
+          "url":
+            "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/1280x1920/2cfbc9e6a36ea7f56d4debd2c3eeab7b/photo-1674998201553-cc4134e7eecd.jpg",
           "bytes": 48894,
           "height": 1920,
           "width": 1280
@@ -151,14 +159,16 @@
           "_id": "63da849c852420982d42a541",
           "id": "63da849c852420982d42a541",
           "scaled": true,
-          "url": "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/original/738928d626a856b754b881e2b5488331/photo-1674998201553-cc4134e7eecd",
+          "url":
+            "https://trello-backgrounds.s3.amazonaws.com/SharedBackground/original/738928d626a856b754b881e2b5488331/photo-1674998201553-cc4134e7eecd",
           "bytes": 125823,
           "height": 2048,
           "width": 1365
         }
       ],
       "edgeColor": "#e7c3a5",
-      "sharedSourceUrl": "https://images.unsplash.com/photo-1674998201553-cc4134e7eecd?ixid=Mnw3MDY2fDB8MXxjb2xsZWN0aW9ufDV8MzE3MDk5fHx8fHwyfHwxNjc1MjY1MTA4&ixlib=rb-4.0.3&w=2560&h=2048&q=90",
+      "sharedSourceUrl":
+        "https://images.unsplash.com/photo-1674998201553-cc4134e7eecd?ixid=Mnw3MDY2fDB8MXxjb2xsZWN0aW9ufDV8MzE3MDk5fHx8fHwyfHwxNjc1MjY1MTA4&ixlib=rb-4.0.3&w=2560&h=2048&q=90",
       "idPlugin": null
     },
     "isTemplate": false,

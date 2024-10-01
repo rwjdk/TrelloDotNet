@@ -63,7 +63,6 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 processingResult.AddToLog($"Removed Sticker '{StickerImageIdToRemove}' from card '{webhookAction.Data.Card.Name}'");
                 processingResult.ActionsExecuted++;
             }
-
         }
     }
 }

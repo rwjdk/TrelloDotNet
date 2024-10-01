@@ -29,7 +29,7 @@ namespace TrelloDotNet.Model.Actions
         [JsonPropertyName("idShort")]
         [JsonInclude]
         public int IdShort { get; private set; }
-        
+
         /// <summary>
         /// The short-link of the card
         /// </summary>

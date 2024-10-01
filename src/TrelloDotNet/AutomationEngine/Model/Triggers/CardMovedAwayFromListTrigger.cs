@@ -60,13 +60,14 @@ namespace TrelloDotNet.AutomationEngine.Model.Triggers
             {
                 return false;
             }
+
             var correctType = webhookAction.Type == WebhookActionTypes.UpdateCard;
 
             if (!TreatListNameAsId)
             {
                 ListNameMatchCriteria = StringMatchCriteria.Equal; //Force exact match no matter what user defined as it does not make sense to partly match auto-generated Ids
             }
-                
+
             switch (Constraint)
             {
                 case CardMovedAwayFromListTriggerConstraint.AnyOfTheseListsAreMovedAwayFrom:

@@ -13,6 +13,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("longitude")]
         [JsonInclude]
         public decimal Longitude { get; private set; }
+
         /// <summary>
         /// latitude
         /// </summary>

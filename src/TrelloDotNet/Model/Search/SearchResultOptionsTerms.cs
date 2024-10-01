@@ -13,6 +13,7 @@ namespace TrelloDotNet.Model.Search
         [JsonPropertyName("text")]
         [JsonInclude]
         public string Text { get; private set; }
+
         /// <summary>
         /// If the search was partial search term matching
         /// </summary>

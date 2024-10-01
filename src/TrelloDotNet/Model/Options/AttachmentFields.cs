@@ -17,7 +17,7 @@ namespace TrelloDotNet.Model.Options
         /// All Fields
         /// </summary>
         public static AttachmentFields All => new AttachmentFields("all");
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -26,7 +26,7 @@ namespace TrelloDotNet.Model.Options
         {
             Fields = fields;
         }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

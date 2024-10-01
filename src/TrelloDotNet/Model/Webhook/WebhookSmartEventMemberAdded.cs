@@ -9,11 +9,12 @@
         /// Id of the new Member
         /// </summary>
         public string AddedMemberId { get; }
+
         /// <summary>
         /// Name of the new Member
         /// </summary>
         public string AddedMemberName { get; }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

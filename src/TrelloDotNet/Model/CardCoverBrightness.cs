@@ -12,11 +12,13 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("null")]
         None = 0,
+
         /// <summary>
         /// Dark
         /// </summary>
         [JsonPropertyName("dark")]
         Dark,
+
         /// <summary>
         /// Light
         /// </summary>

@@ -20,7 +20,7 @@ public class MemberRemovedFromCardTriggerTest : TestBase
         var trigger = new MemberRemovedFromCardTrigger(MemberRemovedFromCardTriggerConstraint.AnyOfTheseMembersAreRemoved, webhookAction.Data.Member.Name) { TreatMemberNameAsId = true };
         Assert.True(await trigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
     [Fact]
     public async Task AnyButNameTrueTrigger()
     {

@@ -13,10 +13,12 @@ namespace TrelloDotNet.Model
         /// The File Stream
         /// </summary>
         public Stream Stream { get; }
+
         /// <summary>
         /// The Optional name of the Attachment (if not provided the Filename is used)
         /// </summary>
         public string Name { get; }
+
         /// <summary>
         /// The Filename
         /// </summary>

@@ -26,7 +26,7 @@ namespace TrelloDotNet.Model.Options
         {
             Fields = fields;
         }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

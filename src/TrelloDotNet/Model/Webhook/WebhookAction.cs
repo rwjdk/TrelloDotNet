@@ -109,6 +109,7 @@ namespace TrelloDotNet.Model.Webhook
                 case WebhookActionDummyCreationScenario.ListUpdated:
                     return WebhookActionTypes.UpdateList;
             }
+
             return WebhookActionTypes.UpdateCard;
         }
 

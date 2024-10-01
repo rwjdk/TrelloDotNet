@@ -9,6 +9,7 @@
         /// If any of the provided lists is the list of the event
         /// </summary>
         AnyOfTheseLists = 1,
+
         /// <summary>
         /// If none of the provided lists is the list of the event (used for "Any list but 'xyz'" scenarios)
         /// </summary>

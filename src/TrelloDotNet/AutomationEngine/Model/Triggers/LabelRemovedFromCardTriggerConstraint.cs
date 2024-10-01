@@ -9,12 +9,12 @@
         /// Any of these labels are removed
         /// </summary>
         AnyOfTheseLabelsAreRemoved = 1,
-        
+
         /// <summary>
         /// Any except these labels are removed (Example: Any label that is not the 'Documentation' label)
         /// </summary>
         AnyButTheseLabelsAreRemoved = 2,
-        
+
         /// <summary>
         /// Any Label is removed
         /// </summary>

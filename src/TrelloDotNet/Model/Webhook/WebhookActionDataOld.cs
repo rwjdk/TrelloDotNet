@@ -15,7 +15,7 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("due")]
         [JsonInclude]
         public DateTimeOffset? Due { get; private set; }
-        
+
         /// <summary>
         /// dueComplete
         /// </summary>
@@ -71,7 +71,7 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("idList")]
         [JsonInclude]
         public string ListId { get; private set; }
-        
+
         /// <summary>
         /// pos
         /// </summary>
@@ -85,7 +85,7 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("dueReminder")]
         [JsonInclude]
         public int? DueReminder { get; private set; }
-        
+
         /// <summary>
         /// coordinates
         /// </summary>

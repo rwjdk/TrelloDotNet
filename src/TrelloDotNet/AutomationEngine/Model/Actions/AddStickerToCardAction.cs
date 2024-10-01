@@ -40,6 +40,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             {
                 throw new AutomationException("Could not perform AddStickerToCardAction as WebhookAction did not involve a Card");
             }
+
             var trelloClient = webhookAction.TrelloClient;
             var cardId = webhookAction.Data.Card.Id;
             //Check if same image id sticker already exist
@@ -56,7 +57,6 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 processingResult.AddToLog($"Added Sticker '{StickerToAdd.ImageId}' to card '{webhookAction.Data.Card.Name}'");
                 processingResult.ActionsExecuted++;
             }
-
         }
     }
 }

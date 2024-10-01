@@ -14,7 +14,7 @@
         /// All Action Types
         /// </summary>
         public static ActionTypesToInclude All => new ActionTypesToInclude("all");
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

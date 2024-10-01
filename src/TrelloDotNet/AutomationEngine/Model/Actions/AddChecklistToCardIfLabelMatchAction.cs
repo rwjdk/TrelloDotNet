@@ -25,7 +25,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         {
             AddChecklistActionsIfLabelsMatch = addChecklistActionsIfLabelsMatch;
         }
-        
+
         /// <summary>
         /// The method called when an automation should be performed
         /// </summary>
@@ -58,6 +58,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                             {
                                 proceed = !checklistIfLabelMatch.LabelIdsThatCantBePresent.Any(labelThatCantBePresent => card.Labels.Any(x => x.Name == labelThatCantBePresent));
                             }
+
                             if (proceed)
                             {
                                 await PerformActions(checklistIfLabelMatch.AddChecklistToCardActions, webhookAction, processingResult);

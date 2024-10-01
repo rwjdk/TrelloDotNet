@@ -36,9 +36,10 @@ namespace TrelloDotNet.AutomationEngine.Model
             {
                 throw new ArgumentException("You need at least one action", nameof(actions));
             }
+
             Actions = actions;
         }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -66,6 +67,7 @@ namespace TrelloDotNet.AutomationEngine.Model
             {
                 throw new ArgumentException("You need at least one action", nameof(actions));
             }
+
             Actions = actions;
         }
 
@@ -79,7 +81,7 @@ namespace TrelloDotNet.AutomationEngine.Model
         /// </summary>
         [Obsolete("This property is Deprecated as system now support multiple Triggers in Automations. Please use Triggers.First() Instead")]
         public IAutomationTrigger Trigger { get; }
-        
+
         /// <summary>
         /// A List of Triggers of the automation (aka the first, light, initial condition of what you wish the automation to react to). Will proceed if any of the triggers are met
         /// </summary>

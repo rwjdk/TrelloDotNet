@@ -12,7 +12,7 @@ public class CheckItemStateUpdatedOnCardTriggerTest : TestBase
         var trigger = new CheckItemStateUpdatedOnCardTrigger();
         Assert.False(await trigger.IsTriggerMetAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardUpdated)));
     }
-    
+
     [Fact]
     public async Task TriggerNoneRightEvent()
     {
@@ -26,7 +26,7 @@ public class CheckItemStateUpdatedOnCardTriggerTest : TestBase
         var trigger = new CheckItemStateUpdatedOnCardTrigger(ChecklistItemState.Incomplete);
         Assert.True(await trigger.IsTriggerMetAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CheckItemStateUpdated)));
     }
-    
+
     [Fact]
     public async Task TriggerFalse()
     {

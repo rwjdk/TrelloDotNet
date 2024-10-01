@@ -45,14 +45,14 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("pos")]
         [JsonInclude]
         public decimal Position { get; private set; }
-        
+
         /// <summary>
         /// Bytes of the Attachment
         /// </summary>
         [JsonPropertyName("bytes")]
         [JsonInclude]
         public long? Bytes { get; private set; }
-        
+
         /// <summary>
         /// Date [stored UTC]
         /// </summary>
@@ -73,7 +73,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("idMember")]
         [JsonInclude]
         public string MemberId { get; private set; }
-        
+
         /// <summary>
         /// MimeType of the attachment
         /// </summary>

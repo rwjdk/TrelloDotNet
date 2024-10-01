@@ -9,14 +9,17 @@
         /// Id of the Checklist
         /// </summary>
         public string ChecklistId { get; }
+
         /// <summary>
         /// Name of the Checklist
         /// </summary>
         public string ChecklistName { get; }
+
         /// <summary>
         /// Id of the last CheckItem that was completed
         /// </summary>
         public string LastCheckItemCompletedId { get; }
+
         /// <summary>
         /// Name of the last CheckItem that was completed
         /// </summary>

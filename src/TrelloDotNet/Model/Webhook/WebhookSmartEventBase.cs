@@ -11,14 +11,17 @@ namespace TrelloDotNet.Model.Webhook
         /// ID of the Board
         /// </summary>
         public string BoardId { get; }
+
         /// <summary>
         /// Name of the Board
         /// </summary>
         public string BoardName { get; }
+
         /// <summary>
         /// Member that initiated the event
         /// </summary>
         public Member MemberCreator { get; }
+
         /// <summary>
         /// The Time of the Event in UTC Time
         /// </summary>

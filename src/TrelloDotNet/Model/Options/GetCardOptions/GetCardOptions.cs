@@ -42,12 +42,12 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         /// What member-fields to include if IncludeMembers are set to True
         /// </summary>
         public MemberFields MemberFields { get; set; }
-        
+
         /// <summary>
         /// What member-fields to include if IncludeMemberVotes are set to True
         /// </summary>
         public MemberFields MembersVotedFields { get; set; }
-        
+
         /// <summary>
         /// What checklist-fields to include if IncludeChecklists are set to True
         /// </summary>
@@ -77,12 +77,12 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         /// Whether to return Sticker objects of the card (Default: False)
         /// </summary>
         public bool IncludeStickers { get; set; }
-        
+
         /// <summary>
         /// Whether to return MemberVotes objects of the card (Default: False)
         /// </summary>
         public bool IncludeMemberVotes { get; set; }
-        
+
         /// <summary>
         /// Whether to return CustomFieldsItem objects of the card (Default: False)
         /// </summary>
@@ -120,7 +120,7 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
             {
                 parameters.Add(new QueryParameter("board_fields", string.Join(",", BoardFields.Fields)));
             }
-            
+
             if (ChecklistFields != null)
             {
                 parameters.Add(new QueryParameter("checklist_fields", string.Join(",", ChecklistFields.Fields)));
@@ -135,7 +135,7 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
             {
                 parameters.Add(new QueryParameter("memberVoted_fields", string.Join(",", MembersVotedFields.Fields)));
             }
-            
+
             parameters.Add(new QueryParameter("members", IncludeMembers));
             parameters.Add(new QueryParameter("board", IncludeBoard));
             parameters.Add(new QueryParameter("list", IncludeList));

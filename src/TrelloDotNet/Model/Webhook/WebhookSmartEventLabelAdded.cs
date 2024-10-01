@@ -9,11 +9,12 @@
         /// Id of the new Member
         /// </summary>
         public string AddedLabelId { get; }
+
         /// <summary>
         /// Name of the new Member
         /// </summary>
         public string AddedLabelName { get; }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

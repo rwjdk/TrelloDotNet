@@ -41,7 +41,7 @@ public class CardMovedToListTriggerTests : TestBase
         };
         Assert.True(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
     [Fact]
     public async Task AnyButNameStartWithTrigger()
     {
@@ -89,7 +89,7 @@ public class CardMovedToListTriggerTests : TestBase
         };
         Assert.True(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
     [Fact]
     public async Task AnyButNameContainsTrigger()
     {
@@ -113,7 +113,7 @@ public class CardMovedToListTriggerTests : TestBase
         };
         Assert.True(await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
     [Fact]
     public async Task AnyButNameRegExTrigger()
     {
@@ -156,9 +156,9 @@ public class CardMovedToListTriggerTests : TestBase
         var webhookAction = WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.MoveCardToList);
         CardMovedToListTriggerConstraint constraint = Enum.Parse<CardMovedToListTriggerConstraint>("99");
         var cardMovedToListTrigger = new CardMovedToListTrigger(constraint, Guid.NewGuid().ToString());
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () =>  await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(async () => await cardMovedToListTrigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
     [Fact]
     public async Task WrongWebActionException()
     {

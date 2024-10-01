@@ -24,7 +24,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("name")]
         [QueryParameter]
         public string Name { get; set; }
-        
+
         /// <summary>
         /// The position of the ChecklistItem on the Checklist
         /// </summary>
@@ -38,7 +38,7 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("due")]
         [QueryParameter]
         public DateTimeOffset? Due { get; set; }
-        
+
         /// <summary>
         /// Member (user) assigned to the Item [Warning: Not available in free version of Trello]
         /// </summary>

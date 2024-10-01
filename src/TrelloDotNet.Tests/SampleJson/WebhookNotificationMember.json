@@ -12,7 +12,7 @@
     "idEnterprise": null,
     "idEnterprisesDeactivated": [],
     "idMemberReferrer": null,
-    "idPremOrgsAdmin": [ "63d123a6472de44f1ea2801c" ],
+    "idPremOrgsAdmin": ["63d123a6472de44f1ea2801c"],
     "initials": "R",
     "memberType": "normal",
     "nonPublic": {},
@@ -29,8 +29,11 @@
     "domainClaimed": null,
     "email": "login@rwj.dk",
     "gravatarHash": "7bf7906fe163f05d309fe634768ef187",
-    "idBoards": [ "63d123b6b2c39a321be51c9d", "63d128787441d05619f44dbe", "63d128840231b184c3a2c1cd", "63e0bd1710289eaaa513a056", "63e1096da4ecf28dcb763ba9", "63e2c9ea3d89ea993831b722" ],
-    "idOrganizations": [ "63d123a6472de44f1ea2801c", "63e0bdc4ab548c20ba689bf9" ],
+    "idBoards": [
+      "63d123b6b2c39a321be51c9d", "63d128787441d05619f44dbe", "63d128840231b184c3a2c1cd", "63e0bd1710289eaaa513a056",
+      "63e1096da4ecf28dcb763ba9", "63e2c9ea3d89ea993831b722"
+    ],
+    "idOrganizations": ["63d123a6472de44f1ea2801c", "63e0bdc4ab548c20ba689bf9"],
     "idEnterprisesAdmin": [],
     "limits": {
       "boards": {
@@ -48,13 +51,17 @@
         }
       }
     },
-    "loginTypes": [ "atlassian" ],
+    "loginTypes": ["atlassian"],
     "marketingOptIn": {
       "optedIn": true,
       "date": "2023-01-25T12:48:22.964Z"
     },
     "messagesDismissed": [],
-    "oneTimeMessagesDismissed": [ "sent-possible-new-signup-event", "close-menu-of-first-board", "team-template-picker-63d123a6472de44f1ea2801c", "free-trial-banner-confetti-63d123a6472de44f1ea2801c", "timeline-view-suggestion-63d123a6472de44f1ea2801c", "checklist-education-banner", "calendar-view-suggestion-63d123a6472de44f1ea2801c", "CollectionsExplainer" ],
+    "oneTimeMessagesDismissed": [
+      "sent-possible-new-signup-event", "close-menu-of-first-board", "team-template-picker-63d123a6472de44f1ea2801c",
+      "free-trial-banner-confetti-63d123a6472de44f1ea2801c", "timeline-view-suggestion-63d123a6472de44f1ea2801c",
+      "checklist-education-banner", "calendar-view-suggestion-63d123a6472de44f1ea2801c", "CollectionsExplainer"
+    ],
     "prefs": {
       "privacy": {
         "fullName": "public",
@@ -69,7 +76,10 @@
     "trophies": [],
     "uploadedAvatarHash": null,
     "uploadedAvatarUrl": null,
-    "premiumFeatures": [ "additionalBoardBackgrounds", "additionalStickers", "customBoardBackgrounds", "customEmoji", "customStickers", "plugins" ],
+    "premiumFeatures": [
+      "additionalBoardBackgrounds", "additionalStickers", "customBoardBackgrounds", "customEmoji", "customStickers",
+      "plugins"
+    ],
     "isAaMastered": true,
     "ixUpdate": "1465"
   },

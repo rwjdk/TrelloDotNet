@@ -20,7 +20,7 @@ namespace TrelloDotNet.Model.Actions
         [JsonPropertyName("name")]
         [JsonInclude]
         public string Name { get; private set; }
-       
+
         /// <summary>
         /// The short-link of the Board
         /// </summary>

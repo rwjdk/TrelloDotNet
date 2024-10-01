@@ -20,7 +20,7 @@ public class LabelAddedToCardTriggerTest : TestBase
         var trigger = new LabelAddedToCardTrigger(LabelAddedToCardTriggerConstraint.AnyOfTheseLabelsAreAdded, webhookAction.Data.Label.Name) { TreatLabelNameAsId = true };
         Assert.True(await trigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
     [Fact]
     public async Task AnyButNameTrueTrigger()
     {

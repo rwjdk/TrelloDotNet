@@ -13,6 +13,7 @@ namespace TrelloDotNet.Model
         /// Url of the Link
         /// </summary>
         public string Url { get; }
+
         /// <summary>
         /// Optional name of the link (if not provided URL will be the name)
         /// </summary>

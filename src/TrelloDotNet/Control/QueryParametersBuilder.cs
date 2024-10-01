@@ -27,6 +27,7 @@ namespace TrelloDotNet.Control
                 {
                     continue;
                 }
+
                 var jsonPropertyName = (JsonPropertyNameAttribute)jsonPropertyNameAttributes.First();
                 var updateableAttribute = (QueryParameterAttribute)updateableAttributes.First();
                 var updateablePropertyType = updateableProperty.PropertyType;
@@ -39,9 +40,7 @@ namespace TrelloDotNet.Control
 
                 if (updateablePropertyType == typeof(string))
                 {
-                    parameters.Add(rawValue == null ?
-                        new QueryParameter(jsonPropertyName.Name, string.Empty) :
-                        new QueryParameter(jsonPropertyName.Name, (string)rawValue));
+                    parameters.Add(rawValue == null ? new QueryParameter(jsonPropertyName.Name, string.Empty) : new QueryParameter(jsonPropertyName.Name, (string)rawValue));
                 }
                 else if (updateablePropertyType == typeof(int) || updateablePropertyType == typeof(int?))
                 {

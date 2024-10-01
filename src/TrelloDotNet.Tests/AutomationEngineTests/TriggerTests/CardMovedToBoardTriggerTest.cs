@@ -11,7 +11,7 @@ public class CardMovedToBoardTriggerTest : TestBase
         var trigger = new CardMovedToBoardTrigger();
         Assert.True(await trigger.IsTriggerMetAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardMovedToBoard)));
     }
-    
+
     [Fact]
     public async Task TriggerFalse()
     {

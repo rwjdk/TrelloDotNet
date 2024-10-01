@@ -42,6 +42,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             {
                 throw new AutomationException("Could not perform RemoveCardDataAction as WebhookAction did not involve a Card");
             }
+
             var card = await webhookAction.Data.Card.GetAsync();
             var queryParametersToUpdate = new List<QueryParameter>();
             foreach (var dataType in DataToRemove)
@@ -54,6 +55,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                             card.Start = null;
                             queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Start.GetJsonPropertyName(), (DateTimeOffset?)null));
                         }
+
                         break;
                     case RemoveCardDataType.DueDate:
                         if (card.Due != null)
@@ -61,6 +63,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                             card.Due = null;
                             queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), (DateTimeOffset?)null));
                         }
+
                         break;
                     case RemoveCardDataType.DueComplete:
                         if (card.DueComplete)
@@ -68,6 +71,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                             card.DueComplete = false;
                             queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.DueComplete.GetJsonPropertyName(), false));
                         }
+
                         break;
                     case RemoveCardDataType.Description:
                         if (!string.IsNullOrWhiteSpace(card.Description))
@@ -75,6 +79,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                             card.Description = null;
                             queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Description.GetJsonPropertyName(), string.Empty));
                         }
+
                         break;
                     case RemoveCardDataType.AllLabels:
                         if (card.LabelIds.Any())
@@ -82,6 +87,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                             card.LabelIds = new List<string>();
                             queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.LabelIds.GetJsonPropertyName(), new List<string>()));
                         }
+
                         break;
                     case RemoveCardDataType.AllMembers:
                         if (card.MemberIds.Any())
@@ -89,6 +95,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                             card.MemberIds = new List<string>();
                             queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), new List<string>()));
                         }
+
                         break;
                     case RemoveCardDataType.Cover:
                         if (card.Cover != null && (card.Cover.Color != null || card.Cover.BackgroundImageId != null))
@@ -96,6 +103,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                             card.Cover = null;
                             queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Cover.GetJsonPropertyName(), (string)null));
                         }
+
                         break;
                     case RemoveCardDataType.AllChecklists:
                         var checklists = await webhookAction.TrelloClient.GetChecklistsOnCardAsync(card.Id);
@@ -103,6 +111,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         {
                             await webhookAction.TrelloClient.DeleteChecklistAsync(checklist.Id);
                         }
+
                         break;
                     case RemoveCardDataType.AllAttachments:
                         var attachments = await webhookAction.TrelloClient.GetAttachmentsOnCardAsync(card.Id);
@@ -110,6 +119,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         {
                             await webhookAction.TrelloClient.DeleteAttachmentOnCardAsync(card.Id, attachment.Id);
                         }
+
                         break;
                     case RemoveCardDataType.AllComments:
                         var comments = await webhookAction.TrelloClient.GetAllCommentsOnCardAsync(card.Id);
@@ -117,6 +127,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         {
                             await webhookAction.TrelloClient.DeleteCommentActionAsync(comment.Id);
                         }
+
                         break;
                     case RemoveCardDataType.AllStickers:
                         var stickers = await webhookAction.TrelloClient.GetStickersOnCardAsync(card.Id);
@@ -124,6 +135,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         {
                             await webhookAction.TrelloClient.DeleteStickerAsync(card.Id, sticker.Id);
                         }
+
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

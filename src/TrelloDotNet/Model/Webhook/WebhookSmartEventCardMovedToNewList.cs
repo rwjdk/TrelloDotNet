@@ -9,14 +9,17 @@
         /// The Id of the list the card was moved to
         /// </summary>
         public string NewListId { get; }
+
         /// <summary>
         /// The name of the list the card was moved to
         /// </summary>
         public string NewListName { get; }
+
         /// <summary>
         /// The id of the list the card was moved from
         /// </summary>
         public string OldListId { get; }
+
         /// <summary>
         /// The name of the list the card was moved from
         /// </summary>

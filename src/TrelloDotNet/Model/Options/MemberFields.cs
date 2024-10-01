@@ -17,7 +17,7 @@ namespace TrelloDotNet.Model.Options
         /// Include all fields 
         /// </summary>
         public static MemberFields All => new MemberFields("all");
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

@@ -9,13 +9,13 @@
         /// The Json from the Webhook
         /// </summary>
         public string JsonFromWebhook { get; }
-        
+
         /// <summary>
         /// The Signature from the X-Trello-Webhook header for signature validation
         /// </summary>
         public string Signature { get; }
-        
-        
+
+
         /// <summary>
         /// The Webhook URL for signature validation
         /// </summary>

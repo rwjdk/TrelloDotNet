@@ -9,11 +9,12 @@
         /// Id of the new Member
         /// </summary>
         public string RemovedMemberId { get; }
+
         /// <summary>
         /// Name of the new Member
         /// </summary>
         public string RemovedMemberName { get; }
-        
+
         /// <summary>
         /// Constructor
         /// </summary>

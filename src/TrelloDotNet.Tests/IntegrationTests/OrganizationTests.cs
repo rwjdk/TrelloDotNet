@@ -12,7 +12,7 @@ public class OrganizationTests : TestBase
         string? id = null;
         try
         {
-            var displayName = "UnitTestOrganization-"+Guid.NewGuid();
+            var displayName = "UnitTestOrganization-" + Guid.NewGuid();
             var input = new Organization(displayName);
             const string description = "Some Description";
             input.Description = description;
@@ -40,10 +40,7 @@ public class OrganizationTests : TestBase
         {
             if (id != null)
             {
-                await Assert.ThrowsAsync<SecurityException>(async () =>
-                {
-                    await TrelloClient.DeleteOrganizationAsync(id);
-                });
+                await Assert.ThrowsAsync<SecurityException>(async () => { await TrelloClient.DeleteOrganizationAsync(id); });
 
                 TrelloClient.Options.AllowDeleteOfOrganizations = true;
                 await TrelloClient.DeleteOrganizationAsync(id);
@@ -51,5 +48,4 @@ public class OrganizationTests : TestBase
             }
         }
     }
-
 }

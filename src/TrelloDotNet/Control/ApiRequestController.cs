@@ -45,6 +45,7 @@ namespace TrelloDotNet.Control
             {
                 return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => Get(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
+
             return responseContent; //Content is assumed JSON
         }
 
@@ -74,6 +75,7 @@ namespace TrelloDotNet.Control
                 {
                     return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => PostWithAttachmentFileUpload(suffix, attachmentFile, cancellationToken, retry, parameters), retryCount, cancellationToken);
                 }
+
                 return responseContent; //Content is assumed JSON
             }
         }
@@ -87,6 +89,7 @@ namespace TrelloDotNet.Control
             {
                 return await PreformRetryIfNeededOrThrow(uri, content, retry => Post(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
+
             return content; //Content is assumed JSON
         }
 
@@ -106,6 +109,7 @@ namespace TrelloDotNet.Control
             {
                 return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => Put(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
+
             return responseContent; //Content is assumed JSON
         }
 
@@ -125,6 +129,7 @@ namespace TrelloDotNet.Control
             {
                 return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => PutWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
             }
+
             return responseContent; //Content is assumed JSON
         }
 
@@ -170,10 +175,11 @@ namespace TrelloDotNet.Control
             {
                 return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => Delete(suffix, cancellationToken, retry), retryCount, cancellationToken);
             }
+
             return null;
         }
 
-        private async Task<string> PreformRetryIfNeededOrThrow(Uri uri, string responseContent, Func<int,Task<string>> toRetry, int retryCount, CancellationToken cancellationToken)
+        private async Task<string> PreformRetryIfNeededOrThrow(Uri uri, string responseContent, Func<int, Task<string>> toRetry, int retryCount, CancellationToken cancellationToken)
         {
             if (responseContent.Contains("API_TOKEN_LIMIT_EXCEEDED") && retryCount <= _client.Options.MaxRetryCountForTokenLimitExceeded)
             {
@@ -181,6 +187,7 @@ namespace TrelloDotNet.Control
                 retryCount++;
                 return await toRetry(retryCount);
             }
+
             throw new TrelloApiException(responseContent, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message       
         }
     }

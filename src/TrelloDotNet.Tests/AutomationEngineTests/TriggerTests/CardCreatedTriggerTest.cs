@@ -11,7 +11,7 @@ public class CardCreatedTriggerTest : TestBase
         var trigger = new CardCreatedTrigger();
         Assert.True(await trigger.IsTriggerMetAsync(WebhookAction.CreateDummy(TrelloClient, WebhookAction.WebhookActionDummyCreationScenario.CardCreated)));
     }
-    
+
     [Fact]
     public async Task TriggerFalse()
     {

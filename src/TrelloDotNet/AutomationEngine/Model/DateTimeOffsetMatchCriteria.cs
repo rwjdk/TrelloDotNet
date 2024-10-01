@@ -9,12 +9,12 @@
         /// The value is the same
         /// </summary>
         Equal,
-        
+
         /// <summary>
         /// The value is before the provided
         /// </summary>
         Before,
-        
+
         /// <summary>
         /// The value is after the provided
         /// </summary>

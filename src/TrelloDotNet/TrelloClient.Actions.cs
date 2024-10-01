@@ -95,17 +95,17 @@ namespace TrelloDotNet
             {
                 parameters.Add(new QueryParameter("limit", limit));
             }
-            
+
             if (page > 0)
             {
                 parameters.Add(new QueryParameter("page", page));
             }
-            
+
             if (before != null)
             {
                 parameters.Add(new QueryParameter("before", before));
             }
-            
+
             if (since != null)
             {
                 parameters.Add(new QueryParameter("since", since));

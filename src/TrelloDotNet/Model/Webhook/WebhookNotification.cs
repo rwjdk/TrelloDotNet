@@ -20,7 +20,5 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("webhook")]
         [JsonInclude]
         public Webhook Webhook { get; private set; }
-
-
     }
 }

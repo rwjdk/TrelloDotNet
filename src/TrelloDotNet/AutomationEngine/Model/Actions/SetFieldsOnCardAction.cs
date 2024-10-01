@@ -16,6 +16,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
         /// List of field-values to set
         /// </summary>
         public ISetCardFieldValue[] FieldValues { get; }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -37,6 +38,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             {
                 throw new AutomationException("Could not perform SetFieldsOnCardAction as WebhookAction did not involve a Card");
             }
+
             var card = await webhookAction.Data.Card.GetAsync();
             var queryParametersToAdd = new List<QueryParameter>();
             foreach (var fieldValue in FieldValues)
@@ -46,7 +48,6 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                 {
                     queryParametersToAdd.Add(queryParameter);
                 }
-
             }
 
             if (queryParametersToAdd.Any())

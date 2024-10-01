@@ -88,7 +88,7 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("idList")]
         [JsonInclude]
         public string ListId { get; private set; }
-        
+
         /// <summary>
         /// dueReminder
         /// </summary>
@@ -157,6 +157,5 @@ namespace TrelloDotNet.Model.Webhook
                 Position = 1
             };
         }
-
     }
 }

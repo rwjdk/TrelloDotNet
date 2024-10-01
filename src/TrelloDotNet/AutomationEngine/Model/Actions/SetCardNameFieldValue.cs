@@ -38,6 +38,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         card.Name = Value;
                         return true;
                     }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

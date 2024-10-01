@@ -11,6 +11,7 @@ namespace TrelloDotNet.AutomationEngine.Model
         /// An instance of the TrelloClient, connected with same APIKey/token as the Webhook was configured with
         /// </summary>
         public TrelloClient TrelloClient { get; }
+
         /// <summary>
         /// One or more Automations the Automation Engine should consider when running
         /// </summary>

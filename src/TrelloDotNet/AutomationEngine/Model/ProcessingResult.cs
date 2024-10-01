@@ -11,23 +11,27 @@ namespace TrelloDotNet.AutomationEngine.Model
         /// Log of events and actions performed
         /// </summary>
         public List<ProcessingResultLogEntry> Log { get; }
+
         /// <summary>
         /// The number of actions executed
         /// </summary>
         public int ActionsExecuted { get; set; }
+
         /// <summary>
         /// The Number of actions skipped (aka was requested to execute but did not need to as data was in already OK state)
         /// </summary>
         public int ActionsSkipped { get; set; }
+
         /// <summary>
         /// The number of automations processed
         /// </summary>
         public int AutomationsProcessed { get; set; }
+
         /// <summary>
         /// The number of automations skipped (due to their trigger or conditions not being met)
         /// </summary>
         public int AutomationsSkipped { get; set; }
-       
+
         /// <summary>
         /// Constructor
         /// </summary>

@@ -20,7 +20,7 @@ public class LabelRemovedFromCardTriggerTest : TestBase
         var trigger = new LabelRemovedFromCardTrigger(LabelRemovedFromCardTriggerConstraint.AnyOfTheseLabelsAreRemoved, webhookAction.Data.Label.Name) { TreatLabelNameAsId = true };
         Assert.True(await trigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
     [Fact]
     public async Task AnyButNameTrueTrigger()
     {

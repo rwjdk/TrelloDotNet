@@ -9,34 +9,42 @@
         /// boards
         /// </summary>
         public const string Boards = "boards";
+
         /// <summary>
         /// cards
         /// </summary>
         public const string Cards = "cards";
+
         /// <summary>
         /// lists
         /// </summary>
         public const string Lists = "lists";
+
         /// <summary>
         /// checklists
         /// </summary>
         public const string Checklists = "checklists";
+
         /// <summary>
         /// checkItems
         /// </summary>
         public const string CheckItems = "checkItems";
+
         /// <summary>
         /// members
         /// </summary>
         public const string Members = "members";
+
         /// <summary>
         /// labels
         /// </summary>
         public const string Labels = "labels";
+
         /// <summary>
         /// webhooks
         /// </summary>
         public const string Webhooks = "webhooks";
+
         /// <summary>
         /// tokens
         /// </summary>
@@ -51,7 +59,7 @@
         /// customFields
         /// </summary>
         public const string CustomFields = "customFields";
-        
+
         /// <summary>
         /// customFieldItems
         /// </summary>

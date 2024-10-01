@@ -120,7 +120,7 @@ namespace TrelloDotNet.Model.Actions
         [JsonPropertyName("website")]
         [JsonInclude]
         public string Website { get; private set; }
-        
+
         /// <summary>
         /// Text of Comment
         /// </summary>

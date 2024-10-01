@@ -13,6 +13,7 @@ namespace TrelloDotNet.AutomationEngine.Model
         /// Timestamp of when log was created in UTC time
         /// </summary>
         public DateTimeOffset Timestamp { get; set; }
+
         /// <summary>
         /// Message of the Log
         /// </summary>

@@ -9,6 +9,7 @@
         /// Id of the Card
         /// </summary>
         public string CardId { get; }
+
         /// <summary>
         /// Name of the Card
         /// </summary>

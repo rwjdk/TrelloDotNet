@@ -9,7 +9,7 @@
         /// Any of these Members are removed
         /// </summary>
         AnyOfTheseMembersAreRemoved = 1,
-        
+
         /// <summary>
         /// Any except these Members are removed
         /// </summary>

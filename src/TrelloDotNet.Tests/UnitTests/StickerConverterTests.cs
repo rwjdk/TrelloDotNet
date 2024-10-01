@@ -21,7 +21,7 @@ public class StickerConverterTests
         Assert.Equal("warning", Sticker.DefaultImageToString(StickerDefaultImageId.Warning));
         Assert.Throws<ArgumentOutOfRangeException>(() => Sticker.DefaultImageToString(StickerDefaultImageId.NotADefault));
     }
-    
+
     [Fact]
     public void StringToDefaultImageId()
     {

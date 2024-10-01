@@ -20,7 +20,7 @@ public class MemberAddedToCardTriggerTest : TestBase
         var trigger = new MemberAddedToCardTrigger(MemberAddedToCardTriggerConstraint.AnyOfTheseMembersAreAdded, webhookAction.Data.Member.Name) { TreatMemberNameAsId = true };
         Assert.True(await trigger.IsTriggerMetAsync(webhookAction));
     }
-    
+
     [Fact]
     public async Task AnyButNameTrueTrigger()
     {

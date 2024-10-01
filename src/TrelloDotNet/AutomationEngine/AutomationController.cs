@@ -43,7 +43,7 @@ namespace TrelloDotNet.AutomationEngine
         public async Task<ProcessingResult> ProcessJsonFromWebhookAsync(ProcessingRequest request, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            
+
             var result = new ProcessingResult();
 
             if ((!string.IsNullOrEmpty(request.Signature) || !string.IsNullOrEmpty(request.WebhookUrl))
@@ -52,7 +52,7 @@ namespace TrelloDotNet.AutomationEngine
                 result.AddToLog("Webhook Signature Validation failed, skipping automations");
                 return result;
             }
-            
+
             WebhookNotification data = _receiver.ConvertJsonToWebhookNotification(request.JsonFromWebhook);
             var webhookAction = data.Action;
 
@@ -67,11 +67,12 @@ namespace TrelloDotNet.AutomationEngine
                     {
                         triggerBeingChecked = trigger;
                         triggerMet = await trigger.IsTriggerMetAsync(webhookAction);
-                        if(triggerMet)
+                        if (triggerMet)
                         {
                             break;
                         }
                     }
+
                     if (!triggerMet)
                     {
                         result.AddToLog($"Automation '{automation.Name}' was not processed as trigger was not met");
@@ -85,6 +86,7 @@ namespace TrelloDotNet.AutomationEngine
                     {
                         throw new AutomationException($"Error checking Trigger of type '{triggerBeingChecked.GetType()}' in automation '{automation.Name}'{AddErrorContext(data)}", e);
                     }
+
                     throw new AutomationException($"Error checking Trigger in automation '{automation.Name}'{AddErrorContext(data)}", e);
                 }
 
@@ -120,7 +122,7 @@ namespace TrelloDotNet.AutomationEngine
                             cancellationToken.ThrowIfCancellationRequested();
                             await actionAction.PerformActionAsync(webhookAction, result);
                         }
-                        catch(StopProcessingFurtherActionException)
+                        catch (StopProcessingFurtherActionException)
                         {
                             return result;
                         }
@@ -128,7 +130,6 @@ namespace TrelloDotNet.AutomationEngine
                         {
                             throw new AutomationException($"Error performing Action of type '{actionAction.GetType()}' in automation '{automation.Name}'{AddErrorContext(data)}", e);
                         }
-
                     }
                 }
                 else
@@ -137,6 +138,7 @@ namespace TrelloDotNet.AutomationEngine
                     result.AutomationsSkipped++;
                 }
             }
+
             return result;
         }
 

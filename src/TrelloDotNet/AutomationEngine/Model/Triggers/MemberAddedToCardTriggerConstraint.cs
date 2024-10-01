@@ -9,7 +9,7 @@
         /// Trigger is true if any of the provided Member are added
         /// </summary>
         AnyOfTheseMembersAreAdded = 1,
-        
+
         /// <summary>
         /// Trigger is true if any but the provided Members are added
         /// </summary>
