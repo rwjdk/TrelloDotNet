@@ -50,6 +50,11 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         /// </summary>
         public bool IncludePluginData { get; set; }
 
+        /// <summary>
+        /// Additional Parameters not supported out-of-the-box
+        /// </summary>
+        public List<QueryParameter> AdditionalParameters { get; set; } = new List<QueryParameter>();
+
         internal QueryParameter[] GetParameters()
         {
             List<QueryParameter> parameters = new List<QueryParameter>();
@@ -80,6 +85,7 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
             parameters.Add(new QueryParameter("cards", IncludeCards.GetJsonPropertyName()));
             parameters.Add(new QueryParameter("labels", IncludeLabels ? "all" : "none"));
             parameters.Add(new QueryParameter("pluginData", IncludePluginData));
+            parameters.AddRange(AdditionalParameters);
 
             return parameters.ToArray();
         }

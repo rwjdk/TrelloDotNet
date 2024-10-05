@@ -1,5 +1,6 @@
 ﻿using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
+using TrelloDotNet.Model.Options.GetCardOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -32,17 +33,12 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
             }
         }
 
-        try
+        Card cardAfterAttachments = await TrelloClient.GetCardAsync(card.Id, new GetCardOptions
         {
-            TrelloClient.Options.IncludeAttachmentsInCardGetMethods = true;
-            Card cardAfterAttachments = await TrelloClient.GetCardAsync(card.Id);
-            Assert.Equal(2, cardAfterAttachments.Attachments.Count);
-            Assert.Equal(att2.Id, cardAfterAttachments.AttachmentCover);
-        }
-        finally
-        {
-            TrelloClient.Options.IncludeAttachmentsInCardGetMethods = false;
-        }
+            IncludeAttachments = GetCardOptionsIncludeAttachments.True
+        });
+        Assert.Equal(2, cardAfterAttachments.Attachments.Count);
+        Assert.Equal(att2.Id, cardAfterAttachments.AttachmentCover);
 
         var attachments = await TrelloClient.GetAttachmentsOnCardAsync(card.Id);
         Assert.Equal(2, attachments.Count);

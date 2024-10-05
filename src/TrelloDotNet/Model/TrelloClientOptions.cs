@@ -1,4 +1,6 @@
-﻿namespace TrelloDotNet.Model
+﻿using System;
+
+namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Options for the Trello Client
@@ -18,11 +20,13 @@
         /// <summary>
         /// Control if cards should retrieve Custom Fields when retrieving cards (WARNING: Non-Get-Methods returning Card will NOT include Custom fields)
         /// </summary>
+        [Obsolete("Use Card Methods with 'GetCardOptions' parameter Instead [Will be removed in v2.0 of this nuGet Package]")]
         public bool IncludeCustomFieldsInCardGetMethods { get; set; }
 
         /// <summary>
         /// Control if cards should retrieve Attachments when retrieving cards (WARNING: Non-Get-Methods returning Card will NOT include Attachments)
         /// </summary>
+        [Obsolete("Use Card Methods with 'GetCardOptions' parameter Instead [Will be removed in v2.0 of this nuGet Package]")]
         public bool IncludeAttachmentsInCardGetMethods { get; set; }
 
         /// <summary>
@@ -48,6 +52,19 @@
         /// <summary>
         /// Constructor
         /// </summary>
+        public TrelloClientOptions()
+        {
+            ApiCallExceptionOption = ApiCallExceptionOption.IncludeUrlButMaskCredentials;
+            AllowDeleteOfBoards = false;
+            AllowDeleteOfOrganizations = false;
+            MaxRetryCountForTokenLimitExceeded = 3;
+            DelayInSecondsToWaitInTokenLimitExceededRetry = 1;
+            Secret = null;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         /// <param name="apiCallExceptionOption">Control level of URL Details are shown in Exceptions from calls to the API</param>
         /// <param name="allowDeleteOfBoards">Controls if it is allowed to delete Boards (secondary confirmation)</param>
         /// <param name="includeCustomFieldsInCardGetMethods">Control if cards should retrieve Custom Fields when retrieving cards (WARNING: Non Get-Methods returning Card will NOT include Custom fields)</param>
@@ -59,6 +76,7 @@
         /// Trello API secret for Webhook signature validation.
         /// When passing a secret, signature validation will be turned on for all incoming Webhooks.
         /// </param>
+        [Obsolete("Use empty constructor instead [Will be removed in v2.0 of this nuGet Package]")]
         public TrelloClientOptions(
             ApiCallExceptionOption apiCallExceptionOption = ApiCallExceptionOption.IncludeUrlButMaskCredentials,
             bool allowDeleteOfBoards = false,
@@ -71,8 +89,10 @@
         {
             ApiCallExceptionOption = apiCallExceptionOption;
             AllowDeleteOfBoards = allowDeleteOfBoards;
+#pragma warning disable CS0618 // Type or member is obsolete
             IncludeCustomFieldsInCardGetMethods = includeCustomFieldsInCardGetMethods;
             IncludeAttachmentsInCardGetMethods = includeAttachmentsInCardGetMethods;
+#pragma warning restore CS0618 // Type or member is obsolete
             AllowDeleteOfOrganizations = allowDeleteOfOrganizations;
             MaxRetryCountForTokenLimitExceeded = maxRetryCountForTokenLimitExceeded;
             DelayInSecondsToWaitInTokenLimitExceededRetry = delayInSecondsToWaitInTokenLimitExceededRetry;

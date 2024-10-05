@@ -12,6 +12,11 @@ namespace TrelloDotNet.Model.Options.GetMemberOptions
         /// </summary>
         public MemberFields MemberFields { get; set; }
 
+        /// <summary>
+        /// Additional Parameters not supported out-of-the-box
+        /// </summary>
+        public List<QueryParameter> AdditionalParameters { get; set; } = new List<QueryParameter>();
+
         internal QueryParameter[] GetParameters()
         {
             List<QueryParameter> parameters = new List<QueryParameter>();
@@ -19,6 +24,8 @@ namespace TrelloDotNet.Model.Options.GetMemberOptions
             {
                 parameters.Add(new QueryParameter("fields", string.Join(",", MemberFields.Fields)));
             }
+
+            parameters.AddRange(AdditionalParameters);
 
             return parameters.ToArray();
         }

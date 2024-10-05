@@ -93,7 +93,27 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         /// </summary>
         public BoardFields BoardFields { get; set; }
 
-        internal QueryParameter[] GetParameters()
+        /// <summary>
+        /// Limit how many object are returned (Default All) [Only used by methods where multiple objects are returned
+        /// </summary>
+        public int? Limit { get; set; }
+
+        /// <summary>
+        /// A Card ID
+        /// </summary>
+        public string Before { get; set; } = null;
+
+        /// <summary>
+        /// A Card ID
+        /// </summary>
+        public string Since { get; set; } = null;
+
+        /// <summary>
+        /// Additional Parameters not supported out-of-the-box
+        /// </summary>
+        public List<QueryParameter> AdditionalParameters { get; set; } = new List<QueryParameter>();
+
+        internal QueryParameter[] GetParameters(bool multipleObjects)
         {
             List<QueryParameter> parameters = new List<QueryParameter>();
             if (CardFields != null)
@@ -159,6 +179,26 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            if (multipleObjects)
+            {
+                if (Limit.HasValue)
+                {
+                    parameters.Add(new QueryParameter("limit", Limit.Value));
+                }
+
+                if (Before != null)
+                {
+                    parameters.Add(new QueryParameter("before", Before));
+                }
+
+                if (Since != null)
+                {
+                    parameters.Add(new QueryParameter("since", Since));
+                }
+            }
+
+            parameters.AddRange(AdditionalParameters);
 
             return parameters.ToArray();
         }

@@ -3,6 +3,7 @@ using TrelloDotNet.AutomationEngine.Interface;
 using TrelloDotNet.AutomationEngine.Model;
 using TrelloDotNet.AutomationEngine.Model.Actions;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Webhook;
 using Label = TrelloDotNet.Model.Label;
 
@@ -321,9 +322,10 @@ public class ActionTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
         );
         await action.PerformActionAsync(webhookAction, processingResult);
 
-        TrelloClient.Options.IncludeAttachmentsInCardGetMethods = true;
-        var cardAfterPerformAction = await TrelloClient.GetCardAsync(card.Id);
-        TrelloClient.Options.IncludeAttachmentsInCardGetMethods = false;
+        var cardAfterPerformAction = await TrelloClient.GetCardAsync(card.Id, new GetCardOptions
+        {
+            IncludeAttachments = GetCardOptionsIncludeAttachments.True
+        });
         Assert.Equal(string.Empty, cardAfterPerformAction.Description);
         Assert.Empty(cardAfterPerformAction.Attachments);
         Assert.Null(cardAfterPerformAction.Due);

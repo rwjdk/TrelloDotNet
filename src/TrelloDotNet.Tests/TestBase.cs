@@ -22,7 +22,7 @@ public abstract class TestBase
 
             var apiKey = config["TrelloApiKey"];
             var token = config["TrelloToken"];
-            var trelloClientOptions = new TrelloClientOptions(includeCustomFieldsInCardGetMethods: true)
+            var trelloClientOptions = new TrelloClientOptions
             {
                 MaxRetryCountForTokenLimitExceeded = 10,
                 DelayInSecondsToWaitInTokenLimitExceededRetry = 2

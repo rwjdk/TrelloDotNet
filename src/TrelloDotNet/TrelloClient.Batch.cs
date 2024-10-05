@@ -48,7 +48,7 @@ namespace TrelloDotNet
         /// <returns>The list of Cards</returns>
         public async Task<List<Card>> GetCardsAsync(List<string> ids, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            StringBuilder parametersAsString = ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1);
+            StringBuilder parametersAsString = ApiRequestController.GetParametersAsString(options.GetParameters(false)).Replace("&", "?", 0, 1);
             return await ExecuteBatchedRequestAsync<Card>(ids.Select(id => $"/{UrlPaths.Cards}/{id}{parametersAsString}").ToList(), cancellationToken);
         }
 

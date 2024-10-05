@@ -13,7 +13,7 @@
 		<PackageProjectUrl>https://github.com/rwjdk/TrelloDotNet/wiki</PackageProjectUrl>
 		<PackageIcon>trello.png</PackageIcon>
 		<PackageTags>trello api rest .NET dotNet crud wrapper webhook automation</PackageTags>
-		<Version>1.11.0</Version>
+		<Version>1.11.1</Version>
 		<Company>RWJDK</Company>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<IncludeSymbols>true</IncludeSymbols>
@@ -50,6 +50,9 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Model\Options\GetLabelOptions\" />
 	</ItemGroup>
 
 </Project>

@@ -120,7 +120,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetCard(string cardId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Cards}/{cardId}" + AddGetCardOptions(options);
+            return $"{UrlPaths.Cards}/{cardId}" + AddGetCardOptions(options, false);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetCardsOnBoard(string boardId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/" + AddGetCardOptions(options);
+            return $"{UrlPaths.Boards}/{boardId}/{UrlPaths.Cards}/" + AddGetCardOptions(options, true);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetCardsInList(string listId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/" + AddGetCardOptions(options);
+            return $"{UrlPaths.Lists}/{listId}/{UrlPaths.Cards}/" + AddGetCardOptions(options, true);
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace TrelloDotNet.Control
         /// <returns>The URL Suffix</returns>
         public static string GetCardsForMember(string memberId, GetCardOptions options = null)
         {
-            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}/" + AddGetCardOptions(options);
+            return $"{UrlPaths.Members}/{memberId}/{UrlPaths.Cards}/" + AddGetCardOptions(options, true);
         }
 
         /// <summary>
@@ -397,9 +397,9 @@ namespace TrelloDotNet.Control
             return $"{UrlPaths.Boards}/{boardId}/pluginData";
         }
 
-        private static string AddGetCardOptions(GetCardOptions options)
+        private static string AddGetCardOptions(GetCardOptions options, bool multipleObjects)
         {
-            return options != null ? ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1).ToString() : string.Empty;
+            return options != null ? ApiRequestController.GetParametersAsString(options.GetParameters(multipleObjects)).Replace("&", "?", 0, 1).ToString() : string.Empty;
         }
 
         private static string AddGetBoardOptions(GetBoardOptions options)

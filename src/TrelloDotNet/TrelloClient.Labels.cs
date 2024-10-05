@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.GetLabelOptions;
 
 namespace TrelloDotNet
 {
@@ -29,6 +30,18 @@ namespace TrelloDotNet
         public async Task<List<Label>> GetLabelsOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Label>>(GetUrlBuilder.GetLabelsOfBoard(boardId), cancellationToken);
+        }
+
+        /// <summary>
+        /// Get a list of Labels defined for a board
+        /// </summary>
+        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="options">Option on how and what to get</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Labels</returns>
+        public async Task<List<Label>> GetLabelsOfBoardAsync(string boardId, GetLabelOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Label>>(GetUrlBuilder.GetLabelsOfBoard(boardId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>

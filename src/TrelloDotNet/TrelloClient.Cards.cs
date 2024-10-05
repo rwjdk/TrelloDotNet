@@ -73,33 +73,6 @@ namespace TrelloDotNet
             return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", cancellationToken, payload, parameters.ToArray());
         }
 
-        private static string GeneratePayloadForCoverUpdate(CardCover cardCover, List<QueryParameter> parameters)
-        {
-            //Special code for Cover
-            string payload = string.Empty;
-            if (cardCover == null)
-            {
-                //Remove cover
-                parameters.Add(new QueryParameter("cover", ""));
-            }
-            else
-            {
-                cardCover.PrepareForAddUpdate();
-                if (cardCover.Color != null || cardCover.BackgroundImageId != null)
-                {
-                    QueryParameter queryParameter = parameters.FirstOrDefault(x => x.Name == "idAttachmentCover");
-                    if (queryParameter != null)
-                    {
-                        parameters.Remove(queryParameter); //This parameter can't be there while a cover is added
-                    }
-                }
-
-                payload = $"{{\"cover\":{JsonSerializer.Serialize(cardCover)}}}";
-            }
-
-            return payload;
-        }
-
         /// <summary>
         /// Archive all cards on in a List
         /// </summary>
@@ -145,8 +118,10 @@ namespace TrelloDotNet
         public async Task<Card> GetCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<Card>(GetUrlBuilder.GetCard(cardId), cancellationToken,
+#pragma warning disable CS0618 // Type or member is obsolete
                 new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods)
+#pragma warning restore CS0618 // Type or member is obsolete
             );
         }
 
@@ -159,7 +134,7 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> GetCardAsync(string cardId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Card>(GetUrlBuilder.GetCard(cardId), cancellationToken, options.GetParameters());
+            return await _apiRequestController.Get<Card>(GetUrlBuilder.GetCard(cardId), cancellationToken, options.GetParameters(false));
         }
 
         /// <summary>
@@ -171,8 +146,10 @@ namespace TrelloDotNet
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken,
+#pragma warning disable CS0618 // Type or member is obsolete
                 new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods)
+#pragma warning restore CS0618 // Type or member is obsolete
             );
         }
 
@@ -207,7 +184,7 @@ namespace TrelloDotNet
                 }
             }
 
-            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken, options.GetParameters());
+            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken, options.GetParameters(true));
             if (options.IncludeList)
             {
                 var lists = await GetListsOnBoardAsync(boardId, cancellationToken);
@@ -238,8 +215,10 @@ namespace TrelloDotNet
         public async Task<List<Card>> GetCardsInListAsync(string listId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken,
+#pragma warning disable CS0618 // Type or member is obsolete
                 new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods));
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
@@ -262,7 +241,7 @@ namespace TrelloDotNet
                 }
             }
 
-            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken, options.GetParameters());
+            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken, options.GetParameters(true));
             if (options.IncludeList)
             {
                 var list = await GetListAsync(listId, cancellationToken);
@@ -296,8 +275,10 @@ namespace TrelloDotNet
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken,
+#pragma warning disable CS0618 // Type or member is obsolete
                 new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
                 new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods));
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
@@ -321,7 +302,7 @@ namespace TrelloDotNet
                 }
             }
 
-            var cards = await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters());
+            var cards = await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters(true));
             if (options.IncludeList)
             {
                 var lists = await GetListsOnBoardAsync(boardId, cancellationToken);
@@ -384,7 +365,7 @@ namespace TrelloDotNet
                 }
             }
 
-            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsForMember(memberId), cancellationToken, options.GetParameters());
+            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsForMember(memberId), cancellationToken, options.GetParameters(true));
             if (options.IncludeList)
             {
                 var boardsToGetListsFor = cards.Select(x => x.BoardId).Distinct().ToArray();
@@ -722,6 +703,33 @@ namespace TrelloDotNet
             }
 
             return await UpdateCardAsync(cardId, parameters, cancellationToken);
+        }
+
+        private static string GeneratePayloadForCoverUpdate(CardCover cardCover, List<QueryParameter> parameters)
+        {
+            //Special code for Cover
+            string payload = string.Empty;
+            if (cardCover == null)
+            {
+                //Remove cover
+                parameters.Add(new QueryParameter("cover", ""));
+            }
+            else
+            {
+                cardCover.PrepareForAddUpdate();
+                if (cardCover.Color != null || cardCover.BackgroundImageId != null)
+                {
+                    QueryParameter queryParameter = parameters.FirstOrDefault(x => x.Name == "idAttachmentCover");
+                    if (queryParameter != null)
+                    {
+                        parameters.Remove(queryParameter); //This parameter can't be there while a cover is added
+                    }
+                }
+
+                payload = $"{{\"cover\":{JsonSerializer.Serialize(cardCover)}}}";
+            }
+
+            return payload;
         }
     }
 }

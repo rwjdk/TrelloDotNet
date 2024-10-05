@@ -79,7 +79,7 @@ namespace TrelloDotNet.AutomationEngine.Model
         /// <summary>
         /// The Trigger of the automation (aka the first, light, initial condition of what you wish the automation to react to)
         /// </summary>
-        [Obsolete("This property is Deprecated as system now support multiple Triggers in Automations. Please use Triggers.First() Instead")]
+        [Obsolete("This property is Deprecated as system now support multiple Triggers in Automations. Please use Triggers.First() Instead [Will be removed in v2.0 of this nuGet Package]")]
         public IAutomationTrigger Trigger { get; }
 
         /// <summary>

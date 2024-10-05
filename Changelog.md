@@ -1,6 +1,16 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.1 (5th of October 2024)
+#### Special 
+- Started Long-term preparing for v2.0 by obsoleting various things
+
+#### TrelloClient
+- Added overload [GetLabelsOfBoardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetLabelsOfBoardAsync) that let you specify `GetLabelOptions` in order to control fields returned and how many labels are returned (Default: 50, Max: 1000) 
+- All Get`<object>`Options now have an `AddtionalParameters` where you can inject additional QueryParameters should the out-of-the box framework not support it
+- Added `Limit`, and `Before`/`Since` (paginating options) to `GetCardOptions`
+<hr/>
+
 ## 1.11.0 (17th of September 2024)
 #### TrelloClient
 - Added options on `CustomFieldItemValue` to get the raw Custom Field Values as String/DateTimeOffset?/Decimal?/Bool (so you do not need to parse them yourself)
