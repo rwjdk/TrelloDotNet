@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## Unreleased
+#### TrelloClient
+- `GetBoardOptions` now have Filter options (All, Open, Closed or Starred boards)
+
+<hr/>
+
 ## 1.11.1 (5th of October 2024)
 #### Special 
 - Started Long-term preparing for v2.0 by obsoleting various things
@@ -9,6 +15,7 @@
 - Added overload [GetLabelsOfBoardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetLabelsOfBoardAsync) that let you specify `GetLabelOptions` in order to control fields returned and how many labels are returned (Default: 50, Max: 1000) 
 - All Get`<object>`Options now have an `AddtionalParameters` where you can inject additional QueryParameters should the out-of-the box framework not support it
 - Added `Limit`, and `Before`/`Since` (paginating options) to `GetCardOptions`
+
 <hr/>
 
 ## 1.11.0 (17th of September 2024)
