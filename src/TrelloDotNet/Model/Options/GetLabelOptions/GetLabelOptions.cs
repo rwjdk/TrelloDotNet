@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System;
-using TrelloDotNet.Model.Options.GetCardOptions;
 
 namespace TrelloDotNet.Model.Options.GetLabelOptions
 {

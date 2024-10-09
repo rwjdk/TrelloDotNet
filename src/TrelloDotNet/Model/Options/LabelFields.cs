@@ -33,7 +33,7 @@ namespace TrelloDotNet.Model.Options
         /// <param name="fields">Type of Field to include</param>
         public LabelFields(params LabelFieldsType[] fields)
         {
-            Fields = fields.Select(x => EnumHelper.GetJsonPropertyName(x)).ToArray();
+            Fields = fields.Select(x => x.GetJsonPropertyName()).ToArray();
         }
     }
 }

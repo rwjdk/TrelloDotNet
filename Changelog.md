@@ -1,10 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## Unreleased
+## 1.11.2 (9th of October 2024)
 #### TrelloClient
 - `GetBoardOptions` now have Filter options (All, Open, Closed or Starred boards)
-
+- Added [GetTrelloPlanInformationForOrganization](https://github.com/rwjdk/TrelloDotNet/wiki/GetTrelloPlanInformationForOrganization) and [GetTrelloPlanInformationForBoard](https://github.com/rwjdk/TrelloDotNet/wiki/GetTrelloPlanInformationForBoard) to get information what features the Workspace/Board support 
+- Bumped System.Text.Json dependency to version 8.0.5 due to [Security Vulnerability CVE-2024-43485](https://github.com/rwjdk/TrelloDotNet/security/dependabot/3) in previous version)
+ 
 <hr/>
 
 ## 1.11.1 (5th of October 2024)

@@ -82,5 +82,16 @@ namespace TrelloDotNet
                 throw new SecurityException("Deletion of Organizations are disabled via Options.AllowDeleteOfOrganizations (You need to enable this as a secondary confirmation that you REALLY wish to use that option as there is no going back)");
             }
         }
+
+        /// <summary>
+        /// Get Plan Information for a specific Workspace (Free, Standard, Premium, Enterprise) + what features are supported
+        /// </summary>
+        /// <param name="organizationId">Id of the Workspace</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Plan Info</returns>
+        public async Task<TrelloPlanInformation> GetTrelloPlanInformationForOrganization(string organizationId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<TrelloPlanInformation>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken, new QueryParameter("fields", "id,name,premiumFeatures"));
+        }
     }
 }

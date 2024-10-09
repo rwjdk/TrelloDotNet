@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetBoardOptions;
 
 // ReSharper disable UnusedMember.Global
@@ -93,6 +94,21 @@ namespace TrelloDotNet
         public async Task<Board> GetBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken);
+        }
+
+
+        /// <summary>
+        /// Get Plan Information for a specific board (Free, Standard, Premium, Enterprise) + what features are supported
+        /// </summary>
+        /// <param name="boardId">Id of the Board</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Plan Info</returns>
+        public async Task<TrelloPlanInformation> GetTrelloPlanInformationForBoard(string boardId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<TrelloPlanInformation>(GetUrlBuilder.GetBoard(boardId, new GetBoardOptions
+            {
+                BoardFields = new BoardFields("name", "premiumFeatures")
+            }), cancellationToken);
         }
 
         /// <summary>
