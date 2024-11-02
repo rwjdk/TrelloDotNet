@@ -109,10 +109,10 @@ namespace TrelloDotNet
         /// <param name="attachmentId">Id of Attachment</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<Stream> DownloadAttachment(string cardId, string attachmentId, CancellationToken cancellationToken = default)
+        public async Task<Stream> DownloadAttachmentAsync(string cardId, string attachmentId, CancellationToken cancellationToken = default)
         {
             Attachment attachment = await GetAttachmentOnCardAsync(cardId, attachmentId, cancellationToken);
-            return await DownloadAttachment(attachment.Url, cancellationToken);
+            return await DownloadAttachmentAsync(attachment.Url, cancellationToken);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace TrelloDotNet
         /// <param name="url">URL of the attachment</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<Stream> DownloadAttachment(string url, CancellationToken cancellationToken = default)
+        public async Task<Stream> DownloadAttachmentAsync(string url, CancellationToken cancellationToken = default)
         {
             try
             {
