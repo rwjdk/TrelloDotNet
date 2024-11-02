@@ -215,9 +215,12 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var checklistsNow = await TrelloClient.GetChecklistsOnBoardAsync(_board.Id);
         Assert.Equal(3, checklistsNow.Count);
 
-        await TrelloClient.DeleteChecklistItemAsync(checklistsNow[0].Id, checklistsNow[0].Items[0].Id);
+        await Task.Delay(1000);
+        Checklist checklist = checklistsNow[0];
+        await TrelloClient.DeleteChecklistItemAsync(checklist.Id, checklist.Items[0].Id);
+        await Task.Delay(1000);
         var checklistsNowAfterOneDelete = await TrelloClient.GetChecklistsOnBoardAsync(_board.Id);
-        Assert.Equal(checklistsNow[0].Items.Count - 1, checklistsNowAfterOneDelete[0].Items.Count);
+        Assert.Equal(checklist.Items.Count - 1, checklistsNowAfterOneDelete.First(x => x.Id == checklist.Id).Items.Count);
 
         await TrelloClient.DeleteChecklistAsync(addedChecklist.Id);
         var checklistsNow2 = await TrelloClient.GetChecklistsOnBoardAsync(_board.Id);
