@@ -1,15 +1,10 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
-## 1.11.4 (3rd of November 2024)
-- Renamed `DownloadAttachment` to [DownloadAttachmentAsync](https://github.com/rwjdk/TrelloDotNet/wiki/DownloadAttachmentAsync)
-
-<hr/>
-
 ## 1.11.3 (3rd of November 2024)
 #### TrelloClient
 - Added [GetAttachmentOnCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetAttachmentOnCardAsync)
-- Added [DownloadAttachment](https://github.com/rwjdk/TrelloDotNet/wiki/DownloadAttachment) [Via Ids or URL]
+- Added [DownloadAttachmentAsync](https://github.com/rwjdk/TrelloDotNet/wiki/DownloadAttachmentAsync) [Via Ids or URL]
 
 <hr/>
 
