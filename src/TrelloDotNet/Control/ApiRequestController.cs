@@ -18,6 +18,8 @@ namespace TrelloDotNet.Control
         private readonly string _token;
         private readonly TrelloClient _client;
 
+        internal HttpClient HttpClient => _httpClient;
+
         internal ApiRequestController(HttpClient httpClient, string apiKey, string token, TrelloClient client)
         {
             _httpClient = httpClient;
@@ -28,6 +30,8 @@ namespace TrelloDotNet.Control
         }
 
         public string Token => _token;
+
+        public string ApiKey => _apiKey;
 
         internal async Task<T> Get<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {

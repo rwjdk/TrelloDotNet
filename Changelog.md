@@ -1,6 +1,13 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.3 (3rd of November 2024)
+#### TrelloClient
+- Added [GetAttachmentOnCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetAttachmentOnCardAsync)
+- Added [DownloadAttachment](https://github.com/rwjdk/TrelloDotNet/wiki/DownloadAttachment) [Via Ids or URL]
+
+<hr/>
+
 ## 1.11.2 (9th of October 2024)
 #### TrelloClient
 - `GetBoardOptions` now have Filter options (All, Open, Closed or Starred boards)

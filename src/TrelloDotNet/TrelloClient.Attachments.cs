@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
@@ -29,6 +31,17 @@ namespace TrelloDotNet
         public async Task DeleteAttachmentOnCardAsync(string cardId, string attachmentId, CancellationToken cancellationToken = default)
         {
             await _apiRequestController.Delete(GetUrlBuilder.GetAttachmentOnCard(cardId, attachmentId), cancellationToken, 0);
+        }
+
+        /// <summary>
+        /// Get an Attachments on a card
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="attachmentId">Id of Attachment</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task<Attachment> GetAttachmentOnCardAsync(string cardId, string attachmentId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<Attachment>(GetUrlBuilder.GetAttachmentOnCard(cardId, attachmentId), cancellationToken);
         }
 
         /// <summary>
@@ -87,6 +100,38 @@ namespace TrelloDotNet
             }
 
             return await _apiRequestController.PostWithAttachmentFileUpload<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", attachmentFileUpload, cancellationToken, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Download an Attachment
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="attachmentId">Id of Attachment</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<Stream> DownloadAttachment(string cardId, string attachmentId, CancellationToken cancellationToken = default)
+        {
+            Attachment attachment = await GetAttachmentOnCardAsync(cardId, attachmentId, cancellationToken);
+            return await DownloadAttachment(attachment.Url, cancellationToken);
+        }
+
+        /// <summary>
+        /// Download an Attachment
+        /// </summary>
+        /// <param name="url">URL of the attachment</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<Stream> DownloadAttachment(string url, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                _apiRequestController.HttpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"OAuth oauth_consumer_key=\"{_apiRequestController.ApiKey}\", oauth_token=\"{_apiRequestController.Token}\"");
+                return await _apiRequestController.HttpClient.GetStreamAsync(url);
+            }
+            finally
+            {
+                _apiRequestController.HttpClient.DefaultRequestHeaders.Authorization = null;
+            }
         }
     }
 }
