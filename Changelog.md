@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.5 (29th of November 2024)
+#### TrelloClient
+- Fix that [AddChecklistItemAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistItemAsync) did not use the NamedPosition Property
+
+<hr/>
+
 ## 1.11.4 (25th of November 2024)
 #### TrelloClient
 - Added [AddChecklistItemAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistItemAsync)

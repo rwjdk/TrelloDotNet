@@ -67,7 +67,9 @@ namespace TrelloDotNet
         /// <returns>The new Checklist Item</returns>
         public async Task<ChecklistItem> AddChecklistItemAsync(string checklistId, ChecklistItem checkItemToAdd, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Post<ChecklistItem>($"{UrlPaths.Checklists}/{checklistId}/{UrlPaths.CheckItems}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(checkItemToAdd));
+            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(checkItemToAdd);
+            _queryParametersBuilder.AdjustForNamedPosition(parameters, checkItemToAdd.NamedPosition);
+            return await _apiRequestController.Post<ChecklistItem>($"{UrlPaths.Checklists}/{checklistId}/{UrlPaths.CheckItems}", cancellationToken, parameters);
         }
 
         internal async Task AddCheckItemsAsync(Checklist existingChecklist, params ChecklistItem[] checkItemsToAdd)
