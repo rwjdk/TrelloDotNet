@@ -25,4 +25,4 @@ jobs:
     - name: SetUserSecretsTrelloToken        
       run: dotnet user-secrets set TrelloToken ${{ secrets.TRELLOTOKEN }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
     - name: Publish to NuGet if needed
-      run: dotnet nuget push **\*.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key ${{secrets.NUGET_API_KEY}} --SkipDuplicate
+      run: dotnet nuget push **\*.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
