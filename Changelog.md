@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.6 (5th of January 2025)
+#### TrelloClient
+- Added [DeleteListAsync](https://github.com/rwjdk/TrelloDotNet/wiki/DeleteListAsync) (Thanks to **[cmoski](https://github.com/cmoski)** for mentioning that this is even possible as I did not know that) - [Issue #46](https://github.com/rwjdk/TrelloDotNet/issues/46))
+
+<hr/>
+
 ## 1.11.5 (29th of November 2024)
 #### TrelloClient
 - Fix that [AddChecklistItemAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistItemAsync) did not use the NamedPosition Property

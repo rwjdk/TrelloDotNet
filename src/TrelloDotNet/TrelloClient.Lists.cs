@@ -36,6 +36,17 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Delete a List and any Cards that are on it (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use ArchiveListAsync() for non-permanency
+        /// </summary>
+        /// <param name="listId">The id of list that should be Deleted</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task DeleteListAsync(string listId, CancellationToken cancellationToken = default)
+        {
+            await ArchiveListAsync(listId, cancellationToken);
+            await _apiRequestController.Delete($"{UrlPaths.Lists}/{listId}", cancellationToken, 0);
+        }
+
+        /// <summary>
         /// Reopen a List (Send back to the board)
         /// </summary>
         /// <param name="listId">The id of list that should be Reopened</param>

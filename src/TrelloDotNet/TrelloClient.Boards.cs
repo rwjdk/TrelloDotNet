@@ -66,7 +66,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Delete an entire board (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseBoard() for non-permanency
+        /// Delete an entire board (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseBoardAsync() for non-permanency
         /// </summary>
         /// <remarks>
         /// As this is a major thing, there is a secondary confirm needed by setting: Options.AllowDeleteOfBoards = true
