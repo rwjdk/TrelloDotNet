@@ -15,7 +15,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore TrelloDotNet.sln
     - name: Build
@@ -32,7 +32,5 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }} 
         path-to-lcov: src/TrelloDotNet.Tests/TestResults/coverage.info
-    - name: Install NuGet
-      run: sudo apt-get install -y nuget        
     - name: Publish to NuGet if needed
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
