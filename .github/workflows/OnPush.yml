@@ -11,9 +11,9 @@ jobs:
     timeout-minutes: 20
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
@@ -33,4 +33,4 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }} 
         path-to-lcov: src/TrelloDotNet.Tests/TestResults/coverage.info
     - name: Publish to NuGet if needed
-      run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
+      run: dotnet nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
