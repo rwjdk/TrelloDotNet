@@ -9,11 +9,11 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Authors>Rasmus Wulff Jensen</Authors>
 		<Description>.NET wrapper of the Trello Rest API (CRUD Operations + Webhook Subscription)</Description>
-		<Copyright>2024</Copyright>
+		<Copyright>2025</Copyright>
 		<PackageProjectUrl>https://github.com/rwjdk/TrelloDotNet/wiki</PackageProjectUrl>
 		<PackageIcon>trello.png</PackageIcon>
 		<PackageTags>trello api rest .NET dotNet crud wrapper webhook automation</PackageTags>
-		<Version>1.11.5</Version>
+		<Version>1.11.6</Version>
 		<Company>RWJDK</Company>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<IncludeSymbols>true</IncludeSymbols>
