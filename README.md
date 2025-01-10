@@ -27,7 +27,7 @@ TrelloClient client = new TrelloDotNet.TrelloClient("APIKey", "TOKEN"); //IMPORT
 Board board = await client.GetBoardAsync("<boardId>");
 
 //Get Lists on a board
-List<List> lists = await client.GetCardsOnBoardAsync("<boardId>");
+List<List> lists = await client.GetListsOnBoardAsync("<boardId>");
 
 //Get a card
 Card card = await client.GetCardAsync("<cardId>");
