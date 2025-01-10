@@ -305,7 +305,21 @@ namespace TrelloDotNet
             var cards = await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters(true));
             if (options.IncludeList)
             {
-                var lists = await GetListsOnBoardAsync(boardId, cancellationToken);
+                List<List> lists;
+                switch (filter)
+                {
+                    case CardsFilter.All:
+                    case CardsFilter.Closed:
+                    case CardsFilter.Visible:
+                        lists = await GetListsOnBoardFilteredAsync(boardId, ListFilter.All, cancellationToken);
+                        break;
+                    case CardsFilter.Open:
+                        lists = await GetListsOnBoardAsync(boardId, cancellationToken);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(filter), filter, null);
+                }
+
                 foreach (Card card in cards)
                 {
                     card.List = lists.FirstOrDefault(x => x.Id == card.ListId);

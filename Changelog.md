@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.7 (10th of January 2025)
+#### TrelloClient
+- Fixed that [GetCardsOnBoardFilteredAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardFilteredAsync) would not give Lists back on Archived Cards that were on a Archived List but instead return null - [Issue #47](https://github.com/rwjdk/TrelloDotNet/issues/47))
+
+<hr/>
+
 ## 1.11.6 (5th of January 2025)
 #### TrelloClient
 - Added [DeleteListAsync](https://github.com/rwjdk/TrelloDotNet/wiki/DeleteListAsync) (Thanks to **[cmoski](https://github.com/cmoski)** for mentioning that this is even possible as I did not know that) - [Issue #46](https://github.com/rwjdk/TrelloDotNet/issues/46))
