@@ -258,12 +258,37 @@ namespace TrelloDotNet.Model
         [JsonInclude]
         public List<Sticker> Stickers { get; private set; }
 
+        /// <summary>
+        /// The role of the Card (only used to define if a card is a mirror or not)
+        /// </summary>
+        [JsonPropertyName("cardRole")]
+        [JsonInclude]
+        public string CardRole { get; private set; }
+
+        /// <summary>
+        /// If the Card is a Mirror, this will contain the Id or the original Card
+        /// </summary>
+        [JsonPropertyName("mirrorSourceId")]
+        [JsonInclude]
+        public string MirrorSourceId { get; private set; }
+
+        /// <summary>
+        /// If the Card is a Mirror or not
+        /// </summary>
+        public bool IsCardMirror => CardRole == "mirror";
 
         /// <summary>
         /// The named position of the Card in the list: Top or Bottom
         /// </summary>
         [JsonIgnore]
         public NamedPosition? NamedPosition { internal get; set; }
+
+        /// <summary>
+        /// Is Card a Template Card
+        /// </summary>
+        [JsonPropertyName("isTemplate")]
+        [QueryParameter]
+        public bool IsTemplate { get; set; }
 
         /// <summary>
         /// Constructor (Common Card fields)

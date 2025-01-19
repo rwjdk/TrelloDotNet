@@ -1,6 +1,16 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.8 (19th of January 2025)
+#### TrelloClient
+- Added [MirrorCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/MirrorCardAsync) to support the new Card Mirroring System
+- Added [AddCardTemplateAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardTemplateAsync) to enable Template Card Creation
+- Added [AddCardFromTemplateAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardFromTemplateAsync) to enable making new cards from templates
+- Added [CopyCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/CopyCardAsync)
+- Added Properties `CardRole`, `MirrorSourceId`, `IsCardMirror` and `IsTemplate` to `Card`-objects
+
+<hr/>
+
 ## 1.11.7 (10th of January 2025)
 #### TrelloClient
 - Fixed that [GetCardsOnBoardFilteredAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardFilteredAsync) would not give Lists back on Archived Cards that were on a Archived List but instead return null - [Issue #47](https://github.com/rwjdk/TrelloDotNet/issues/47))

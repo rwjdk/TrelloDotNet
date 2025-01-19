@@ -134,5 +134,11 @@ namespace TrelloDotNet.Model.Options
         /// </summary>
         [JsonPropertyName("cover")]
         Cover,
+
+        /// <summary>
+        /// If the Card is a Template
+        /// </summary>
+        [JsonPropertyName("isTemplate")]
+        IsTemplate
     }
 }

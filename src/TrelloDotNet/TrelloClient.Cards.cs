@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -7,7 +8,10 @@ using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.AddCardFromTemplateOptions;
+using TrelloDotNet.Model.Options.CopyCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.MirrorCardOptions;
 using TrelloDotNet.Model.Options.MoveCardToBoardOptions;
 using TrelloDotNet.Model.Options.MoveCardToListOptions;
 
@@ -33,6 +37,156 @@ namespace TrelloDotNet
                 return await AddCoverToCardAsync(result.Id, card.Cover, cancellationToken);
             }
 
+            return result;
+        }
+
+        /// <summary>
+        /// Add new card based on a Template Card
+        /// </summary>
+        /// <param name="options">Parameters for Adding the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The New Card</returns>
+        public async Task<Card> AddCardFromTemplateAsync(AddCardFromTemplateOptions options, CancellationToken cancellationToken = default)
+        {
+            var nameOnNewCard = !string.IsNullOrWhiteSpace(options.Name)
+                ? options.Name
+                : (await GetCardAsync(options.SourceTemplateCardId, new GetCardOptions
+                {
+                    CardFields = new CardFields(CardFieldsType.Name)
+                }, cancellationToken)).Name;
+
+            QueryParameter[] parameters =
+            {
+                new QueryParameter("name", nameOnNewCard),
+                new QueryParameter("idList", options.TargetListId),
+                new QueryParameter("pos", "bottom"),
+                new QueryParameter("idCardSource", options.SourceTemplateCardId)
+            };
+            return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
+        }
+
+        /// <summary>
+        /// Copy a Card
+        /// </summary>
+        /// <param name="options">Parameters for copying the card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Card Copy</returns>
+        public async Task<Card> CopyCardAsync(CopyCardOptions options, CancellationToken cancellationToken = default)
+
+        {
+            var nameOnNewCard = !string.IsNullOrWhiteSpace(options.Name)
+                ? options.Name
+                : (await GetCardAsync(options.SourceCardId, new GetCardOptions
+                {
+                    CardFields = new CardFields(CardFieldsType.Name)
+                }, cancellationToken)).Name;
+
+            string position = "bottom";
+
+            if (options.Position.HasValue)
+            {
+                position = options.Position.Value.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (options.NamedPosition.HasValue)
+            {
+                position = options.NamedPosition.Value == NamedPosition.Bottom ? "bottom" : "top";
+            }
+
+            string keepFromSource = "all";
+            if (options.Keep.HasValue)
+            {
+                CopyCardOptionsToKeep keep = options.Keep.Value;
+
+                if (keep.HasFlag(CopyCardOptionsToKeep.All))
+                {
+                    keepFromSource = "all";
+                }
+                else
+                {
+                    var keepStrings = new List<string>();
+                    var enumValues = Enum.GetValues(typeof(CopyCardOptionsToKeep)).Cast<CopyCardOptionsToKeep>().ToList();
+                    foreach (CopyCardOptionsToKeep toKeep in enumValues.Where(x => x != CopyCardOptionsToKeep.All))
+                    {
+                        if (keep.HasFlag(toKeep))
+                        {
+                            keepStrings.Add(toKeep.GetJsonPropertyName());
+                        }
+                    }
+
+                    keepFromSource = string.Join(",", keepStrings);
+                }
+            }
+
+            QueryParameter[] parameters =
+            {
+                new QueryParameter("name", nameOnNewCard),
+                new QueryParameter("idList", options.TargetListId),
+                new QueryParameter("pos", position),
+                new QueryParameter("idCardSource", options.SourceCardId),
+                new QueryParameter("keepFromSource", keepFromSource)
+            };
+            return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
+        }
+
+        /// <summary>
+        /// Add a Template Card
+        /// </summary>
+        /// <param name="card">The Card Template to Add</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Added Template</returns>
+        public async Task<Card> AddCardTemplateAsync(Card card, CancellationToken cancellationToken = default)
+        {
+            card.IsTemplate = true;
+            QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(card);
+
+            _queryParametersBuilder.AdjustForNamedPosition(parameters, card.NamedPosition);
+            var result = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
+            if (card.Cover != null)
+            {
+                return await AddCoverToCardAsync(result.Id, card.Cover, cancellationToken);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Mirror a Card
+        /// </summary>
+        /// <param name="options">Parameters for create the mirror</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Mirror Card</returns>
+        public async Task<Card> MirrorCardAsync(MirrorCardOptions options, CancellationToken cancellationToken = default)
+        {
+            //Get Source-Card as we need the ShortUrl to make the Card Mirror magic Happen
+            Card sourceCard = await GetCardAsync(options.SourceCardId, new GetCardOptions
+            {
+                CardFields = new CardFields(CardFieldsType.ShortUrl)
+            }, cancellationToken);
+
+            string position = "bottom";
+
+            if (options.Position.HasValue)
+            {
+                position = options.Position.Value.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (options.NamedPosition.HasValue)
+            {
+                position = options.NamedPosition.Value == NamedPosition.Bottom ? "bottom" : "top";
+            }
+
+            var parameters = new List<QueryParameter>
+            {
+                new QueryParameter("idList", options.TargetListId),
+                new QueryParameter("name", sourceCard.ShortUrl),
+                new QueryParameter("isTemplate", false),
+                new QueryParameter("closed", false),
+                new QueryParameter("pos", position),
+                new QueryParameter("cardRole", "mirror"),
+            };
+
+            var result = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters.ToArray());
             return result;
         }
 
