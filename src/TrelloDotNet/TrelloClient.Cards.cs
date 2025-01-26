@@ -473,7 +473,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get all open cards on un-archived lists on a board
+        /// Get all cards (default only all un-archived lists on a board; use options.Filter to get archived cards)
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
         /// <param name="options">Options on how and what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls)</param>

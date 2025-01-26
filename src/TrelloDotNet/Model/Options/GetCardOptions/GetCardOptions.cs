@@ -9,7 +9,7 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
     public class GetCardOptions
     {
         /// <summary>
-        /// all or a comma-separated list of fields. Defaults: badges, checkItemStates, closed, dateLastActivity, desc, descData, due, start, email, idBoard, idChecklists, idLabels, idList, idMembers, idShort, idAttachmentCover, manualCoverAttachment, labels, name, pos, shortUrl, url
+        /// All or a comma-separated list of fields. Defaults: badges, checkItemStates, closed, dateLastActivity, desc, descData, due, start, email, idBoard, idChecklists, idLabels, idList, idMembers, idShort, idAttachmentCover, manualCoverAttachment, labels, name, pos, shortUrl, url
         /// </summary>
         public CardFields CardFields { get; set; }
 
@@ -99,22 +99,22 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         public int? Limit { get; set; }
 
         /// <summary>
-        /// A Card ID
+        /// Pagination (Only return cards before this Card Id was created)
         /// </summary>
         public string Before { get; set; } = null;
 
         /// <summary>
-        /// A Card ID
+        /// Pagination (Only return cards since this Card Id was created)
         /// </summary>
         public string Since { get; set; } = null;
 
         /// <summary>
-        /// What Kind of Cards should be included (Active, Closed/Archived or All)
+        /// What Kind of Cards should be included (Active, Closed/Archived or All) [Only used on GetCardsForBoard(...)]
         /// </summary>
         public CardsFilter? Filter { get; set; }
 
         /// <summary>
-        /// Additional Parameters not supported out-of-the-box
+        /// Send these Additional Parameters not supported out-of-the-box (should you need to do something to the query-parameters not yet supported by this API)
         /// </summary>
         public List<QueryParameter> AdditionalParameters { get; set; } = new List<QueryParameter>();
 
