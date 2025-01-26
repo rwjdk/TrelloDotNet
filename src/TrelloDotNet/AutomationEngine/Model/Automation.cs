@@ -21,9 +21,11 @@ namespace TrelloDotNet.AutomationEngine.Model
         public Automation(string name, IAutomationTrigger trigger, List<IAutomationCondition> conditions, List<IAutomationAction> actions)
         {
             Name = name;
-#pragma warning disable CS0618 // Type or member is obsolete
-            Trigger = trigger ?? throw new ArgumentNullException(nameof(trigger), "Trigger can't be null");
-#pragma warning restore CS0618 // Type or member is obsolete
+            if (trigger == null)
+            {
+                throw new ArgumentNullException(nameof(trigger), "Trigger can't be null");
+            }
+
             Triggers = new List<IAutomationTrigger> { trigger };
             Conditions = conditions;
 
@@ -75,12 +77,6 @@ namespace TrelloDotNet.AutomationEngine.Model
         /// Name of the Automation
         /// </summary>
         public string Name { get; }
-
-        /// <summary>
-        /// The Trigger of the automation (aka the first, light, initial condition of what you wish the automation to react to)
-        /// </summary>
-        [Obsolete("This property is Deprecated as system now support multiple Triggers in Automations. Please use Triggers.First() Instead [Will be removed in v2.0 of this nuGet Package]")]
-        public IAutomationTrigger Trigger { get; }
 
         /// <summary>
         /// A List of Triggers of the automation (aka the first, light, initial condition of what you wish the automation to react to). Will proceed if any of the triggers are met

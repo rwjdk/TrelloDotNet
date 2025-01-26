@@ -1,6 +1,14 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## Unreleased
+#### Special
+- **This is the first v2.x release. It has a set of breaking changes to streamline the API and make it less confusing to use (aka less options to do the same thing). [See a list of breaking changes here](https://github.com/rwjdk/TrelloDotNet/issues/51)**
+
+#### TrelloClient
+
+<hr>
+
 ## 1.11.9 (25th of January 2025)
 #### Special
 - **This is the last planned 1.x release. Upcoming 2.x releases will have a set of breaking changes to streamline the API and make it less confusing to use (aka less options to do the same thing). [See a list of breaking changes here](https://github.com/rwjdk/TrelloDotNet/issues/51)**

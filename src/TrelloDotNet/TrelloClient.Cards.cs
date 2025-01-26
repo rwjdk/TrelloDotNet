@@ -446,12 +446,7 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> GetCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Card>(GetUrlBuilder.GetCard(cardId), cancellationToken,
-#pragma warning disable CS0618 // Type or member is obsolete
-                new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
-                new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods)
-#pragma warning restore CS0618 // Type or member is obsolete
-            );
+            return await _apiRequestController.Get<Card>(GetUrlBuilder.GetCard(cardId), cancellationToken);
         }
 
         /// <summary>
@@ -474,12 +469,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken,
-#pragma warning disable CS0618 // Type or member is obsolete
-                new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
-                new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods)
-#pragma warning restore CS0618 // Type or member is obsolete
-            );
+            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken);
         }
 
         /// <summary>
@@ -552,11 +542,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken,
-#pragma warning disable CS0618 // Type or member is obsolete
-                new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
-                new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods));
-#pragma warning restore CS0618 // Type or member is obsolete
+            return await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken);
         }
 
         /// <summary>
