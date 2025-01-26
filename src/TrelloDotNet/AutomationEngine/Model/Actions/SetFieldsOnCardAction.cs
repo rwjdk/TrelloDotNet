@@ -40,13 +40,13 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             }
 
             var card = await webhookAction.Data.Card.GetAsync();
-            var queryParametersToAdd = new List<QueryParameter>();
+            var queryParametersToAdd = new List<CardUpdate>();
             foreach (var fieldValue in FieldValues)
             {
                 QueryParameter queryParameter = fieldValue.GetQueryParameter(card);
                 if (queryParameter != null)
                 {
-                    queryParametersToAdd.Add(queryParameter);
+                    queryParametersToAdd.Add(CardUpdate.AdditionalParameter(queryParameter));
                 }
             }
 

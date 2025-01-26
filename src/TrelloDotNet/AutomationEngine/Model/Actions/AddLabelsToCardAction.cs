@@ -2,9 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
-using TrelloDotNet.Control;
 using TrelloDotNet.Model;
-using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
@@ -81,9 +79,9 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
 
             if (updateNeeded)
             {
-                await trelloClient.UpdateCardAsync(card.Id, new List<QueryParameter>()
+                await trelloClient.UpdateCardAsync(card.Id, new List<CardUpdate>()
                 {
-                    new QueryParameter(CardFieldsType.LabelIds.GetJsonPropertyName(), card.LabelIds)
+                    CardUpdate.Labels(card.LabelIds)
                 });
                 processingResult.AddToLog($"Added labels '{string.Join(",", LabelIds)}' to card '{webhookAction.Data.Card.Name}'");
                 processingResult.ActionsExecuted++;

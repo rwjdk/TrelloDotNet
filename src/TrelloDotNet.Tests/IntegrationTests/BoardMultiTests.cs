@@ -1,4 +1,5 @@
 ﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.AddCardOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -21,7 +22,7 @@ public class BoardMultiTests(TestFixtureWithNewBoard fixture) : TestBase, IClass
             secondBoardId = secondBoard.Id;
 
             var addedList = await TrelloClient.AddListAsync(new List("List on first board", _boardId));
-            await TrelloClient.AddCardAsync(new Card(addedList.Id, "card to move between boards"));
+            await TrelloClient.AddCardAsync(new AddCardOptions(addedList.Id, "card to move between boards"));
             var listOnPrimaryBoard = await TrelloClient.GetListsOnBoardAsync(_boardId);
             var listOnSecondaryBoard = await TrelloClient.GetListsOnBoardAsync(secondBoardId);
             Assert.Equal(4, listOnPrimaryBoard.Count);

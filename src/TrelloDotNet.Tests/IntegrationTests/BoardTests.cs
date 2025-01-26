@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.GetCardOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -66,7 +67,11 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         }
 
         Assert.Empty(await TrelloClient.GetCardsOnBoardAsync(_boardId));
-        Assert.Empty(await TrelloClient.GetCardsOnBoardFilteredAsync(_boardId, CardsFilter.All));
+        Assert.Empty(await TrelloClient.GetCardsOnBoardAsync(_boardId, new GetCardOptions
+            {
+                Filter = CardsFilter.All
+            }
+        ));
     }
 
     [Fact]

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TrelloDotNet.Model.Options.CopyCardOptions
+﻿namespace TrelloDotNet.Model.Options.CopyCardOptions
 {
     /// <summary>
     /// Options for 

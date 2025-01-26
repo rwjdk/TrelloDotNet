@@ -1,4 +1,5 @@
 ﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.AddCardOptions;
 using TrelloDotNet.Model.Options.GetActionsOptions;
 using TrelloDotNet.Model.Webhook;
 
@@ -43,10 +44,11 @@ public class ActionTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     {
         const string testName = "GetActionsOfCard";
         List list = await TrelloClient.AddListAsync(new List(testName, _boardId));
-        Card card = await TrelloClient.AddCardAsync(new Card(list.Id, testName));
+        Card card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, testName));
         const string newName = testName + "X";
-        card.Name = newName;
-        await TrelloClient.UpdateCardAsync(card);
+        await TrelloClient.UpdateCardAsync(card.Id, [
+            CardUpdate.Name(newName),
+        ]);
         var actions = await TrelloClient.GetActionsOnCardAsync(card.Id, new GetActionsOptions
         {
             Filter = [WebhookActionTypes.UpdateCard]
@@ -59,10 +61,9 @@ public class ActionTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     {
         const string testName = "GetActionsOfList";
         List list = await TrelloClient.AddListAsync(new List(testName, _boardId));
-        Card card = await TrelloClient.AddCardAsync(new Card(list.Id, testName));
+        Card card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, testName));
         const string newName = testName + "X";
-        card.Name = newName;
-        await TrelloClient.UpdateCardAsync(card);
+        await TrelloClient.UpdateCardAsync(card.Id, [CardUpdate.Name(newName)]);
         var actions = await TrelloClient.GetActionsForListAsync(list.Id, new GetActionsOptions
         {
             Filter = [WebhookActionTypes.UpdateCard]
@@ -75,10 +76,9 @@ public class ActionTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     {
         const string testName = "GetActionsForMember";
         List list = await TrelloClient.AddListAsync(new List(testName, _boardId));
-        Card card = await TrelloClient.AddCardAsync(new Card(list.Id, testName));
+        Card card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, testName));
         const string newName = testName + "X";
-        card.Name = newName;
-        await TrelloClient.UpdateCardAsync(card);
+        await TrelloClient.UpdateCardAsync(card.Id, [CardUpdate.Name(newName)]);
         Member member = await TrelloClient.GetTokenMemberAsync();
         var actions = await TrelloClient.GetActionsForMemberAsync(member.Id, new GetActionsOptions
         {

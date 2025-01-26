@@ -96,7 +96,6 @@ namespace TrelloDotNet
             return await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken);
         }
 
-
         /// <summary>
         /// Get Plan Information for a specific board (Free, Standard, Premium, Enterprise) + what features are supported
         /// </summary>

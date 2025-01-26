@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
-using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetLabelOptions;
 
 namespace TrelloDotNet
@@ -72,9 +71,9 @@ namespace TrelloDotNet
 
             //Need update
             card.LabelIds.AddRange(missing);
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.LabelIds.GetJsonPropertyName(), card.LabelIds)
+                CardUpdate.Labels(card.LabelIds)
             }, cancellationToken);
         }
 
@@ -105,9 +104,9 @@ namespace TrelloDotNet
 
             //Need update
             card.LabelIds = card.LabelIds.Except(toRemove).ToList();
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.LabelIds.GetJsonPropertyName(), card.LabelIds)
+                CardUpdate.Labels(card.LabelIds)
             }, cancellationToken);
         }
 
@@ -118,9 +117,9 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<Card> RemoveAllLabelsFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.LabelIds.GetJsonPropertyName(), new List<string>())
+                CardUpdate.Labels(new List<string>())
             }, cancellationToken);
         }
 

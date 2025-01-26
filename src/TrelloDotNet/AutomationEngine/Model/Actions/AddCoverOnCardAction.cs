@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
-using TrelloDotNet.Control;
 using TrelloDotNet.Model;
-using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
@@ -45,9 +42,9 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             }
 
             var trelloClient = webhookAction.TrelloClient;
-            await trelloClient.UpdateCardAsync(webhookAction.Data.Card.Id, new List<QueryParameter>
+            await trelloClient.UpdateCardAsync(webhookAction.Data.Card.Id, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.Cover.GetJsonPropertyName(), JsonSerializer.Serialize(CardCoverToAdd))
+                CardUpdate.Cover(CardCoverToAdd)
             });
             processingResult.AddToLog($"Updated Card '{webhookAction.Data.Card.Name}' with new Cover");
             processingResult.ActionsExecuted++;

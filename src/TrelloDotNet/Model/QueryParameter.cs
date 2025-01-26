@@ -216,6 +216,11 @@ namespace TrelloDotNet.Model
             return _valueAsObject?.ToString();
         }
 
+        internal object GetRawValue()
+        {
+            return _valueAsObject;
+        }
+
         internal void SetRawValue(object value)
         {
             _valueAsObject = value;

@@ -200,7 +200,7 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("attachments")]
         [JsonInclude]
-        public List<Attachment> Attachments { get; private set; }
+        public List<Attachment> Attachments { get; internal set; }
 
         /// <summary>
         /// Members of the Card (Only populated if GetCardOptions.IncludeMembers is used)
@@ -242,7 +242,7 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("checklists")]
         [JsonInclude]
-        public List<Checklist> Checklists { get; private set; }
+        public List<Checklist> Checklists { get; internal set; }
 
         /// <summary>
         /// Plugin data of the Card (Only populated if GetCardOptions.IncludePluginData is used)

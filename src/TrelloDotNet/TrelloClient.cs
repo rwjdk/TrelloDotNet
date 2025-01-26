@@ -58,5 +58,15 @@ namespace TrelloDotNet
         {
             return await _apiRequestController.Get<TokenInformation>($"{UrlPaths.Tokens}/{_apiRequestController.Token}", cancellationToken);
         }
+
+        /// <summary>
+        /// Get Ids of the owner of the Token's Inbox
+        /// </summary>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The Inbox Info</returns>
+        public async Task<TokenMemberInbox> GetTokenMemberInboxAsync(CancellationToken cancellationToken = default)
+        {
+            return (await _apiRequestController.Get<TokenMemberInformationInbox>($"{UrlPaths.Members}/me?fields=inbox", cancellationToken))?.Inbox;
+        }
     }
 }

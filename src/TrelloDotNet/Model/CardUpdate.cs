@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Json;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model.Options;
 
@@ -29,11 +30,19 @@ namespace TrelloDotNet.Model
         private QueryParameterType _type { get; set; }
 
         /// <summary>
+        /// Create a Cover Parameter
+        /// </summary>
+        /// <param name="value">New Cover or null to remove</param>
+        /// <returns>CardUpdate Object</returns>
+        public static CardUpdate Cover(CardCover value) => new CardUpdate(CardFieldsType.Cover, JsonSerializer.Serialize(value));
+
+
+        /// <summary>
         /// Create a Due Date Parameter
         /// </summary>
-        /// <param name="value">Due Date</param>
+        /// <param name="value">Due Date or null to remove</param>
         /// <returns>CardUpdate Object</returns>
-        public static CardUpdate DueDate(DateTimeOffset value) => new CardUpdate(CardFieldsType.Due, value);
+        public static CardUpdate DueDate(DateTimeOffset? value) => new CardUpdate(CardFieldsType.Due, value);
 
         /// <summary>
         /// Create a Due Completed Parameter
@@ -41,6 +50,13 @@ namespace TrelloDotNet.Model
         /// <param name="value">Due Completed</param>
         /// <returns>CardUpdate Object</returns>
         public static CardUpdate DueComplete(bool value) => new CardUpdate(CardFieldsType.DueComplete, value);
+
+        /// <summary>
+        /// Create a IsTemplate Parameter
+        /// </summary>
+        /// <param name="value">Is Template Card</param>
+        /// <returns>CardUpdate Object</returns>
+        public static CardUpdate IsTemplate(bool value) => new CardUpdate(CardFieldsType.IsTemplate, value);
 
         /// <summary>
         /// Create a Closed Parameter
@@ -66,16 +82,16 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Create a Start Parameter
         /// </summary>
-        /// <param name="value">Start</param>
+        /// <param name="value">Start or null to remove</param>
         /// <returns>CardUpdate Object</returns>
-        public static CardUpdate StartDate(DateTimeOffset value) => new CardUpdate(CardFieldsType.Start, value);
+        public static CardUpdate StartDate(DateTimeOffset? value) => new CardUpdate(CardFieldsType.Start, value);
 
         /// <summary>
         /// Create a Name Parameter
         /// </summary>
         /// <param name="value">Name</param>
         /// <returns>CardUpdate Object</returns>
-        public static CardUpdate Name(string value) => new CardUpdate(CardFieldsType.Name, value);
+        public static CardUpdate Name(string value) => new CardUpdate(CardFieldsType.Name, value ?? "");
 
         /// <summary>
         /// Create a Board Parameter
@@ -110,7 +126,7 @@ namespace TrelloDotNet.Model
         /// </summary>
         /// <param name="value">Description</param>
         /// <returns>CardUpdate Object</returns>
-        public static CardUpdate Description(string value) => new CardUpdate(CardFieldsType.Description, value);
+        public static CardUpdate Description(string value) => new CardUpdate(CardFieldsType.Description, value ?? "");
 
         /// <summary>
         /// Create a Members Parameter
@@ -138,8 +154,26 @@ namespace TrelloDotNet.Model
         /// </summary>
         /// <param name="labels">Labels</param>
         /// <returns>CardUpdate Object</returns>
-        public static CardUpdate Labels(List<Label> labels) => new CardUpdate(CardFieldsType.LabelIds, labels.Select(x => x.Id).ToList());
+        public static CardUpdate Labels(List<Label> labels) => new CardUpdate(CardFieldsType.LabelIds, labels?.Select(x => x.Id).ToList());
 
+        /// <summary>
+        /// Create an Additional Parameter (aka one that is not a named CardFieldsType)
+        /// </summary>
+        /// <param name="additionalParameter">The Additional Parameter</param>
+        /// <returns>CardUpdate Object</returns>
+        public static CardUpdate AdditionalParameter(QueryParameter additionalParameter) => new CardUpdate(additionalParameter);
+
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="parameter">The raw Parameter</param>
+        private CardUpdate(QueryParameter parameter)
+        {
+            _name = parameter.Name;
+            _type = parameter.Type;
+            _valueAsObject = parameter.GetRawValue();
+        }
 
         /// <summary>
         /// Constructor

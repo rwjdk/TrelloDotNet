@@ -1,4 +1,5 @@
 ﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.AddCardOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -70,9 +71,9 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var name = Guid.NewGuid().ToString();
         var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
         //Add some cards so we can test Archive All Cards In List
-        await TrelloClient.AddCardAsync(new Card(addList.Id, "C1"));
-        await TrelloClient.AddCardAsync(new Card(addList.Id, "C2"));
-        await TrelloClient.AddCardAsync(new Card(addList.Id, "C3"));
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C1"));
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C2"));
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C3"));
         var cardsOnListAfterAdd = await TrelloClient.GetCardsInListAsync(addList.Id);
         Assert.Equal(3, cardsOnListAfterAdd.Count);
         await TrelloClient.ArchiveAllCardsInListAsync(addList.Id);
@@ -86,9 +87,9 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var sourceList = await TrelloClient.AddListAsync(new List("Source", _boardId));
         var targetList = await TrelloClient.AddListAsync(new List("Target", _boardId));
 
-        Card card1 = await TrelloClient.AddCardAsync(new Card(sourceList.Id, "C1"));
-        Card card2 = await TrelloClient.AddCardAsync(new Card(sourceList.Id, "C2"));
-        Card card3 = await TrelloClient.AddCardAsync(new Card(sourceList.Id, "C3"));
+        Card card1 = await TrelloClient.AddCardAsync(new AddCardOptions(sourceList.Id, "C1"));
+        Card card2 = await TrelloClient.AddCardAsync(new AddCardOptions(sourceList.Id, "C2"));
+        Card card3 = await TrelloClient.AddCardAsync(new AddCardOptions(sourceList.Id, "C3"));
 
         await TrelloClient.MoveCardToListAsync(card2.Id, targetList.Id);
 
@@ -109,9 +110,9 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var name = Guid.NewGuid().ToString();
         var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
         //Add some cards so we can test Move All Cards In List
-        await TrelloClient.AddCardAsync(new Card(addList.Id, "C1"));
-        await TrelloClient.AddCardAsync(new Card(addList.Id, "C2"));
-        await TrelloClient.AddCardAsync(new Card(addList.Id, "C3"));
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C1"));
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C2"));
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C3"));
 
         //Add new list to move cards to
         var listToMoveTo = await TrelloClient.AddListAsync(new List("List to move to", _boardId));

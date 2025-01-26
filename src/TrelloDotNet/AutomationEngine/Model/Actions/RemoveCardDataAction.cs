@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrelloDotNet.AutomationEngine.Interface;
-using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
-using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.AutomationEngine.Model.Actions
@@ -44,7 +42,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             }
 
             var card = await webhookAction.Data.Card.GetAsync();
-            var queryParametersToUpdate = new List<QueryParameter>();
+            var queryParametersToUpdate = new List<CardUpdate>();
             foreach (var dataType in DataToRemove)
             {
                 switch (dataType)
@@ -53,7 +51,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         if (card.Start != null)
                         {
                             card.Start = null;
-                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Start.GetJsonPropertyName(), (DateTimeOffset?)null));
+                            queryParametersToUpdate.Add(CardUpdate.StartDate(null));
                         }
 
                         break;
@@ -61,7 +59,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         if (card.Due != null)
                         {
                             card.Due = null;
-                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), (DateTimeOffset?)null));
+                            queryParametersToUpdate.Add(CardUpdate.DueDate(null));
                         }
 
                         break;
@@ -69,7 +67,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         if (card.DueComplete)
                         {
                             card.DueComplete = false;
-                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.DueComplete.GetJsonPropertyName(), false));
+                            queryParametersToUpdate.Add(CardUpdate.DueComplete(false));
                         }
 
                         break;
@@ -77,7 +75,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         if (!string.IsNullOrWhiteSpace(card.Description))
                         {
                             card.Description = null;
-                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Description.GetJsonPropertyName(), string.Empty));
+                            queryParametersToUpdate.Add(CardUpdate.Description(string.Empty));
                         }
 
                         break;
@@ -85,7 +83,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         if (card.LabelIds.Any())
                         {
                             card.LabelIds = new List<string>();
-                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.LabelIds.GetJsonPropertyName(), new List<string>()));
+                            queryParametersToUpdate.Add(CardUpdate.Labels(new List<string>()));
                         }
 
                         break;
@@ -93,7 +91,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         if (card.MemberIds.Any())
                         {
                             card.MemberIds = new List<string>();
-                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), new List<string>()));
+                            queryParametersToUpdate.Add(CardUpdate.Members(new List<string>()));
                         }
 
                         break;
@@ -101,7 +99,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
                         if (card.Cover != null && (card.Cover.Color != null || card.Cover.BackgroundImageId != null))
                         {
                             card.Cover = null;
-                            queryParametersToUpdate.Add(new QueryParameter(CardFieldsType.Cover.GetJsonPropertyName(), (string)null));
+                            queryParametersToUpdate.Add(CardUpdate.Cover(null));
                         }
 
                         break;

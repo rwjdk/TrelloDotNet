@@ -109,6 +109,11 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         public string Since { get; set; } = null;
 
         /// <summary>
+        /// What Kind of Cards should be included (Active, Closed/Archived or All)
+        /// </summary>
+        public CardsFilter? Filter { get; set; }
+
+        /// <summary>
         /// Additional Parameters not supported out-of-the-box
         /// </summary>
         public List<QueryParameter> AdditionalParameters { get; set; } = new List<QueryParameter>();

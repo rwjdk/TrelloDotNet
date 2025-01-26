@@ -1,6 +1,4 @@
-﻿using TrelloDotNet.Model.Options.CopyCardOptions;
-
-namespace TrelloDotNet.Model.Options.MirrorCardOptions
+﻿namespace TrelloDotNet.Model.Options.MirrorCardOptions
 {
     /// <summary>
     /// Options for mirroring a Card

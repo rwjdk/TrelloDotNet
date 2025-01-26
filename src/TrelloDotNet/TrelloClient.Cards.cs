@@ -9,8 +9,11 @@ using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.AddCardFromTemplateOptions;
+using TrelloDotNet.Model.Options.AddCardOptions;
+using TrelloDotNet.Model.Options.AddCardToInboxOptions;
 using TrelloDotNet.Model.Options.CopyCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.GetInboxCardOptions;
 using TrelloDotNet.Model.Options.MirrorCardOptions;
 using TrelloDotNet.Model.Options.MoveCardToBoardOptions;
 using TrelloDotNet.Model.Options.MoveCardToListOptions;
@@ -24,20 +27,206 @@ namespace TrelloDotNet
         /// <summary>
         /// Add a Card
         /// </summary>
-        /// <param name="card">The Card to Add</param>
+        /// <param name="options">Add Card Options (Name, Dates, Checklist, etc.)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Added Card</returns>
-        public async Task<Card> AddCardAsync(Card card, CancellationToken cancellationToken = default)
+        public async Task<Card> AddCardAsync(AddCardOptions options, CancellationToken cancellationToken = default)
         {
-            QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(card);
-            _queryParametersBuilder.AdjustForNamedPosition(parameters, card.NamedPosition);
-            var result = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
-            if (card.Cover != null)
+            if (string.IsNullOrWhiteSpace(options.ListId))
             {
-                return await AddCoverToCardAsync(result.Id, card.Cover, cancellationToken);
+                throw new TrelloApiException("No ListId provided in options (Mandatory)", string.Empty);
             }
 
-            return result;
+            var input = new Card(options.ListId, options.Name, options.Description)
+            {
+                IsTemplate = options.IsTemplate
+            };
+
+            if (options.Start.HasValue)
+            {
+                input.Start = options.Start.Value;
+            }
+
+            if (options.Due.HasValue)
+            {
+                input.Due = options.Due.Value;
+            }
+
+            input.DueComplete = options.DueComplete;
+
+            if (options.Position.HasValue)
+            {
+                input.Position = options.Position.Value;
+            }
+            else
+            {
+                input.NamedPosition = options.NamedPosition;
+            }
+
+            if (options.LabelIds != null)
+            {
+                input.LabelIds = options.LabelIds;
+            }
+
+            if (options.MemberIds != null)
+            {
+                input.MemberIds = options.MemberIds;
+            }
+
+            QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(input);
+            Card addedCard = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
+
+            bool needGet = false;
+            var getCardOptions = new GetCardOptions();
+            if (options.Checklists != null)
+            {
+                needGet = true;
+                getCardOptions.IncludeChecklists = true;
+                foreach (Checklist checklist in options.Checklists)
+                {
+                    checklist.NamedPosition = NamedPosition.Bottom;
+                    await AddChecklistAsync(addedCard.Id, checklist, cancellationToken: cancellationToken);
+                }
+            }
+
+            if (options.AttachmentFileUploads != null)
+            {
+                needGet = true;
+                getCardOptions.IncludeAttachments = GetCardOptionsIncludeAttachments.True;
+                foreach (AttachmentFileUpload fileUpload in options.AttachmentFileUploads)
+                {
+                    await AddAttachmentToCardAsync(addedCard.Id, fileUpload, cancellationToken: cancellationToken);
+                }
+            }
+
+            if (options.AttachmentUrlLinks != null)
+            {
+                needGet = true;
+                getCardOptions.IncludeAttachments = GetCardOptionsIncludeAttachments.True;
+                foreach (AttachmentUrlLink urlLink in options.AttachmentUrlLinks)
+                {
+                    await AddAttachmentToCardAsync(addedCard.Id, urlLink, cancellationToken: cancellationToken);
+                }
+            }
+
+            if (options.Cover != null)
+            {
+                needGet = true;
+                await AddCoverToCardAsync(addedCard.Id, options.Cover, cancellationToken);
+            }
+
+            // ReSharper disable once InvertIf
+            if (options.CustomFields != null)
+            {
+                needGet = true;
+                getCardOptions.IncludeCustomFieldItems = true;
+                foreach (var customField in options.CustomFields)
+                {
+                    switch (customField.Field.Type)
+                    {
+                        case CustomFieldType.Checkbox:
+                            await UpdateCustomFieldValueOnCardAsync(addedCard.Id, customField.Field, (bool)customField.Value, cancellationToken);
+                            break;
+                        case CustomFieldType.Date:
+                            await UpdateCustomFieldValueOnCardAsync(addedCard.Id, customField.Field, (DateTimeOffset)customField.Value, cancellationToken);
+                            break;
+                        case CustomFieldType.List:
+                            await UpdateCustomFieldValueOnCardAsync(addedCard.Id, customField.Field, (CustomFieldOption)customField.Value, cancellationToken);
+                            break;
+                        case CustomFieldType.Number:
+                            switch (customField.Value)
+                            {
+                                case int intValue:
+                                    await UpdateCustomFieldValueOnCardAsync(addedCard.Id, customField.Field, intValue, cancellationToken);
+                                    break;
+                                case decimal decimalValue:
+                                    await UpdateCustomFieldValueOnCardAsync(addedCard.Id, customField.Field, decimalValue, cancellationToken);
+                                    break;
+                            }
+
+                            break;
+                        case CustomFieldType.Text:
+                        default:
+                            await UpdateCustomFieldValueOnCardAsync(addedCard.Id, customField.Field, (string)customField.Value, cancellationToken);
+                            break;
+                    }
+                }
+            }
+
+            return needGet ? await GetCardAsync(addedCard.Id, getCardOptions, cancellationToken) : addedCard;
+        }
+
+
+        /// <summary>
+        /// Add a Card to the Inbox of the Member that own the Trello token
+        /// </summary>
+        /// <param name="options">Add Card options (Name, Dates, Checklists, etc.)</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The Added Card</returns>
+        public async Task<Card> AddCardToInboxAsync(AddCardToInboxOptions options, CancellationToken cancellationToken = default)
+        {
+            TokenMemberInbox inbox = await GetTokenMemberInboxAsync(cancellationToken);
+            if (inbox == null)
+            {
+                throw new TrelloApiException("Could not find your inbox", string.Empty);
+            }
+
+            var input = new Card(inbox.ListId, options.Name, options.Description);
+            if (options.Start.HasValue)
+            {
+                input.Start = options.Start.Value;
+            }
+
+            if (options.Due.HasValue)
+            {
+                input.Due = options.Due.Value;
+            }
+
+            input.DueComplete = options.DueComplete;
+
+            if (options.Position.HasValue)
+            {
+                input.Position = options.Position.Value;
+            }
+            else
+            {
+                input.NamedPosition = options.NamedPosition;
+            }
+
+            QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(input);
+            Card addedCard = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
+
+            if (options.Checklists != null)
+            {
+                foreach (Checklist checklist in options.Checklists)
+                {
+                    checklist.NamedPosition = NamedPosition.Bottom;
+                    await AddChecklistAsync(addedCard.Id, checklist, cancellationToken: cancellationToken);
+                }
+            }
+
+            if (options.AttachmentFileUploads != null)
+            {
+                foreach (AttachmentFileUpload fileUpload in options.AttachmentFileUploads)
+                {
+                    await AddAttachmentToCardAsync(addedCard.Id, fileUpload, cancellationToken: cancellationToken);
+                }
+            }
+
+            if (options.AttachmentUrlLinks != null)
+            {
+                foreach (AttachmentUrlLink urlLink in options.AttachmentUrlLinks)
+                {
+                    await AddAttachmentToCardAsync(addedCard.Id, urlLink, cancellationToken: cancellationToken);
+                }
+            }
+
+            if (options.Cover != null)
+            {
+                await AddCoverToCardAsync(addedCard.Id, options.Cover, cancellationToken);
+            }
+
+            return addedCard;
         }
 
         /// <summary>
@@ -130,27 +319,6 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Add a Template Card
-        /// </summary>
-        /// <param name="card">The Card Template to Add</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Added Template</returns>
-        public async Task<Card> AddCardTemplateAsync(Card card, CancellationToken cancellationToken = default)
-        {
-            card.IsTemplate = true;
-            QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(card);
-
-            _queryParametersBuilder.AdjustForNamedPosition(parameters, card.NamedPosition);
-            var result = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
-            if (card.Cover != null)
-            {
-                return await AddCoverToCardAsync(result.Id, card.Cover, cancellationToken);
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Mirror a Card
         /// </summary>
         /// <param name="options">Parameters for create the mirror</param>
@@ -213,18 +381,25 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Update a Card
+        /// Update one or more specific fields on a card
         /// </summary>
-        /// <param name="cardWithChanges">The card with the changes</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Updated Card</returns>
-        public async Task<Card> UpdateCardAsync(Card cardWithChanges, CancellationToken cancellationToken = default)
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="valuesToUpdate">The Specific values to set</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        public async Task<Card> UpdateCardAsync(string cardId, List<CardUpdate> valuesToUpdate, CancellationToken cancellationToken = default)
         {
-            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(cardWithChanges).ToList();
-            CardCover cardCover = cardWithChanges.Cover;
-            _queryParametersBuilder.AdjustForNamedPosition(parameters, cardWithChanges.NamedPosition);
-            var payload = GeneratePayloadForCoverUpdate(cardCover, parameters);
-            return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardWithChanges.Id}", cancellationToken, payload, parameters.ToArray());
+            var parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
+            QueryParameter coverParameter = parameters.FirstOrDefault(x => x.Name == "cover");
+            if (coverParameter != null && !string.IsNullOrWhiteSpace(coverParameter.GetRawStringValue()))
+            {
+                //Special Cover Card
+                parameters.Remove(coverParameter);
+                CardCover cover = JsonSerializer.Deserialize<CardCover>(coverParameter.GetRawStringValue());
+                var payload = GeneratePayloadForCoverUpdate(cover, parameters);
+                return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, payload, parameters.ToArray());
+            }
+
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, parameters.ToArray());
         }
 
         /// <summary>
@@ -338,7 +513,16 @@ namespace TrelloDotNet
                 }
             }
 
-            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken, options.GetParameters(true));
+            List<Card> cards;
+            if (options.Filter.HasValue)
+            {
+                cards = await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{options.Filter.Value.GetJsonPropertyName()}", cancellationToken, options.GetParameters(true));
+            }
+            else
+            {
+                cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken, options.GetParameters(true));
+            }
+
             if (options.IncludeList)
             {
                 var lists = await GetListsOnBoardAsync(boardId, cancellationToken);
@@ -420,67 +604,36 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get the cards on board based on their status regardless if they are on archived lists
+        /// Get the Cards in your Inbox
         /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
-        /// <param name="filter">The Selected Filter</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Cards</returns>
-        public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, CancellationToken cancellationToken = default)
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The Cards</returns>
+        public async Task<List<Card>> GetCardsInInboxAsync(CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken,
-#pragma warning disable CS0618 // Type or member is obsolete
-                new QueryParameter("customFieldItems", Options.IncludeCustomFieldsInCardGetMethods),
-                new QueryParameter("attachments", Options.IncludeAttachmentsInCardGetMethods));
-#pragma warning restore CS0618 // Type or member is obsolete
+            TokenMemberInbox inbox = await GetTokenMemberInboxAsync(cancellationToken);
+            if (inbox == null)
+            {
+                throw new TrelloApiException("Could not find your inbox", string.Empty);
+            }
+
+            return await GetCardsOnBoardAsync(inbox.BoardId, cancellationToken);
         }
 
         /// <summary>
-        /// Get the cards on board based on their status regardless if they are on archived lists
+        /// Get the Cards in your Inbox
         /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
-        /// <param name="filter">The Selected Filter</param>
-        /// <param name="options">Options on how and what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls)</param> 
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Cards</returns>
-        public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, GetCardOptions options, CancellationToken cancellationToken = default)
+        /// <param name="options">Options on what parts of the cards to get</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The Cards</returns>
+        public async Task<List<Card>> GetCardsInInboxAsync(GetInboxCardOptions options, CancellationToken cancellationToken = default)
         {
-            if (options.IncludeList)
+            TokenMemberInbox inbox = await GetTokenMemberInboxAsync(cancellationToken);
+            if (inbox == null)
             {
-                if (options.CardFields != null && !options.CardFields.Fields.Contains("idList"))
-                {
-                    options.CardFields.Fields = options.CardFields.Fields.Union(new List<string>
-                    {
-                        "idList"
-                    }).ToArray();
-                }
+                throw new TrelloApiException("Could not find your inbox", string.Empty);
             }
 
-            var cards = await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters(true));
-            if (options.IncludeList)
-            {
-                List<List> lists;
-                switch (filter)
-                {
-                    case CardsFilter.All:
-                    case CardsFilter.Closed:
-                    case CardsFilter.Visible:
-                        lists = await GetListsOnBoardFilteredAsync(boardId, ListFilter.All, cancellationToken);
-                        break;
-                    case CardsFilter.Open:
-                        lists = await GetListsOnBoardAsync(boardId, cancellationToken);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(filter), filter, null);
-                }
-
-                foreach (Card card in cards)
-                {
-                    card.List = lists.FirstOrDefault(x => x.Id == card.ListId);
-                }
-            }
-
-            return cards;
+            return await GetCardsOnBoardAsync(inbox.BoardId, options.ToCardOptions(), cancellationToken);
         }
 
         /// <summary>
@@ -571,10 +724,10 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<Card> SetDueDateOnCardAsync(string cardId, DateTimeOffset dueDate, bool dueComplete = false, CancellationToken cancellationToken = default)
         {
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), dueDate),
-                new QueryParameter(CardFieldsType.DueComplete.GetJsonPropertyName(), dueComplete)
+                CardUpdate.DueDate(dueDate),
+                CardUpdate.DueComplete(dueComplete)
             }, cancellationToken);
         }
 
@@ -586,9 +739,9 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<Card> SetStartDateOnCardAsync(string cardId, DateTimeOffset startDate, CancellationToken cancellationToken = default)
         {
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.Start.GetJsonPropertyName(), startDate)
+                CardUpdate.StartDate(startDate)
             }, cancellationToken);
         }
 
@@ -602,11 +755,11 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param> 
         public async Task<Card> SetStartDateAndDueDateOnCardAsync(string cardId, DateTimeOffset startDate, DateTimeOffset dueDate, bool dueComplete = false, CancellationToken cancellationToken = default)
         {
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.Start.GetJsonPropertyName(), startDate),
-                new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), dueDate),
-                new QueryParameter(CardFieldsType.DueComplete.GetJsonPropertyName(), dueComplete),
+                CardUpdate.StartDate(startDate),
+                CardUpdate.DueDate(dueDate),
+                CardUpdate.DueComplete(dueComplete)
             }, cancellationToken);
         }
 
@@ -619,9 +772,9 @@ namespace TrelloDotNet
         /// <returns></returns>
         public async Task<Card> MoveCardToListAsync(string cardId, string newListId, CancellationToken cancellationToken = default)
         {
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.ListId.GetJsonPropertyName(), newListId)
+                CardUpdate.List(newListId)
             }, cancellationToken);
         }
 
@@ -635,57 +788,17 @@ namespace TrelloDotNet
         /// <returns></returns>
         public async Task<Card> MoveCardToListAsync(string cardId, string newListId, MoveCardToListOptions options, CancellationToken cancellationToken = default)
         {
-            var parameters = new List<QueryParameter> { new QueryParameter(CardFieldsType.ListId.GetJsonPropertyName(), newListId) };
+            var parameters = new List<CardUpdate> { CardUpdate.List(newListId) };
             if (options.NamedPositionOnNewList.HasValue)
             {
-                switch (options.NamedPositionOnNewList.Value)
-                {
-                    case NamedPosition.Top:
-                        parameters.Add(new QueryParameter("pos", "top"));
-                        break;
-                    case NamedPosition.Bottom:
-                        parameters.Add(new QueryParameter("pos", "bottom"));
-                        break;
-                }
+                parameters.Add(CardUpdate.Position(options.NamedPositionOnNewList.Value));
             }
             else if (options.PositionOnNewList.HasValue)
             {
-                parameters.Add(new QueryParameter(CardFieldsType.Position.GetJsonPropertyName(), options.PositionOnNewList.Value));
+                parameters.Add(CardUpdate.Position(options.PositionOnNewList.Value));
             }
 
             return await UpdateCardAsync(cardId, parameters, cancellationToken);
-        }
-
-        /// <summary>
-        /// Update one or more specific fields on a card (compared to a full update of all fields with UpdateCard)
-        /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="parameters">The Specific Parameters to set</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        public async Task<Card> UpdateCardAsync(string cardId, List<QueryParameter> parameters, CancellationToken cancellationToken = default)
-        {
-            QueryParameter coverParameter = parameters.FirstOrDefault(x => x.Name == "cover");
-            if (coverParameter != null && !string.IsNullOrWhiteSpace(coverParameter.GetRawStringValue()))
-            {
-                parameters.Remove(coverParameter);
-                CardCover cover = JsonSerializer.Deserialize<CardCover>(coverParameter.GetRawStringValue());
-                var payload = GeneratePayloadForCoverUpdate(cover, parameters);
-                return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, payload, parameters.ToArray());
-            }
-
-            //Special Cover Card
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, parameters.ToArray());
-        }
-
-        /// <summary>
-        /// Update one or more specific fields on a card (compared to a full update of all fields with UpdateCard)
-        /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="valuesToUpdate">The Specific values to set</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        public async Task<Card> UpdateCardAsync(string cardId, List<CardUpdate> valuesToUpdate, CancellationToken cancellationToken = default)
-        {
-            return await UpdateCardAsync(cardId, valuesToUpdate.Select(x => x.ToQueryParameter()).ToList(), cancellationToken);
         }
 
         /// <summary>
@@ -696,9 +809,9 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> MoveCardToTopOfCurrentListAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.Position.GetJsonPropertyName(), "top")
+                CardUpdate.Position(NamedPosition.Top)
             }, cancellationToken);
         }
 
@@ -710,9 +823,9 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> MoveCardToBottomOfCurrentListAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.Position.GetJsonPropertyName(), "bottom")
+                CardUpdate.Position(NamedPosition.Bottom)
             }, cancellationToken);
         }
 
@@ -731,7 +844,7 @@ namespace TrelloDotNet
                 throw new ArgumentNullException(nameof(options), "You need to pass an options object to confirm the various options that are invovled with moving a card between boards");
             }
 
-            List<QueryParameter> parameters = new List<QueryParameter> { new QueryParameter(CardFieldsType.BoardId.GetJsonPropertyName(), newBoardId) };
+            List<CardUpdate> parameters = new List<CardUpdate> { CardUpdate.Board(newBoardId) };
             var newListId = options.NewListId;
             if (string.IsNullOrWhiteSpace(newListId))
             {
@@ -739,23 +852,15 @@ namespace TrelloDotNet
                 newListId = (await GetListsOnBoardAsync(newBoardId, cancellationToken)).OrderBy(x => x.Position).FirstOrDefault()?.Id;
             }
 
-            parameters.Add(new QueryParameter(CardFieldsType.ListId.GetJsonPropertyName(), newListId));
+            parameters.Add(CardUpdate.List(newListId));
 
             if (options.NamedPositionOnNewList.HasValue)
             {
-                switch (options.NamedPositionOnNewList.Value)
-                {
-                    case NamedPosition.Top:
-                        parameters.Add(new QueryParameter("pos", "top"));
-                        break;
-                    case NamedPosition.Bottom:
-                        parameters.Add(new QueryParameter("pos", "bottom"));
-                        break;
-                }
+                parameters.Add(CardUpdate.Position((options.NamedPositionOnNewList.Value)));
             }
             else if (options.PositionOnNewList.HasValue)
             {
-                parameters.Add(new QueryParameter(CardFieldsType.Position.GetJsonPropertyName(), options.PositionOnNewList.Value));
+                parameters.Add(CardUpdate.Position(options.PositionOnNewList.Value));
             }
 
             Card card = await GetCardAsync(cardId, new GetCardOptions
@@ -857,17 +962,17 @@ namespace TrelloDotNet
                 }
             }
 
-            parameters.Add(new QueryParameter(CardFieldsType.LabelIds.GetJsonPropertyName(), card.LabelIds));
-            parameters.Add(new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), card.MemberIds));
+            parameters.Add(CardUpdate.Labels(card.LabelIds));
+            parameters.Add(CardUpdate.Members(card.MemberIds));
 
             if (options.RemoveDueDate)
             {
-                parameters.Add(new QueryParameter(CardFieldsType.Due.GetJsonPropertyName(), (DateTimeOffset?)null));
+                parameters.Add(CardUpdate.DueDate(null));
             }
 
             if (options.RemoveStartDate)
             {
-                parameters.Add(new QueryParameter(CardFieldsType.Start.GetJsonPropertyName(), (DateTimeOffset?)null));
+                parameters.Add(CardUpdate.StartDate(null));
             }
 
             return await UpdateCardAsync(cardId, parameters, cancellationToken);

@@ -21,27 +21,88 @@ Welcome to TrelloDotNet - a .NET wrapper of the Trello REST API.
 ### Examples of Usage:
 
 ```cs
-TrelloClient client = new TrelloDotNet.TrelloClient("APIKey", "TOKEN"); //IMPORTANT: Remember to NOT leave Key and Token in clear text!
+TrelloClient client = new TrelloDotNet.TrelloClient("APIKEY", "TOKEN"); //IMPORTANT: Remember to NOT leave Key and Token in clear text!
 
-//Get a board
+//Get all boards that Token Owner can Access
+List<Board> boards = await client.GetBoardsCurrentTokenCanAccessAsync();
+
+//Get a specific board
 Board board = await client.GetBoardAsync("<boardId>");
 
 //Get Lists on a board
 List<List> lists = await client.GetListsOnBoardAsync("<boardId>");
 
-//Get a card
-Card card = await client.GetCardAsync("<cardId>");
-
 //Get Cards on Board
 List<Card> cardsOnBoard = await trelloClient.GetCardsOnBoardAsync("<boardId>");
 
-//Get Cards in List
+//Get Cards in a specific List
 List<Card> cardsInList = await trelloClient.GetCardsInListAsync("<listId>");
 
-//Add a card
-Card input = new Card("<listId>", "My Card", "My Card description");
-//todo - add more about the card 
-Card newCard = await client.AddCardAsync(input);
+//Get a specific card
+Card card = await client.GetCardAsync("<cardId>");
+
+//Add a card (Simple)
+AddCardOptions newCardOptions = new AddCardOptions("<listId>", "My Card", "My Card description");
+Card newCard = await client.AddCardAsync(newCardOptions);
+
+//Add a Card (Advanced with all options set)
+Card newAdvancedCard = await client.AddCardAsync(new AddCardOptions
+{
+    //Mandatory options
+    ListId = "<listId>",
+    Name = "My Card",
+
+    //Optional options
+    Description = "Description of My Card",
+    Start = DateTimeOffset.Now,
+    Due = DateTimeOffset.Now.AddDays(3),
+    Cover = new CardCover(CardCoverColor.Blue, CardCoverSize.Normal),
+    LabelIds = new List<string>
+    {
+        "<labelId1>",
+        "<labelId2>",
+    },
+    MemberIds = new List<string>
+    {
+        "<memberId1>",
+        "<memberId2>"
+    },
+    Checklists = new List<Checklist>
+    {
+        new Checklist("Checklist 1", new List<ChecklistItem>
+        {
+            new ChecklistItem("Item 1"),
+            new ChecklistItem("Item 2"),
+            new ChecklistItem("Item 3")
+        }),
+        new Checklist("Checklist 2", new List<ChecklistItem>
+        {
+            new ChecklistItem("Item A"),
+            new ChecklistItem("Item B"),
+            new ChecklistItem("Item C")
+        }),
+    },
+    AttachmentUrlLinks = new List<AttachmentUrlLink>
+    {
+        new AttachmentUrlLink("https://www.google.com", "Google")
+    },
+    AttachmentFileUploads = new List<AttachmentFileUpload>
+    {
+        new AttachmentFileUpload(File.OpenRead(@"<pathToFile>"), "<Filename>", "<FileDescription>")
+    },
+    CustomFields = new List<AddCardOptionsCustomField>
+    {
+        new AddCardOptionsCustomField(customField1OnBoard, "ABC"),
+        new AddCardOptionsCustomField(customField2OnBoard, 123),
+    }
+});
+
+//Update a Card (with new name and description and removal of Due Date)
+var updateCard = await TrelloClient.UpdateCardAsync("<cardId>", [
+    CardUpdate.Name("New Name"),
+    CardUpdate.Description("New Description"),
+    CardUpdate.DueDate(null),
+]);
 
 //Add a Checklist to a card
 var checklistItems = new List<ChecklistItem>

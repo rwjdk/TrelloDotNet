@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
-using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetMemberOptions;
 
 // ReSharper disable UnusedMember.Global
@@ -121,9 +120,9 @@ namespace TrelloDotNet
 
             //Need update
             card.MemberIds.AddRange(missing);
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), card.MemberIds)
+                CardUpdate.Members(card.MemberIds)
             }, cancellationToken);
         }
 
@@ -154,9 +153,9 @@ namespace TrelloDotNet
 
             //Need update
             card.MemberIds = card.MemberIds.Except(toRemove).ToList();
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), card.MemberIds)
+                CardUpdate.Members(card.MemberIds)
             }, cancellationToken);
         }
 
@@ -167,9 +166,9 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<Card> RemoveAllMembersFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await UpdateCardAsync(cardId, new List<QueryParameter>
+            return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                new QueryParameter(CardFieldsType.MemberIds.GetJsonPropertyName(), new List<string>())
+                CardUpdate.Members(new List<string>())
             }, cancellationToken);
         }
 

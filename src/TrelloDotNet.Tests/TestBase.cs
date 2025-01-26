@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.AddCardOptions;
 
 namespace TrelloDotNet.Tests;
 
@@ -48,7 +49,7 @@ public abstract class TestBase
     protected async Task<(List List, Card Card)> AddDummyCardAndList(string boardId, string? name = null)
     {
         List list = await AddDummyList(boardId, name);
-        Card card = await TrelloClient.AddCardAsync(new Card(list.Id, name ?? Guid.NewGuid().ToString()));
+        Card card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString()));
         return (list, card);
     }
 

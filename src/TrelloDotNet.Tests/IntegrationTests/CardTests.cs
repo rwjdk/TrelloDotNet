@@ -1,5 +1,6 @@
 ﻿using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
+using TrelloDotNet.Model.Options.AddCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
@@ -80,7 +81,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task GetCard()
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
-        var inputCard = new Card(list.Id, Guid.NewGuid().ToString())
+        var inputCard = new AddCardOptions(list.Id, Guid.NewGuid().ToString())
         {
             Due = DateTimeOffset.Now,
             Description = Guid.NewGuid().ToString()
@@ -106,8 +107,13 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
             allLabelsOnBoard[1].Id,
             allLabelsOnBoard[2].Id
         };
-        var input = new Card(list.Id, "Card", "Description", start, due, false, labelIds, memberIds)
+        var input = new AddCardOptions(list.Id, "Card", "Description")
         {
+            Start = start,
+            Due = due,
+            DueComplete = false,
+            LabelIds = labelIds,
+            MemberIds = memberIds,
             Cover = new CardCover(CardCoverColor.Blue, CardCoverSize.Normal)
         };
         var addedCard = await TrelloClient.AddCardAsync(input);
@@ -134,8 +140,6 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         Assert.Equal(CardCoverBrightness.Dark, addedCard.Cover.Brightness);
         Assert.Null(addedCard.Cover.BackgroundImageId);
         Assert.Empty(addedCard.ChecklistIds);
-        Assert.Null(addedCard.CustomFieldItems);
-
 
         var membersOfCardAsync = await TrelloClient.GetMembersOfCardAsync(addedCard.Id);
         Assert.Single(membersOfCardAsync);
@@ -145,11 +149,11 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task UpdateCard()
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
-        Card addedCard = await TrelloClient.AddCardAsync(new Card(list.Id, "X", "X"));
-        //Update Card
-        addedCard.DueComplete = true;
-        addedCard.Description = "New Description";
-        var updateCard = await TrelloClient.UpdateCardAsync(addedCard);
+        Card addedCard = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "X", "X"));
+        var updateCard = await TrelloClient.UpdateCardAsync(addedCard.Id, [
+            CardUpdate.DueComplete(true),
+            CardUpdate.Description("New Description"),
+        ]);
         Assert.True(updateCard.DueComplete);
         Assert.Equal("New Description", updateCard.Description);
     }
@@ -158,7 +162,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task Checklists()
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
-        Card card = await TrelloClient.AddCardAsync(new Card(list.Id, "Card"));
+        Card card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Card"));
 
         var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
         DateTimeOffset? due = new DateTimeOffset(new DateTime(2099, 1, 1, 12, 0, 0, DateTimeKind.Utc));
@@ -205,7 +209,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         Assert.Null(itemC.Due);
         //Assert.Equal(member.Id, itemC.MemberId); //This will fail on a free version of Trello so commented out
 
-        var doneCard = await TrelloClient.AddCardAsync(new Card(list.Id, "Card 2"));
+        var doneCard = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Card 2"));
         await TrelloClient.AddChecklistAsync(doneCard.Id, addedChecklist.Id, true, null);
         await TrelloClient.AddChecklistAsync(doneCard.Id, addedChecklist.Id, true, null);
 
@@ -231,7 +235,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task Delete()
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
-        Card card = await TrelloClient.AddCardAsync(new Card(list.Id, "Card"));
+        Card card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Card"));
         await TrelloClient.DeleteCardAsync(card.Id);
         var cardsAfterDelete = await TrelloClient.GetCardsOnBoardAsync(_board.Id);
         Assert.True(cardsAfterDelete.All(x => x.Id != card.Id));
@@ -243,7 +247,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
 
         //Archive and Reopen
-        var cardForArchiveAndReopen = await TrelloClient.AddCardAsync(new Card(list.Id, "Card for archive and reopen"));
+        var cardForArchiveAndReopen = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Card for archive and reopen"));
         Assert.False(cardForArchiveAndReopen.Closed);
 
         var archivedCard = await TrelloClient.ArchiveCardAsync(cardForArchiveAndReopen.Id);
@@ -258,7 +262,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Test: Set dates
-        var cardWithDates = await TrelloClient.AddCardAsync(new Card(list.Id, "Date Card"));
+        var cardWithDates = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Date Card"));
         DateTimeOffset testStartDate = new(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc));
         var testDueDate = testStartDate.AddDays(2);
 
@@ -280,7 +284,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Test: Add/Remove Labels
-        var cardWithLabels = await TrelloClient.AddCardAsync(new Card(list.Id, "Label Card"));
+        var cardWithLabels = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Label Card"));
         Assert.Empty(cardWithLabels.LabelIds);
 
         var cardWithLabelsAdded = await TrelloClient.AddLabelsToCardAsync(cardWithLabels.Id, allLabelsOnBoard.Select(x => x.Id).ToArray());
@@ -306,7 +310,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
         var memberIds = new List<string> { member.Id };
         //Test: Add/Remove Members
-        var cardWithMembers = await TrelloClient.AddCardAsync(new Card(list.Id, "Member Card"));
+        var cardWithMembers = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Member Card"));
         Assert.Empty(cardWithMembers.MemberIds);
 
         var cardWithMemberAdded = await TrelloClient.AddMembersToCardAsync(cardWithMembers.Id, memberIds.ToArray());
@@ -330,7 +334,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Custom Delete
-        var customDeleteCard = await TrelloClient.AddCardAsync(new Card(list.Id, "Custom Delete Card"));
+        var customDeleteCard = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Custom Delete Card"));
 
         await TrelloClient.DeleteAsync($"cards/{customDeleteCard.Id}");
     }
@@ -340,7 +344,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Test Sticker CRUD
-        var cardForStickerTests = await TrelloClient.AddCardAsync(new Card(list.Id, "Sticker Tests"));
+        var cardForStickerTests = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Sticker Tests"));
         var stickersPresentJustAfterAdd = await TrelloClient.GetStickersOnCardAsync(cardForStickerTests.Id);
         Assert.Empty(stickersPresentJustAfterAdd);
         var addedSticker = await TrelloClient.AddStickerToCardAsync(cardForStickerTests.Id, new Sticker(StickerDefaultImageId.Clock, 20, 10, 1, 45));
@@ -386,7 +390,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         //Test Comments
-        var cardForComments = await TrelloClient.AddCardAsync(new Card(list.Id, "Comments Tests"));
+        var cardForComments = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Comments Tests"));
         // ReSharper disable once RedundantAssignment
 #pragma warning disable IDE0059
         var commentInput = new Comment(); //For Test-coverage
@@ -430,17 +434,14 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task Covers()
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
-        var card = await TrelloClient.AddCardAsync(new Card(list.Id, "Cover Tests"));
+        var card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Cover Tests"));
         Assert.Null(card.Cover.Color);
-        card.Cover.Color = CardCoverColor.Blue;
-        card.Cover.Size = CardCoverSize.Full;
 
-        var updatedCard = await TrelloClient.UpdateCardAsync(card);
+        var updatedCard = await TrelloClient.UpdateCoverOnCardAsync(card.Id, new CardCover(CardCoverColor.Blue, CardCoverSize.Full));
         Assert.Equal(CardCoverColor.Blue, updatedCard.Cover.Color);
         Assert.Equal(CardCoverSize.Full, updatedCard.Cover.Size);
 
-        card.Cover = null;
-        var updated2Card = await TrelloClient.UpdateCardAsync(card);
+        var updated2Card = await TrelloClient.RemoveCoverFromCardAsync(card.Id);
         Assert.Null(updated2Card.Cover.Color);
 
         var addCoverOnCardAsync = await TrelloClient.AddCoverToCardAsync(updated2Card.Id, new CardCover(CardCoverColor.Lime, CardCoverSize.Normal));

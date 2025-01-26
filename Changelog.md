@@ -1,6 +1,23 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.9 (25th of January 2025)
+#### Special
+- **This is the last planned 1.x release. Upcoming 2.x releases will have a set of breaking changes to streamline the API and make it less confusing to use (aka less options to do the same thing). [See a list of breaking changes here](https://github.com/rwjdk/TrelloDotNet/issues/51)**
+
+#### TrelloClient
+- Added new version of [AddCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardAsync) that allow all features on a card to be set in a single command and obsoleted old version.
+- Added methods to inteact with you Trello Inbox ([AddCardToInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardToInboxAsync) + [GetCardsInInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/))
+- Added [GetTokenMemberInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetTokenMemberInboxAsync) to get the Ids of the owner of the Token's Inbox
+- Added `CardUpdate.Cover` to allow Cover Updates and `CardUpdate.AdditionalParameter` to allow any additional fields that are not a known field (should something new come along)
+- Change: `CardUpdate.DueDate` and `CardUpdate.StartDate` has been changed to be nullable in order to allow removal of value
+- Obsoleted `UpdateCardAsync(Card cardWithChanges...)` as it have performance issues and overwritten data scenarios. Use one of the two other variants to update your cards as they are faster and more safe.
+- Obsoleted `UpdateCardAsync(string cardId, List<QueryParameter> parameters...)`. User `UpdateCardAsync(string cardId, List<CardUpdate> valuesToUpdate)` version instead.
+- Obsoleted `AddCardTemplateAsync()` (Use `AddCardAsync()` instead and in options set `IsTemplate = true` ) 
+- Obsoleted `GetCardsOnBoardFilteredAsync()` (Use `GetCardsOnBoardAsync()` with `options.Filter = <your Filter>`)
+
+<hr/>
+
 ## 1.11.8 (19th of January 2025)
 #### TrelloClient
 - Added [MirrorCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/MirrorCardAsync) to support the new Card Mirroring System

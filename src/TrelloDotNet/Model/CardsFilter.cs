@@ -28,7 +28,7 @@ namespace TrelloDotNet.Model
         Open,
 
         /// <summary>
-        /// Unknown option - API Reference does not explain (Create GitHub Issue if you know so we can fix this comment :-))
+        /// Only open cards (excluding those on archived lists)
         /// </summary>
         [JsonPropertyName("visible")]
         Visible
