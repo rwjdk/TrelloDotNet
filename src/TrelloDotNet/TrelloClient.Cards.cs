@@ -74,6 +74,7 @@ namespace TrelloDotNet
             }
 
             QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(input);
+            _queryParametersBuilder.AdjustForNamedPosition(parameters, input.NamedPosition);
             Card addedCard = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
 
             bool needGet = false;
