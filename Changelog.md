@@ -1,6 +1,12 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.10 (27th of January 2025)
+#### TrelloClient
+- Fixed that the new AddCard variant did not properly work with NamePosition
+- 
+<hr>
+
 ## 1.11.9 (25th of January 2025)
 #### Special
 - **This is the last planned 1.x release. Upcoming 2.x releases will have a set of breaking changes to streamline the API and make it less confusing to use (aka less options to do the same thing). [See a list of breaking changes here](https://github.com/rwjdk/TrelloDotNet/issues/51)**
