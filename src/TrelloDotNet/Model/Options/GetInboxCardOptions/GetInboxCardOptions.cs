@@ -64,6 +64,11 @@ namespace TrelloDotNet.Model.Options.GetInboxCardOptions
         public CardsFilter? Filter { get; set; }
 
         /// <summary>
+        /// Order the cards returned by this (only used when multiple cards are returned)
+        /// </summary>
+        public CardsOrderBy? OrderBy { get; set; }
+
+        /// <summary>
         /// Additional Parameters not supported out-of-the-box
         /// </summary>
         public List<QueryParameter> AdditionalParameters { get; set; } = new List<QueryParameter>();

@@ -114,6 +114,16 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         public CardsFilter? Filter { get; set; }
 
         /// <summary>
+        /// Order the cards returned by this (only used when multiple cards are returned)
+        /// </summary>
+        public CardsOrderBy? OrderBy { get; set; }
+
+        /// <summary>
+        /// Add conditions of which of the data from the call is actually returned (Note: this is in-memory filtering as Trello's API is not able to filter on server-side)
+        /// </summary>
+        public List<CardsFilterCondition> FilterConditions { get; set; } = new List<CardsFilterCondition>();
+
+        /// <summary>
         /// Send these Additional Parameters not supported out-of-the-box (should you need to do something to the query-parameters not yet supported by this API)
         /// </summary>
         public List<QueryParameter> AdditionalParameters { get; set; } = new List<QueryParameter>();

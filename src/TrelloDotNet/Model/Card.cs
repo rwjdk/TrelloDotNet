@@ -112,7 +112,7 @@ namespace TrelloDotNet.Model
         public DateTimeOffset? Due { get; set; }
 
         /// <summary>
-        /// If the due work is completed
+        /// If the Card is completed
         /// </summary>
         [JsonPropertyName("dueComplete")]
         [QueryParameter]
@@ -312,7 +312,7 @@ namespace TrelloDotNet.Model
         /// <param name="description">Description on the card</param>
         /// <param name="start">Start-date (should be given in UTC)</param>
         /// <param name="due">Due-date (should be given in UTC)</param>
-        /// <param name="dueComplete">If due-date is complete (normally false when you create a card)</param>
+        /// <param name="dueComplete">If card is complete (normally false when you create a card)</param>
         /// <param name="labelIds">Labels set on the card</param>
         /// <param name="memberIds">Members (user) assigned to the card</param>
         public Card(string listId, string name, string description, DateTimeOffset? start, DateTimeOffset? due, bool dueComplete = false, List<string> labelIds = null, List<string> memberIds = null)

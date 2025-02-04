@@ -26,7 +26,7 @@
         Due,
 
         /// <summary>
-        /// The Due Complete 
+        /// The Card Complete 
         /// </summary>
         DueComplete
     }

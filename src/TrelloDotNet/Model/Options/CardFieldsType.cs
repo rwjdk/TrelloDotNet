@@ -76,7 +76,7 @@ namespace TrelloDotNet.Model.Options
         Due,
 
         /// <summary>
-        /// If the due work is completed
+        /// If the Card is completed
         /// </summary>
         [JsonPropertyName("dueComplete")]
         DueComplete,

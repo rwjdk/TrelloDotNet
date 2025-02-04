@@ -16,7 +16,7 @@
         DueDate,
 
         /// <summary>
-        /// Due Completed (will be marked as False)
+        /// Card Completed (will be marked as False)
         /// </summary>
         DueComplete,
 

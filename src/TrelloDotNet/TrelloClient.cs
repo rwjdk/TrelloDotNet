@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
+using TrelloDotNet.Extensions;
 using TrelloDotNet.Model;
 
 namespace TrelloDotNet
@@ -67,6 +70,47 @@ namespace TrelloDotNet
         public async Task<TokenMemberInbox> GetTokenMemberInboxAsync(CancellationToken cancellationToken = default)
         {
             return (await _apiRequestController.Get<TokenMemberInformationInbox>($"{UrlPaths.Members}/me?fields=inbox", cancellationToken))?.Inbox;
+        }
+
+        private static List<Card> OrderCards(List<Card> cards, CardsOrderBy? orderBy)
+        {
+            switch (orderBy)
+            {
+                case CardsOrderBy.CreateDateAsc:
+                    return cards.OrderBy(x => x.Created).ToList();
+                case CardsOrderBy.CreateDateDesc:
+                    return cards.OrderByDescending(x => x.Created).ToList();
+                case CardsOrderBy.StartDateAsc:
+                    return cards.OrderBy(x => x.Start).ToList();
+                case CardsOrderBy.StartDateDesc:
+                    return cards.OrderByDescending(x => x.Start).ToList();
+                case CardsOrderBy.DueDateAsc:
+                    return cards.OrderBy(x => x.Due).ToList();
+                case CardsOrderBy.DueDateDesc:
+                    return cards.OrderByDescending(x => x.Due).ToList();
+                case CardsOrderBy.NameAsc:
+                    return cards.OrderBy(x => x.Name).ToList();
+                case CardsOrderBy.NameDesc:
+                    return cards.OrderByDescending(x => x.Name).ToList();
+            }
+
+            return cards;
+        }
+
+        private async Task<List<Card>> FilterCards(string boardId, List<Card> cards, List<CardsFilterCondition> filterConditions)
+        {
+            if (filterConditions == null || filterConditions.Count == 0)
+            {
+                return cards;
+            }
+
+            var customFields = new List<CustomField>();
+            if (filterConditions.Any(x => x.Field == CardsConditionField.CustomField))
+            {
+                customFields = await GetCustomFieldsOnBoardAsync(boardId);
+            }
+
+            return cards.Filter(filterConditions, customFields);
         }
     }
 }

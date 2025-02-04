@@ -16,6 +16,15 @@ namespace TrelloDotNet.Model
         /// Constructor
         /// </summary>
         /// <param name="message">Message to display to user</param>
+        public TrelloApiException(string message) : base(message)
+        {
+            DataSentToTrello = string.Empty;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="message">Message to display to user</param>
         /// <param name="dataSentToTrello">The URI Payload used to call Trello</param>
         public TrelloApiException(string message, string dataSentToTrello) : base(message)
         {

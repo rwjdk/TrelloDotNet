@@ -532,7 +532,9 @@ namespace TrelloDotNet
                 }
             }
 
-            return cards;
+            //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
+            cards = await FilterCards(boardId, cards, options.FilterConditions);
+            return OrderCards(cards, options.OrderBy);
         }
 
         /// <summary>
@@ -587,7 +589,7 @@ namespace TrelloDotNet
             }
 
 
-            return cards;
+            return OrderCards(cards, options.OrderBy);
         }
 
         /// <summary>
@@ -620,7 +622,8 @@ namespace TrelloDotNet
                 throw new TrelloApiException("Could not find your inbox", string.Empty);
             }
 
-            return await GetCardsOnBoardAsync(inbox.BoardId, options.ToCardOptions(), cancellationToken);
+            var cards = await GetCardsOnBoardAsync(inbox.BoardId, options.ToCardOptions(), cancellationToken);
+            return OrderCards(cards, options.OrderBy);
         }
 
         /// <summary>
@@ -699,7 +702,7 @@ namespace TrelloDotNet
                 }
             }
 
-            return cards;
+            return OrderCards(cards, options.OrderBy);
         }
 
         /// <summary>
@@ -707,7 +710,7 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cardId">Id of the Card</param>
         /// <param name="dueDate">The Due Date (In UTC Time)</param>
-        /// <param name="dueComplete">If Due is complete</param>
+        /// <param name="dueComplete">If Card is complete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<Card> SetDueDateOnCardAsync(string cardId, DateTimeOffset dueDate, bool dueComplete = false, CancellationToken cancellationToken = default)
         {
@@ -738,7 +741,7 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="startDate">The Start Date (In UTC Time)</param>
         /// <param name="dueDate">The Due Date (In UTC Time)</param>
-        /// <param name="dueComplete">If Due is complete</param>
+        /// <param name="dueComplete">If Card is complete</param>
         /// <param name="cancellationToken">Cancellation Token</param> 
         public async Task<Card> SetStartDateAndDueDateOnCardAsync(string cardId, DateTimeOffset startDate, DateTimeOffset dueDate, bool dueComplete = false, CancellationToken cancellationToken = default)
         {

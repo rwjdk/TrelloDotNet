@@ -34,7 +34,7 @@ namespace TrelloDotNet.Model.Webhook
         public decimal? Position { get; private set; }
 
         /// <summary>
-        /// If the due work is completed
+        /// If the Card is completed
         /// </summary>
         [JsonPropertyName("dueComplete")]
         [JsonInclude]

@@ -49,7 +49,8 @@ namespace TrelloDotNet
         public async Task<List<Card>> GetCardsAsync(List<string> ids, GetCardOptions options, CancellationToken cancellationToken = default)
         {
             StringBuilder parametersAsString = ApiRequestController.GetParametersAsString(options.GetParameters(false)).Replace("&", "?", 0, 1);
-            return await ExecuteBatchedRequestAsync<Card>(ids.Select(id => $"/{UrlPaths.Cards}/{id}{parametersAsString}").ToList(), cancellationToken);
+            List<Card> cards = await ExecuteBatchedRequestAsync<Card>(ids.Select(id => $"/{UrlPaths.Cards}/{id}{parametersAsString}").ToList(), cancellationToken);
+            return OrderCards(cards, options.OrderBy);
         }
 
         /// <summary>

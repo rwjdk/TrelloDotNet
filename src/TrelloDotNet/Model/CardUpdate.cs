@@ -45,7 +45,7 @@ namespace TrelloDotNet.Model
         public static CardUpdate DueDate(DateTimeOffset? value) => new CardUpdate(CardFieldsType.Due, value);
 
         /// <summary>
-        /// Create a Due Completed Parameter
+        /// Create a Card Completed Parameter
         /// </summary>
         /// <param name="value">Due Completed</param>
         /// <returns>CardUpdate Object</returns>

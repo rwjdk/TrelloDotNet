@@ -59,7 +59,7 @@ namespace TrelloDotNet.Model.Options.AddCardToInboxOptions
         public NamedPosition? NamedPosition { get; set; }
 
         /// <summary>
-        /// If Due is Complete
+        /// If Card is Complete
         /// </summary>
         public bool DueComplete { get; set; }
 

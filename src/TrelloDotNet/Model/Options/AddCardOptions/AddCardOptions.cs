@@ -80,7 +80,7 @@ namespace TrelloDotNet.Model.Options.AddCardOptions
         public NamedPosition? NamedPosition { get; set; }
 
         /// <summary>
-        /// If Due is Complete
+        /// If Card is Complete
         /// </summary>
         public bool DueComplete { get; set; }
 
