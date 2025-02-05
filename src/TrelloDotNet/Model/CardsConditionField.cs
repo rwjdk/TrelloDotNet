@@ -7,9 +7,11 @@
         Label,
         Member,
         Description,
-        DueDate,
-        StartDate,
-        CreateDate,
+        Due,
+        DueWithNoDueComplete,
+        Start,
+        Created,
         CustomField,
+        DueComplete,
     }
 }

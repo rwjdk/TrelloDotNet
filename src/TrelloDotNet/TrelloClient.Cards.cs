@@ -533,7 +533,7 @@ namespace TrelloDotNet
             }
 
             //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
-            cards = await FilterCards(boardId, cards, options.FilterConditions);
+            cards = FilterCards(cards, options.FilterConditions);
             return OrderCards(cards, options.OrderBy);
         }
 
@@ -588,7 +588,8 @@ namespace TrelloDotNet
                 }
             }
 
-
+            //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
+            cards = FilterCards(cards, options.FilterConditions);
             return OrderCards(cards, options.OrderBy);
         }
 
@@ -623,6 +624,8 @@ namespace TrelloDotNet
             }
 
             var cards = await GetCardsOnBoardAsync(inbox.BoardId, options.ToCardOptions(), cancellationToken);
+            //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
+            cards = FilterCards(cards, options.FilterConditions);
             return OrderCards(cards, options.OrderBy);
         }
 
@@ -702,6 +705,8 @@ namespace TrelloDotNet
                 }
             }
 
+            //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
+            cards = FilterCards(cards, options.FilterConditions);
             return OrderCards(cards, options.OrderBy);
         }
 

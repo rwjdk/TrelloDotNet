@@ -97,20 +97,14 @@ namespace TrelloDotNet
             return cards;
         }
 
-        private async Task<List<Card>> FilterCards(string boardId, List<Card> cards, List<CardsFilterCondition> filterConditions)
+        private List<Card> FilterCards(List<Card> cards, List<CardsFilterCondition> filterConditions)
         {
             if (filterConditions == null || filterConditions.Count == 0)
             {
                 return cards;
             }
 
-            var customFields = new List<CustomField>();
-            if (filterConditions.Any(x => x.Field == CardsConditionField.CustomField))
-            {
-                customFields = await GetCustomFieldsOnBoardAsync(boardId);
-            }
-
-            return cards.Filter(filterConditions, customFields);
+            return cards.Filter(filterConditions);
         }
     }
 }

@@ -6,9 +6,18 @@ using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Extensions
 {
+    /// <summary>
+    /// Extensions for list of Cards
+    /// </summary>
     public static class CardsExtensions
     {
-        public static List<Card> Filter(this IEnumerable<Card> cards, List<CardsFilterCondition> conditions, List<CustomField> customFields)
+        /// <summary>
+        /// Filter list of cards based on a set of conditions
+        /// </summary>
+        /// <param name="cards">The list of cards</param>
+        /// <param name="conditions">The conditions to apply</param>
+        /// <returns></returns>
+        public static List<Card> Filter(this IEnumerable<Card> cards, List<CardsFilterCondition> conditions)
         {
             foreach (CardsFilterCondition entry in conditions)
             {
@@ -29,17 +38,23 @@ namespace TrelloDotNet.Extensions
                     case CardsConditionField.Description:
                         cards = FilterDescription(cards, entry);
                         break;
-                    case CardsConditionField.DueDate:
+                    case CardsConditionField.DueWithNoDueComplete:
+                        cards = FilterDueDateNoDueComplete(cards, entry);
+                        break;
+                    case CardsConditionField.Due:
                         cards = FilterDueDate(cards, entry);
                         break;
-                    case CardsConditionField.StartDate:
+                    case CardsConditionField.Start:
                         cards = FilterStartDate(cards, entry);
                         break;
-                    case CardsConditionField.CreateDate:
+                    case CardsConditionField.Created:
                         cards = FilterCreateDate(cards, entry);
                         break;
                     case CardsConditionField.CustomField:
-                        cards = FilterCustomFields(cards, entry, customFields);
+                        cards = FilterCustomField(cards, entry);
+                        break;
+                    case CardsConditionField.DueComplete:
+                        cards = FilterDueComplete(cards, entry);
                         break;
                 }
             }
@@ -47,22 +62,31 @@ namespace TrelloDotNet.Extensions
             return cards.ToList();
         }
 
-        private static IEnumerable<Card> FilterCustomFields(IEnumerable<Card> cards, CardsFilterCondition entry, List<CustomField> customFields)
+        private static IEnumerable<Card> FilterDueComplete(IEnumerable<Card> cards, CardsFilterCondition entry)
         {
-            if (entry.CustomFieldId == null)
+            switch (entry.Condition)
             {
-                throw new TrelloApiException("CustomFieldId was not provided");
+                case CardsCondition.Equal:
+                    return cards.Where(x => x.DueComplete == entry.ValueAsBoolean);
+                case CardsCondition.NotEqual:
+                    return cards.Where(x => x.DueComplete != entry.ValueAsBoolean);
+                default:
+                    throw new TrelloApiException($"{entry.Condition} on DueComplete Filter does not make sense");
+            }
+        }
+
+        private static IEnumerable<Card> FilterCustomField(IEnumerable<Card> cards, CardsFilterCondition entry)
+        {
+            if (entry.CustomFieldEntry == null)
+            {
+                throw new TrelloApiException("CustomField was not provided");
             }
 
-            CustomField customFieldDefinition = customFields.FirstOrDefault(x => x.Id == entry.CustomFieldId);
-            if (customFieldDefinition == null)
-            {
-                throw new TrelloApiException($"CustomField with id {entry.CustomFieldId} was not found");
-            }
+            var customFieldDefinition = entry.CustomFieldEntry;
 
             cards = cards.Where(x =>
             {
-                CustomFieldItem customFieldItem = x.CustomFieldItems.FirstOrDefault(y => y.CustomFieldId == entry.CustomFieldId);
+                CustomFieldItem customFieldItem = x.CustomFieldItems.FirstOrDefault(y => y.CustomFieldId == customFieldDefinition.Id);
                 switch (entry.Condition)
                 {
                     case CardsCondition.HasAnyValue:
@@ -104,14 +128,28 @@ namespace TrelloDotNet.Extensions
                                 return date.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y == date.Value);
                             case CardsCondition.NoneOfThese:
                                 return date.HasValue && entry.ValueAsDateTimeOffsets.All(y => y != date.Value);
-                            case CardsCondition.Contains:
-                            case CardsCondition.DoNotContains:
-                            case CardsCondition.AllOfThese:
-                            case CardsCondition.RegEx:
-                            case CardsCondition.StartsWith:
-                            case CardsCondition.EndsWith:
-                            case CardsCondition.DoNotStartWith:
-                            case CardsCondition.DoNotEndWith:
+                            case CardsCondition.Between:
+                            {
+                                if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                                {
+                                    throw new TrelloApiException("Between Condition for Custom Field need 2 and only 2 Dates");
+                                }
+
+                                DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                                DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                                return date.HasValue && date.Value >= from && date.Value <= to;
+                            }
+                            case CardsCondition.NotBetween:
+                            {
+                                if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                                {
+                                    throw new TrelloApiException("NotBetween Condition for Custom Field need 2 and only 2 Dates");
+                                }
+
+                                DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                                DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                                return (date.HasValue && date.Value > to) || (date.HasValue && date.Value < from);
+                            }
                             default:
                                 throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a CustomField of Type Date");
                         }
@@ -124,13 +162,13 @@ namespace TrelloDotNet.Extensions
                             case CardsCondition.NotEqual:
                                 return listValue != entry.ValueAsString;
                             case CardsCondition.GreaterThan:
-                                return listValue.Length > entry.ValueAsInteger;
+                                return listValue.Length > entry.ValueAsNumber;
                             case CardsCondition.LessThan:
-                                return listValue.Length < entry.ValueAsInteger;
+                                return listValue.Length < entry.ValueAsNumber;
                             case CardsCondition.GreaterThanOrEqual:
-                                return listValue.Length >= entry.ValueAsInteger;
+                                return listValue.Length >= entry.ValueAsNumber;
                             case CardsCondition.LessThanOrEqual:
-                                return listValue.Length <= entry.ValueAsInteger;
+                                return listValue.Length <= entry.ValueAsNumber;
                             case CardsCondition.Contains:
                                 return listValue.Contains(entry.ValueAsString);
                             case CardsCondition.DoNotContains:
@@ -158,27 +196,43 @@ namespace TrelloDotNet.Extensions
                         switch (entry.Condition)
                         {
                             case CardsCondition.Equal:
-                                return number == entry.ValueAsDecimal;
+                                return number == entry.ValueAsNumber;
                             case CardsCondition.NotEqual:
-                                return number != entry.ValueAsDecimal;
+                                return number != entry.ValueAsNumber;
                             case CardsCondition.GreaterThan:
-                                return number > entry.ValueAsDecimal;
+                                return number > entry.ValueAsNumber;
                             case CardsCondition.LessThan:
-                                return number < entry.ValueAsDecimal;
+                                return number < entry.ValueAsNumber;
                             case CardsCondition.GreaterThanOrEqual:
-                                return number >= entry.ValueAsDecimal;
+                                return number >= entry.ValueAsNumber;
                             case CardsCondition.LessThanOrEqual:
-                                return number <= entry.ValueAsDecimal;
+                                return number <= entry.ValueAsNumber;
                             case CardsCondition.AnyOfThese:
-                                return entry.ValueAsDecimals.Any(y => y == number);
+                                return entry.ValueAsNumbers.Any(y => y == number);
                             case CardsCondition.NoneOfThese:
-                                return entry.ValueAsDecimals.All(y => y != number);
-                            case CardsCondition.AllOfThese:
-                            case CardsCondition.RegEx:
-                            case CardsCondition.StartsWith:
-                            case CardsCondition.EndsWith:
-                            case CardsCondition.DoNotStartWith:
-                            case CardsCondition.DoNotEndWith:
+                                return entry.ValueAsNumbers.All(y => y != number);
+                            case CardsCondition.Between:
+                            {
+                                if (entry.ValueAsNumbers?.Count != 2)
+                                {
+                                    throw new TrelloApiException("Between Condition for Custom Field need 2 and only 2 Numbers");
+                                }
+
+                                decimal from = entry.ValueAsNumbers.First();
+                                decimal to = entry.ValueAsNumbers.Last();
+                                return number >= from && number <= to;
+                            }
+                            case CardsCondition.NotBetween:
+                            {
+                                if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                                {
+                                    throw new TrelloApiException("NotBetween Condition for Custom Field need 2 and only 2 Numbers");
+                                }
+
+                                decimal from = entry.ValueAsNumbers.First();
+                                decimal to = entry.ValueAsNumbers.Last();
+                                return number > to || number < from;
+                            }
                             default:
                                 throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a CustomField of Type Number");
                         }
@@ -192,13 +246,13 @@ namespace TrelloDotNet.Extensions
                             case CardsCondition.NotEqual:
                                 return textValue != entry.ValueAsString;
                             case CardsCondition.GreaterThan:
-                                return textValue.Length > entry.ValueAsInteger;
+                                return textValue.Length > entry.ValueAsNumber;
                             case CardsCondition.LessThan:
-                                return textValue.Length < entry.ValueAsInteger;
+                                return textValue.Length < entry.ValueAsNumber;
                             case CardsCondition.GreaterThanOrEqual:
-                                return textValue.Length >= entry.ValueAsInteger;
+                                return textValue.Length >= entry.ValueAsNumber;
                             case CardsCondition.LessThanOrEqual:
-                                return textValue.Length <= entry.ValueAsInteger;
+                                return textValue.Length <= entry.ValueAsNumber;
                             case CardsCondition.Contains:
                                 return textValue.Contains(entry.ValueAsString);
                             case CardsCondition.DoNotContains:
@@ -232,50 +286,111 @@ namespace TrelloDotNet.Extensions
             switch (entry.Condition)
             {
                 case CardsCondition.Equal:
-                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due == entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Due.HasValue && x.Due == entry.ValueAsDateTimeOffset);
                 case CardsCondition.NotEqual:
-                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due != entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Due.HasValue && x.Due != entry.ValueAsDateTimeOffset);
                 case CardsCondition.GreaterThan:
-                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due > entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Due.HasValue && x.Due > entry.ValueAsDateTimeOffset);
                 case CardsCondition.LessThan:
-                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due < entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Due.HasValue && x.Due < entry.ValueAsDateTimeOffset);
                 case CardsCondition.GreaterThanOrEqual:
-                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due >= entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Due.HasValue && x.Due >= entry.ValueAsDateTimeOffset);
                 case CardsCondition.LessThanOrEqual:
-                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due <= entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Due.HasValue && x.Due <= entry.ValueAsDateTimeOffset);
+
+                case CardsCondition.Between:
+                {
+                    if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                    {
+                        throw new TrelloApiException("Between Condition for Due Date need 2 and only 2 Dates");
+                    }
+
+                    DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                    DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                    cards = cards.Where(x => x.Due.HasValue && x.Due >= from);
+                    cards = cards.Where(x => x.Due.HasValue && x.Due <= to);
+                    return cards;
+                }
+                case CardsCondition.NotBetween:
+                {
+                    if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                    {
+                        throw new TrelloApiException("NotBetween Condition for Due Date need 2 and only 2 Dates");
+                    }
+
+                    DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                    DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                    cards = cards.Where(x => x.Due.HasValue && x.Due > to || x.Due < from);
+                    return cards;
+                }
+
                 case CardsCondition.HasAnyValue:
-                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue);
-                    break;
+                    return cards.Where(x => x.Due.HasValue);
                 case CardsCondition.DoNotHaveAnyValue:
-                    cards = cards.Where(x => !x.Due.HasValue);
-                    break;
+                    return cards.Where(x => !x.Due.HasValue);
                 case CardsCondition.AnyOfThese:
-                    List<DateTimeOffset> anyOfThese = entry.ValueAsDateTimeOffsets;
-                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && anyOfThese.Any(y => y == x.Due));
-                    break;
+                    return cards.Where(x => x.Due.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y == x.Due));
                 case CardsCondition.NoneOfThese:
-                    List<DateTimeOffset> noneOfThese = entry.ValueAsDateTimeOffsets;
-                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && noneOfThese.All(y => y != x.Due));
-                    break;
-                case CardsCondition.Contains:
-                case CardsCondition.DoNotContains:
-                case CardsCondition.AllOfThese:
-                case CardsCondition.RegEx:
-                case CardsCondition.StartsWith:
-                case CardsCondition.EndsWith:
-                case CardsCondition.DoNotStartWith:
-                case CardsCondition.DoNotEndWith:
+                    return cards.Where(x => x.Due.HasValue && entry.ValueAsDateTimeOffsets.All(y => y != x.Due));
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a FilterDueDate");
             }
+        }
 
-            return cards;
+        private static IEnumerable<Card> FilterDueDateNoDueComplete(IEnumerable<Card> cards, CardsFilterCondition entry)
+        {
+            switch (entry.Condition)
+            {
+                case CardsCondition.Equal:
+                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due == entry.ValueAsDateTimeOffset);
+                case CardsCondition.NotEqual:
+                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due != entry.ValueAsDateTimeOffset);
+                case CardsCondition.GreaterThan:
+                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due > entry.ValueAsDateTimeOffset);
+                case CardsCondition.LessThan:
+                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due < entry.ValueAsDateTimeOffset);
+                case CardsCondition.GreaterThanOrEqual:
+                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due >= entry.ValueAsDateTimeOffset);
+                case CardsCondition.LessThanOrEqual:
+                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due <= entry.ValueAsDateTimeOffset);
+
+                case CardsCondition.Between:
+                {
+                    if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                    {
+                        throw new TrelloApiException("Between Condition for Due Date need 2 and only 2 Dates");
+                    }
+
+                    DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                    DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due >= from);
+                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due <= to);
+                    return cards;
+                }
+                case CardsCondition.NotBetween:
+                {
+                    if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                    {
+                        throw new TrelloApiException("NotBetween Condition for Due Date need 2 and only 2 Dates");
+                    }
+
+                    DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                    DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                    cards = cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due > to || x.Due < from);
+                    return cards;
+                }
+
+                case CardsCondition.HasAnyValue:
+                    return cards.Where(x => !x.DueComplete && x.Due.HasValue);
+                case CardsCondition.DoNotHaveAnyValue:
+                    return cards.Where(x => !x.Due.HasValue);
+                case CardsCondition.AnyOfThese:
+                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y == x.Due));
+                case CardsCondition.NoneOfThese:
+                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && entry.ValueAsDateTimeOffsets.All(y => y != x.Due));
+                default:
+                    throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a FilterDueDate");
+            }
         }
 
         private static IEnumerable<Card> FilterCreateDate(IEnumerable<Card> cards, CardsFilterCondition entry)
@@ -283,50 +398,49 @@ namespace TrelloDotNet.Extensions
             switch (entry.Condition)
             {
                 case CardsCondition.Equal:
-                    cards = cards.Where(x => x.Created.HasValue && x.Created == entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Created.HasValue && x.Created == entry.ValueAsDateTimeOffset);
                 case CardsCondition.NotEqual:
-                    cards = cards.Where(x => x.Created.HasValue && x.Created != entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Created.HasValue && x.Created != entry.ValueAsDateTimeOffset);
                 case CardsCondition.GreaterThan:
-                    cards = cards.Where(x => x.Created.HasValue && x.Created > entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Created.HasValue && x.Created > entry.ValueAsDateTimeOffset);
                 case CardsCondition.LessThan:
-                    cards = cards.Where(x => x.Created.HasValue && x.Created < entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Created.HasValue && x.Created < entry.ValueAsDateTimeOffset);
                 case CardsCondition.GreaterThanOrEqual:
-                    cards = cards.Where(x => x.Created.HasValue && x.Created >= entry.ValueAsDateTimeOffset);
-                    break;
+                    return cards.Where(x => x.Created.HasValue && x.Created >= entry.ValueAsDateTimeOffset);
                 case CardsCondition.LessThanOrEqual:
-                    cards = cards.Where(x => x.Created.HasValue && x.Created <= entry.ValueAsDateTimeOffset);
-                    break;
-                case CardsCondition.HasAnyValue:
-                    cards = cards.Where(x => x.Created.HasValue);
-                    break;
-                case CardsCondition.DoNotHaveAnyValue:
-                    cards = cards.Where(x => !x.Created.HasValue);
-                    break;
+                    return cards.Where(x => x.Created.HasValue && x.Created <= entry.ValueAsDateTimeOffset);
+                case CardsCondition.Between:
+                {
+                    if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                    {
+                        throw new TrelloApiException("Between Condition for Created Date need 2 and only 2 Dates");
+                    }
+
+                    DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                    DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                    cards = cards.Where(x => x.Created.HasValue && x.Created >= from);
+                    cards = cards.Where(x => x.Created.HasValue && x.Created <= to);
+                    return cards;
+                }
+                case CardsCondition.NotBetween:
+                {
+                    if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                    {
+                        throw new TrelloApiException("NotBetween Condition for Created Date need 2 and only 2 Dates");
+                    }
+
+                    DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                    DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                    cards = cards.Where(x => x.Created.HasValue && x.Created > to || x.Created < from);
+                    return cards;
+                }
                 case CardsCondition.AnyOfThese:
-                    List<DateTimeOffset> anyOfThese = entry.ValueAsDateTimeOffsets;
-                    cards = cards.Where(x => anyOfThese.Any(y => x.Created != null && y == x.Created.Value));
-                    break;
+                    return cards.Where(x => entry.ValueAsDateTimeOffsets.Any(y => x.Created != null && y == x.Created.Value));
                 case CardsCondition.NoneOfThese:
-                    List<DateTimeOffset> noneOfThese = entry.ValueAsDateTimeOffsets;
-                    cards = cards.Where(x => noneOfThese.All(y => x.Created != null && y != x.Created.Value));
-                    break;
-                case CardsCondition.Contains:
-                case CardsCondition.DoNotContains:
-                case CardsCondition.AllOfThese:
-                case CardsCondition.RegEx:
-                case CardsCondition.StartsWith:
-                case CardsCondition.EndsWith:
-                case CardsCondition.DoNotStartWith:
-                case CardsCondition.DoNotEndWith:
+                    return cards.Where(x => entry.ValueAsDateTimeOffsets.All(y => x.Created != null && y != x.Created.Value));
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a FilterCreateDate");
             }
-
-            return cards;
         }
 
         private static IEnumerable<Card> FilterStartDate(IEnumerable<Card> cards, CardsFilterCondition entry)
@@ -334,50 +448,53 @@ namespace TrelloDotNet.Extensions
             switch (entry.Condition)
             {
                 case CardsCondition.Equal:
-                    cards = cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date == entry.ValueAsDateTimeOffset.Value.Date);
-                    break;
+                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date == entry.ValueAsDateTimeOffset.Value.Date);
                 case CardsCondition.NotEqual:
-                    cards = cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date != entry.ValueAsDateTimeOffset.Value.Date);
-                    break;
+                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date != entry.ValueAsDateTimeOffset.Value.Date);
                 case CardsCondition.GreaterThan:
-                    cards = cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date > entry.ValueAsDateTimeOffset.Value.Date);
-                    break;
+                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date > entry.ValueAsDateTimeOffset.Value.Date);
                 case CardsCondition.LessThan:
-                    cards = cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date < entry.ValueAsDateTimeOffset.Value.Date);
-                    break;
+                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date < entry.ValueAsDateTimeOffset.Value.Date);
                 case CardsCondition.GreaterThanOrEqual:
-                    cards = cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date >= entry.ValueAsDateTimeOffset.Value.Date);
-                    break;
+                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date >= entry.ValueAsDateTimeOffset.Value.Date);
                 case CardsCondition.LessThanOrEqual:
-                    cards = cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date <= entry.ValueAsDateTimeOffset.Value.Date);
-                    break;
+                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date <= entry.ValueAsDateTimeOffset.Value.Date);
+                case CardsCondition.Between:
+                {
+                    if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                    {
+                        throw new TrelloApiException("Between Condition for Start Date need 2 and only 2 Dates");
+                    }
+
+                    DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                    DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                    cards = cards.Where(x => x.Start.HasValue && x.Start >= from);
+                    cards = cards.Where(x => x.Start.HasValue && x.Start <= to);
+                    return cards;
+                }
+                case CardsCondition.NotBetween:
+                {
+                    if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                    {
+                        throw new TrelloApiException("NotBetween Condition for Start Date need 2 and only 2 Dates");
+                    }
+
+                    DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
+                    DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
+                    cards = cards.Where(x => x.Start.HasValue && x.Start > to || x.Start < from);
+                    return cards;
+                }
                 case CardsCondition.HasAnyValue:
-                    cards = cards.Where(x => x.Start.HasValue);
-                    break;
+                    return cards.Where(x => x.Start.HasValue);
                 case CardsCondition.DoNotHaveAnyValue:
-                    cards = cards.Where(x => !x.Start.HasValue);
-                    break;
+                    return cards.Where(x => !x.Start.HasValue);
                 case CardsCondition.AnyOfThese:
-                    List<DateTimeOffset> anyOfThese = entry.ValueAsDateTimeOffsets;
-                    cards = cards.Where(x => x.Start.HasValue && anyOfThese.Any(y => y.Date == x.Start.Value.Date));
-                    break;
+                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y.Date == x.Start.Value.Date));
                 case CardsCondition.NoneOfThese:
-                    List<DateTimeOffset> noneOfThese = entry.ValueAsDateTimeOffsets;
-                    cards = cards.Where(x => x.Start.HasValue && noneOfThese.All(y => y.Date != x.Start.Value.Date));
-                    break;
-                case CardsCondition.Contains:
-                case CardsCondition.DoNotContains:
-                case CardsCondition.AllOfThese:
-                case CardsCondition.RegEx:
-                case CardsCondition.StartsWith:
-                case CardsCondition.EndsWith:
-                case CardsCondition.DoNotStartWith:
-                case CardsCondition.DoNotEndWith:
+                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffsets.All(y => y.Date != x.Start.Value.Date));
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a FilterStartDate");
             }
-
-            return cards;
         }
 
         private static IEnumerable<Card> FilterList(IEnumerable<Card> cards, CardsFilterCondition entry)
@@ -388,46 +505,21 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.Equal:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => y == x.ListId));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.ListId == entry.ValueAsString);
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => y == x.ListId));
                     }
 
-                    break;
-
+                    return cards.Where(x => x.ListId == entry.ValueAsString);
                 case CardsCondition.NoneOfThese:
                 case CardsCondition.NotEqual:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.All(y => y != x.ListId));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.ListId != entry.ValueAsString);
+                        return cards.Where(x => entry.ValueAsStrings.All(y => y != x.ListId));
                     }
 
-                    break;
-                case CardsCondition.HasAnyValue:
-                case CardsCondition.DoNotContains:
-                case CardsCondition.Contains:
-                case CardsCondition.GreaterThan:
-                case CardsCondition.LessThan:
-                case CardsCondition.GreaterThanOrEqual:
-                case CardsCondition.LessThanOrEqual:
-                case CardsCondition.DoNotHaveAnyValue:
-                case CardsCondition.AllOfThese:
-                case CardsCondition.RegEx:
-                case CardsCondition.StartsWith:
-                case CardsCondition.EndsWith:
-                case CardsCondition.DoNotStartWith:
-                case CardsCondition.DoNotEndWith:
+                    return cards.Where(x => x.ListId != entry.ValueAsString);
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a List Condition");
             }
-
-            return cards;
         }
 
         private static IEnumerable<Card> FilterLabel(IEnumerable<Card> cards, CardsFilterCondition entry)
@@ -437,78 +529,75 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.AllOfThese:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => { return entry.ValueAsStrings.All(y => x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.All(y => x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+
                 case CardsCondition.Equal:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.LabelIds.Count == 1 && x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => x.LabelIds.Count == 1 && x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+
                 case CardsCondition.AnyOfThese:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => { return entry.ValueAsStrings.Any(y => x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => { return entry.ValueAsStrings.Any(y => x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
                     }
 
-                    break;
+                    return cards.Where(x => x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+
                 case CardsCondition.NoneOfThese:
                 case CardsCondition.NotEqual:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => { return entry.ValueAsStrings.All(y => !x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => { return entry.ValueAsStrings.All(y => !x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
                     }
 
-                    break;
+                    return cards.Where(x => !x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
                 case CardsCondition.DoNotHaveAnyValue:
-                    cards = cards.Where(x => x.LabelIds.Count == 0);
-                    break;
+                    return cards.Where(x => x.LabelIds.Count == 0);
                 case CardsCondition.HasAnyValue:
-                    cards = cards.Where(x => x.LabelIds.Count != 0);
-                    break;
+                    return cards.Where(x => x.LabelIds.Count != 0);
                 case CardsCondition.GreaterThan:
-                    cards = cards.Where(x => x.LabelIds.Count > entry.ValueAsInteger);
-                    break;
+                    return cards.Where(x => x.LabelIds.Count > entry.ValueAsNumber);
                 case CardsCondition.LessThan:
-                    cards = cards.Where(x => x.LabelIds.Count < entry.ValueAsInteger);
-                    break;
+                    return cards.Where(x => x.LabelIds.Count < entry.ValueAsNumber);
                 case CardsCondition.GreaterThanOrEqual:
-                    cards = cards.Where(x => x.LabelIds.Count >= entry.ValueAsInteger);
-                    break;
+                    return cards.Where(x => x.LabelIds.Count >= entry.ValueAsNumber);
                 case CardsCondition.LessThanOrEqual:
-                    cards = cards.Where(x => x.LabelIds.Count <= entry.ValueAsInteger);
-                    break;
-                case CardsCondition.DoNotContains:
-                case CardsCondition.Contains:
-                case CardsCondition.RegEx:
-                case CardsCondition.StartsWith:
-                case CardsCondition.EndsWith:
-                case CardsCondition.DoNotStartWith:
-                case CardsCondition.DoNotEndWith:
+                    return cards.Where(x => x.LabelIds.Count <= entry.ValueAsNumber);
+                case CardsCondition.Between:
+                {
+                    if (entry.ValueAsNumbers?.Count != 2)
+                    {
+                        throw new TrelloApiException("Between Condition for Labels need 2 and only 2 Numbers");
+                    }
+
+                    decimal from = entry.ValueAsNumbers.First();
+                    decimal to = entry.ValueAsNumbers.Last();
+                    cards = cards.Where(x => x.LabelIds.Count >= from);
+                    cards = cards.Where(x => x.LabelIds.Count <= to);
+                    return cards;
+                }
+                case CardsCondition.NotBetween:
+                {
+                    if (entry.ValueAsNumbers?.Count != 2)
+                    {
+                        throw new TrelloApiException("NotBetween Condition for Labels need 2 and only 2 Numbers");
+                    }
+
+                    decimal from = entry.ValueAsNumbers.First();
+                    decimal to = entry.ValueAsNumbers.Last();
+                    cards = cards.Where(x => x.LabelIds.Count > to || x.LabelIds.Count < from);
+                    return cards;
+                }
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a Label Condition");
             }
-
-            return cards;
         }
 
         private static IEnumerable<Card> FilterMember(IEnumerable<Card> cards, CardsFilterCondition entry)
@@ -518,79 +607,77 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.AllOfThese:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => { return entry.ValueAsStrings.All(y => x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => { return entry.ValueAsStrings.All(y => x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
                     }
 
-                    break;
+                    return cards.Where(x => x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+
                 case CardsCondition.Equal:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.MemberIds.Count == 1 && x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
                     }
 
-                    break;
+                    return cards.Where(x => x.MemberIds.Count == 1 && x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+
                 case CardsCondition.AnyOfThese:
 
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => { return entry.ValueAsStrings.Any(y => x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => { return entry.ValueAsStrings.Any(y => x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
                     }
 
-                    break;
+                    return cards.Where(x => x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+
                 case CardsCondition.NoneOfThese:
                 case CardsCondition.NotEqual:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => { return entry.ValueAsStrings.All(y => !x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => { return entry.ValueAsStrings.All(y => !x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
                     }
 
-                    break;
+                    return cards.Where(x => !x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
+
                 case CardsCondition.DoNotHaveAnyValue:
-                    cards = cards.Where(x => x.MemberIds.Count == 0);
-                    break;
+                    return cards.Where(x => x.MemberIds.Count == 0);
                 case CardsCondition.HasAnyValue:
-                    cards = cards.Where(x => x.MemberIds.Count != 0);
-                    break;
+                    return cards.Where(x => x.MemberIds.Count != 0);
                 case CardsCondition.GreaterThan:
-                    cards = cards.Where(x => x.MemberIds.Count > entry.ValueAsInteger);
-                    break;
+                    return cards.Where(x => x.MemberIds.Count > entry.ValueAsNumber);
                 case CardsCondition.LessThan:
-                    cards = cards.Where(x => x.MemberIds.Count < entry.ValueAsInteger);
-                    break;
+                    return cards.Where(x => x.MemberIds.Count < entry.ValueAsNumber);
                 case CardsCondition.GreaterThanOrEqual:
-                    cards = cards.Where(x => x.MemberIds.Count >= entry.ValueAsInteger);
-                    break;
+                    return cards.Where(x => x.MemberIds.Count >= entry.ValueAsNumber);
                 case CardsCondition.LessThanOrEqual:
-                    cards = cards.Where(x => x.MemberIds.Count <= entry.ValueAsInteger);
-                    break;
-                case CardsCondition.Contains:
-                case CardsCondition.DoNotContains:
-                case CardsCondition.RegEx:
-                case CardsCondition.StartsWith:
-                case CardsCondition.EndsWith:
-                case CardsCondition.DoNotStartWith:
-                case CardsCondition.DoNotEndWith:
+                    return cards.Where(x => x.MemberIds.Count <= entry.ValueAsNumber);
+                case CardsCondition.Between:
+                {
+                    if (entry.ValueAsNumbers?.Count != 2)
+                    {
+                        throw new TrelloApiException("Between Condition for Members need 2 and only 2 Numbers");
+                    }
+
+                    decimal from = entry.ValueAsNumbers.First();
+                    decimal to = entry.ValueAsNumbers.Last();
+                    cards = cards.Where(x => x.MemberIds.Count >= from);
+                    cards = cards.Where(x => x.MemberIds.Count <= to);
+                    return cards;
+                }
+                case CardsCondition.NotBetween:
+                {
+                    if (entry.ValueAsNumbers?.Count != 2)
+                    {
+                        throw new TrelloApiException("NotBetween Condition for Members need 2 and only 2 Numbers");
+                    }
+
+                    decimal from = entry.ValueAsNumbers.First();
+                    decimal to = entry.ValueAsNumbers.Last();
+                    cards = cards.Where(x => x.MemberIds.Count > to || x.MemberIds.Count < from);
+                    return cards;
+                }
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a Member Condition");
             }
-
-            return cards;
         }
 
         private static IEnumerable<Card> FilterName(IEnumerable<Card> cards, CardsFilterCondition entry)
@@ -600,181 +687,148 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.Equal:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase));
                     }
                     else if (entry.ValueAsString != null)
                     {
-                        cards = cards.Where(x => entry.ValueAsString.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsString.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase));
                     }
-                    else if (entry.ValueAsInteger.HasValue)
+                    else if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Name.Length == entry.ValueAsInteger);
+                        return cards.Where(x => x.Name.Length == entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.NotEqual:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => !entry.ValueAsStrings.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => !entry.ValueAsStrings.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase));
                     }
                     else if (entry.ValueAsString != null)
                     {
-                        cards = cards.Where(x => !entry.ValueAsString.Equals(x.Name));
+                        return cards.Where(x => !entry.ValueAsString.Equals(x.Name));
                     }
-                    else if (entry.ValueAsInteger.HasValue)
+                    else if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Name.Length != entry.ValueAsInteger);
+                        return cards.Where(x => x.Name.Length != entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.GreaterThan:
                     //Assume this means length of name
-                    if (entry.ValueAsInteger.HasValue)
+                    if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Name.Length > entry.ValueAsInteger);
+                        return cards.Where(x => x.Name.Length > entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.LessThan:
                     //Assume this means length of name
-                    if (entry.ValueAsInteger.HasValue)
+                    if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Name.Length < entry.ValueAsInteger);
+                        cards = cards.Where(x => x.Name.Length < entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.GreaterThanOrEqual:
                     //Assume this means length of name
-                    if (entry.ValueAsInteger.HasValue)
+                    if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Name.Length >= entry.ValueAsInteger);
+                        cards = cards.Where(x => x.Name.Length >= entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.LessThanOrEqual:
                     //Assume this means length of name
-                    if (entry.ValueAsInteger.HasValue)
+                    if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Name.Length <= entry.ValueAsInteger);
+                        cards = cards.Where(x => x.Name.Length <= entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.HasAnyValue:
-                    cards = cards.Where(x => !string.IsNullOrWhiteSpace(x.Name));
-                    break;
+                    return cards.Where(x => !string.IsNullOrWhiteSpace(x.Name));
                 case CardsCondition.DoNotHaveAnyValue:
-                    cards = cards.Where(x => string.IsNullOrWhiteSpace(x.Name));
-                    break;
+                    return cards.Where(x => string.IsNullOrWhiteSpace(x.Name));
                 case CardsCondition.Contains:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => x.Name.Contains(y)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.Name.Contains(entry.ValueAsString));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => x.Name.Contains(y)));
                     }
 
-                    break;
+                    return cards.Where(x => x.Name.Contains(entry.ValueAsString));
+
                 case CardsCondition.DoNotContains:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => !x.Name.Contains(y)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !x.Name.Contains(entry.ValueAsString));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => !x.Name.Contains(y)));
                     }
 
-                    break;
+                    return cards.Where(x => !x.Name.Contains(entry.ValueAsString));
+
                 case CardsCondition.AnyOfThese:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => y.Contains(x.Name)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => entry.ValueAsString.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => y.Contains(x.Name)));
                     }
 
-                    break;
-                case CardsCondition.AllOfThese:
-                    throw new TrelloApiException("AllOfThese on Name Filter does not make sense");
+                    return cards.Where(x => entry.ValueAsString.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase));
+
                 case CardsCondition.NoneOfThese:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => !entry.ValueAsStrings.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !entry.ValueAsString.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => !entry.ValueAsStrings.Contains(x.Name, StringComparer.InvariantCultureIgnoreCase));
                     }
 
-                    break;
+                    return cards.Where(x => !entry.ValueAsString.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase));
+
                 case CardsCondition.RegEx:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.All(y => Regex.IsMatch(x.Name, y, RegexOptions.IgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => Regex.IsMatch(x.Name, entry.ValueAsString, RegexOptions.IgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.All(y => Regex.IsMatch(x.Name, y, RegexOptions.IgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => Regex.IsMatch(x.Name, entry.ValueAsString, RegexOptions.IgnoreCase));
+
                 case CardsCondition.StartsWith:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => x.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.Name.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => x.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => x.Name.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+
                 case CardsCondition.EndsWith:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => x.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.Name.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => x.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => x.Name.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
 
                 case CardsCondition.DoNotStartWith:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.All(y => !x.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !x.Name.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.All(y => !x.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => !x.Name.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
 
                 case CardsCondition.DoNotEndWith:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.All(y => !x.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !x.Name.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.All(y => !x.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => !x.Name.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a Name Condition");
             }
@@ -790,15 +844,15 @@ namespace TrelloDotNet.Extensions
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Contains(x.Description, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Contains(x.Description, StringComparer.InvariantCultureIgnoreCase));
                     }
                     else if (entry.ValueAsString != null)
                     {
-                        cards = cards.Where(x => entry.ValueAsString.Equals(x.Description, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsString.Equals(x.Description, StringComparison.CurrentCultureIgnoreCase));
                     }
-                    else if (entry.ValueAsInteger.HasValue)
+                    else if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Description.Length == entry.ValueAsInteger);
+                        return cards.Where(x => x.Description.Length == entry.ValueAsNumber);
                     }
 
                     break;
@@ -806,91 +860,80 @@ namespace TrelloDotNet.Extensions
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => !entry.ValueAsStrings.Contains(x.Description, StringComparer.InvariantCultureIgnoreCase));
+                        return cards.Where(x => !entry.ValueAsStrings.Contains(x.Description, StringComparer.InvariantCultureIgnoreCase));
                     }
                     else if (entry.ValueAsString != null)
                     {
-                        cards = cards.Where(x => !entry.ValueAsString.Equals(x.Description, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => !entry.ValueAsString.Equals(x.Description, StringComparison.CurrentCultureIgnoreCase));
                     }
-                    else if (entry.ValueAsInteger.HasValue)
+                    else if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Description.Length != entry.ValueAsInteger);
+                        return cards.Where(x => x.Description.Length != entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.GreaterThan:
                     //Assume this means length of Description
-                    if (entry.ValueAsInteger.HasValue)
+                    if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Description.Length > entry.ValueAsInteger);
+                        return cards.Where(x => x.Description.Length > entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.LessThan:
                     //Assume this means length of Description
-                    if (entry.ValueAsInteger.HasValue)
+                    if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Description.Length < entry.ValueAsInteger);
+                        return cards.Where(x => x.Description.Length < entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.GreaterThanOrEqual:
                     //Assume this means length of Description
-                    if (entry.ValueAsInteger.HasValue)
+                    if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Description.Length >= entry.ValueAsInteger);
+                        return cards.Where(x => x.Description.Length >= entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.LessThanOrEqual:
                     //Assume this means length of Description
-                    if (entry.ValueAsInteger.HasValue)
+                    if (entry.ValueAsNumber.HasValue)
                     {
-                        cards = cards.Where(x => x.Description.Length <= entry.ValueAsInteger);
+                        return cards.Where(x => x.Description.Length <= entry.ValueAsNumber);
                     }
 
                     break;
                 case CardsCondition.HasAnyValue:
-                    cards = cards.Where(x => !string.IsNullOrWhiteSpace(x.Description));
-                    break;
+                    return cards.Where(x => !string.IsNullOrWhiteSpace(x.Description));
                 case CardsCondition.DoNotHaveAnyValue:
-                    cards = cards.Where(x => string.IsNullOrWhiteSpace(x.Description));
-                    break;
+                    return cards.Where(x => string.IsNullOrWhiteSpace(x.Description));
                 case CardsCondition.Contains:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => x.Description.Contains(y)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.Description.Contains(entry.ValueAsString));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => x.Description.Contains(y)));
                     }
 
-                    break;
+                    return cards.Where(x => x.Description.Contains(entry.ValueAsString));
+
                 case CardsCondition.DoNotContains:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => !x.Description.Contains(y)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !x.Description.Contains(entry.ValueAsString));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => !x.Description.Contains(y)));
                     }
 
-                    break;
+                    return cards.Where(x => !x.Description.Contains(entry.ValueAsString));
+
                 case CardsCondition.AnyOfThese:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => y.Contains(x.Description)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => entry.ValueAsString.Equals(x.Description, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => y.Contains(x.Description)));
                     }
 
-                    break;
+                    return cards.Where(x => entry.ValueAsString.Equals(x.Description, StringComparison.CurrentCultureIgnoreCase));
+
                 case CardsCondition.AllOfThese:
                 {
                     throw new TrelloApiException("AllOfThese on Description Filter does not make sense");
@@ -899,76 +942,56 @@ namespace TrelloDotNet.Extensions
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => !entry.ValueAsStrings.Contains(x.Description, StringComparer.InvariantCultureIgnoreCase));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !entry.ValueAsString.Equals(x.Description, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => !entry.ValueAsStrings.Contains(x.Description, StringComparer.InvariantCultureIgnoreCase));
                     }
 
-                    break;
+                    return cards.Where(x => !entry.ValueAsString.Equals(x.Description, StringComparison.CurrentCultureIgnoreCase));
+
                 case CardsCondition.RegEx:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.All(y => Regex.IsMatch(x.Description, y, RegexOptions.IgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => Regex.IsMatch(x.Description, entry.ValueAsString, RegexOptions.IgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.All(y => Regex.IsMatch(x.Description, y, RegexOptions.IgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => Regex.IsMatch(x.Description, entry.ValueAsString, RegexOptions.IgnoreCase));
+
                 case CardsCondition.StartsWith:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => x.Description.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.Description.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => x.Description.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => x.Description.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+
                 case CardsCondition.EndsWith:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => x.Description.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => x.Description.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => x.Description.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => x.Description.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
 
                 case CardsCondition.DoNotStartWith:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => !x.Description.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !x.Description.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => !x.Description.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => !x.Description.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
 
                 case CardsCondition.DoNotEndWith:
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        cards = cards.Where(x => entry.ValueAsStrings.Any(y => !x.Description.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
-                    }
-                    else
-                    {
-                        cards = cards.Where(x => !x.Description.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => !x.Description.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
-                    break;
+                    return cards.Where(x => !x.Description.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
+
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a Description Condition");
             }

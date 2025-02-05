@@ -73,6 +73,11 @@ namespace TrelloDotNet.Model.Options.GetInboxCardOptions
         /// </summary>
         public List<QueryParameter> AdditionalParameters { get; set; } = new List<QueryParameter>();
 
+        /// <summary>
+        /// Add conditions of which of the data from the call is actually returned (Note: this is in-memory filtering as Trello's API is not able to filter on server-side)
+        /// </summary>
+        public List<CardsFilterCondition> FilterConditions { get; set; } = new List<CardsFilterCondition>();
+
         internal GetCardOptions.GetCardOptions ToCardOptions()
         {
             return new GetCardOptions.GetCardOptions

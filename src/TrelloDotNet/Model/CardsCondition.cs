@@ -20,9 +20,53 @@
         EndsWith = 16,
         DoNotStartWith = 17,
         DoNotEndWith = 18,
+        Between = 19,
+        NotBetween = 20
     }
 
-    public enum CardsConditionText
+    public enum CardsConditionNumber
+    {
+        Equal = 1,
+        NotEqual = 2,
+        GreaterThan = 3,
+        LessThan = 4,
+        GreaterThanOrEqual = 5,
+        LessThanOrEqual = 6,
+        HasAnyValue = 7,
+        DoNotHaveAnyValue = 8,
+        AnyOfThese = 11,
+        NoneOfThese = 13,
+        Between = 19,
+        NotBetween = 20
+    }
+
+    public enum CardsConditionCount
+    {
+        Equal = 1,
+        NotEqual = 2,
+        GreaterThan = 3,
+        LessThan = 4,
+        GreaterThanOrEqual = 5,
+        LessThanOrEqual = 6,
+    }
+
+    public enum CardsConditionDate
+    {
+        Equal = 1,
+        NotEqual = 2,
+        GreaterThan = 3,
+        LessThan = 4,
+        GreaterThanOrEqual = 5,
+        LessThanOrEqual = 6,
+        HasAnyValue = 7,
+        DoNotHaveAnyValue = 8,
+        AnyOfThese = 11,
+        NoneOfThese = 13,
+        Between = 19,
+        NotBetween = 20
+    }
+
+    public enum CardsConditionString
     {
         Equal = 1,
         NotEqual = 2,
@@ -46,13 +90,9 @@
         NoneOfThese = 13,
     }
 
-    public enum CardsConditionCount
+    public enum CardsConditionBoolean
     {
         Equal = 1,
         NotEqual = 2,
-        GreaterThan = 3,
-        LessThan = 4,
-        GreaterThanOrEqual = 5,
-        LessThanOrEqual = 6,
     }
 }
