@@ -1,20 +1,20 @@
-[![NuGet](https://img.shields.io/badge/Code-NuGet-blue)](https://www.nuget.org/packages/TrelloDotNet)
-[![WIKI](https://img.shields.io/badge/Documentation-Wiki-darkred)](https://github.com/rwjdk/TrelloDotNet/wiki)
-[![Changelog](https://img.shields.io/badge/-Changelog-darkred)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
+[![NuGet](https://img.shields.io/badge/NuGet-blue)](https://www.nuget.org/packages/TrelloDotNet)
+[![WIKI](https://img.shields.io/badge/Wiki-brown)](https://github.com/rwjdk/TrelloDotNet/wiki)
+[![Changelog](https://img.shields.io/badge/-Changelog-darkgreen)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
 [![YouTube](https://img.shields.io/badge/-YouTube-darkred)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
-[![Rest API](https://img.shields.io/badge/Trello_API-Reference-red)](https://developer.atlassian.com/cloud/trello/rest/)
-[![API Keys](https://img.shields.io/badge/-Admin-red)](https://trello.com/power-ups/admin/)
+[![Rest API](https://img.shields.io/badge/The_Trello_REST_API-gray)](https://developer.atlassian.com/cloud/trello/rest/)
+[![API Keys](https://img.shields.io/badge/Power--Ups_administration-purple)](https://trello.com/power-ups/admin/)
 
-Welcome to TrelloDotNet - a .NET wrapper of the Trello REST API.
+# TrelloDotNet: .NET Implementation of the Trello REST API
 
 ## Features
-- A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on most Trello features
-- An [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) and [Webhook Data Reciver](https://github.com/rwjdk/TrelloDotNet/wiki/Webhook-Data-Reciver) for handling Webhook Events from a Trello Board
+- A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on the Trello features
+- An [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) and [Webhook Data Reciver](https://github.com/rwjdk/TrelloDotNet/wiki/Webhook-Data-Reciver) for handling Webhook Events
 
 ## Getting Started
-1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (dotnet add package TrelloDotNet)
-2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8)
-3. Create new instance of the `TrelloClient` (located in namespace 'TrelloDotNet')
+1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (`dotnet add package TrelloDotNet`)
+2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8) from the [PowerUps Administration](https://trello.com/power-ups/admin)
+3. Create new instance of the `TrelloClient` _(located in namespace 'TrelloDotNet')_
 4. Locate you Ids of your Boards, List, and Cards (see video [here](https://youtu.be/es84INLIiKI) or at the end on this ReadMe)
 5. Use the TrelloClient based on the examples below and/or the [Wiki](https://github.com/rwjdk/TrelloDotNet/wiki).
 
