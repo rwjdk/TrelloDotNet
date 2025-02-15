@@ -104,7 +104,7 @@ namespace TrelloDotNet
                 return cards;
             }
 
-            return cards.Filter(filterConditions);
+            return cards.Filter(filterConditions.ToArray());
         }
     }
 }
