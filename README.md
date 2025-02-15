@@ -10,7 +10,7 @@ _Welcome to TrelloDotNet - A .NET Implementation of the [Trello REST API](https:
 
 ## Features
 - A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on the Trello features
-- An [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) and [Webhook Data Reciver](https://github.com/rwjdk/TrelloDotNet/wiki/Webhook-Data-Reciver) for handling Webhook Events
+- An [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) and [Webhook Data Receiver](https://github.com/rwjdk/TrelloDotNet/wiki/Webhook-Data-Receiver) for handling Webhook Events
 
 ## Getting Started
 1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (`dotnet add package TrelloDotNet`)
