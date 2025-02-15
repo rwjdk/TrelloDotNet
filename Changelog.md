@@ -3,8 +3,9 @@
 ## Unreleased
 #### Special
 - **This is the first v2.x release. It has a set of breaking changes to streamline the API and make it less confusing to use (aka less options to do the same thing). [See a list of breaking changes here](https://github.com/rwjdk/TrelloDotNet/issues/51)**
-- TODO - DESCRIBE THE NEW FILTER!!!
+
 #### TrelloClient
+- Added `FilterCondition` to `GetCardsOptions` that allow you to filter the cards returned in various ways (Example: _give me all cards on board that have the Red Label, 1-2 Members and the Description contains the word 'Urgent'_). NB: Please note that the filter is an In-Memory Filter as Trello's do not allow Server-side filtering. See more about the Filter Condition System [here](https://github.com/rwjdk/TrelloDotNet/wiki/Filter-Condition-System)
 
 <hr>
 
@@ -14,7 +15,7 @@
 
 #### TrelloClient
 - Added new version of [AddCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardAsync) that allow all features on a card to be set in a single command and obsoleted old version.
-- Added methods to inteact with you Trello Inbox ([AddCardToInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardToInboxAsync) + [GetCardsInInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/))
+- Added methods to inteact with you Trello Inbox ([AddCardToInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardToInboxAsync) + [GetCardsInInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsInInboxAsync))
 - Added [GetTokenMemberInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetTokenMemberInboxAsync) to get the Ids of the owner of the Token's Inbox
 - Added `CardUpdate.Cover` to allow Cover Updates and `CardUpdate.AdditionalParameter` to allow any additional fields that are not a known field (should something new come along)
 - Change: `CardUpdate.DueDate` and `CardUpdate.StartDate` has been changed to be nullable in order to allow removal of value

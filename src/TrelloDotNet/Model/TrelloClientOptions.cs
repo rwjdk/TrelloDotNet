@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TrelloDotNet.Model
+﻿namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Options for the Trello Client

@@ -43,7 +43,7 @@ public class ConditionTests(TestFixtureWithNewBoard fixture) : TestBase, IClassF
         Assert.False(await new CardFieldCondition(CardField.Description, CardFieldConditionConstraint.Value, "xyz", StringMatchCriteria.RegEx).IsConditionMetAsync(webhookAction));
 
         Assert.True(await new CardFieldCondition(CardField.Due, CardFieldConditionConstraint.IsSet).IsConditionMetAsync(webhookAction));
-        Assert.True(await new CardFieldCondition(CardField.Due, CardFieldConditionConstraint.Value, card.Due.Value) { MatchDateOnlyOnDateTimeOffsetFields = true }.IsConditionMetAsync(webhookAction));
+        Assert.True(card.Due != null && await new CardFieldCondition(CardField.Due, CardFieldConditionConstraint.Value, card.Due.Value) { MatchDateOnlyOnDateTimeOffsetFields = true }.IsConditionMetAsync(webhookAction));
         Assert.True(await new CardFieldCondition(CardField.Due, CardFieldConditionConstraint.Value, card.Due.Value).IsConditionMetAsync(webhookAction));
         Assert.True(await new CardFieldCondition(CardField.Due, CardFieldConditionConstraint.Value, card.Due.Value.AddDays(-1), DateTimeOffsetMatchCriteria.After).IsConditionMetAsync(webhookAction));
         Assert.True(await new CardFieldCondition(CardField.Due, CardFieldConditionConstraint.Value, card.Due.Value.AddDays(+1), DateTimeOffsetMatchCriteria.Before).IsConditionMetAsync(webhookAction));

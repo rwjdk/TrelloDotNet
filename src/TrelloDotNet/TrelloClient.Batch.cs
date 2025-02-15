@@ -48,9 +48,9 @@ namespace TrelloDotNet
         /// <returns>The list of Cards</returns>
         public async Task<List<Card>> GetCardsAsync(List<string> ids, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            options.AdjustFieldsBasedOnSelectedOptions();
             StringBuilder parametersAsString = ApiRequestController.GetParametersAsString(options.GetParameters(false)).Replace("&", "?", 0, 1);
             List<Card> cards = await ExecuteBatchedRequestAsync<Card>(ids.Select(id => $"/{UrlPaths.Cards}/{id}{parametersAsString}").ToList(), cancellationToken);
-            //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
             cards = FilterCards(cards, options.FilterConditions);
             return OrderCards(cards, options.OrderBy);
         }

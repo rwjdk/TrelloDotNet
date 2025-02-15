@@ -483,6 +483,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            options.AdjustFieldsBasedOnSelectedOptions();
             if (options.IncludeList)
             {
                 if (options.CardFields != null && !options.CardFields.Fields.Contains("idList"))
@@ -533,7 +534,6 @@ namespace TrelloDotNet
                 }
             }
 
-            //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
             cards = FilterCards(cards, options.FilterConditions);
             return OrderCards(cards, options.OrderBy);
         }
@@ -558,6 +558,7 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            options.AdjustFieldsBasedOnSelectedOptions();
             if (options.IncludeBoard)
             {
                 if (options.CardFields != null && !options.CardFields.Fields.Contains("idBoard"))
@@ -589,7 +590,6 @@ namespace TrelloDotNet
                 }
             }
 
-            //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
             cards = FilterCards(cards, options.FilterConditions);
             return OrderCards(cards, options.OrderBy);
         }
@@ -624,10 +624,10 @@ namespace TrelloDotNet
                 throw new TrelloApiException("Could not find your inbox", string.Empty);
             }
 
-            var cards = await GetCardsOnBoardAsync(inbox.BoardId, options.ToCardOptions(), cancellationToken);
-            //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
-            cards = FilterCards(cards, options.FilterConditions);
-            return OrderCards(cards, options.OrderBy);
+            GetCardOptions getCardOptions = options.ToCardOptions();
+            var cards = await GetCardsOnBoardAsync(inbox.BoardId, getCardOptions, cancellationToken);
+            cards = FilterCards(cards, getCardOptions.FilterConditions);
+            return OrderCards(cards, getCardOptions.OrderBy);
         }
 
         /// <summary>
@@ -650,6 +650,7 @@ namespace TrelloDotNet
         /// <returns></returns>
         public async Task<List<Card>> GetCardsForMemberAsync(string memberId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            options.AdjustFieldsBasedOnSelectedOptions();
             if (options.IncludeList)
             {
                 if (options.CardFields != null && !options.CardFields.Fields.Contains("idList"))
@@ -706,7 +707,6 @@ namespace TrelloDotNet
                 }
             }
 
-            //todo - Add cardFields on the fly based on filter-conditions (adding any that is missing based on the filter)
             cards = FilterCards(cards, options.FilterConditions);
             return OrderCards(cards, options.OrderBy);
         }

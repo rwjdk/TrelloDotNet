@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TrelloDotNet.Model.Options.GetCardOptions
 {
@@ -216,6 +217,82 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
             parameters.AddRange(AdditionalParameters);
 
             return parameters.ToArray();
+        }
+
+        internal void AdjustFieldsBasedOnSelectedOptions()
+        {
+            List<CardFieldsType> cardFieldsNeededForFilterAndOrder = new List<CardFieldsType>();
+            switch (OrderBy)
+            {
+                case CardsOrderBy.StartDateAsc:
+                case CardsOrderBy.StartDateDesc:
+                    cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Start);
+                    break;
+                case CardsOrderBy.DueDateAsc:
+                case CardsOrderBy.DueDateDesc:
+                    cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Due);
+                    break;
+                case CardsOrderBy.NameAsc:
+                case CardsOrderBy.NameDesc:
+                    cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Name);
+                    break;
+            }
+
+            if (FilterConditions != null && FilterConditions.Count != 0)
+            {
+                foreach (CardsFilterCondition condition in FilterConditions)
+                {
+                    switch (condition.Field)
+                    {
+                        case CardsConditionField.Name:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Name);
+                            break;
+                        case CardsConditionField.List:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.ListId);
+                            break;
+                        case CardsConditionField.Label:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.LabelIds);
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Labels);
+                            break;
+                        case CardsConditionField.Member:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.MemberIds);
+                            break;
+                        case CardsConditionField.Description:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Description);
+                            break;
+                        case CardsConditionField.Due:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Due);
+                            break;
+                        case CardsConditionField.DueWithNoDueComplete:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Due);
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.DueComplete);
+                            break;
+                        case CardsConditionField.Start:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Start);
+                            break;
+                        case CardsConditionField.CustomField:
+                            IncludeCustomFieldItems = true;
+                            break;
+                        case CardsConditionField.DueComplete:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.DueComplete);
+                            break;
+                    }
+                }
+            }
+
+            // ReSharper disable once InvertIf
+            if (cardFieldsNeededForFilterAndOrder.Count > 0)
+            {
+                if (CardFields == null)
+                {
+                    CardFields = CardFields.DefaultFields;
+                }
+
+                foreach (CardFieldsType cardFieldsType in cardFieldsNeededForFilterAndOrder.Distinct())
+                {
+                    CardFields.AddIfMissing(cardFieldsType);
+                }
+            }
         }
     }
 }

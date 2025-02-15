@@ -80,7 +80,7 @@ namespace TrelloDotNet.Model.Options.GetInboxCardOptions
 
         internal GetCardOptions.GetCardOptions ToCardOptions()
         {
-            return new GetCardOptions.GetCardOptions
+            var getCardOptions = new GetCardOptions.GetCardOptions
             {
                 ActionsTypes = ActionsTypes,
                 AdditionalParameters = AdditionalParameters,
@@ -93,8 +93,12 @@ namespace TrelloDotNet.Model.Options.GetInboxCardOptions
                 IncludeChecklists = IncludeChecklists,
                 Limit = Limit,
                 Since = Since,
-                Filter = Filter
+                Filter = Filter,
+                FilterConditions = FilterConditions,
+                OrderBy = OrderBy
             };
+            getCardOptions.AdjustFieldsBasedOnSelectedOptions();
+            return getCardOptions;
         }
     }
 }

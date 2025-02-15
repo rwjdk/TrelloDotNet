@@ -17,7 +17,7 @@ namespace TrelloDotNet.Extensions
         /// <param name="cards">The list of cards</param>
         /// <param name="conditions">The conditions to apply</param>
         /// <returns></returns>
-        public static List<Card> Filter(this IEnumerable<Card> cards, List<CardsFilterCondition> conditions)
+        public static List<Card> Filter(this IEnumerable<Card> cards, params CardsFilterCondition[] conditions)
         {
             foreach (CardsFilterCondition entry in conditions)
             {
