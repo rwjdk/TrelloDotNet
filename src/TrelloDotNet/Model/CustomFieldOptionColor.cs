@@ -12,7 +12,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Unknown value retrieved from the Trello REST API
         /// </summary>
-        Unknown,
+        Unknown = -1,
 
         /// <summary>
         /// none

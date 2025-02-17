@@ -8,7 +8,7 @@
         /// <summary>
         /// The Plan could not be determined
         /// </summary>
-        Unknown,
+        Unknown = -1,
 
         /// <summary>
         /// The Free Plan
