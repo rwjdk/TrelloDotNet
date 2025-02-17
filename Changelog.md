@@ -4,9 +4,12 @@
 #### Special
 - **This is the first v2.x release. It has a set of breaking changes to streamline the API and make it less confusing to use (aka less options to do the same thing). [See a list of breaking changes here](https://github.com/rwjdk/TrelloDotNet/issues/51)**
 - Streamlined texts in ReadME, Changelog and Description of NuGet Package
-
+- Introduced an "Unknown" value for all enum-based values returned from the API that ensure that Trello can introduce new Valid Values without breaking this API (will revert to this Unknown value, should value-parsing fail) [NB: You should never send this value to Add/Update Methods as it will result in a failure]
+- 
 #### TrelloClient
 - Added `FilterCondition` to `GetCardsOptions` that allow you to filter the cards returned in various ways (Example: _give me all cards on board that have the Red Label, 1-2 Members and the Description contains the word 'Urgent'_). NB: Please note that the filter is an In-Memory Filter as Trello's do not allow Server-side filtering. See more about the Filter Condition System [here](https://github.com/rwjdk/TrelloDotNet/wiki/Filter-Condition-System)
+- Added option to see the Board Prefrences of the `Board`
+- Added [UpdateBoardPreferencesAsync](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateBoardPreferencesAsync) to update the various prefenrence of the board
 
 <hr>
 

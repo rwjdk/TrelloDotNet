@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Threading;
@@ -7,6 +8,7 @@ using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetBoardOptions;
+using TrelloDotNet.Model.Options.UpdateBoardPreferencesOptions;
 
 // ReSharper disable UnusedMember.Global
 
@@ -188,6 +190,39 @@ namespace TrelloDotNet
         public async Task<List<Board>> GetBoardsInOrganization(string organizationId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsInOrganization(organizationId), cancellationToken, options.GetParameters());
+        }
+
+        /// <summary>
+        /// Update the Board Preferences
+        /// </summary>
+        /// <param name="boardId">Id of the Board</param>
+        /// <param name="options">The Preference options to set (ignore those you wish to leave unchanged)</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task UpdateBoardPreferencesAsync(string boardId, UpdateBoardPreferencesOptions options, CancellationToken cancellationToken = default)
+        {
+            List<QueryParameter> parameters = new List<QueryParameter>();
+            SetOption(options.CardCovers, "prefs/cardCovers");
+            SetOption(options.Visibility, "prefs/permissionLevel");
+            SetOption(options.ShowCompletedStatusOnCardFront, "prefs/showCompleteStatus");
+            SetOption(options.HideVotes, "prefs/hideVotes");
+            SetOption(options.WhoCanVote, "prefs/voting");
+            SetOption(options.WhoCanComment, "prefs/comments");
+            SetOption(options.WhoCanAddAndRemoveMembers, "prefs/invitations");
+            SetOption(options.SelfJoin, "prefs/selfJoin");
+            SetOption(options.CardAging, "prefs/cardAging");
+
+            if (parameters.Count > 0)
+            {
+                await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}", cancellationToken, 0, parameters.ToArray());
+            }
+
+            void SetOption(Enum @enum, string parameterKey)
+            {
+                if (@enum != null)
+                {
+                    parameters.Add(new QueryParameter(parameterKey, @enum.GetJsonPropertyName()));
+                }
+            }
         }
     }
 }

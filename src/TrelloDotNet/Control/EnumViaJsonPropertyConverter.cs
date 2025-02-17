@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -13,7 +15,20 @@ namespace TrelloDotNet.Control
         /// <inheritdoc />
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var stringValue = reader.GetString();
+            string stringValue;
+            if (reader.TokenType == JsonTokenType.True)
+            {
+                stringValue = "true";
+            }
+            else if (reader.TokenType == JsonTokenType.False)
+            {
+                stringValue = "false";
+            }
+            else
+            {
+                stringValue = reader.GetString();
+            }
+
             if (string.IsNullOrWhiteSpace(stringValue))
             {
                 return default;
@@ -27,6 +42,12 @@ namespace TrelloDotNet.Control
                 {
                     return (T)memberInfo.GetValue(null);
                 }
+            }
+
+            FieldInfo unknown = members.FirstOrDefault(x => x.Name == "Unknown");
+            if (unknown != null)
+            {
+                return (T)unknown.GetValue(null);
             }
 
             throw new Exception($"Could not covert string value '{stringValue}' to Enum of type '{typeToConvert}'");

@@ -10,6 +10,11 @@ namespace TrelloDotNet.Model
     public enum ListColor
     {
         /// <summary>
+        /// Unknown value retrieved from the Trello REST API
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// Gray (default)
         /// </summary>
         [JsonPropertyName("gray")]

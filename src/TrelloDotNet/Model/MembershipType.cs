@@ -10,6 +10,11 @@ namespace TrelloDotNet.Model
     public enum MembershipType
     {
         /// <summary>
+        /// Unknown value retrieved from the Trello REST API
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// Administrator
         /// </summary>
         [JsonPropertyName("admin")]

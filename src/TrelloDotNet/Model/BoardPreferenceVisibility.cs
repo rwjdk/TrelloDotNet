@@ -3,9 +3,9 @@
 namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// The 'Brightness' of the Cover aka if text should be shown black or white on it to contrast image
+    /// The Visibility of a board
     /// </summary>
-    public enum CardCoverBrightness
+    public enum BoardPreferenceVisibility
     {
         /// <summary>
         /// Unknown value retrieved from the Trello REST API
@@ -13,21 +13,21 @@ namespace TrelloDotNet.Model
         Unknown,
 
         /// <summary>
-        /// None
+        /// Board is Private
         /// </summary>
-        [JsonPropertyName("null")]
-        None = 0,
+        [JsonPropertyName("private")]
+        Private,
 
         /// <summary>
-        /// Dark
+        /// Board is Workspace (All workspace members can see/edit this board)
         /// </summary>
-        [JsonPropertyName("dark")]
-        Dark,
+        [JsonPropertyName("org")]
+        Workspace,
 
         /// <summary>
-        /// Light
+        /// The Board is Public
         /// </summary>
-        [JsonPropertyName("light")]
-        Light
+        [JsonPropertyName("public")]
+        Public
     }
 }

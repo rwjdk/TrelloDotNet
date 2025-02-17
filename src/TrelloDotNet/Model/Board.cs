@@ -118,6 +118,13 @@ namespace TrelloDotNet.Model
         public List<PluginData> PluginData { get; private set; }
 
         /// <summary>
+        /// The Preferences of the Board
+        /// </summary>
+        [JsonPropertyName("prefs")]
+        [JsonInclude]
+        public BoardPreferences Preferences { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public Board()

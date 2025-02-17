@@ -10,6 +10,11 @@ namespace TrelloDotNet.Model
     public enum CustomFieldOptionColor
     {
         /// <summary>
+        /// Unknown value retrieved from the Trello REST API
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// none
         /// </summary>
         [JsonPropertyName("none")]

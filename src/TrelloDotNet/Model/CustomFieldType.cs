@@ -8,6 +8,11 @@ namespace TrelloDotNet.Model
     public enum CustomFieldType
     {
         /// <summary>
+        /// Unknown value retrieved from the Trello REST API
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// None
         /// </summary>
         [JsonPropertyName("checkbox")]
