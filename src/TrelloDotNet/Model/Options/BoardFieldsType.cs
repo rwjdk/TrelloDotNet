@@ -56,5 +56,11 @@ namespace TrelloDotNet.Model.Options
         /// </summary>
         [JsonPropertyName("pinned")]
         Pinned,
+
+        /// <summary>
+        /// The Preferences of the board
+        /// </summary>
+        [JsonPropertyName("prefs")]
+        Preferences,
     }
 }
