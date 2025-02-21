@@ -833,7 +833,7 @@ namespace TrelloDotNet
         /// <param name="options">Additional Options for the move like what list the card should end up on the new board and what happens to labels and members</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<Card> MoveCardToBoard(string cardId, string newBoardId, MoveCardToBoardOptions options, CancellationToken cancellationToken = default)
+        public async Task<Card> MoveCardToBoardAsync(string cardId, string newBoardId, MoveCardToBoardOptions options, CancellationToken cancellationToken = default)
         {
             if (options == null)
             {

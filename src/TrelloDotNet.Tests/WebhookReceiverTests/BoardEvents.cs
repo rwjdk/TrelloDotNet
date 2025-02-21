@@ -90,7 +90,7 @@ public class BoardEvents : TestBase
     public void BaseTest()
     {
         var receiver = new WebhookDataReceiver(TrelloClient);
-        receiver.ProcessJsonIntoEvents(string.Empty);
+        receiver.ProcessJsonIntoEventsAsync(string.Empty);
         var json = GetJsonFromSampleFile("AddStartDate.json");
         var eBoard = receiver.ConvertJsonToWebhookNotificationBoard(json);
 
@@ -153,7 +153,7 @@ public class BoardEvents : TestBase
     {
         SubscribeToSmartEvents(receiver);
         SubscribeToBasicEvents(receiver);
-        receiver.ProcessJsonIntoEvents(json);
+        receiver.ProcessJsonIntoEventsAsync(json);
 
         Thread.Sleep(500);
     }

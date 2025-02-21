@@ -89,7 +89,7 @@ namespace TrelloDotNet
         /// <param name="organizationId">Id of the Workspace</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Plan Info</returns>
-        public async Task<TrelloPlanInformation> GetTrelloPlanInformationForOrganization(string organizationId, CancellationToken cancellationToken = default)
+        public async Task<TrelloPlanInformation> GetTrelloPlanInformationForOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<TrelloPlanInformation>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken, new QueryParameter("fields", "id,name,premiumFeatures"));
         }

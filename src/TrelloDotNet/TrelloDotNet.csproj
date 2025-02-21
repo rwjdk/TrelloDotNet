@@ -24,6 +24,9 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageReleaseNotes>https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md</PackageReleaseNotes>
 	</PropertyGroup>
+	<PropertyGroup>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<None Include="..\..\Changelog.md" Link="Changelog.md" />
@@ -31,6 +34,7 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+		<None Include="X:\TrelloDotNet\src\TrelloDotNet\.editorconfig" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -54,6 +58,9 @@
 	<ItemGroup>
 	  <Folder Include="Model\Options\GetLabelOptions\" />
 	  <Folder Include="Model\Options\AddCardToInboxOptions\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EditorConfigFiles Remove="X:\TrelloDotNet\src\TrelloDotNet\.editorconfig" />
 	</ItemGroup>
 
 </Project>

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TrelloDotNet.Model.Options.UpdateBoardPreferencesOptions
+﻿namespace TrelloDotNet.Model.Options.UpdateBoardPreferencesOptions
 {
     /// <summary>
     /// Options to update for the board (options you do not define is left as is)

@@ -104,7 +104,7 @@ namespace TrelloDotNet
         /// <param name="boardId">Id of the Board</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Plan Info</returns>
-        public async Task<TrelloPlanInformation> GetTrelloPlanInformationForBoard(string boardId, CancellationToken cancellationToken = default)
+        public async Task<TrelloPlanInformation> GetTrelloPlanInformationForBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<TrelloPlanInformation>(GetUrlBuilder.GetBoard(boardId, new GetBoardOptions
             {
@@ -175,7 +175,7 @@ namespace TrelloDotNet
         /// <param name="organizationId">Id of the Organization</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Active Boards in the Organization</returns>
-        public async Task<List<Board>> GetBoardsInOrganization(string organizationId, CancellationToken cancellationToken = default)
+        public async Task<List<Board>> GetBoardsInOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsInOrganization(organizationId), cancellationToken);
         }
@@ -187,7 +187,7 @@ namespace TrelloDotNet
         /// <param name="options">Options on what should be included on the board</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Active Boards in the Organization</returns>
-        public async Task<List<Board>> GetBoardsInOrganization(string organizationId, GetBoardOptions options, CancellationToken cancellationToken = default)
+        public async Task<List<Board>> GetBoardsInOrganizationAsync(string organizationId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsInOrganization(organizationId), cancellationToken, options.GetParameters());
         }

@@ -1,0 +1,17 @@
+[*.{cs,vb}]
+
+# Naming rule: Async methods should have "Async" suffix
+dotnet_naming_rule.async_methods_end_with_async.symbols = public_methods
+dotnet_naming_rule.async_methods_end_with_async.style = end_with_async
+dotnet_naming_rule.async_methods_end_with_async.severity = error
+
+# Symbol specification: All public methods
+dotnet_naming_symbols.public_methods.applicable_kinds = method
+dotnet_naming_symbols.public_methods.applicable_accessibilities = public
+dotnet_naming_symbols.public_methods.required_modifiers = async
+
+# Naming style: Suffix "Async"
+dotnet_naming_style.end_with_async.required_suffix = Async
+dotnet_naming_style.end_with_async.capitalization = pascal_case
+
+dotnet_diagnostic.IDE1006.severity = error

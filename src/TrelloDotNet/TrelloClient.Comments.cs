@@ -91,7 +91,7 @@ namespace TrelloDotNet
         /// <param name="commentActionId">Id of the Comment (ActionId)</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>The Reactions</returns>
-        public async Task<List<CommentReaction>> GetCommentReactions(string commentActionId, CancellationToken cancellationToken = default)
+        public async Task<List<CommentReaction>> GetCommentReactionsAsync(string commentActionId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<CommentReaction>>(GetUrlBuilder.GetCommentReactions(commentActionId), cancellationToken);
         }
