@@ -20,7 +20,7 @@ namespace TrelloDotNet
         /// <param name="card">The Card to Add</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Added Card</returns>
-        [Obsolete("Use AddCard(AddCardOptions) instead for more options [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use AddCard(AddCardOptions) instead for more options [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<Card> AddCardAsync(Card card, CancellationToken cancellationToken = default)
         {
             QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(card);
@@ -40,7 +40,7 @@ namespace TrelloDotNet
         /// <param name="card">The Card Template to Add</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Added Template</returns>
-        [Obsolete("Use AddCardTemplateAsync(AddCardOptions) instead [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use AddCardTemplateAsync(AddCardOptions) instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<Card> AddCardTemplateAsync(Card card, CancellationToken cancellationToken = default)
         {
             card.IsTemplate = true;
@@ -63,7 +63,7 @@ namespace TrelloDotNet
         /// <param name="filter">The Selected Filter</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Cards</returns>
-        [Obsolete("Use GetCardsOnBoardAsync with GetCardOptions.Filter [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use GetCardsOnBoardAsync with GetCardOptions.Filter [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken,
@@ -81,7 +81,7 @@ namespace TrelloDotNet
         /// <param name="options">Options on how and what should be included on the cards (Example only a few fields to increase performance or more nested data to avoid more API calls)</param> 
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Cards</returns>
-        [Obsolete("Use GetCardsOnBoardAsync with GetCardOptions.Filter [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use GetCardsOnBoardAsync with GetCardOptions.Filter [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<List<Card>> GetCardsOnBoardFilteredAsync(string boardId, CardsFilter filter, GetCardOptions options, CancellationToken cancellationToken = default)
         {
             if (options.IncludeList)
@@ -133,7 +133,7 @@ namespace TrelloDotNet
         /// <param name="before">An Action ID</param>
         /// <param name="since">An Action ID</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default, int page = 0, string before = null, string since = null)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnBoard(boardId), new GetActionsOptions
@@ -157,7 +157,7 @@ namespace TrelloDotNet
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<List<TrelloAction>> GetActionsOnCardAsync(string cardId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnCard(cardId), new GetActionsOptions
@@ -175,7 +175,7 @@ namespace TrelloDotNet
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<List<TrelloAction>> GetActionsForListAsync(string listId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForList(listId), new GetActionsOptions
@@ -193,7 +193,7 @@ namespace TrelloDotNet
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<List<TrelloAction>> GetActionsForMemberAsync(string memberId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForMember(memberId), new GetActionsOptions
@@ -214,7 +214,7 @@ namespace TrelloDotNet
         /// <param name="limit">How many recent events to get back; Default 50, Max 1000</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of most Recent Trello Actions</returns>
-        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use overload the take in the 'GetActionsOptions' instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<List<TrelloAction>> GetActionsForOrganizationsAsync(string organizationId, List<string> filter = null, int limit = 50, CancellationToken cancellationToken = default)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForOrganization(organizationId), new GetActionsOptions
@@ -230,7 +230,7 @@ namespace TrelloDotNet
         /// <param name="cardWithChanges">The card with the changes</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Updated Card</returns>
-        [Obsolete("Use UpdateCard with 'List<CardUpdate> valuesToUpdate' as it have much better performance due to delta changes and avoid lost changes between get and update [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use UpdateCard with 'List<CardUpdate> valuesToUpdate' as it have much better performance due to delta changes and avoid lost changes between get and update [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<Card> UpdateCardAsync(Card cardWithChanges, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(cardWithChanges).ToList();
@@ -246,7 +246,7 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="parameters">The Specific Parameters to set (aka nerdy way; use 'valuesToUpdate' variant for more user-friendly way)</param>
         /// <param name="cancellationToken">CancellationToken</param>
-        [Obsolete("Use UpdateCardAsync(string cardId, List<CardUpdate> valuesToUpdate...) variant")]
+        [Obsolete("Use UpdateCardAsync(string cardId, List<CardUpdate> valuesToUpdate...) variant (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)")]
         public async Task<Card> UpdateCardAsync(string cardId, List<QueryParameter> parameters, CancellationToken cancellationToken = default)
         {
             QueryParameter coverParameter = parameters.FirstOrDefault(x => x.Name == "cover");

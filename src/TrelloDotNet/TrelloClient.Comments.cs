@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -91,7 +92,19 @@ namespace TrelloDotNet
         /// <param name="commentActionId">Id of the Comment (ActionId)</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>The Reactions</returns>
+        [Obsolete("Use version with Async-suffix [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<List<CommentReaction>> GetCommentReactions(string commentActionId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<CommentReaction>>(GetUrlBuilder.GetCommentReactions(commentActionId), cancellationToken);
+        }
+
+        /// <summary>
+        /// The reactions to a comment
+        /// </summary>
+        /// <param name="commentActionId">Id of the Comment (ActionId)</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The Reactions</returns>
+        public async Task<List<CommentReaction>> GetCommentReactionsAsync(string commentActionId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<CommentReaction>>(GetUrlBuilder.GetCommentReactions(commentActionId), cancellationToken);
         }

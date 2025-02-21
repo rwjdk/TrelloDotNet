@@ -838,7 +838,21 @@ namespace TrelloDotNet
         /// <param name="options">Additional Options for the move like what list the card should end up on the new board and what happens to labels and members</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
+        [Obsolete("Use version with Async-suffix [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<Card> MoveCardToBoard(string cardId, string newBoardId, MoveCardToBoardOptions options, CancellationToken cancellationToken = default)
+        {
+            return await MoveCardToBoardAsync(cardId, newBoardId, options, cancellationToken);
+        }
+
+        /// <summary>
+        /// Move a Card to another board
+        /// </summary>
+        /// <param name="cardId">The Id of the Card to Move</param>
+        /// <param name="newBoardId">The ID of the New Board that the card should be moved to</param>
+        /// <param name="options">Additional Options for the move like what list the card should end up on the new board and what happens to labels and members</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<Card> MoveCardToBoardAsync(string cardId, string newBoardId, MoveCardToBoardOptions options, CancellationToken cancellationToken = default)
         {
             if (options == null)
             {

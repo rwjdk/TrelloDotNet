@@ -145,7 +145,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task BoardsInOrganization()
     {
-        var boards = await TrelloClient.GetBoardsInOrganization(_board.OrganizationId);
+        var boards = await TrelloClient.GetBoardsInOrganizationAsync(_board.OrganizationId);
         Assert.Single(boards);
         Assert.Equal(_board.Id, boards.First().Id);
     }

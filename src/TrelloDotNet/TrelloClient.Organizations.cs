@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
@@ -89,7 +90,19 @@ namespace TrelloDotNet
         /// <param name="organizationId">Id of the Workspace</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Plan Info</returns>
+        [Obsolete("Use version with Async-suffix [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<TrelloPlanInformation> GetTrelloPlanInformationForOrganization(string organizationId, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<TrelloPlanInformation>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken, new QueryParameter("fields", "id,name,premiumFeatures"));
+        }
+
+        /// <summary>
+        /// Get Plan Information for a specific Workspace (Free, Standard, Premium, Enterprise) + what features are supported
+        /// </summary>
+        /// <param name="organizationId">Id of the Workspace</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Plan Info</returns>
+        public async Task<TrelloPlanInformation> GetTrelloPlanInformationForOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<TrelloPlanInformation>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken, new QueryParameter("fields", "id,name,premiumFeatures"));
         }

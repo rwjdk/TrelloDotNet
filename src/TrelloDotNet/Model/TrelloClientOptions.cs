@@ -20,13 +20,13 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Control if cards should retrieve Custom Fields when retrieving cards (WARNING: Non-Get-Methods returning Card will NOT include Custom fields)
         /// </summary>
-        [Obsolete("Use Card Methods with 'GetCardOptions' parameter Instead [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use Card Methods with 'GetCardOptions' parameter Instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public bool IncludeCustomFieldsInCardGetMethods { get; set; }
 
         /// <summary>
         /// Control if cards should retrieve Attachments when retrieving cards (WARNING: Non-Get-Methods returning Card will NOT include Attachments)
         /// </summary>
-        [Obsolete("Use Card Methods with 'GetCardOptions' parameter Instead [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use Card Methods with 'GetCardOptions' parameter Instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public bool IncludeAttachmentsInCardGetMethods { get; set; }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace TrelloDotNet.Model
         /// Trello API secret for Webhook signature validation.
         /// When passing a secret, signature validation will be turned on for all incoming Webhooks.
         /// </param>
-        [Obsolete("Use empty constructor instead [Will be removed in v2.0 of this nuGet Package]")]
+        [Obsolete("Use empty constructor instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public TrelloClientOptions(
             ApiCallExceptionOption apiCallExceptionOption = ApiCallExceptionOption.IncludeUrlButMaskCredentials,
             bool allowDeleteOfBoards = false,
