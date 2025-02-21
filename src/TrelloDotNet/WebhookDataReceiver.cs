@@ -27,7 +27,10 @@ namespace TrelloDotNet
         /// <param name="signature">Signature from X-Trello-Webhook header for signature validation</param>
         /// <param name="webhookUrl">Webhook URL for signature validation</param>
         /// <returns>If the Event was processed (aka it was a supported event)</returns>
-        public async void ProcessJsonIntoEventsAsync(string json, string signature = null, string webhookUrl = null)
+#pragma warning disable IDE1006 // Naming Styles
+        // ReSharper disable once InconsistentNaming
+        public async void ProcessJsonIntoEvents(string json, string signature = null, string webhookUrl = null)
+#pragma warning restore IDE1006 // Naming Styles
         {
             if (string.IsNullOrWhiteSpace(json))
             {
