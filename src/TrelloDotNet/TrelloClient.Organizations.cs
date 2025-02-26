@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.GetOrganizationOptions;
 
 namespace TrelloDotNet
 {
@@ -18,6 +19,18 @@ namespace TrelloDotNet
         public async Task<Organization> GetOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<Organization>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken);
+        }
+
+        /// <summary>
+        /// Get an Organization (also known as Workspace)
+        /// </summary>
+        /// <param name="organizationId">ID of an Organization</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <param name="options">Options how to get the organization</param>
+        /// <returns>The Organization</returns>
+        public async Task<Organization> GetOrganizationAsync(string organizationId, GetOrganizationOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<Organization>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
@@ -54,6 +67,18 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get the Organizations that the specified member has access to
+        /// </summary>
+        /// <param name="memberId">Id of the Member to find organizations for</param>
+        /// <param name="options">Options how to get the organization</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The Organizations there is access to</returns>
+        public async Task<List<Organization>> GetOrganizationsForMemberAsync(string memberId, GetOrganizationOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List<Organization>>(GetUrlBuilder.GetOrganizationsForMember(memberId), cancellationToken, options.GetParameters());
+        }
+
+        /// <summary>
         /// Get the Organizations that the token provided to the TrelloClient can Access
         /// </summary>
         /// <returns>The Organizations there is access to</returns>
@@ -61,6 +86,18 @@ namespace TrelloDotNet
         {
             var tokenMember = await GetTokenMemberAsync(cancellationToken);
             return await GetOrganizationsForMemberAsync(tokenMember.Id, cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the Organizations that the token provided to the TrelloClient can Access
+        /// <param name="options">Options how to get the organization</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// </summary>
+        /// <returns>The Organizations there is access to</returns>
+        public async Task<List<Organization>> GetOrganizationsCurrentTokenCanAccessAsync(GetOrganizationOptions options, CancellationToken cancellationToken = default)
+        {
+            var tokenMember = await GetTokenMemberAsync(cancellationToken);
+            return await GetOrganizationsForMemberAsync(tokenMember.Id, options, cancellationToken);
         }
 
         /// <summary>

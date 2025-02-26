@@ -31,6 +31,11 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         public GetBoardOptionsIncludeLists IncludeLists { get; set; }
 
         /// <summary>
+        /// Whether to return the Organization of the board (Default: False)
+        /// </summary>
+        public bool IncludeOrganization { get; set; }
+
+        /// <summary>
         /// Whether to return Labels on the board (Default: False)
         /// </summary>
         public bool IncludeLabels { get; set; }
@@ -39,6 +44,11 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         /// What board-fields to include if IncludeBoard are set to True
         /// </summary>
         public BoardFields BoardFields { get; set; }
+
+        /// <summary>
+        /// What Organization (Workspace)-fields to include if IncludeBoard are set to True
+        /// </summary>
+        public OrganizationFields OrganizationFields { get; set; }
 
         /// <summary>
         /// What card-fields to include if IncludeCards are set to other than None. all or a comma-separated list of fields. Defaults: badges, checkItemStates, closed, dateLastActivity, desc, descData, due, start, email, idBoard, idChecklists, idLabels, idList, idMembers, idShort, idAttachmentCover, manualCoverAttachment, labels, name, pos, shortUrl, url
@@ -74,6 +84,11 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
                 parameters.Add(new QueryParameter("card_fields", string.Join(",", CardFields.Fields)));
             }
 
+            if (OrganizationFields != null)
+            {
+                parameters.Add(new QueryParameter("organization_fields", string.Join(",", OrganizationFields.Fields)));
+            }
+
             if (ActionsTypes != null)
             {
                 parameters.Add(new QueryParameter("actions", string.Join(",", ActionsTypes.ActionTypes)));
@@ -87,6 +102,7 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
             }
 
             parameters.Add(new QueryParameter("lists", IncludeLists.GetJsonPropertyName()));
+            parameters.Add(new QueryParameter("organization", IncludeOrganization));
             parameters.Add(new QueryParameter("filter", Filter.GetJsonPropertyName()));
             parameters.Add(new QueryParameter("cards", IncludeCards.GetJsonPropertyName()));
             parameters.Add(new QueryParameter("labels", IncludeLabels ? "all" : "none"));

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -53,6 +54,21 @@ namespace TrelloDotNet.Model
         [JsonPropertyName("website")]
         [QueryParameter]
         public string Website { get; set; }
+
+        /// <summary>
+        /// Memberships of the Workspace
+        /// </summary>
+        [JsonPropertyName("memberships")]
+        [JsonInclude]
+        public List<Membership> Memberships { get; private set; }
+
+        /// <summary>
+        /// Id of Boards Linked to the Workspace
+        /// </summary>
+        [JsonPropertyName("idBoards")]
+        [JsonInclude]
+        public List<string> BoardIds { get; private set; }
+
 
         /// <summary>
         /// Constructor

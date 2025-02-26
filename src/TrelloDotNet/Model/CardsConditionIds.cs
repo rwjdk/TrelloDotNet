@@ -3,7 +3,7 @@
     /// <summary>
     /// Cards Condition that are based on Child-object of a card (Labels, Members and Lists)
     /// </summary>
-    public enum CardsConditionId
+    public enum CardsConditionIds
     {
         /// <summary>
         /// Id is equal to given value

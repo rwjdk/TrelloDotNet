@@ -63,6 +63,13 @@ namespace TrelloDotNet.Model
         public string OrganizationId { get; set; }
 
         /// <summary>
+        /// Organization (Only populated if IncludeOrganization in GetBoardOptions is set to true)
+        /// </summary>
+        [JsonPropertyName("organization")]
+        [JsonInclude]
+        public Organization Organization { get; private set; }
+
+        /// <summary>
         /// Id of Enterprise
         /// </summary>
         [JsonPropertyName("idEnterprise")]

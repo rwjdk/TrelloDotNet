@@ -184,7 +184,7 @@ namespace TrelloDotNet.Model
         {
             return new CardsFilterCondition
             {
-                Field = CardsConditionField.Label,
+                Field = CardsConditionField.LabelId,
                 Condition = CardsCondition.HasAnyValue
             };
         }
@@ -197,7 +197,7 @@ namespace TrelloDotNet.Model
         {
             return new CardsFilterCondition
             {
-                Field = CardsConditionField.Label,
+                Field = CardsConditionField.LabelId,
                 Condition = CardsCondition.DoNotHaveAnyValue
             };
         }
@@ -208,9 +208,21 @@ namespace TrelloDotNet.Model
         /// <param name="condition">The condition the listIds values should meet</param>
         /// <param name="listIds">One or more listIds that should bee the condition</param>
         /// <returns>The Condition</returns>
-        public static CardsFilterCondition ListId(CardsConditionId condition, params string[] listIds)
+        public static CardsFilterCondition ListId(CardsConditionIds condition, params string[] listIds)
         {
-            return AdvancedStringCondition(CardsConditionField.List, (CardsConditionString)Convert.ToInt32(condition), listIds);
+            return AdvancedStringCondition(CardsConditionField.ListId, (CardsConditionString)Convert.ToInt32(condition), listIds);
+        }
+
+
+        /// <summary>
+        /// Create a listName based condition (example only cards on a specific list)
+        /// </summary>
+        /// <param name="condition">The condition the listNames values should meet</param>
+        /// <param name="listNames">One or more listNames that should bee the condition</param>
+        /// <returns>The Condition</returns>
+        public static CardsFilterCondition ListName(CardsConditionString condition, params string[] listNames)
+        {
+            return AdvancedStringCondition(CardsConditionField.ListName, condition, listNames);
         }
 
         /// <summary>
@@ -258,10 +270,21 @@ namespace TrelloDotNet.Model
         /// </summary>
         /// <param name="condition">The condition for the labelIds</param>
         /// <param name="labelIds">One of more labelIds that the condition should adhere to</param>
-        /// <returns>THe condition</returns>
-        public static CardsFilterCondition LabelId(CardsConditionId condition, params string[] labelIds)
+        /// <returns>The condition</returns>
+        public static CardsFilterCondition LabelId(CardsConditionIds condition, params string[] labelIds)
         {
-            return AdvancedStringCondition(CardsConditionField.Label, (CardsConditionString)Convert.ToInt32(condition), labelIds);
+            return AdvancedStringCondition(CardsConditionField.LabelId, (CardsConditionString)Convert.ToInt32(condition), labelIds);
+        }
+
+        /// <summary>
+        /// Create a label-based condition (example only cards that have 2 specific labelNames)
+        /// </summary>
+        /// <param name="condition">The condition for the labelNames</param>
+        /// <param name="labelNames">One of more labelNames that the condition should adhere to</param>
+        /// <returns>The condition</returns>
+        public static CardsFilterCondition LabelName(CardsConditionString condition, params string[] labelNames)
+        {
+            return AdvancedStringCondition(CardsConditionField.LabelName, condition, labelNames);
         }
 
         /// <summary>
@@ -272,7 +295,7 @@ namespace TrelloDotNet.Model
         /// <returns>The condition</returns>
         public static CardsFilterCondition LabelCount(CardsConditionCount condition, int value)
         {
-            return AdvancedNumberCondition(CardsConditionField.Label, (CardsConditionNumber)Convert.ToInt32(condition), value);
+            return AdvancedNumberCondition(CardsConditionField.LabelId, (CardsConditionNumber)Convert.ToInt32(condition), value);
         }
 
         /// <summary>
@@ -284,7 +307,7 @@ namespace TrelloDotNet.Model
         public static CardsFilterCondition LabelCountBetween(int min, int max)
         {
             var decimals = new List<decimal>() { min, max };
-            return AdvancedNumberCondition(CardsConditionField.Label, CardsConditionNumber.Between, decimals.ToArray());
+            return AdvancedNumberCondition(CardsConditionField.LabelId, CardsConditionNumber.Between, decimals.ToArray());
         }
 
         /// <summary>
@@ -296,7 +319,7 @@ namespace TrelloDotNet.Model
         public static CardsFilterCondition LabelCountNotBetween(int mustBeBelow, int mustBeAbove)
         {
             var decimals = new List<decimal>() { mustBeBelow, mustBeAbove };
-            return AdvancedNumberCondition(CardsConditionField.Label, CardsConditionNumber.NotBetween, decimals.ToArray());
+            return AdvancedNumberCondition(CardsConditionField.LabelId, CardsConditionNumber.NotBetween, decimals.ToArray());
         }
 
         /// <summary>
@@ -307,7 +330,7 @@ namespace TrelloDotNet.Model
         {
             return new CardsFilterCondition
             {
-                Field = CardsConditionField.Member,
+                Field = CardsConditionField.MemberId,
                 Condition = CardsCondition.HasAnyValue
             };
         }
@@ -320,7 +343,7 @@ namespace TrelloDotNet.Model
         {
             return new CardsFilterCondition
             {
-                Field = CardsConditionField.Member,
+                Field = CardsConditionField.MemberId,
                 Condition = CardsCondition.DoNotHaveAnyValue
             };
         }
@@ -330,10 +353,21 @@ namespace TrelloDotNet.Model
         /// </summary>
         /// <param name="condition">The condition for the memberIds</param>
         /// <param name="memberIds">One of more memberIds that the condition should adhere to</param>
-        /// <returns>THe condition</returns>
-        public static CardsFilterCondition MemberId(CardsConditionId condition, params string[] memberIds)
+        /// <returns>The condition</returns>
+        public static CardsFilterCondition MemberId(CardsConditionIds condition, params string[] memberIds)
         {
-            return AdvancedStringCondition(CardsConditionField.Member, (CardsConditionString)Convert.ToInt32(condition), memberIds);
+            return AdvancedStringCondition(CardsConditionField.MemberId, (CardsConditionString)Convert.ToInt32(condition), memberIds);
+        }
+
+        /// <summary>
+        /// Create a member-based condition  (example only cards that have 2 specific memberNames)
+        /// </summary>
+        /// <param name="condition">The condition for the memberNames</param>
+        /// <param name="memberNames">One of more memberNames that the condition should adhere to</param>
+        /// <returns>The condition</returns>
+        public static CardsFilterCondition MemberName(CardsConditionString condition, params string[] memberNames)
+        {
+            return AdvancedStringCondition(CardsConditionField.MemberName, condition, memberNames);
         }
 
         /// <summary>
@@ -344,7 +378,7 @@ namespace TrelloDotNet.Model
         /// <returns>The condition</returns>
         public static CardsFilterCondition MemberCount(CardsConditionCount condition, int value)
         {
-            return AdvancedNumberCondition(CardsConditionField.Member, (CardsConditionNumber)Convert.ToInt32(condition), value);
+            return AdvancedNumberCondition(CardsConditionField.MemberId, (CardsConditionNumber)Convert.ToInt32(condition), value);
         }
 
         /// <summary>
@@ -356,7 +390,7 @@ namespace TrelloDotNet.Model
         public static CardsFilterCondition MemberCountBetween(int min, int max)
         {
             var decimals = new List<decimal>() { min, max };
-            return AdvancedNumberCondition(CardsConditionField.Member, CardsConditionNumber.Between, decimals.ToArray());
+            return AdvancedNumberCondition(CardsConditionField.MemberId, CardsConditionNumber.Between, decimals.ToArray());
         }
 
         /// <summary>
@@ -368,7 +402,7 @@ namespace TrelloDotNet.Model
         public static CardsFilterCondition MemberCountNotBetween(int mustBeBelow, int mustBeAbove)
         {
             var decimals = new List<decimal>() { mustBeBelow, mustBeAbove };
-            return AdvancedNumberCondition(CardsConditionField.Member, CardsConditionNumber.Between, decimals.ToArray());
+            return AdvancedNumberCondition(CardsConditionField.MemberId, CardsConditionNumber.Between, decimals.ToArray());
         }
 
         /// <summary>

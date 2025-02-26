@@ -247,15 +247,24 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
                         case CardsConditionField.Name:
                             cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Name);
                             break;
-                        case CardsConditionField.List:
+                        case CardsConditionField.ListId:
                             cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.ListId);
                             break;
-                        case CardsConditionField.Label:
+                        case CardsConditionField.ListName:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.ListId);
+                            IncludeList = true;
+                            break;
+                        case CardsConditionField.LabelId:
+                        case CardsConditionField.LabelName:
                             cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.LabelIds);
                             cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Labels);
                             break;
-                        case CardsConditionField.Member:
+                        case CardsConditionField.MemberId:
                             cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.MemberIds);
+                            break;
+                        case CardsConditionField.MemberName:
+                            cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.MemberIds);
+                            IncludeMembers = true;
                             break;
                         case CardsConditionField.Description:
                             cardFieldsNeededForFilterAndOrder.Add(CardFieldsType.Description);

@@ -31,6 +31,11 @@
         AnyOfThese = 11,
 
         /// <summary>
+        /// String exist with all the given values (Only apply to Labels and Members)
+        /// </summary>
+        AllOfThese = 12,
+
+        /// <summary>
         /// String have any of the given values
         /// </summary>
         NoneOfThese = 13,

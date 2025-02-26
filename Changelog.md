@@ -9,8 +9,11 @@
 
 #### TrelloClient
 - Added `FilterCondition` to `GetCardsOptions` that allow you to filter the cards returned in various ways (Example: _give me all cards on board that have the Red Label, 1-2 Members and the Description contains the word 'Urgent'_). NB: Please note that the filter is an In-Memory Filter as Trello's do not allow Server-side filtering. See more about the Filter Condition System [here](https://github.com/rwjdk/TrelloDotNet/wiki/Filter-Condition-System)
-- Added option to see the Board Prefrences of the `Board`
+- Added option to see the Board Preferences of the `Board`
 - Added [UpdateBoardPreferencesAsync](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateBoardPreferencesAsync) to update the various prefenrence of the board
+- Added [GetCurrentTokenMembershipsAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCurrentTokenMembershipsAsync)  to more easily get if example the token-user is Admin or not on a board
+- Added `IncludeOrganization` to `GetBoardOptions`
+- Added `GetOrganizationOptions` on the various GetOrganization methods
 
 <hr>
 

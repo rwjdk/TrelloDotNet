@@ -11,19 +11,34 @@
         Name,
 
         /// <summary>
-        /// The list (id) of a Card
+        /// The list (Id) of a Card
         /// </summary>
-        List,
+        ListId,
 
         /// <summary>
-        /// The Label(s) of the Card
+        /// The list (Name) of a Card
         /// </summary>
-        Label,
+        ListName,
 
         /// <summary>
-        /// The Member(s) of the Card
+        /// The Label Id(s) of the Card
         /// </summary>
-        Member,
+        LabelId,
+
+        /// <summary>
+        /// The Label Name(s) of the Card
+        /// </summary>
+        LabelName,
+
+        /// <summary>
+        /// The Member Id(s) of the Card
+        /// </summary>
+        MemberId,
+
+        /// <summary>
+        /// The Member Name(s) of the Card
+        /// </summary>
+        MemberName,
 
         /// <summary>
         /// The Description of the Card
