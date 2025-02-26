@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Represent a comment on a Card
     /// </summary>
+    [DebuggerDisplay("{Text}")]
     public class Comment
     {
         /// <summary>

@@ -22,12 +22,12 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Name of the Parameter (found on Trello API reference page: https://developer.atlassian.com/cloud/trello/rest)
         /// </summary>
-        private string _name { get; set; }
+        private string _name;
 
         /// <summary>
         /// Type of the parameter
         /// </summary>
-        private QueryParameterType _type { get; set; }
+        private QueryParameterType _type;
 
         /// <summary>
         /// Create a Cover Parameter

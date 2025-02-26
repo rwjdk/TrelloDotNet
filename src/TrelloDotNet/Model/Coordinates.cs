@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Represent a Locations Coordinates
     /// </summary>
+    [DebuggerDisplay("Long: {Longitude} Lat: {Latitude}")]
     public class Coordinates
     {
         /// <summary>

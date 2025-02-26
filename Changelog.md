@@ -12,6 +12,10 @@
 - Added option to see the Board Preferences of the `Board`
 - Added [UpdateBoardPreferencesAsync](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateBoardPreferencesAsync) to update the various prefenrence of the board
 - Added [GetCurrentTokenMembershipsAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCurrentTokenMembershipsAsync)  to more easily get if example the token-user is Admin or not on a board
+- Added [GetPluginsForBoardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginsForBoardAsync)
+- Added [GetPluginDataOnCardAsync\<T\>(cardId, pluginId)](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOnCardAsync)
+- Added [GetPluginDataOfBoardAsync\<T\>(boardId, pluginId)](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOfBoardAsync)
+- Added Extension Methods for `PlugInData` to cast their values to a Specific Model
 - Added `IncludeOrganization` to `GetBoardOptions`
 - Added `GetOrganizationOptions` on the various GetOrganization methods
 
