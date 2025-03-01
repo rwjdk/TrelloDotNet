@@ -87,7 +87,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         Assert.EndsWith("X", updatedBoard.Description);
         Assert.EndsWith("X", getBoard.Name);
         Assert.EndsWith("X", getBoard.Description);
-        Assert.Equal(updatedBoard.Description, getBoard.Description);
+        //Assert.Equal(updatedBoard.Name, getBoard.Name); //todo: Add again once bug https://support.atlassian.com/requests/TRELLO-212222/ is resolved
         Assert.Equal(updatedBoard.Description, getBoard.Description);
     }
 
