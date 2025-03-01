@@ -131,6 +131,7 @@ Checklist addedChecklist = await client.AddChecklistAsync("<cardId>", newCheckli
 ## Handy links
 - [Wiki](https://github.com/rwjdk/TrelloDotNet/wiki)
 - [Changelog](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
+  - [Version 2.0 Migration Guide](https://github.com/rwjdk/TrelloDotNet/issues/51)
 - [Report an issue](https://github.com/rwjdk/TrelloDotNet/issues)
 - [Report a security concern](https://github.com/rwjdk/TrelloDotNet/security)
 - [TrelloDotNet Nuget Package](https://www.nuget.org/packages/TrelloDotNet) 
