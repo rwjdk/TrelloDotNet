@@ -1,4 +1,6 @@
 ﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.GetOrganizationOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -15,9 +17,30 @@ public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     }
 
     [Fact]
+    public async Task GetCurrentTokenMembershipsAsync()
+    {
+        TokenMembershipOverview memberships = await TrelloClient.GetCurrentTokenMembershipsAsync();
+        Assert.NotNull(memberships);
+        Assert.NotEmpty(memberships.OrganizationMemberships);
+        Assert.Contains(memberships.OrganizationMemberships, pair => pair.Key.Id == _board.OrganizationId);
+        Assert.NotEmpty(memberships.BoardMemberships);
+        Assert.Contains(memberships.BoardMemberships, pair => pair.Key.Id == _board.Id);
+    }
+
+    [Fact]
     public async Task GetOrganizationsCurrentTokenCanAccess()
     {
         var organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync();
+        Assert.Contains(organizations, x => x.Id == _organization.Id);
+    }
+
+    [Fact]
+    public async Task GetOrganizationsCurrentTokenCanAccessWithOptions()
+    {
+        var organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync(new GetOrganizationOptions
+        {
+            OrganizationFields = new OrganizationFields(OrganizationFieldsType.Name, OrganizationFieldsType.Url)
+        });
         Assert.Contains(organizations, x => x.Id == _organization.Id);
     }
 

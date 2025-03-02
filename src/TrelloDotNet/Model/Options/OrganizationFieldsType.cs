@@ -3,7 +3,7 @@
 namespace TrelloDotNet.Model.Options
 {
     /// <summary>
-    /// The various fields on a Organization (Workspace)
+    /// The various fields on an Organization (Workspace)
     /// </summary>
     public enum OrganizationFieldsType
     {

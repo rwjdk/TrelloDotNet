@@ -10,6 +10,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Unknown value retrieved from the Trello REST API
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         Unknown = -1,
 
         /// <summary>

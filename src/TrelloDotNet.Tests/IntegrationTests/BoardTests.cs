@@ -1,6 +1,10 @@
 ﻿using System.Diagnostics;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.GetBoardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.GetLabelOptions;
+using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -12,7 +16,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     private readonly Board _board = fixture.Board!;
 
     [Fact]
-    public void DefaultBoardData()
+    public async Task DefaultBoardData()
     {
         //Check Create date
         AssertTimeIsNow(_board.Created);
@@ -23,6 +27,22 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         Assert.False(_board.Pinned);
         Assert.Null(_board.EnterpriseId);
         Assert.NotEmpty(_board.OrganizationId);
+
+        var getBoardWithOptions = await TrelloClient.GetBoardAsync(_boardId, new GetBoardOptions
+        {
+            IncludeLists = GetBoardOptionsIncludeLists.Open,
+            IncludeCards = GetBoardOptionsIncludeCards.OpenCards,
+            BoardFields = new BoardFields(BoardFieldsType.Name)
+        });
+
+        Assert.NotNull(getBoardWithOptions.Lists);
+        Assert.Contains(getBoardWithOptions.Lists, x => x.Name == "To Do");
+        Assert.NotNull(getBoardWithOptions.Cards);
+        Assert.Null(getBoardWithOptions.Url);
+
+        TrelloPlanInformation plan = await TrelloClient.GetTrelloPlanInformationForBoardAsync(_boardId);
+        Assert.Equal(_boardName, plan.Name);
+        Assert.NotEmpty(plan.Features);
     }
 
     [Fact]
@@ -89,6 +109,12 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         Assert.EndsWith("X", getBoard.Description);
         //Assert.Equal(updatedBoard.Name, getBoard.Name); //todo: Add again once bug https://support.atlassian.com/requests/TRELLO-212222/ is resolved
         Assert.Equal(updatedBoard.Description, getBoard.Description);
+
+        var getBoardWithOptions = await TrelloClient.GetBoardAsync(_boardId, new GetBoardOptions
+        {
+            ActionsTypes = new ActionTypesToInclude([WebhookActionTypes.UpdateBoard])
+        });
+        Assert.NotEmpty(getBoardWithOptions.Actions);
     }
 
     [Fact]
@@ -112,6 +138,16 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
             Assert.Empty(label.Name);
             AssertTimeIsNow(label.Created);
         }
+
+        var labelsWithOptions = await TrelloClient.GetLabelsOfBoardAsync(_boardId, new GetLabelOptions
+        {
+            Limit = 2,
+            LabelFields = new LabelFields(LabelFieldsType.Name)
+        });
+        Assert.Equal(2, labelsWithOptions.Count);
+        Assert.Null(labelsWithOptions[0].Color);
+        Assert.Null(labelsWithOptions[1].Color);
+
 
         Label addedLabel = await TrelloClient.AddLabelAsync(new Label(_boardId, "MyLabel", "red"));
         Assert.NotNull(addedLabel.Id);
@@ -143,10 +179,28 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     }
 
     [Fact]
+    public async Task PluginInformation()
+    {
+        var plugins = await TrelloClient.GetPluginsOnBoardAsync(_boardId);
+        Assert.Contains(plugins, x => x.Name == "Butler");
+    }
+
+    [Fact]
     public async Task BoardsInOrganization()
     {
         var boards = await TrelloClient.GetBoardsInOrganizationAsync(_board.OrganizationId);
         Assert.Single(boards);
         Assert.Equal(_board.Id, boards.First().Id);
+
+        boards = await TrelloClient.GetBoardsInOrganizationAsync(_board.OrganizationId, new GetBoardOptions
+        {
+            IncludeLists = GetBoardOptionsIncludeLists.All
+        });
+        Assert.Single(boards);
+        Assert.Equal(_board.Id, boards.First().Id);
+        foreach (Board board in boards)
+        {
+            Assert.NotNull(board.Lists);
+        }
     }
 }

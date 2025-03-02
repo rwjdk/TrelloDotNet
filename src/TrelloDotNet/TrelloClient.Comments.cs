@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
@@ -94,6 +95,30 @@ namespace TrelloDotNet
         public async Task<List<CommentReaction>> GetCommentReactionsAsync(string commentActionId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<CommentReaction>>(GetUrlBuilder.GetCommentReactions(commentActionId), cancellationToken);
+        }
+
+        /// <summary>
+        /// Add a Reaction to a comment
+        /// </summary>
+        /// <param name="commentActionId">Id of the comment (and Action Id as comments are actions)</param>
+        /// <param name="reaction">The Reaction to add</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The Reaction as a Comment Reaction object</returns>
+        public async Task<CommentReaction> AddCommentReactionAsync(string commentActionId, Reaction reaction, CancellationToken cancellationToken = default)
+        {
+            string payload = JsonSerializer.Serialize(reaction);
+            return await _apiRequestController.PostWithJsonPayload<CommentReaction>($"{UrlPaths.Actions}/{commentActionId}/reactions", cancellationToken, payload);
+        }
+
+        /// <summary>
+        /// Delete a reaction from a Comment
+        /// </summary>
+        /// <param name="commentActionId">Id of the Comment</param>
+        /// <param name="commentReactionId">Id of the Reaction</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        public async Task DeleteReactionFromCommentAsync(string commentActionId, string commentReactionId, CancellationToken cancellationToken = default)
+        {
+            await _apiRequestController.Delete($"{UrlPaths.Actions}/{commentActionId}/reactions/{commentReactionId}", cancellationToken, 0);
         }
     }
 }

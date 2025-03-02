@@ -46,6 +46,11 @@ public abstract class TestBase
         return (await AddDummyCardAndList(boardId, name)).Card;
     }
 
+    protected async Task<Card> AddDummyCardToList(List list, string? name = null)
+    {
+        return await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString()));
+    }
+
     protected async Task<(List List, Card Card)> AddDummyCardAndList(string boardId, string? name = null)
     {
         List list = await AddDummyList(boardId, name);

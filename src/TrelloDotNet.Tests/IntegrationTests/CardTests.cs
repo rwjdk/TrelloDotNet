@@ -2,6 +2,7 @@
 using TrelloDotNet.Model.Actions;
 using TrelloDotNet.Model.Options.AddCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.MoveCardToListOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -45,6 +46,9 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         Assert.Equal(2, attachments.Count);
         Attachment attachment1 = attachments.Single(x => x.Id == att1.Id);
         Attachment attachment2 = attachments.Single(x => x.Id == att2.Id);
+
+        Stream stream = await TrelloClient.DownloadAttachmentAsync(card.Id, attachment1.Id);
+        Assert.NotNull(stream);
 
         Assert.Equal(att1.Url, attachment1.Url);
         Assert.Equal(att1.Name, attachment1.Name);
@@ -210,7 +214,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         //Assert.Equal(member.Id, itemC.MemberId); //This will fail on a free version of Trello so commented out
 
         var doneCard = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Card 2"));
-        await TrelloClient.AddChecklistAsync(doneCard.Id, addedChecklist.Id, true, null);
+        await TrelloClient.AddChecklistAsync(doneCard.Id, addedChecklist.Id, true, cancellationToken: CancellationToken.None);
         await TrelloClient.AddChecklistAsync(doneCard.Id, addedChecklist.Id, true, null);
 
         //Test adding a checklist with no items
@@ -385,6 +389,34 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         Assert.Empty(stickersPresentAfterDelete);
     }
 
+
+    [Fact]
+    public async Task CommentReactions()
+    {
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
+        //Test Comments
+        var cardForComments = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Comments Tests"));
+
+        var commentInput = new Comment("Hello World");
+        var comment = await TrelloClient.AddCommentAsync(cardForComments.Id, commentInput);
+
+        CommentReaction reaction = await TrelloClient.AddCommentReactionAsync(comment.Id, new Reaction
+        {
+            Native = "👍"
+        });
+
+        Assert.Equal("👍", reaction.Emoji.Native);
+
+        var reactions = await TrelloClient.GetCommentReactionsAsync(comment.Id);
+        Assert.Single(reactions);
+        Assert.Equal("👍", reactions[0].Emoji.Native);
+
+        await TrelloClient.DeleteReactionFromCommentAsync(comment.Id, reaction.Id);
+        reactions = await TrelloClient.GetCommentReactionsAsync(comment.Id);
+        Assert.Empty(reactions);
+    }
+
+
     [Fact]
     public async Task Comments()
     {
@@ -456,5 +488,47 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
 
         var removeCoverFromCardAsync = await TrelloClient.RemoveCoverFromCardAsync(updateCoverOnCardAsync.Id);
         Assert.Null(removeCoverFromCardAsync.Cover.Color);
+    }
+
+    [Fact]
+    public async Task MoveCards()
+    {
+        List list1 = await AddDummyList(_board.Id);
+        List list2 = await AddDummyList(_board.Id);
+
+        var card1 = await AddDummyCardToList(list1);
+        // ReSharper disable once UnusedVariable
+        var card2 = await AddDummyCardToList(list1);
+        // ReSharper disable once UnusedVariable
+        var card3 = await AddDummyCardToList(list1);
+
+        var card4 = await AddDummyCardToList(list2);
+        var card5 = await AddDummyCardToList(list2);
+        // ReSharper disable once UnusedVariable
+        var card6 = await AddDummyCardToList(list2);
+
+        await TrelloClient.MoveCardToListAsync(card1.Id, list2.Id, new MoveCardToListOptions
+        {
+            NamedPositionOnNewList = NamedPosition.Top
+        });
+
+        var list1Cards = await TrelloClient.GetCardsInListAsync(list1.Id);
+        var list2Cards = await TrelloClient.GetCardsInListAsync(list2.Id);
+
+        Assert.Equal(2, list1Cards.Count);
+        Assert.Equal(4, list2Cards.Count);
+
+        Assert.Equal(card1.Id, list2Cards.OrderBy(x => x.Position).First().Id);
+
+        await TrelloClient.MoveCardToBottomOfCurrentListAsync(card1.Id);
+        list2Cards = await TrelloClient.GetCardsInListAsync(list2.Id);
+
+        Assert.Equal(card4.Id, list2Cards.OrderBy(x => x.Position).First().Id);
+
+        await TrelloClient.MoveCardToTopOfCurrentListAsync(card5.Id);
+
+        list2Cards = await TrelloClient.GetCardsInListAsync(list2.Id);
+
+        Assert.Equal(card5.Id, list2Cards.OrderBy(x => x.Position).First().Id);
     }
 }

@@ -66,6 +66,21 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     }
 
     [Fact]
+    public async Task DeleteList()
+    {
+        var listsBefore = await TrelloClient.GetListsOnBoardFilteredAsync(_boardId, ListFilter.All);
+        var name = Guid.NewGuid().ToString();
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+
+        //Delete
+        await TrelloClient.DeleteListAsync(addList.Id);
+        var listsAfter = await TrelloClient.GetListsOnBoardFilteredAsync(_boardId, ListFilter.All);
+
+        Assert.Equal(listsAfter.Count, listsBefore.Count);
+        Assert.Contains(listsAfter, x => x.Name != name);
+    }
+
+    [Fact]
     public async Task ArchiveAllCardsInList()
     {
         var name = Guid.NewGuid().ToString();

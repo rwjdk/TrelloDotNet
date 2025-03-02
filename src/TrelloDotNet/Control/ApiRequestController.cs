@@ -137,6 +137,26 @@ namespace TrelloDotNet.Control
             return responseContent; //Content is assumed JSON
         }
 
+        internal async Task<T> PostWithJsonPayload<T>(string suffix, CancellationToken cancellationToken, string payload, params QueryParameter[] parameters)
+        {
+            string json = await PostWithJsonPayload(suffix, cancellationToken, payload, 0, parameters);
+            var @object = JsonSerializer.Deserialize<T>(json);
+            return @object;
+        }
+
+        internal async Task<string> PostWithJsonPayload(string suffix, CancellationToken cancellationToken, string payload, int retryCount, params QueryParameter[] parameters)
+        {
+            var uri = BuildUri(suffix, parameters);
+            var response = await _httpClient.PostAsync(uri, new StringContent(payload, Encoding.UTF8, "application/json"), cancellationToken);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => PostWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
+            }
+
+            return responseContent; //Content is assumed JSON
+        }
+
         private string FormatExceptionUrlAccordingToClientOptions(string fullUrl)
         {
             switch (_client.Options.ApiCallExceptionOption)

@@ -1,5 +1,7 @@
 ﻿using System.Security;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.GetOrganizationOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -28,6 +30,19 @@ public class OrganizationTests : TestBase
             Organization get = await TrelloClient.GetOrganizationAsync(id);
             Assert.Equal(added.Id, get.Id);
             Assert.Equal(added.Name, get.Name);
+
+            Organization getWithOptions = await TrelloClient.GetOrganizationAsync(id, new GetOrganizationOptions
+            {
+                OrganizationFields = new OrganizationFields(OrganizationFieldsType.Name)
+            });
+            Assert.Equal(added.Id, getWithOptions.Id);
+            Assert.Equal(added.Name, getWithOptions.Name);
+            Assert.NotEqual(added.Url, getWithOptions.Url);
+            Assert.Null(getWithOptions.Url);
+
+            TrelloPlanInformation plan = await TrelloClient.GetTrelloPlanInformationForOrganizationAsync(id);
+            Assert.Equal(added.Name, plan.Name);
+            Assert.NotEmpty(plan.Features);
 
             get.Description = "Some other description";
             Organization updated = await TrelloClient.UpdateOrganizationAsync(added);
