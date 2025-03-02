@@ -1,12 +1,18 @@
-[![NuGet](https://img.shields.io/badge/NuGet-blue)](https://www.nuget.org/packages/TrelloDotNet)
-[![WIKI](https://img.shields.io/badge/Wiki-brown)](https://github.com/rwjdk/TrelloDotNet/wiki)
-[![Changelog](https://img.shields.io/badge/-Changelog-darkgreen)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
-[![YouTube](https://img.shields.io/badge/-YouTube-darkred)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
-[![Rest API](https://img.shields.io/badge/The_Trello_REST_API-gray)](https://developer.atlassian.com/cloud/trello/rest/)
-[![API Keys](https://img.shields.io/badge/Power--Ups_administration-purple)](https://trello.com/power-ups/admin/)
+[![NuGet](https://img.shields.io/badge/NuGet-blue?style=for-the-badge)](https://www.nuget.org/packages/TrelloDotNet)
+[![WIKI](https://img.shields.io/badge/Wiki-brown?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/wiki)
+[![Changelog](https://img.shields.io/badge/-Changelog-darkgreen?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
+[![YouTube](https://img.shields.io/badge/-YouTube-darkred?style=for-the-badge)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
+[![Rest API](https://img.shields.io/badge/The_Trello_REST_API-gray?style=for-the-badge)](https://developer.atlassian.com/cloud/trello/rest/)
+[![API Keys](https://img.shields.io/badge/Power--Ups_administration-purple?style=for-the-badge)](https://trello.com/power-ups/admin/)
 
 # TrelloDotNet
 _Welcome to TrelloDotNet - A .NET Implementation of the [Trello REST API](https://developer.atlassian.com/cloud/trello/rest)_
+
+![GitHub Release Date](https://img.shields.io/github/release-date/rwjdk/TrelloDotNet?style=for-the-badge&label=Last%20Release)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rwjdk/TrelloDotNet/Build.yml?style=for-the-badge)
+![GitHub Issues or Pull Requests by label](https://img.shields.io/github/issues/rwjdk/TrelloDotNet/bug?style=for-the-badge&label=Bugs)
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/rwjdk/TrelloDotNet?style=for-the-badge)
+![Coveralls](https://img.shields.io/coverallsCoverage/github/rwjdk/TrelloDotNet?style=for-the-badge)
 
 ## Features
 - A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on the Trello features
