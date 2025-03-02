@@ -1,6 +1,6 @@
 # This workflow will build a .NET project
 
-name: Build and Publish (1.x)
+name: Build (1.x)
 on:
   push:
     branches: [ "version_1.x" ]
