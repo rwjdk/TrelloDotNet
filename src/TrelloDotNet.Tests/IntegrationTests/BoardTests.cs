@@ -73,7 +73,10 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     public async Task NoClosedLists()
     {
         //No closed lists
-        var listsFiltered = await TrelloClient.GetListsOnBoardFilteredAsync(_boardId, ListFilter.Closed);
+        var listsFiltered = await TrelloClient.GetListsOnBoardAsync(_boardId, new GetListOptions
+        {
+            Filter = ListFilter.Closed
+        });
         Assert.Empty(listsFiltered);
     }
 

@@ -86,19 +86,6 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get Lists on board based on their status
-        /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
-        /// <param name="filter">The Selected Filter</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Cards</returns>
-        [Obsolete("Use GetCardsOnBoardAsync with GetListOptions.Filter instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
-        public async Task<List<List>> GetListsOnBoardFilteredAsync(string boardId, ListFilter filter, CancellationToken cancellationToken = default)
-        {
-            return await _apiRequestController.Get<List<List>>($"{GetUrlBuilder.GetListsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken);
-        }
-
-        /// <summary>
         /// Get a specific List (Column) based on its Id
         /// </summary>
         /// <param name="listId">Id of the List</param>
