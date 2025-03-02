@@ -1,6 +1,11 @@
 ﻿# Changelog 
 *Below is the version history of [TrelloDotNet](https://github.com/rwjdk/TrelloDotNet) (An wrapper of the Trello API)*
 
+## 1.11.12 (2nd of March 2025)
+- Obsoleted `GetListsOnBoardFilteredAsync`. Use GetListsOnBoardAsync with GetListOptions.Filter instead.
+
+<hr>
+
 ## 1.11.11 (21st of February 2025)
 #### TrelloClient
 - Marked incorrect named methods with Obsolete and offer new versions with the correct names

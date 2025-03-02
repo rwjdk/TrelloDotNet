@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.GetBoardOptions;
+using TrelloDotNet.Model.Options.GetListOptions;
 
 namespace TrelloDotNet
 {
@@ -83,18 +86,6 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get Lists on board based on their status
-        /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
-        /// <param name="filter">The Selected Filter</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Cards</returns>
-        public async Task<List<List>> GetListsOnBoardFilteredAsync(string boardId, ListFilter filter, CancellationToken cancellationToken = default)
-        {
-            return await _apiRequestController.Get<List<List>>($"{GetUrlBuilder.GetListsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken);
-        }
-
-        /// <summary>
         /// Get a specific List (Column) based on its Id
         /// </summary>
         /// <param name="listId">Id of the List</param>
@@ -114,6 +105,29 @@ namespace TrelloDotNet
         public async Task<List<List>> GetListsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<List>>(GetUrlBuilder.GetListsOnBoard(boardId), cancellationToken);
+        }
+
+        /// <summary>
+        /// Get Lists (Columns) on a Board
+        /// </summary>
+        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="options">List Options</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Lists (Columns)</returns>
+        public async Task<List<List>> GetListsOnBoardAsync(string boardId, GetListOptions options, CancellationToken cancellationToken = default)
+        {
+            List<List> lists;
+
+            if (options.Filter.HasValue)
+            {
+                lists = await _apiRequestController.Get<List<List>>($"{GetUrlBuilder.GetListsOnBoard(boardId)}/{options.Filter.GetJsonPropertyName()}", cancellationToken);
+            }
+            else
+            {
+                lists = await _apiRequestController.Get<List<List>>(GetUrlBuilder.GetListsOnBoard(boardId), cancellationToken);
+            }
+
+            return lists;
         }
     }
 }

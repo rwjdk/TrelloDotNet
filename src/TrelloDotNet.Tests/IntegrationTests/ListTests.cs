@@ -1,5 +1,6 @@
 ﻿using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options.AddCardOptions;
+using TrelloDotNet.Model.Options.GetListOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -50,7 +51,10 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         Assert.True(listsAfter.TrueForAll(x => x.Name != name));
 
         //Check that there are a closed list
-        var closedLists = await TrelloClient.GetListsOnBoardFilteredAsync(_boardId, ListFilter.Closed);
+        var closedLists = await TrelloClient.GetListsOnBoardAsync(_boardId, new GetListOptions
+        {
+            Filter = ListFilter.Closed
+        });
         List foundList = closedLists.Single(x => x.Id == addList.Id);
         Assert.Equal(addList.Name, foundList.Name);
 

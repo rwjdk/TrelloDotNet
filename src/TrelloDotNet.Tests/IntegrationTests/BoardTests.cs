@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.GetListOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -52,7 +53,10 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     public async Task NoClosedLists()
     {
         //No closed lists
-        var listsFiltered = await TrelloClient.GetListsOnBoardFilteredAsync(_boardId, ListFilter.Closed);
+        var listsFiltered = await TrelloClient.GetListsOnBoardAsync(_boardId, new GetListOptions
+        {
+            Filter = ListFilter.Closed
+        });
         Assert.Empty(listsFiltered);
     }
 
