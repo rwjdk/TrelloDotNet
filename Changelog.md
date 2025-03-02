@@ -15,11 +15,30 @@
 - Added [GetPluginsForBoardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginsForBoardAsync)
 - Added [GetPluginDataOnCardAsync\<T\>(cardId, pluginId)](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOnCardAsync)
 - Added [GetPluginDataOfBoardAsync\<T\>(boardId, pluginId)](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOfBoardAsync)
+- Added options for `GetListAsync`, `GetListsAsync` and `GetListsOnBoardAsync` to include the Board and the Cards on the list(s)
 - Added Extension Methods for `PlugInData` to cast their values to a Specific Model
 - Added `IncludeOrganization` to `GetBoardOptions`
 - Added `GetOrganizationOptions` on the various GetOrganization methods
 
 <hr>
+
+## 1.11.12 (2nd of March 2025)
+- Obsoleted `GetListsOnBoardFilteredAsync`. Use GetListsOnBoardAsync with GetListOptions.Filter instead.
+
+<hr>
+
+## 1.11.11 (21st of February 2025)
+#### TrelloClient
+- Marked incorrect named methods with Obsolete and offer new versions with the correct names
+
+<hr>
+
+## 1.11.10 (27th of January 2025)
+#### TrelloClient
+- Fixed that the new AddCard variant did not properly work with NamePosition
+
+<hr>
+
 
 ## Version 1.11.9 (25th of January 2025)
 #### Special

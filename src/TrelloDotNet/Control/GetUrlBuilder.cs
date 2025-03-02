@@ -1,5 +1,6 @@
 ﻿using TrelloDotNet.Model.Options.GetBoardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.GetListOptions;
 
 namespace TrelloDotNet.Control
 {
@@ -247,6 +248,17 @@ namespace TrelloDotNet.Control
         }
 
         /// <summary>
+        /// lists/{listId}
+        /// </summary>
+        /// <param name="listId">Id of the List</param>
+        /// <param name="options">Options for the list</param>
+        /// <returns>The URL Suffix</returns>
+        public static string GetList(string listId, GetListOptions options)
+        {
+            return $"{UrlPaths.Lists}/{listId}" + AddGetListOptions(options);
+        }
+
+        /// <summary>
         /// boards/{boardId}/members/
         /// </summary>
         /// <param name="boardId">Id of the Board</param>
@@ -403,6 +415,11 @@ namespace TrelloDotNet.Control
         }
 
         private static string AddGetBoardOptions(GetBoardOptions options)
+        {
+            return options != null ? ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1).ToString() : string.Empty;
+        }
+
+        private static string AddGetListOptions(GetListOptions options)
         {
             return options != null ? ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1).ToString() : string.Empty;
         }

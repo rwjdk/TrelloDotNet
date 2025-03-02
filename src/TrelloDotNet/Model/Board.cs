@@ -101,7 +101,7 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonPropertyName("cards")]
         [JsonInclude]
-        public List<Card> Cards { get; private set; }
+        public List<Card> Cards { get; internal set; }
 
         /// <summary>
         /// Labels on the board (Only populated if 'IncludeLabels' in GetBoardOptions is set to true)

@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.GetBoardOptions;
+using TrelloDotNet.Model.Options.GetListOptions;
 
 namespace TrelloDotNet
 {
@@ -89,6 +92,7 @@ namespace TrelloDotNet
         /// <param name="filter">The Selected Filter</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of Cards</returns>
+        [Obsolete("Use GetCardsOnBoardAsync with GetListOptions.Filter instead [Will be removed in v2.0 of this nuGet Package (More info: https://github.com/rwjdk/TrelloDotNet/issues/51)]")]
         public async Task<List<List>> GetListsOnBoardFilteredAsync(string boardId, ListFilter filter, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<List>>($"{GetUrlBuilder.GetListsOnBoard(boardId)}/{filter.GetJsonPropertyName()}", cancellationToken);
@@ -106,6 +110,18 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Get a specific List (Column) based on its Id
+        /// </summary>
+        /// <param name="listId">Id of the List</param>
+        /// <param name="options">Options for getting the List</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task<List> GetListAsync(string listId, GetListOptions options, CancellationToken cancellationToken = default)
+        {
+            return await _apiRequestController.Get<List>(GetUrlBuilder.GetList(listId), cancellationToken, options.GetParameters());
+        }
+
+        /// <summary>
         /// Get Lists (Columns) on a Board
         /// </summary>
         /// <param name="boardId">Id of the Board (in its long or short version)</param>
@@ -114,6 +130,52 @@ namespace TrelloDotNet
         public async Task<List<List>> GetListsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<List>>(GetUrlBuilder.GetListsOnBoard(boardId), cancellationToken);
+        }
+
+        /// <summary>
+        /// Get Lists (Columns) on a Board
+        /// </summary>
+        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="options">List Options</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of Lists (Columns)</returns>
+        public async Task<List<List>> GetListsOnBoardAsync(string boardId, GetListOptions options, CancellationToken cancellationToken = default)
+        {
+            List<List> lists;
+            options.AdjustFieldsBasedOnSelectedOptions();
+
+            if (options.Filter.HasValue)
+            {
+                lists = await _apiRequestController.Get<List<List>>($"{GetUrlBuilder.GetListsOnBoard(boardId)}/{options.Filter.GetJsonPropertyName()}", cancellationToken, options.GetParameters());
+            }
+            else
+            {
+                lists = await _apiRequestController.Get<List<List>>(GetUrlBuilder.GetListsOnBoard(boardId), cancellationToken, options.GetParameters());
+            }
+
+            // ReSharper disable once InvertIf
+            if (options.IncludeBoard)
+            {
+                var board = await GetBoardAsync(boardId, new GetBoardOptions
+                {
+                    BoardFields = options.BoardFields
+                }, cancellationToken);
+                foreach (List list in lists)
+                {
+                    list.Board = board;
+                }
+            }
+
+            if (options.IncludeCards != GetListOptionsIncludeCards.None)
+            {
+                foreach (List list in lists)
+                {
+                    list.Cards = FilterCards(list.Cards, options.CardsFilterConditions);
+                    list.Cards = OrderCards(list.Cards, options.CardsOrderBy);
+                }
+            }
+
+            return lists;
         }
     }
 }

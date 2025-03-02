@@ -10,6 +10,7 @@ using TrelloDotNet.Model;
 using TrelloDotNet.Model.Batch;
 using TrelloDotNet.Model.Options.GetBoardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.GetListOptions;
 
 // ReSharper disable UnusedMember.Global
 
@@ -26,6 +27,18 @@ namespace TrelloDotNet
         public async Task<List<List>> GetListsAsync(List<string> ids, CancellationToken cancellationToken = default)
         {
             return await ExecuteBatchedRequestAsync<List>(ids.Select(id => $"/{GetUrlBuilder.GetList(id)}").ToList(), cancellationToken);
+        }
+
+        /// <summary>
+        /// Get a list of Trello Lists as a batch
+        /// </summary>
+        /// <param name="ids">List Ids</param>
+        /// <param name="options">Options for getting the lists</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The list of Lists</returns>
+        public async Task<List<List>> GetListsAsync(List<string> ids, GetListOptions options, CancellationToken cancellationToken = default)
+        {
+            return await ExecuteBatchedRequestAsync<List>(ids.Select(id => $"/{GetUrlBuilder.GetList(id, options)}").ToList(), cancellationToken);
         }
 
         /// <summary>

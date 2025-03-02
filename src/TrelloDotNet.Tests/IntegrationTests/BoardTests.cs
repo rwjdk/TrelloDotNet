@@ -4,6 +4,7 @@ using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetBoardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.GetLabelOptions;
+using TrelloDotNet.Model.Options.GetListOptions;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.Tests.IntegrationTests;

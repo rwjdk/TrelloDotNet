@@ -121,7 +121,15 @@ namespace TrelloDotNet
         /// <returns>The Board</returns>
         public async Task<Board> GetBoardAsync(string boardId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken, options.GetParameters());
+            options.AdjustFieldsBasedOnSelectedOptions();
+            var board = await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken, options.GetParameters());
+            if (options.IncludeCards != GetBoardOptionsIncludeCards.None)
+            {
+                board.Cards = FilterCards(board.Cards, options.CardsFilterConditions);
+                board.Cards = OrderCards(board.Cards, options.CardsOrderBy);
+            }
+
+            return board;
         }
 
         /// <summary>

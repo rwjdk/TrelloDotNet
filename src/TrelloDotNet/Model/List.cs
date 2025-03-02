@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
@@ -79,6 +80,20 @@ namespace TrelloDotNet.Model
         /// </summary>
         [JsonIgnore]
         public NamedPosition? NamedPosition { internal get; set; }
+
+        /// <summary>
+        /// The Board the list is on (Only included if IncludeBoard = true in GetListOptions)
+        /// </summary>
+        [JsonPropertyName("board")]
+        [JsonInclude]
+        public Board Board { get; internal set; }
+
+        /// <summary>
+        /// The Cards on the list is on (Only included if IncludeCards = true in GetListOptions)
+        /// </summary>
+        [JsonPropertyName("cards")]
+        [JsonInclude]
+        public List<Card> Cards { get; internal set; }
 
         /// <summary>
         /// Constructor
