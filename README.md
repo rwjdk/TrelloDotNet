@@ -1,18 +1,18 @@
-[![NuGet](https://img.shields.io/badge/NuGet-blue?style=for-the-badge)](https://www.nuget.org/packages/TrelloDotNet)
-[![WIKI](https://img.shields.io/badge/Wiki-brown?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/wiki)
-[![Changelog](https://img.shields.io/badge/-Changelog-darkgreen?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
-[![YouTube](https://img.shields.io/badge/-YouTube-darkred?style=for-the-badge)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
-[![Rest API](https://img.shields.io/badge/The_Trello_REST_API-gray?style=for-the-badge)](https://developer.atlassian.com/cloud/trello/rest/)
-[![API Keys](https://img.shields.io/badge/Power--Ups_administration-purple?style=for-the-badge)](https://trello.com/power-ups/admin/)
+[![GitHub Release Date](https://img.shields.io/github/release-date/rwjdk/TrelloDotNet?style=for-the-badge&label=Last%20Release)](https://www.nuget.org/packages/TrelloDotNet)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rwjdk/TrelloDotNet/Build.yml?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/actions)
+[![GitHub Issues or Pull Requests by label](https://img.shields.io/github/issues/rwjdk/TrelloDotNet/bug?style=for-the-badge&label=Bugs)](https://github.com/rwjdk/TrelloDotNet/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug)
+[![Coveralls](https://img.shields.io/coverallsCoverage/github/rwjdk/TrelloDotNet?style=for-the-badge)](https://coveralls.io/github/rwjdk/TrelloDotNet)
 
 # TrelloDotNet
 _Welcome to TrelloDotNet - A .NET Implementation of the [Trello REST API](https://developer.atlassian.com/cloud/trello/rest)_
 
-[![GitHub Release Date](https://img.shields.io/github/release-date/rwjdk/TrelloDotNet?style=for-the-badge&label=Last%20Release)](https://www.nuget.org/packages/TrelloDotNet)
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rwjdk/TrelloDotNet/Build.yml?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/actions)
-[![GitHub Issues or Pull Requests by label](https://img.shields.io/github/issues/rwjdk/TrelloDotNet/bug?style=for-the-badge&label=Bugs)](https://github.com/rwjdk/TrelloDotNet/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug)
-[![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/rwjdk/TrelloDotNet?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/network/dependencies)
-[![Coveralls](https://img.shields.io/coverallsCoverage/github/rwjdk/TrelloDotNet?style=for-the-badge)](https://coveralls.io/github/rwjdk/TrelloDotNet)
+[![NuGet](https://img.shields.io/badge/NuGet-blue?style=for-the-badge)](https://www.nuget.org/packages/TrelloDotNet)
+[![WIKI](https://img.shields.io/badge/Wiki-brown?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/wiki)
+[![Changelog](https://img.shields.io/badge/-Changelog-darkgreen?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
+[![YouTube](https://img.shields.io/badge/-YouTube-darkred?style=for-the-badge)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
+[![Rest API](https://img.shields.io/badge/API__Reference-gray?style=for-the-badge)](https://developer.atlassian.com/cloud/trello/rest/)
+[![API Keys](https://img.shields.io/badge/Power--Ups_Admin-purple?style=for-the-badge)](https://trello.com/power-ups/admin/)
+
 
 ## Features
 - A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on the Trello features
