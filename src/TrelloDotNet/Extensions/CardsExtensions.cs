@@ -149,52 +149,52 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.Contains:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Labels.Any(z => z.Name.Contains(y))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.Any(y => x.Labels.Any(z => z.Name.Contains(y))); });
                     }
 
-                    return cards.Where(x => x.LabelIds.Count == 1 && x.Labels.Any(z => z.Name.Contains(entry.ValueAsString)));
+                    return cards.Where(x => x.Labels.Any(z => z.Name.Contains(entry.ValueAsString)));
                 case CardsCondition.DoNotContains:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Labels.All(z => !z.Name.Contains(y))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.All(y => x.Labels.All(z => !z.Name.Contains(y))); });
                     }
 
-                    return cards.Where(x => x.LabelIds.Count == 1 && x.Labels.All(z => !z.Name.Contains(entry.ValueAsString)));
+                    return cards.Where(x => x.Labels.All(z => !z.Name.Contains(entry.ValueAsString)));
                 case CardsCondition.RegEx:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Labels.Any(z => Regex.IsMatch(z.Name, y, RegexOptions.IgnoreCase))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.Any(y => x.Labels.Any(z => Regex.IsMatch(z.Name, y, RegexOptions.IgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.LabelIds.Count == 1 && x.Labels.Any(z => Regex.IsMatch(z.Name, entry.ValueAsString, RegexOptions.IgnoreCase)));
+                    return cards.Where(x => x.Labels.Any(z => Regex.IsMatch(z.Name, entry.ValueAsString, RegexOptions.IgnoreCase)));
                 case CardsCondition.StartsWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Labels.Any(z => z.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
+                        return cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.Any(y => x.Labels.Any(z => z.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.LabelIds.Count == 1 && x.Labels.Any(z => z.Name.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
+                    return cards.Where(x => x.Labels.Any(z => z.Name.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
                 case CardsCondition.DoNotStartWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Labels.All(z => !z.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.All(y => x.Labels.All(z => !z.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.LabelIds.Count == 1 && x.Labels.All(z => !z.Name.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
+                    return cards.Where(x => x.Labels.All(z => !z.Name.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
                 case CardsCondition.EndsWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Labels.Any(z => z.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.Any(y => x.Labels.Any(z => z.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.LabelIds.Count == 1 && x.Labels.Any(z => z.Name.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
+                    return cards.Where(x => x.Labels.Any(z => z.Name.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
                 case CardsCondition.DoNotEndWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Labels.All(z => !z.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.All(y => x.Labels.All(z => !z.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.LabelIds.Count == 1 && x.Labels.All(z => !z.Name.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
+                    return cards.Where(x => x.Labels.All(z => !z.Name.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a Label Condition");
             }
@@ -223,14 +223,14 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.Contains:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => entry.ValueAsStrings.Any(y => y.Contains(x.List.Name)));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => x.List.Name.Contains(y)));
                     }
 
                     return cards.Where(x => x.List.Name.Contains(entry.ValueAsString));
                 case CardsCondition.DoNotContains:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => entry.ValueAsStrings.All(y => !y.Contains(x.List.Name)));
+                        return cards.Where(x => entry.ValueAsStrings.All(y => !x.List.Name.Contains(y)));
                     }
 
                     return cards.Where(x => !x.List.Name.Contains(entry.ValueAsString));
@@ -244,28 +244,28 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.StartsWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => entry.ValueAsStrings.Any(y => y.StartsWith(x.List.Name, StringComparison.InvariantCultureIgnoreCase)));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => x.List.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
                     return cards.Where(x => x.List.Name.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase));
                 case CardsCondition.EndsWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => entry.ValueAsStrings.Any(y => y.EndsWith(x.List.Name, StringComparison.InvariantCultureIgnoreCase)));
+                        return cards.Where(x => entry.ValueAsStrings.Any(y => x.List.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
                     return cards.Where(x => x.List.Name.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase));
                 case CardsCondition.DoNotStartWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => entry.ValueAsStrings.All(y => !y.StartsWith(x.List.Name, StringComparison.InvariantCultureIgnoreCase)));
+                        return cards.Where(x => entry.ValueAsStrings.All(y => !x.List.Name.StartsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
                     return cards.Where(x => !x.List.Name.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase));
                 case CardsCondition.DoNotEndWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => entry.ValueAsStrings.All(y => !y.EndsWith(x.List.Name, StringComparison.InvariantCultureIgnoreCase)));
+                        return cards.Where(x => entry.ValueAsStrings.All(y => !x.List.Name.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
                     return cards.Where(x => !x.List.Name.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase));
@@ -970,52 +970,52 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.Contains:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Members.Any(z => z.FullName.Contains(y))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.Any(y => x.Members.Any(z => z.FullName.Contains(y))); });
                     }
 
-                    return cards.Where(x => x.MemberIds.Count == 1 && x.Members.Any(z => z.FullName.Contains(entry.ValueAsString)));
+                    return cards.Where(x => x.Members.Any(z => z.FullName.Contains(entry.ValueAsString)));
                 case CardsCondition.DoNotContains:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Members.All(z => !z.FullName.Contains(y))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.All(y => x.Members.All(z => !z.FullName.Contains(y))); });
                     }
 
-                    return cards.Where(x => x.MemberIds.Count == 1 && x.Members.All(z => !z.FullName.Contains(entry.ValueAsString)));
+                    return cards.Where(x => x.Members.All(z => !z.FullName.Contains(entry.ValueAsString)));
                 case CardsCondition.RegEx:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Members.Any(z => Regex.IsMatch(z.FullName, y, RegexOptions.IgnoreCase))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.Any(y => x.Members.Any(z => Regex.IsMatch(z.FullName, y, RegexOptions.IgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.MemberIds.Count == 1 && x.Members.Any(z => Regex.IsMatch(z.FullName, entry.ValueAsString, RegexOptions.IgnoreCase)));
+                    return cards.Where(x => x.Members.Any(z => Regex.IsMatch(z.FullName, entry.ValueAsString, RegexOptions.IgnoreCase)));
                 case CardsCondition.StartsWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Members.Any(z => z.FullName.StartsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.Any(y => x.Members.Any(z => z.FullName.StartsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.MemberIds.Count == 1 && x.Members.Any(z => z.FullName.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
+                    return cards.Where(x => x.Members.Any(z => z.FullName.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
                 case CardsCondition.DoNotStartWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Members.All(z => !z.FullName.StartsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.All(y => x.Members.All(z => !z.FullName.StartsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.MemberIds.Count == 1 && x.Members.All(z => !z.FullName.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
+                    return cards.Where(x => x.Members.All(z => !z.FullName.StartsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
                 case CardsCondition.EndsWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Members.Any(z => z.FullName.EndsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.Any(y => x.Members.Any(z => z.FullName.EndsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.MemberIds.Count == 1 && x.Members.Any(z => z.FullName.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
+                    return cards.Where(x => x.Members.Any(z => z.FullName.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
                 case CardsCondition.DoNotEndWith:
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Members.All(z => !z.FullName.EndsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
+                        return cards.Where(x => { return entry.ValueAsStrings.All(y => x.Members.All(z => !z.FullName.EndsWith(y, StringComparison.InvariantCultureIgnoreCase))); });
                     }
 
-                    return cards.Where(x => x.MemberIds.Count == 1 && x.Members.All(z => !z.FullName.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
+                    return cards.Where(x => x.Members.All(z => !z.FullName.EndsWith(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a Member Condition");
             }
