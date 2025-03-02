@@ -8,11 +8,11 @@
 # TrelloDotNet
 _Welcome to TrelloDotNet - A .NET Implementation of the [Trello REST API](https://developer.atlassian.com/cloud/trello/rest)_
 
-![GitHub Release Date](https://img.shields.io/github/release-date/rwjdk/TrelloDotNet?style=for-the-badge&label=Last%20Release)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rwjdk/TrelloDotNet/Build.yml?style=for-the-badge)
-![GitHub Issues or Pull Requests by label](https://img.shields.io/github/issues/rwjdk/TrelloDotNet/bug?style=for-the-badge&label=Bugs)
-![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/rwjdk/TrelloDotNet?style=for-the-badge)
-![Coveralls](https://img.shields.io/coverallsCoverage/github/rwjdk/TrelloDotNet?style=for-the-badge)
+[![GitHub Release Date](https://img.shields.io/github/release-date/rwjdk/TrelloDotNet?style=for-the-badge&label=Last%20Release)](https://www.nuget.org/packages/TrelloDotNet)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rwjdk/TrelloDotNet/Build.yml?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/actions)
+[![GitHub Issues or Pull Requests by label](https://img.shields.io/github/issues/rwjdk/TrelloDotNet/bug?style=for-the-badge&label=Bugs)](https://github.com/rwjdk/TrelloDotNet/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug)
+[![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/rwjdk/TrelloDotNet?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/network/dependencies)
+[![Coveralls](https://img.shields.io/coverallsCoverage/github/rwjdk/TrelloDotNet?style=for-the-badge)](https://coveralls.io/github/rwjdk/TrelloDotNet)
 
 ## Features
 - A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on the Trello features
