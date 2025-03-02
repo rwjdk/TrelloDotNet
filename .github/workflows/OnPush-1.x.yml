@@ -1,6 +1,6 @@
 # This workflow will build a .NET project
 
-name: OnPush (Build and Publish)
+name: Build and Publish (1.x)
 on:
   push:
     branches: [ "version_1.x" ]
@@ -26,11 +26,6 @@ jobs:
       run: dotnet user-secrets set TrelloToken ${{ secrets.TRELLOTOKEN }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
     - name: Test      
       run: dotnet test --configuration Release --no-build --verbosity normal --p:CollectCoverage=true --p:CoverletOutput=TestResults/ --p:CoverletOutputFormat=lcov
-      working-directory: src/TrelloDotNet.Tests
-    - name: Publish coverage report to coveralls.io   
-      uses: coverallsapp/github-action@master   
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }} 
-        path-to-lcov: src/TrelloDotNet.Tests/TestResults/coverage.info
+      working-directory: src/TrelloDotNet.Tests    
     - name: Publish to NuGet if needed
       run: dotnet nuget push **\*.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate
