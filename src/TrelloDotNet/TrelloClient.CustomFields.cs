@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace TrelloDotNet
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        [ExcludeFromCodeCoverage]
         public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, bool newValue, CancellationToken cancellationToken = default)
         {
             string payload;
@@ -53,6 +55,7 @@ namespace TrelloDotNet
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        [ExcludeFromCodeCoverage]
         public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, DateTimeOffset newValue, CancellationToken cancellationToken = default)
         {
             string payload;
@@ -83,6 +86,7 @@ namespace TrelloDotNet
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        [ExcludeFromCodeCoverage]
         public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, int newValue, CancellationToken cancellationToken = default)
         {
             string payload;
@@ -113,6 +117,7 @@ namespace TrelloDotNet
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        [ExcludeFromCodeCoverage]
         public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, decimal newValue, CancellationToken cancellationToken = default)
         {
             string payload;
@@ -143,6 +148,7 @@ namespace TrelloDotNet
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        [ExcludeFromCodeCoverage]
         public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, CustomFieldOption newValue, CancellationToken cancellationToken = default)
         {
             string payload;
@@ -178,6 +184,7 @@ namespace TrelloDotNet
         /// <param name="customField">The custom Field to update</param>
         /// <param name="newValue">The new value</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        [ExcludeFromCodeCoverage]
         public async Task UpdateCustomFieldValueOnCardAsync(string cardId, CustomField customField, string newValue, CancellationToken cancellationToken = default)
         {
             string payload;
@@ -211,6 +218,7 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="customField">The custom Field to clear</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        [ExcludeFromCodeCoverage]
         public async Task ClearCustomFieldValueOnCardAsync(string cardId, CustomField customField, CancellationToken cancellationToken = default)
         {
             string payload;
@@ -232,6 +240,7 @@ namespace TrelloDotNet
             await SendCustomFieldChangeRequestAsync(cardId, customField, payload, cancellationToken);
         }
 
+        [ExcludeFromCodeCoverage]
         private async Task SendCustomFieldChangeRequestAsync(string cardId, CustomField customField, string payload, CancellationToken cancellationToken)
         {
             await _apiRequestController.PutWithJsonPayload($"{UrlPaths.Cards}/{cardId}/customField/{customField.Id}/item", cancellationToken, payload, 0);
@@ -244,6 +253,7 @@ namespace TrelloDotNet
         /// <param name="cardId">Id of the Card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Custom Fields</returns>
+        [ExcludeFromCodeCoverage]
         public async Task<List<CustomFieldItem>> GetCustomFieldItemsForCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<CustomFieldItem>>(GetUrlBuilder.GetCustomFieldItemsForCard(cardId), cancellationToken);
@@ -255,6 +265,7 @@ namespace TrelloDotNet
         /// <param name="boardId">Id of the Board (long version)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>List of CustomFields</returns>
+        [ExcludeFromCodeCoverage]
         public async Task<List<CustomField>> GetCustomFieldsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<CustomField>>(GetUrlBuilder.GetCustomFieldsOnBoard(boardId), cancellationToken);

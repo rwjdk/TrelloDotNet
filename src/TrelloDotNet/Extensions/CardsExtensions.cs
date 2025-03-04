@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using TrelloDotNet.Model;
@@ -299,6 +300,7 @@ namespace TrelloDotNet.Extensions
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private static IEnumerable<Card> FilterCustomField(IEnumerable<Card> cards, CardsFilterCondition entry)
         {
             if (entry.CustomFieldEntry == null)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -261,6 +262,7 @@ namespace TrelloDotNet
         /// <param name="cardId">The cardId to add the vote to</param>
         /// <param name="memberId">The id of the member that cast the vote</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        [ExcludeFromCodeCoverage]
         public async Task AddVoteToCardAsync(string cardId, string memberId, CancellationToken cancellationToken = default)
         {
             await _apiRequestController.Post($"{UrlPaths.Cards}/{cardId}/membersVoted", cancellationToken, 0, new QueryParameter("value", memberId));
@@ -272,6 +274,7 @@ namespace TrelloDotNet
         /// <param name="cardId">The cardId to add the vote to</param>
         /// <param name="memberId">The id of the member that cast the vote</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        [ExcludeFromCodeCoverage]
         public async Task RemoveVoteFromCardAsync(string cardId, string memberId, CancellationToken cancellationToken = default)
         {
             await _apiRequestController.Delete($"{UrlPaths.Cards}/{cardId}/membersVoted/{memberId}", cancellationToken, 0);

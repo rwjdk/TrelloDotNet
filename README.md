@@ -11,7 +11,7 @@ _Welcome to TrelloDotNet - A .NET Implementation of the [Trello REST API](https:
 [![WIKI](https://img.shields.io/badge/Wiki-brown?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/wiki)
 [![Changelog](https://img.shields.io/badge/-Changelog-darkgreen?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/blob/main/Changelog.md)
 [![YouTube](https://img.shields.io/badge/-YouTube-darkred?style=for-the-badge)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
-[![Rest API](https://img.shields.io/badge/API__Reference-gray?style=for-the-badge)](https://developer.atlassian.com/cloud/trello/rest/)
+[![Rest API](https://img.shields.io/badge/API_Reference-gray?style=for-the-badge)](https://developer.atlassian.com/cloud/trello/rest/)
 [![API Keys](https://img.shields.io/badge/Power--Ups_Admin-purple?style=for-the-badge)](https://trello.com/power-ups/admin/)
 
 
