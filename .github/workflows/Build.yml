@@ -41,7 +41,7 @@ jobs:
     - name: SetUserSecretsTrelloToken5        
       run: dotnet user-secrets set TrelloToken5 ${{ secrets.TRELLOTOKEN5 }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj            
     - name: Test      
-      run: dotnet test --configuration Release --no-build --verbosity normal --p:CollectCoverage=true --p:CoverletOutput=TestResults/ --p:CoverletOutputFormat=lcov
+      run: dotnet test --configuration Release --no-build --verbosity normal --p:CollectCoverage=true --p:CoverletOutput=TestResults/ --p:CoverletOutputFormat=lcov --p:ExcludeByAttribute=ExcludeFromCodeCoverage
       working-directory: src/TrelloDotNet.Tests
     - name: Publish coverage report to coveralls.io   
       uses: coverallsapp/github-action@master   
