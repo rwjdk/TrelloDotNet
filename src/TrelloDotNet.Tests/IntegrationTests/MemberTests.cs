@@ -1,4 +1,6 @@
 ﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.GetMemberOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -6,6 +8,19 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
 {
     private readonly Board _board = fixture.Board!;
     private readonly Organization _organization = fixture.Organization!;
+
+    [Fact]
+    public async Task GetTokenMember()
+    {
+        Member member = await TrelloClient.GetTokenMemberAsync(new GetMemberOptions
+        {
+            MemberFields = new MemberFields(MemberFieldsType.FullName)
+        });
+        Assert.NotNull(member);
+        Assert.NotEmpty(member.Id);
+        Assert.NotEmpty(member.FullName);
+        Assert.Null(member.Username);
+    }
 
     [Fact]
     public async Task GetCardsForMember()
@@ -60,5 +75,43 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
 
         var membersAfterInvite = await TrelloClient.GetMembersOfBoardAsync(_board.Id);
         Assert.Contains(membersAfterInvite, x => x.Id == memberId);
+    }
+
+    [Fact]
+    public async Task GetMembersOfCard()
+    {
+        var list = await AddDummyList(_board.Id);
+        var card = await AddDummyCardToList(list);
+        var member = await TrelloClient.GetTokenMemberAsync();
+
+        await TrelloClient.AddMembersToCardAsync(card.Id, member.Id);
+
+        var membersOnCard = await TrelloClient.GetMembersOfCardAsync(card.Id);
+        Assert.Contains(membersOnCard, x => x.Id == member.Id);
+
+        // Test with options
+        var membersWithOptions = await TrelloClient.GetMembersOfCardAsync(card.Id, new GetMemberOptions
+        {
+            MemberFields = new MemberFields(MemberFieldsType.FullName)
+        });
+        Assert.Contains(membersWithOptions, x => x.Id == member.Id);
+    }
+
+    [Fact]
+    public async Task GetMembersWhoVotedOnCard()
+    {
+        var list = await AddDummyList(_board.Id);
+        var card = await AddDummyCardToList(list);
+        var member = await TrelloClient.GetTokenMemberAsync();
+
+        var votingMembers = await TrelloClient.GetMembersWhoVotedOnCardAsync(card.Id);
+        Assert.Empty(votingMembers);
+
+        // Test with options
+        var votingMembersWithOptions = await TrelloClient.GetMembersWhoVotedOnCardAsync(card.Id, new GetMemberOptions
+        {
+            MemberFields = new MemberFields(MemberFieldsType.FullName)
+        });
+        Assert.Empty(votingMembersWithOptions);
     }
 }

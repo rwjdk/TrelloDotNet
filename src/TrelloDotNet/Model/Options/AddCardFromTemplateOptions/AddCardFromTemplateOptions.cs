@@ -21,6 +21,21 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Position 
+        /// </summary>
+        public decimal? Position { get; set; }
+
+        /// <summary>
+        /// Named Position
+        /// </summary>
+        public NamedPosition? NamedPosition { get; set; }
+
+        /// <summary>
+        /// What to Keep from the Source Keep (or leave blank if you wish to copy everything)
+        /// </summary>
+        public AddCardFromTemplateOptionsToKeep? Keep { get; set; }
+
+        /// <summary>
         /// constructor
         /// </summary>
         public AddCardFromTemplateOptions()

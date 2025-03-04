@@ -5,6 +5,7 @@ using TrelloDotNet.Model.Options.GetBoardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.GetLabelOptions;
 using TrelloDotNet.Model.Options.GetListOptions;
+using TrelloDotNet.Model.Options.GetMemberOptions;
 using TrelloDotNet.Model.Options.UpdateBoardPreferencesOptions;
 using TrelloDotNet.Model.Webhook;
 
@@ -56,6 +57,19 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         var member = await TrelloClient.GetMemberAsync(members.First().Id);
         Assert.Equal(member.FullName, members.First().FullName);
         Assert.Equal(member.Username, members.First().Username);
+    }
+
+    [Fact]
+    public async Task GetMembersOfBoardWithOptions()
+    {
+        var members = await TrelloClient.GetMembersOfBoardAsync(_boardId, new GetMemberOptions
+        {
+            MemberFields = new MemberFields(MemberFieldsType.FullName)
+        });
+        Assert.Single(members);
+        Assert.NotEmpty(members[0].Id);
+        Assert.NotEmpty(members[0].FullName);
+        Assert.Null(members[0].Username);
     }
 
     [Fact]

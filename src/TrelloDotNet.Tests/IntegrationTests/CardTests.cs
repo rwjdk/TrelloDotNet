@@ -1,9 +1,11 @@
 ﻿using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
 using TrelloDotNet.Model.Options;
+using TrelloDotNet.Model.Options.AddCardFromTemplateOptions;
 using TrelloDotNet.Model.Options.AddCardOptions;
 using TrelloDotNet.Model.Options.CopyCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.MirrorCardOptions;
 using TrelloDotNet.Model.Options.MoveCardToBoardOptions;
 using TrelloDotNet.Model.Options.MoveCardToListOptions;
 using TrelloDotNet.Model.Webhook;
@@ -752,5 +754,78 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
                 Assert.Empty(card.LabelIds);
                 break;
         }
+    }
+
+    [Fact]
+    public async Task MirrorCard()
+    {
+        var board = new Board("UnitTestBoard-" + Guid.NewGuid())
+        {
+            OrganizationId = _board.OrganizationId
+        };
+        Board secondBoard = await TrelloClient.AddBoardAsync(board);
+
+        List sourceList = await AddDummyList(_board.Id);
+        List targetList = await AddDummyList(secondBoard.Id);
+
+        var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
+        var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
+
+        var sourceCard = await AddDummyCardToList(sourceList,
+            start: DateTimeOffset.UtcNow,
+            due: DateTimeOffset.UtcNow.AddDays(1),
+            description: "Test Description");
+
+        await TrelloClient.AddMembersToCardAsync(sourceCard.Id, member.Id);
+        await TrelloClient.AddLabelsToCardAsync(sourceCard.Id, allLabelsOnBoard.Select(x => x.Id).ToArray());
+
+        var mirroredCard = await TrelloClient.MirrorCardAsync(new MirrorCardOptions
+        {
+            SourceCardId = sourceCard.Id,
+            TargetListId = targetList.Id,
+            NamedPosition = NamedPosition.Bottom
+        });
+
+        Assert.NotEqual(sourceCard.Id, mirroredCard.Id);
+        Assert.Equal(sourceCard.ShortUrl, mirroredCard.Name);
+        Assert.Equal(targetList.Id, mirroredCard.ListId);
+        Assert.Equal(secondBoard.Id, mirroredCard.BoardId);
+    }
+
+    [Fact]
+    public async Task AddCardFromTemplate()
+    {
+        List sourceList = await AddDummyList(_board.Id);
+        List targetList = await AddDummyList(_board.Id);
+
+        var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
+        var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
+
+        var templateCard = await AddDummyCardToList(sourceList,
+            start: DateTimeOffset.UtcNow,
+            due: DateTimeOffset.UtcNow.AddDays(1),
+            description: "Template Description");
+
+        templateCard = await TrelloClient.AddMembersToCardAsync(templateCard.Id, member.Id);
+        templateCard = await TrelloClient.AddLabelsToCardAsync(templateCard.Id, allLabelsOnBoard.Select(x => x.Id).ToArray());
+
+        var newCard = await TrelloClient.AddCardFromTemplateAsync(new AddCardFromTemplateOptions
+        {
+            SourceTemplateCardId = templateCard.Id,
+            TargetListId = targetList.Id,
+            Name = "New Card From Template",
+            NamedPosition = NamedPosition.Bottom,
+            Keep = AddCardFromTemplateOptionsToKeep.All
+        });
+
+        Assert.NotEqual(templateCard.Id, newCard.Id);
+        Assert.Equal("New Card From Template", newCard.Name);
+        Assert.Equal(targetList.Id, newCard.ListId);
+        Assert.Equal(_board.Id, newCard.BoardId);
+        Assert.Equal(templateCard.Description, newCard.Description);
+        Assert.Equal(templateCard.Start, newCard.Start);
+        Assert.Equal(templateCard.Due, newCard.Due);
+        Assert.Equal(templateCard.MemberIds.Count, newCard.MemberIds.Count);
+        Assert.Equal(templateCard.LabelIds.Count, newCard.LabelIds.Count);
     }
 }

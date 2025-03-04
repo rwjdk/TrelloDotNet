@@ -246,12 +246,50 @@ namespace TrelloDotNet
                     CardFields = new CardFields(CardFieldsType.Name)
                 }, cancellationToken)).Name;
 
+            string position = "bottom";
+
+            if (options.Position.HasValue)
+            {
+                position = options.Position.Value.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (options.NamedPosition.HasValue)
+            {
+                position = options.NamedPosition.Value == NamedPosition.Bottom ? "bottom" : "top";
+            }
+
+            string keepFromSource = "all";
+            if (options.Keep.HasValue)
+            {
+                AddCardFromTemplateOptionsToKeep keep = options.Keep.Value;
+
+                if (keep.HasFlag(AddCardFromTemplateOptionsToKeep.All))
+                {
+                    keepFromSource = "all";
+                }
+                else
+                {
+                    var keepStrings = new List<string>();
+                    var enumValues = Enum.GetValues(typeof(AddCardFromTemplateOptionsToKeep)).Cast<AddCardFromTemplateOptionsToKeep>().ToList();
+                    foreach (AddCardFromTemplateOptionsToKeep toKeep in enumValues.Where(x => x != AddCardFromTemplateOptionsToKeep.All))
+                    {
+                        if (keep.HasFlag(toKeep))
+                        {
+                            keepStrings.Add(toKeep.GetJsonPropertyName());
+                        }
+                    }
+
+                    keepFromSource = string.Join(",", keepStrings);
+                }
+            }
+
             QueryParameter[] parameters =
             {
                 new QueryParameter("name", nameOnNewCard),
                 new QueryParameter("idList", options.TargetListId),
-                new QueryParameter("pos", "bottom"),
-                new QueryParameter("idCardSource", options.SourceTemplateCardId)
+                new QueryParameter("pos", position),
+                new QueryParameter("idCardSource", options.SourceTemplateCardId),
+                new QueryParameter("keepFromSource", keepFromSource)
             };
             return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
         }

@@ -168,4 +168,23 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
 
         Assert.Equal(3, cards.Count);
     }
+
+    [Fact]
+    public async Task GetListWithOptions()
+    {
+        var list = await AddDummyList(_boardId);
+        var card = await AddDummyCardToList(list);
+
+        var listWithOptions = await TrelloClient.GetListAsync(list.Id, new GetListOptions
+        {
+            IncludeBoard = true,
+            IncludeCards = GetListOptionsIncludeCards.All
+        });
+
+        Assert.Equal(list.Id, listWithOptions.Id);
+        Assert.Equal(list.Name, listWithOptions.Name);
+        Assert.False(listWithOptions.Closed);
+        Assert.NotEmpty(listWithOptions.Cards);
+        Assert.Contains(listWithOptions.Cards, c => c.Id == card.Id);
+    }
 }
