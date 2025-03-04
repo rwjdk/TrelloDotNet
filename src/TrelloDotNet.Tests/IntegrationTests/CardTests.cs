@@ -1,8 +1,10 @@
 ﻿using TrelloDotNet.Model;
 using TrelloDotNet.Model.Actions;
+using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.AddCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.MoveCardToListOptions;
+using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -147,6 +149,53 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
 
         var membersOfCardAsync = await TrelloClient.GetMembersOfCardAsync(addedCard.Id);
         Assert.Single(membersOfCardAsync);
+    }
+
+    [Fact]
+    public async Task AddCardFull()
+    {
+        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
+        var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
+        var memberIds = new List<string> { member.Id };
+        var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
+        await using Stream stream = File.Open("TestData" + Path.DirectorySeparatorChar + "TestImage.png", FileMode.Open);
+        Card newAdvancedCard = await TrelloClient.AddCardAsync(new AddCardOptions
+        {
+            //Mandatory options
+            ListId = list.Id,
+            Name = "My Card",
+
+            //Optional options
+            Description = "Description of My Card",
+            Start = DateTimeOffset.Now,
+            Due = DateTimeOffset.Now.AddDays(3),
+            Cover = new CardCover(CardCoverColor.Blue, CardCoverSize.Normal),
+            LabelIds = allLabelsOnBoard.Select(x => x.Id).ToList(),
+            MemberIds = [member.Id],
+            Checklists = new List<Checklist>
+            {
+                new Checklist("Checklist 1", new List<ChecklistItem>
+                {
+                    new ChecklistItem("Item 1"),
+                    new ChecklistItem("Item 2"),
+                    new ChecklistItem("Item 3")
+                }),
+                new Checklist("Checklist 2", new List<ChecklistItem>
+                {
+                    new ChecklistItem("Item A"),
+                    new ChecklistItem("Item B"),
+                    new ChecklistItem("Item C")
+                }),
+            },
+            AttachmentUrlLinks = new List<AttachmentUrlLink>
+            {
+                new AttachmentUrlLink("https://www.google.com", "Google")
+            },
+            AttachmentFileUploads = new List<AttachmentFileUpload>
+            {
+                new AttachmentFileUpload(stream, "X", "Z")
+            }
+        });
     }
 
     [Fact]
@@ -389,7 +438,6 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         Assert.Empty(stickersPresentAfterDelete);
     }
 
-
     [Fact]
     public async Task CommentReactions()
     {
@@ -415,7 +463,6 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         reactions = await TrelloClient.GetCommentReactionsAsync(comment.Id);
         Assert.Empty(reactions);
     }
-
 
     [Fact]
     public async Task Comments()
@@ -530,5 +577,43 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         list2Cards = await TrelloClient.GetCardsInListAsync(list2.Id);
 
         Assert.Equal(card5.Id, list2Cards.OrderBy(x => x.Position).First().Id);
+    }
+
+    [Fact]
+    public async Task GetCardsOnBoard()
+    {
+        List list1 = await AddDummyList(_board.Id);
+
+        var card1 = await AddDummyCardToList(list1);
+        var card2 = await AddDummyCardToList(list1);
+        var card3 = await AddDummyCardToList(list1);
+
+        var cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
+        {
+            Filter = CardsFilter.All,
+            BoardFields = new BoardFields(BoardFieldsType.Name),
+            ActionsTypes = new ActionTypesToInclude(WebhookActionTypes.CreateCard),
+            CardFields = new CardFields(CardFieldsType.Name),
+            Limit = 999,
+            OrderBy = CardsOrderBy.CreateDateAsc,
+            IncludeBoard = true,
+            FilterConditions = [CardsFilterCondition.Name(CardsConditionString.NoneOfThese, Guid.NewGuid().ToString())],
+            AdditionalParameters = [new QueryParameter("x", "z")],
+            AttachmentFields = AttachmentFields.All,
+            Before = "",
+            ChecklistFields = ChecklistFields.All,
+            IncludeAttachments = GetCardOptionsIncludeAttachments.True,
+            IncludeChecklists = true,
+            IncludeCustomFieldItems = true,
+            IncludeList = true,
+            IncludeMemberVotes = true,
+            IncludeMembers = true,
+            IncludePluginData = true,
+            IncludeStickers = true,
+            MemberFields = MemberFields.All,
+            MembersVotedFields = MemberFields.All,
+            Since = "",
+            StickerFields = StickerFields.All
+        });
     }
 }
