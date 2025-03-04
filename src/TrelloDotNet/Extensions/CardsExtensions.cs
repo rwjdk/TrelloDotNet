@@ -510,8 +510,18 @@ namespace TrelloDotNet.Extensions
             switch (entry.Condition)
             {
                 case CardsCondition.Equal:
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Due.HasValue && entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.All(y => y == x.Due.Value));
+                    }
+
                     return cards.Where(x => x.Due.HasValue && x.Due == entry.ValueAsDateTimeOffset);
                 case CardsCondition.NotEqual:
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Due.HasValue && entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.All(y => y != x.Due.Value));
+                    }
+
                     return cards.Where(x => x.Due.HasValue && x.Due != entry.ValueAsDateTimeOffset);
                 case CardsCondition.GreaterThan:
                     return cards.Where(x => x.Due.HasValue && x.Due > entry.ValueAsDateTimeOffset);
@@ -553,9 +563,19 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.DoNotHaveAnyValue:
                     return cards.Where(x => !x.Due.HasValue);
                 case CardsCondition.AnyOfThese:
-                    return cards.Where(x => x.Due.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y == x.Due));
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Due.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y == x.Due));
+                    }
+
+                    return cards.Where(x => x.Due != null && entry.ValueAsDateTimeOffset != null && entry.ValueAsDateTimeOffset.Value.Date == x.Due.Value.Date);
                 case CardsCondition.NoneOfThese:
-                    return cards.Where(x => x.Due.HasValue && entry.ValueAsDateTimeOffsets.All(y => y != x.Due));
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Due.HasValue && entry.ValueAsDateTimeOffsets.All(y => y != x.Due));
+                    }
+
+                    return cards.Where(x => x.Due != null && entry.ValueAsDateTimeOffset != null && entry.ValueAsDateTimeOffset.Value.Date != x.Due.Value.Date);
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a FilterDueDate");
             }
@@ -566,8 +586,18 @@ namespace TrelloDotNet.Extensions
             switch (entry.Condition)
             {
                 case CardsCondition.Equal:
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => !x.DueComplete && x.Due.HasValue && entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.All(y => y == x.Due.Value));
+                    }
+
                     return cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due == entry.ValueAsDateTimeOffset);
                 case CardsCondition.NotEqual:
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => !x.DueComplete && x.Due.HasValue && entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.All(y => y != x.Due.Value));
+                    }
+
                     return cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due != entry.ValueAsDateTimeOffset);
                 case CardsCondition.GreaterThan:
                     return cards.Where(x => !x.DueComplete && x.Due.HasValue && x.Due > entry.ValueAsDateTimeOffset);
@@ -609,9 +639,19 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.DoNotHaveAnyValue:
                     return cards.Where(x => !x.Due.HasValue);
                 case CardsCondition.AnyOfThese:
-                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y == x.Due));
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => !x.DueComplete && x.Due.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y == x.Due));
+                    }
+
+                    return cards.Where(x => !x.DueComplete && x.Due != null && entry.ValueAsDateTimeOffset != null && entry.ValueAsDateTimeOffset.Value.Date == x.Due.Value.Date);
                 case CardsCondition.NoneOfThese:
-                    return cards.Where(x => !x.DueComplete && x.Due.HasValue && entry.ValueAsDateTimeOffsets.All(y => y != x.Due));
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => !x.DueComplete && x.Due.HasValue && entry.ValueAsDateTimeOffsets.All(y => y != x.Due));
+                    }
+
+                    return cards.Where(x => !x.DueComplete && x.Due != null && entry.ValueAsDateTimeOffset != null && entry.ValueAsDateTimeOffset.Value.Date != x.Due.Value.Date);
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a FilterDueDate");
             }
@@ -622,8 +662,18 @@ namespace TrelloDotNet.Extensions
             switch (entry.Condition)
             {
                 case CardsCondition.Equal:
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Created.HasValue && entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.All(y => y == x.Created.Value));
+                    }
+
                     return cards.Where(x => x.Created.HasValue && x.Created == entry.ValueAsDateTimeOffset);
                 case CardsCondition.NotEqual:
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Created.HasValue && entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.All(y => x.Created != null && y.Date != x.Created.Value));
+                    }
+
                     return cards.Where(x => x.Created.HasValue && x.Created != entry.ValueAsDateTimeOffset);
                 case CardsCondition.GreaterThan:
                     return cards.Where(x => x.Created.HasValue && x.Created > entry.ValueAsDateTimeOffset);
@@ -659,9 +709,20 @@ namespace TrelloDotNet.Extensions
                     return cards;
                 }
                 case CardsCondition.AnyOfThese:
-                    return cards.Where(x => entry.ValueAsDateTimeOffsets.Any(y => x.Created != null && y == x.Created.Value));
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => entry.ValueAsDateTimeOffsets.Any(y => x.Created != null && y == x.Created.Value));
+                    }
+
+                    return cards.Where(x => x.Created != null && entry.ValueAsDateTimeOffset == x.Created.Value);
+
                 case CardsCondition.NoneOfThese:
-                    return cards.Where(x => entry.ValueAsDateTimeOffsets.All(y => x.Created != null && y != x.Created.Value));
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => entry.ValueAsDateTimeOffsets.All(y => x.Created != null && y != x.Created.Value));
+                    }
+
+                    return cards.Where(x => x.Created != null && entry.ValueAsDateTimeOffset != x.Created.Value);
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a FilterCreateDate");
             }
@@ -672,8 +733,18 @@ namespace TrelloDotNet.Extensions
             switch (entry.Condition)
             {
                 case CardsCondition.Equal:
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.All(y => y.Date == x.Start.Value.Date));
+                    }
+
                     return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date == entry.ValueAsDateTimeOffset.Value.Date);
                 case CardsCondition.NotEqual:
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.All(y => y.Date != x.Start.Value.Date));
+                    }
+
                     return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date != entry.ValueAsDateTimeOffset.Value.Date);
                 case CardsCondition.GreaterThan:
                     return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffset != null && x.Start.Value.Date > entry.ValueAsDateTimeOffset.Value.Date);
@@ -713,9 +784,21 @@ namespace TrelloDotNet.Extensions
                 case CardsCondition.DoNotHaveAnyValue:
                     return cards.Where(x => !x.Start.HasValue);
                 case CardsCondition.AnyOfThese:
-                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y.Date == x.Start.Value.Date));
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y.Date == x.Start.Value.Date));
+                    }
+
+                    return cards.Where(x => x.Start != null && entry.ValueAsDateTimeOffset != null && entry.ValueAsDateTimeOffset.Value.Date == x.Start.Value.Date);
+
                 case CardsCondition.NoneOfThese:
-                    return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffsets.All(y => y.Date != x.Start.Value.Date));
+                    if (entry.ValueAsDateTimeOffsets != null && entry.ValueAsDateTimeOffsets.Count != 0)
+                    {
+                        return cards.Where(x => x.Start.HasValue && entry.ValueAsDateTimeOffsets.All(y => y.Date != x.Start.Value.Date));
+                    }
+
+                    return cards.Where(x => x.Start != null && entry.ValueAsDateTimeOffset != null && entry.ValueAsDateTimeOffset.Value.Date != x.Start.Value.Date);
+
                 default:
                     throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a FilterStartDate");
             }

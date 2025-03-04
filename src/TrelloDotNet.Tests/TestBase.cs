@@ -67,9 +67,25 @@ public abstract class TestBase
         return (await AddDummyCardAndList(boardId, name)).Card;
     }
 
-    protected async Task<Card> AddDummyCardToList(List list, string? name = null, string? description = null)
+    protected async Task<Card> AddDummyCardToList(List list, string? name = null, string? description = null, DateTimeOffset? start = null, DateTimeOffset? due = null, bool? dueComplete = null)
     {
-        return await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString(), description ?? string.Empty));
+        var addCardOptions = new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString(), description ?? string.Empty);
+        if (start.HasValue)
+        {
+            addCardOptions.Start = start.Value;
+        }
+
+        if (due.HasValue)
+        {
+            addCardOptions.Due = due.Value;
+        }
+
+        if (dueComplete.HasValue)
+        {
+            addCardOptions.DueComplete = dueComplete.Value;
+        }
+
+        return await TrelloClient.AddCardAsync(addCardOptions);
     }
 
     protected async Task<(List List, Card Card)> AddDummyCardAndList(string boardId, string? name = null)
