@@ -2,7 +2,9 @@
 using TrelloDotNet.Model.Actions;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.AddCardOptions;
+using TrelloDotNet.Model.Options.CopyCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.MoveCardToBoardOptions;
 using TrelloDotNet.Model.Options.MoveCardToListOptions;
 using TrelloDotNet.Model.Webhook;
 
@@ -156,7 +158,6 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     {
         var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id));
         var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
-        var memberIds = new List<string> { member.Id };
         var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
         await using Stream stream = File.Open("TestData" + Path.DirectorySeparatorChar + "TestImage.png", FileMode.Open);
         Card newAdvancedCard = await TrelloClient.AddCardAsync(new AddCardOptions
@@ -209,6 +210,23 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         ]);
         Assert.True(updateCard.DueComplete);
         Assert.Equal("New Description", updateCard.Description);
+    }
+
+    [Fact]
+    public async Task CopyCard()
+    {
+        (List list, Card card) = await AddDummyCardAndList(_board.Id);
+        Card copy = await TrelloClient.CopyCardAsync(new CopyCardOptions
+        {
+            Name = "NewName",
+            NamedPosition = NamedPosition.Top,
+            Keep = CopyCardOptionsToKeep.Due | CopyCardOptionsToKeep.Labels | CopyCardOptionsToKeep.Start,
+            SourceCardId = card.Id,
+            TargetListId = list.Id
+        });
+
+        Assert.NotEqual(copy.Id, card.Id);
+        Assert.NotEqual(copy.Name, card.Name);
     }
 
     [Fact]
@@ -615,5 +633,124 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
             Since = "",
             StickerFields = StickerFields.All
         });
+
+        foreach (Card card in cards)
+        {
+            Assert.NotNull(card.List);
+            Assert.NotNull(card.Board);
+            Assert.NotNull(card.Checklists);
+            Assert.NotNull(card.Stickers);
+            Assert.NotNull(card.Actions);
+            Assert.NotNull(card.Attachments);
+        }
+    }
+
+    [Fact]
+    public async Task GetCardsForMember()
+    {
+        List list1 = await AddDummyList(_board.Id);
+
+        var card1 = await AddDummyCardToList(list1);
+        var card2 = await AddDummyCardToList(list1);
+        var card3 = await AddDummyCardToList(list1);
+
+        Member tokenMemberAsync = await TrelloClient.GetTokenMemberAsync();
+        var cards = await TrelloClient.GetCardsForMemberAsync(tokenMemberAsync.Id, new GetCardOptions
+        {
+            Filter = CardsFilter.All,
+            BoardFields = new BoardFields(BoardFieldsType.Name),
+            ActionsTypes = new ActionTypesToInclude(WebhookActionTypes.CreateCard),
+            CardFields = new CardFields(CardFieldsType.Name),
+            Limit = 999,
+            OrderBy = CardsOrderBy.CreateDateAsc,
+            IncludeBoard = true,
+            FilterConditions = [CardsFilterCondition.Name(CardsConditionString.NoneOfThese, Guid.NewGuid().ToString())],
+            AdditionalParameters = [new QueryParameter("x", "z")],
+            AttachmentFields = AttachmentFields.All,
+            Before = "",
+            ChecklistFields = ChecklistFields.All,
+            IncludeAttachments = GetCardOptionsIncludeAttachments.True,
+            IncludeChecklists = true,
+            IncludeCustomFieldItems = true,
+            IncludeList = true,
+            IncludeMemberVotes = true,
+            IncludeMembers = true,
+            IncludePluginData = true,
+            IncludeStickers = true,
+            MemberFields = MemberFields.All,
+            MembersVotedFields = MemberFields.All,
+            Since = "",
+            StickerFields = StickerFields.All
+        });
+
+        foreach (Card card in cards)
+        {
+            Assert.NotNull(card.List);
+            Assert.NotNull(card.Board);
+            Assert.NotNull(card.Checklists);
+            Assert.NotNull(card.Stickers);
+            Assert.NotNull(card.Actions);
+            Assert.NotNull(card.Attachments);
+        }
+    }
+
+    [Theory]
+    [InlineData(false, false, MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndCreateMissing, MoveCardToBoardOptionsMemberOptions.KeepMembersAlsoOnNewBoardAndRemoveRest)]
+    [InlineData(true, true, MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndCreateMissing, MoveCardToBoardOptionsMemberOptions.KeepMembersAlsoOnNewBoardAndRemoveRest)]
+    [InlineData(true, true, MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndRemoveMissing, MoveCardToBoardOptionsMemberOptions.RemoveAllMembersOnCard)]
+    [InlineData(true, true, MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndCreateMissing, MoveCardToBoardOptionsMemberOptions.KeepMembersAlsoOnNewBoardAndRemoveRest)]
+    [InlineData(true, true, MoveCardToBoardOptionsLabelOptions.RemoveAllLabelsOnCard, MoveCardToBoardOptionsMemberOptions.RemoveAllMembersOnCard)]
+    public async Task MoveCardToBoard(bool removeDueDate, bool removeStartDate, MoveCardToBoardOptionsLabelOptions labelOptions, MoveCardToBoardOptionsMemberOptions memberOptions)
+    {
+        var existingCards = await TrelloClient.GetCardsOnBoardAsync(_board.Id);
+        foreach (Card existingCard in existingCards)
+        {
+            await TrelloClient.DeleteCardAsync(existingCard.Id);
+        }
+
+        var board = new Board("UnitTestBoard-" + Guid.NewGuid().ToString())
+        {
+            OrganizationId = _board.OrganizationId
+        };
+        Board secondBoard = await TrelloClient.AddBoardAsync(board);
+
+        List list1 = await AddDummyList(_board.Id);
+        List list2 = await AddDummyList(secondBoard.Id);
+
+        var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
+        var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
+        var card1 = await AddDummyCardToList(list1, start: DateTimeOffset.UtcNow, due: DateTimeOffset.UtcNow.AddDays(1));
+        await TrelloClient.AddMembersToCardAsync(card1.Id, member.Id);
+        await TrelloClient.AddLabelsToCardAsync(card1.Id, allLabelsOnBoard.Select(x => x.Id).ToArray());
+
+        await TrelloClient.MoveCardToBoardAsync(card1.Id, secondBoard.Id, new MoveCardToBoardOptions
+        {
+            NewListId = list2.Id,
+            NamedPositionOnNewList = NamedPosition.Bottom,
+            PositionOnNewList = 12,
+            LabelOptions = labelOptions,
+            MemberOptions = memberOptions,
+            RemoveDueDate = removeDueDate,
+            RemoveStartDate = removeStartDate
+        });
+
+        var cardsOnBoardAsync = await TrelloClient.GetCardsOnBoardAsync(secondBoard.Id);
+        Assert.Single(cardsOnBoardAsync);
+        var card = cardsOnBoardAsync[0];
+        Assert.Equal(card1.Id, card.Id);
+        Assert.True(removeDueDate ? card.Due == null : card.Due != null);
+        Assert.True(removeStartDate ? card.Start == null : card.Start != null);
+        switch (labelOptions)
+        {
+            case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndCreateMissing:
+                Assert.Equal(allLabelsOnBoard.Count, card.LabelIds.Count);
+                break;
+            case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndRemoveMissing:
+                Assert.Equal(allLabelsOnBoard.Count, card.LabelIds.Count);
+                break;
+            case MoveCardToBoardOptionsLabelOptions.RemoveAllLabelsOnCard:
+                Assert.Empty(card.LabelIds);
+                break;
+        }
     }
 }
