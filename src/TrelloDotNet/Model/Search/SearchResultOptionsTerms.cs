@@ -19,6 +19,6 @@ namespace TrelloDotNet.Model.Search
         /// </summary>
         [JsonPropertyName("partial")]
         [JsonInclude]
-        public string Partial { get; private set; }
+        public bool Partial { get; private set; }
     }
 }
