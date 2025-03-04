@@ -21,14 +21,35 @@ public abstract class TestBase
                 .AddUserSecrets<TestBase>()
                 .Build();
 
+            List<TrelloClient> clients = [];
             var apiKey = config["TrelloApiKey"];
             var token = config["TrelloToken"];
-            var trelloClientOptions = new TrelloClientOptions
+            if (!string.IsNullOrWhiteSpace(apiKey) && !string.IsNullOrWhiteSpace(token))
             {
-                MaxRetryCountForTokenLimitExceeded = 10,
-                DelayInSecondsToWaitInTokenLimitExceededRetry = 2
-            };
-            return new TrelloClient(apiKey, token, trelloClientOptions);
+                var trelloClientOptions = new TrelloClientOptions
+                {
+                    MaxRetryCountForTokenLimitExceeded = 10,
+                    DelayInSecondsToWaitInTokenLimitExceededRetry = 2
+                };
+                clients.Add(new TrelloClient(apiKey, token, trelloClientOptions));
+            }
+
+            for (int i = 1; i < 10; i++)
+            {
+                apiKey = config["TrelloApiKey" + (i + 1)];
+                token = config["TrelloToken" + (i + 1)];
+                if (!string.IsNullOrWhiteSpace(apiKey) && !string.IsNullOrWhiteSpace(token))
+                {
+                    var trelloClientOptions = new TrelloClientOptions
+                    {
+                        MaxRetryCountForTokenLimitExceeded = 10,
+                        DelayInSecondsToWaitInTokenLimitExceededRetry = 2
+                    };
+                    clients.Add(new TrelloClient(apiKey, token, trelloClientOptions));
+                }
+            }
+
+            return clients[Random.Shared.Next(0, clients.Count - 1)];
         }
         catch (Exception)
         {
@@ -46,9 +67,9 @@ public abstract class TestBase
         return (await AddDummyCardAndList(boardId, name)).Card;
     }
 
-    protected async Task<Card> AddDummyCardToList(List list, string? name = null)
+    protected async Task<Card> AddDummyCardToList(List list, string? name = null, string? description = null)
     {
-        return await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString()));
+        return await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString(), description ?? string.Empty));
     }
 
     protected async Task<(List List, Card Card)> AddDummyCardAndList(string boardId, string? name = null)

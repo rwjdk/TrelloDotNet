@@ -262,7 +262,7 @@ namespace TrelloDotNet.Model
         /// <returns>The Condition</returns>
         public static CardsFilterCondition Description(CardsConditionString condition, params string[] textValues)
         {
-            return AdvancedStringCondition(CardsConditionField.Name, condition, textValues);
+            return AdvancedStringCondition(CardsConditionField.Description, condition, textValues);
         }
 
         /// <summary>

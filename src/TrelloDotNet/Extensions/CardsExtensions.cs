@@ -89,6 +89,12 @@ namespace TrelloDotNet.Extensions
                         return cards.Where(x => { return x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.Labels.Any(z => z.Name.Equals(y, StringComparison.InvariantCultureIgnoreCase))); });
                     }
 
+                    // ReSharper disable once ConvertIfStatementToReturnStatement
+                    if (entry.ValueAsNumber.HasValue)
+                    {
+                        return cards.Where(x => x.LabelIds.Count == entry.ValueAsNumber.Value);
+                    }
+
                     return cards.Where(x => x.LabelIds.Count == 1 && x.Labels.Any(z => z.Name.Equals(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase)));
 
                 case CardsCondition.AnyOfThese:
@@ -105,6 +111,12 @@ namespace TrelloDotNet.Extensions
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
                         return cards.Where(x => { return entry.ValueAsStrings.All(y => !x.Labels.Any(z => z.Name.Equals(y, StringComparison.InvariantCultureIgnoreCase))); });
+                    }
+
+                    // ReSharper disable once ConvertIfStatementToReturnStatement
+                    if (entry.ValueAsNumber.HasValue)
+                    {
+                        return cards.Where(x => x.LabelIds.Count != entry.ValueAsNumber.Value);
                     }
 
                     return cards.Where(x => !x.Labels.Any(z => z.Name.Equals(entry.ValueAsString)));
@@ -752,6 +764,11 @@ namespace TrelloDotNet.Extensions
                         return cards.Where(x => x.LabelIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)));
                     }
 
+                    if (entry.ValueAsNumber.HasValue)
+                    {
+                        return cards.Where(x => x.LabelIds.Count == entry.ValueAsNumber.Value);
+                    }
+
                     return cards.Where(x => x.LabelIds.Count == 1 && x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
 
                 case CardsCondition.AnyOfThese:
@@ -767,6 +784,11 @@ namespace TrelloDotNet.Extensions
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
                         return cards.Where(x => { return entry.ValueAsStrings.All(y => !x.LabelIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
+                    }
+
+                    if (entry.ValueAsNumber.HasValue)
+                    {
+                        return cards.Where(x => x.LabelIds.Count != entry.ValueAsNumber.Value);
                     }
 
                     return cards.Where(x => !x.LabelIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
@@ -830,6 +852,11 @@ namespace TrelloDotNet.Extensions
                         return cards.Where(x => { return x.MemberIds.Count == entry.ValueAsStrings.Count && entry.ValueAsStrings.All(y => x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
                     }
 
+                    if (entry.ValueAsNumber.HasValue)
+                    {
+                        return cards.Where(x => x.MemberIds.Count == entry.ValueAsNumber.Value);
+                    }
+
                     return cards.Where(x => x.MemberIds.Count == 1 && x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
 
                 case CardsCondition.AnyOfThese:
@@ -846,6 +873,11 @@ namespace TrelloDotNet.Extensions
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
                         return cards.Where(x => { return entry.ValueAsStrings.All(y => !x.MemberIds.Contains(y, StringComparer.InvariantCultureIgnoreCase)); });
+                    }
+
+                    if (entry.ValueAsNumber.HasValue)
+                    {
+                        return cards.Where(x => x.MemberIds.Count != entry.ValueAsNumber.Value);
                     }
 
                     return cards.Where(x => !x.MemberIds.Contains(entry.ValueAsString, StringComparer.InvariantCultureIgnoreCase));
@@ -1332,7 +1364,7 @@ namespace TrelloDotNet.Extensions
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (entry.ValueAsStrings != null && entry.ValueAsStrings.Count != 0)
                     {
-                        return cards.Where(x => entry.ValueAsStrings.Any(y => !x.Description.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
+                        return cards.Where(x => entry.ValueAsStrings.All(y => !x.Description.EndsWith(y, StringComparison.InvariantCultureIgnoreCase)));
                     }
 
                     return cards.Where(x => !x.Description.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase));
