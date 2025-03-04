@@ -22,8 +22,24 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: SetUserSecretsTrelloApiKey        
       run: dotnet user-secrets set TrelloApiKey ${{ secrets.TRELLOAPIKEY }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
+    - name: SetUserSecretsTrelloApiKey2        
+      run: dotnet user-secrets set TrelloApiKey2 ${{ secrets.TRELLOAPIKEY2 }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
+    - name: SetUserSecretsTrelloApiKey3        
+      run: dotnet user-secrets set TrelloApiKey3 ${{ secrets.TRELLOAPIKEY3 }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
+    - name: SetUserSecretsTrelloApiKey4        
+      run: dotnet user-secrets set TrelloApiKey4 ${{ secrets.TRELLOAPIKEY4 }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj
+    - name: SetUserSecretsTrelloApiKey5        
+      run: dotnet user-secrets set TrelloApiKey5 ${{ secrets.TRELLOAPIKEY5 }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
     - name: SetUserSecretsTrelloToken        
       run: dotnet user-secrets set TrelloToken ${{ secrets.TRELLOTOKEN }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
+    - name: SetUserSecretsTrelloToken2        
+      run: dotnet user-secrets set TrelloToken2 ${{ secrets.TRELLOTOKEN2 }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
+    - name: SetUserSecretsTrelloToken3        
+      run: dotnet user-secrets set TrelloToken3 ${{ secrets.TRELLOTOKEN3 }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
+    - name: SetUserSecretsTrelloToken4        
+      run: dotnet user-secrets set TrelloToken4 ${{ secrets.TRELLOTOKEN4 }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj      
+    - name: SetUserSecretsTrelloToken5        
+      run: dotnet user-secrets set TrelloToken5 ${{ secrets.TRELLOTOKEN5 }} --project src/TrelloDotNet.Tests/TrelloDotNet.Tests.csproj            
     - name: Test      
       run: dotnet test --configuration Release --no-build --verbosity normal --p:CollectCoverage=true --p:CoverletOutput=TestResults/ --p:CoverletOutputFormat=lcov
       working-directory: src/TrelloDotNet.Tests
