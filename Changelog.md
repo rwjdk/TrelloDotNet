@@ -22,6 +22,12 @@
 
 <hr>
 
+## 1.11.13 (4th of March 2025)
+#### TrelloClient
+- Fixed that [Search](https://github.com/rwjdk/TrelloDotNet/wiki/Search) failed deserializing JSON
+
+<hr>
+
 ## 1.11.12 (2nd of March 2025)
 - Obsoleted `GetListsOnBoardFilteredAsync`. Use GetListsOnBoardAsync with GetListOptions.Filter instead.
 

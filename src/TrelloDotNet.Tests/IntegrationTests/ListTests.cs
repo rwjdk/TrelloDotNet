@@ -1,12 +1,14 @@
 ﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.AddCardOptions;
+using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.GetListOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
 public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixture<TestFixtureWithNewBoard>
 {
-    private readonly string? _boardId = fixture.BoardId;
+    private readonly string _boardId = fixture.BoardId!;
 
     [Fact]
     public async Task AddList()
@@ -144,5 +146,26 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         await TrelloClient.MoveAllCardsInListAsync(addList.Id, listToMoveTo.Id);
         var cardsOnListAfterMove = await TrelloClient.GetCardsInListAsync(listToMoveTo.Id);
         Assert.Equal(3, cardsOnListAfterMove.Count);
+    }
+
+    [Fact]
+    public async Task GetCardsInList()
+    {
+        List list = await AddDummyList(_boardId);
+
+        await AddDummyCardToList(list, "Card 1");
+        await AddDummyCardToList(list, "Card 2");
+        await AddDummyCardToList(list, "Card 3");
+
+        var cards = await TrelloClient.GetCardsInListAsync(list.Id, new GetCardOptions
+        {
+            IncludeBoard = true,
+            IncludeList = true,
+            ActionsTypes = ActionTypesToInclude.All,
+            Limit = 10,
+            CardFields = new CardFields(CardFieldsType.Name)
+        });
+
+        Assert.Equal(3, cards.Count);
     }
 }

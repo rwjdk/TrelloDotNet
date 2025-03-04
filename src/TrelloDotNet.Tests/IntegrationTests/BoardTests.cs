@@ -5,6 +5,7 @@ using TrelloDotNet.Model.Options.GetBoardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.GetLabelOptions;
 using TrelloDotNet.Model.Options.GetListOptions;
+using TrelloDotNet.Model.Options.UpdateBoardPreferencesOptions;
 using TrelloDotNet.Model.Webhook;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
@@ -119,6 +120,38 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
             ActionsTypes = new ActionTypesToInclude([WebhookActionTypes.UpdateBoard])
         });
         Assert.NotEmpty(getBoardWithOptions.Actions);
+    }
+
+    [Fact]
+    public async Task GetAndUpdateBoardPref()
+    {
+        await TrelloClient.UpdateBoardPreferencesAsync(_boardId, new UpdateBoardPreferencesOptions
+        {
+            CardAging = BoardPreferenceCardAging.Regular,
+            CardCovers = BoardPreferenceCardCovers.DoNotShow,
+            HideVotes = BoardPreferenceHideVotes.Hide,
+            SelfJoin = BoardPreferenceSelfJoin.Yes,
+            ShowCompletedStatusOnCardFront = BoardPreferenceShowCompletedStatusOnCardFront.DoNotShow,
+            Visibility = BoardPreferenceVisibility.Workspace,
+            WhoCanComment = BoardPreferenceWhoCanComment.Disabled,
+            WhoCanVote = BoardPreferenceWhoCanVote.Disabled,
+            WhoCanAddAndRemoveMembers = BoardPreferenceWhoCanAddAndRemoveMembers.Members
+        });
+
+        Board board = await TrelloClient.GetBoardAsync(_boardId, new GetBoardOptions
+        {
+            BoardFields = new BoardFields(BoardFieldsType.Preferences)
+        });
+        Assert.NotNull(board.Preferences);
+        Assert.Equal(BoardPreferenceCardAging.Regular, board.Preferences.CardAging);
+        Assert.Equal(BoardPreferenceCardCovers.DoNotShow, board.Preferences.CardCovers);
+        Assert.Equal(BoardPreferenceHideVotes.Hide, board.Preferences.HideVotes);
+        Assert.Equal(BoardPreferenceSelfJoin.Yes, board.Preferences.SelfJoin);
+        Assert.Equal(BoardPreferenceShowCompletedStatusOnCardFront.DoNotShow, board.Preferences.ShowCompletedStatusOnCardFront);
+        Assert.Equal(BoardPreferenceVisibility.Workspace, board.Preferences.Visibility);
+        Assert.Equal(BoardPreferenceWhoCanComment.Disabled, board.Preferences.WhoCanComment);
+        Assert.Equal(BoardPreferenceWhoCanVote.Disabled, board.Preferences.WhoCanVote);
+        Assert.Equal(BoardPreferenceWhoCanAddAndRemoveMembers.Members, board.Preferences.WhoCanAddAndRemoveMembers);
     }
 
     [Fact]
