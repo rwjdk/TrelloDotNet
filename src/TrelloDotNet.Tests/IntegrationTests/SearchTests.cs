@@ -1,6 +1,4 @@
 ﻿using TrelloDotNet.Model;
-using TrelloDotNet.Model.Options;
-using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Search;
 
 namespace TrelloDotNet.Tests.IntegrationTests;

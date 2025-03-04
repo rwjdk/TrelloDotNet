@@ -102,7 +102,6 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     {
         var list = await AddDummyList(_board.Id);
         var card = await AddDummyCardToList(list);
-        var member = await TrelloClient.GetTokenMemberAsync();
 
         var votingMembers = await TrelloClient.GetMembersWhoVotedOnCardAsync(card.Id);
         Assert.Empty(votingMembers);
@@ -113,5 +112,17 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
             MemberFields = new MemberFields(MemberFieldsType.FullName)
         });
         Assert.Empty(votingMembersWithOptions);
+    }
+
+    [Fact]
+    public async Task GetMembersOfOrganization()
+    {
+        // Test with options
+        var membersWithOptions = await TrelloClient.GetMembersOfOrganizationAsync(fixture.OrganizationId!, new GetMemberOptions
+        {
+            MemberFields = new MemberFields(MemberFieldsType.FullName)
+        });
+        Assert.NotEmpty(membersWithOptions);
+        Assert.All(membersWithOptions, member => Assert.NotNull(member.FullName));
     }
 }

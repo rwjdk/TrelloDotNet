@@ -162,7 +162,7 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
         var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
         await using Stream stream = File.Open("TestData" + Path.DirectorySeparatorChar + "TestImage.png", FileMode.Open);
-        Card newAdvancedCard = await TrelloClient.AddCardAsync(new AddCardOptions
+        await TrelloClient.AddCardAsync(new AddCardOptions
         {
             //Mandatory options
             ListId = list.Id,
@@ -175,29 +175,28 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
             Cover = new CardCover(CardCoverColor.Blue, CardCoverSize.Normal),
             LabelIds = allLabelsOnBoard.Select(x => x.Id).ToList(),
             MemberIds = [member.Id],
-            Checklists = new List<Checklist>
-            {
-                new Checklist("Checklist 1", new List<ChecklistItem>
-                {
+            Checklists =
+            [
+                new Checklist("Checklist 1", [
                     new ChecklistItem("Item 1"),
                     new ChecklistItem("Item 2"),
                     new ChecklistItem("Item 3")
-                }),
-                new Checklist("Checklist 2", new List<ChecklistItem>
-                {
+                ]),
+
+                new Checklist("Checklist 2", [
                     new ChecklistItem("Item A"),
                     new ChecklistItem("Item B"),
                     new ChecklistItem("Item C")
-                }),
-            },
-            AttachmentUrlLinks = new List<AttachmentUrlLink>
-            {
+                ])
+            ],
+            AttachmentUrlLinks =
+            [
                 new AttachmentUrlLink("https://www.google.com", "Google")
-            },
-            AttachmentFileUploads = new List<AttachmentFileUpload>
-            {
+            ],
+            AttachmentFileUploads =
+            [
                 new AttachmentFileUpload(stream, "X", "Z")
-            }
+            ]
         });
     }
 
@@ -209,9 +208,35 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var updateCard = await TrelloClient.UpdateCardAsync(addedCard.Id, [
             CardUpdate.DueComplete(true),
             CardUpdate.Description("New Description"),
+            CardUpdate.Name("NewName"),
+            CardUpdate.Closed(true),
+            CardUpdate.Cover(new CardCover(CardCoverColor.Black, CardCoverSize.Full)),
+            CardUpdate.DueDate(DateTimeOffset.UtcNow),
+            CardUpdate.StartDate(DateTimeOffset.UtcNow),
+            CardUpdate.Position(NamedPosition.Bottom),
+            CardUpdate.Members(new List<string>()),
+            CardUpdate.Labels(new List<string>()),
+            CardUpdate.Board(_board.Id),
+            CardUpdate.List(list.Id),
+            CardUpdate.IsTemplate(false),
         ]);
         Assert.True(updateCard.DueComplete);
         Assert.Equal("New Description", updateCard.Description);
+        updateCard = await TrelloClient.UpdateCardAsync(addedCard.Id, [
+            CardUpdate.DueComplete(false),
+            CardUpdate.Description("New Description"),
+            CardUpdate.Name("NewName"),
+            CardUpdate.Closed(false),
+            CardUpdate.Cover(new CardCover(CardCoverColor.Black, CardCoverSize.Full)),
+            CardUpdate.DueDate(DateTimeOffset.UtcNow),
+            CardUpdate.StartDate(DateTimeOffset.UtcNow),
+            CardUpdate.Position(1),
+            CardUpdate.Members(new List<Member>()),
+            CardUpdate.Labels(new List<Label>()),
+            CardUpdate.Board(_board),
+            CardUpdate.List(list),
+            CardUpdate.IsTemplate(true),
+        ]);
     }
 
     [Fact]
@@ -302,6 +327,14 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         await TrelloClient.DeleteChecklistAsync(addedChecklist.Id);
         var checklistsNow2 = await TrelloClient.GetChecklistsOnBoardAsync(_board.Id);
         Assert.Equal(2, checklistsNow2.Count);
+
+        ChecklistItem item = await TrelloClient.AddChecklistItemAsync(checklistsNow2[0].Id, new ChecklistItem("SomeMore"));
+        Assert.Equal(checklistsNow2[0].Id, item.ChecklistId);
+        Assert.Equal("SomeMore", item.Name);
+        Assert.Equal(ChecklistItemState.Incomplete, item.State);
+
+        Checklist updateChecklist = await TrelloClient.UpdateChecklistAsync(checklistsNow2[0].Id, "SomethingNew", NamedPosition.Bottom);
+        Assert.Equal("SomethingNew", updateChecklist.Name);
     }
 
     [Fact]
@@ -604,9 +637,9 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     {
         List list1 = await AddDummyList(_board.Id);
 
-        var card1 = await AddDummyCardToList(list1);
-        var card2 = await AddDummyCardToList(list1);
-        var card3 = await AddDummyCardToList(list1);
+        await AddDummyCardToList(list1);
+        await AddDummyCardToList(list1);
+        await AddDummyCardToList(list1);
 
         var cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
@@ -652,9 +685,9 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     {
         List list1 = await AddDummyList(_board.Id);
 
-        var card1 = await AddDummyCardToList(list1);
-        var card2 = await AddDummyCardToList(list1);
-        var card3 = await AddDummyCardToList(list1);
+        await AddDummyCardToList(list1);
+        await AddDummyCardToList(list1);
+        await AddDummyCardToList(list1);
 
         Member tokenMemberAsync = await TrelloClient.GetTokenMemberAsync();
         var cards = await TrelloClient.GetCardsForMemberAsync(tokenMemberAsync.Id, new GetCardOptions

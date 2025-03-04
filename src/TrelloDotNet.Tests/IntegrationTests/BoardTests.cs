@@ -131,7 +131,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
 
         var getBoardWithOptions = await TrelloClient.GetBoardAsync(_boardId, new GetBoardOptions
         {
-            ActionsTypes = new ActionTypesToInclude([WebhookActionTypes.UpdateBoard])
+            ActionsTypes = new ActionTypesToInclude(WebhookActionTypes.UpdateBoard)
         });
         Assert.NotEmpty(getBoardWithOptions.Actions);
     }
@@ -187,6 +187,10 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
             Assert.NotEmpty(label.Id);
             Assert.NotEmpty(label.BoardId);
             Assert.Empty(label.Name);
+            Assert.NotNull(label.Color);
+            Assert.NotNull(label.ColorAsInfo);
+            Assert.NotNull(label.ColorAsInfo.BackgroundHex);
+            Assert.NotNull(label.ColorAsInfo.TextHex);
             AssertTimeIsNow(label.Created);
         }
 

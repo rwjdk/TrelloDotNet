@@ -1,5 +1,4 @@
 ﻿using TrelloDotNet.Model;
-using TrelloDotNet.Model.Options.GetLabelOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 

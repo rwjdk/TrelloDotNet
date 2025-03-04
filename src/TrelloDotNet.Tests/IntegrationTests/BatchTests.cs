@@ -3,6 +3,7 @@ using TrelloDotNet.Model.Batch;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetBoardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
+using TrelloDotNet.Model.Options.GetListOptions;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -31,10 +32,26 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     }
 
     [Fact]
+    public async Task GetNoneExistOrganizations()
+    {
+        await Assert.ThrowsAsync<TrelloApiException>(async () =>
+        {
+            var data = await TrelloClient.GetOrganizationsAsync(["non-Exist"]);
+            Assert.NotEmpty(data);
+        });
+    }
+
+    [Fact]
     public async Task GetListsAndCards()
     {
         (List? list, Card? card) = await AddDummyCardAndList(_boardId);
+        // ReSharper disable once RedundantAssignment
         var listData = await TrelloClient.GetListsAsync([list.Id]);
+        listData = await TrelloClient.GetListsAsync([list.Id], new GetListOptions
+        {
+            IncludeBoard = true,
+            IncludeCards = GetListOptionsIncludeCards.All
+        });
         Assert.NotEmpty(listData);
         Assert.Equal(list.Id, listData[0].Id);
         Assert.Equal(list.Name, listData[0].Name);

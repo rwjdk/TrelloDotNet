@@ -15,9 +15,9 @@ public class CardsConditionDueCompleteTests(TestFixtureWithNewBoard fixture) : T
         List list2 = await AddDummyList(_board.Id, "List 2");
         List list3 = await AddDummyList(_board.Id, "List 3");
 
-        Card card1 = await AddDummyCardToList(list1, "Card 1", due: DateTimeOffset.UtcNow.AddDays(-1), dueComplete: true);
-        Card card2 = await AddDummyCardToList(list2, "Card 2", due: DateTimeOffset.UtcNow, dueComplete: true);
-        Card card3 = await AddDummyCardToList(list3, "Card 3", due: DateTimeOffset.UtcNow.AddDays(1), dueComplete: false);
+        await AddDummyCardToList(list1, "Card 1", due: DateTimeOffset.UtcNow.AddDays(-1), dueComplete: true);
+        await AddDummyCardToList(list2, "Card 2", due: DateTimeOffset.UtcNow, dueComplete: true);
+        await AddDummyCardToList(list3, "Card 3", due: DateTimeOffset.UtcNow.AddDays(1), dueComplete: false);
 
         // ReSharper disable once JoinDeclarationAndInitializer
         List<Card> cards;

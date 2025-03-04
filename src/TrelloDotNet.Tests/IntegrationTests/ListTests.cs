@@ -55,7 +55,14 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         //Check that there are a closed list
         var closedLists = await TrelloClient.GetListsOnBoardAsync(_boardId, new GetListOptions
         {
-            Filter = ListFilter.Closed
+            Filter = ListFilter.Closed,
+            BoardFields = new BoardFields(BoardFieldsType.Closed),
+            AdditionalParameters = [new QueryParameter("x", "y")],
+            CardFields = new CardFields(CardFieldsType.Name),
+            CardsFilterConditions = [CardsFilterCondition.Name(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),],
+            CardsOrderBy = CardsOrderBy.CreateDateDesc,
+            IncludeBoard = true,
+            IncludeCards = GetListOptionsIncludeCards.All
         });
         List foundList = closedLists.Single(x => x.Id == addList.Id);
         Assert.Equal(addList.Name, foundList.Name);
