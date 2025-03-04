@@ -300,7 +300,6 @@ namespace TrelloDotNet.Extensions
             }
         }
 
-        [ExcludeFromCodeCoverage]
         private static IEnumerable<Card> FilterCustomField(IEnumerable<Card> cards, CardsFilterCondition entry)
         {
             if (entry.CustomFieldEntry == null)

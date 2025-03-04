@@ -166,7 +166,6 @@ namespace TrelloDotNet
         /// <param name="options">Add Card options (Name, Dates, Checklists, etc.)</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>The Added Card</returns>
-        [ExcludeFromCodeCoverage]
         public async Task<Card> AddCardToInboxAsync(AddCardToInboxOptions options, CancellationToken cancellationToken = default)
         {
             TokenMemberInbox inbox = await GetTokenMemberInboxAsync(cancellationToken);
@@ -639,7 +638,6 @@ namespace TrelloDotNet
         /// </summary>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>The Cards</returns>
-        [ExcludeFromCodeCoverage]
         public async Task<List<Card>> GetCardsInInboxAsync(CancellationToken cancellationToken = default)
         {
             TokenMemberInbox inbox = await GetTokenMemberInboxAsync(cancellationToken);
@@ -657,7 +655,6 @@ namespace TrelloDotNet
         /// <param name="options">Options on what parts of the cards to get</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>The Cards</returns>
-        [ExcludeFromCodeCoverage]
         public async Task<List<Card>> GetCardsInInboxAsync(GetInboxCardOptions options, CancellationToken cancellationToken = default)
         {
             TokenMemberInbox inbox = await GetTokenMemberInboxAsync(cancellationToken);
