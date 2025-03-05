@@ -507,6 +507,15 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         });
 
         Assert.Equal("👍", reaction.Emoji.Native);
+        Assert.NotNull(reaction.MemberId);
+        Assert.NotNull(reaction.EmojiId);
+        Assert.NotNull(reaction.Id);
+        Assert.NotNull(reaction.CommentId);
+        Assert.NotNull(reaction.Member);
+        Assert.NotNull(reaction.Member.FullName);
+        Assert.NotNull(reaction.Emoji.Name);
+        Assert.NotNull(reaction.Emoji.ShortName);
+        Assert.NotNull(reaction.Emoji.UnifiedId);
 
         var reactions = await TrelloClient.GetCommentReactionsAsync(comment.Id);
         Assert.Single(reactions);

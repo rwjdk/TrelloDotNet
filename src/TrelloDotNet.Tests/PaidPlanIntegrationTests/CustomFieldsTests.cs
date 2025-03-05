@@ -1,4 +1,5 @@
 ﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options.AddCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.GetListOptions;
 
@@ -67,6 +68,20 @@ public class CustomFieldsTests : TestBase
             Assert.NotNull(valueNumber);
             Assert.NotNull(valueText);
 
+            Assert.Equal(checkboxValue, customValues.GetCustomFieldValueAsBoolean(fieldCheckbox));
+            Assert.Equal(dateValue.ToUnixTimeSeconds(), customValues.GetCustomFieldValueAsDateTimeOffset(fieldDate)?.ToUnixTimeSeconds());
+            Assert.Equal(numberValue, customValues.GetCustomFieldValueAsDecimal(fieldNumber));
+            Assert.Equal(Convert.ToInt32(numberValue), customValues.GetCustomFieldValueAsInteger(fieldNumber));
+            Assert.Equal(listValue.Id, customValues.GetCustomFieldValueAsOption(fieldList).Id);
+            Assert.Equal(textValue, customValues.GetCustomFieldValueAsString(fieldText));
+            Assert.NotNull(customValues.GetCustomFieldValueAsObject(fieldText));
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => customValues.GetCustomFieldValueAsDateTimeOffset(fieldCheckbox));
+            Assert.Throws<ArgumentOutOfRangeException>(() => customValues.GetCustomFieldValueAsDateTimeOffset(fieldNumber));
+            Assert.Throws<ArgumentOutOfRangeException>(() => customValues.GetCustomFieldValueAsDateTimeOffset(fieldList));
+            Assert.Throws<ArgumentOutOfRangeException>(() => customValues.GetCustomFieldValueAsDateTimeOffset(fieldText));
+            Assert.Throws<ArgumentOutOfRangeException>(() => customValues.GetCustomFieldValueAsInteger(fieldDate));
+
             var cards = await TrelloClient.GetCardsOnBoardAsync(board.Id, new GetCardOptions
             {
                 FilterConditions =
@@ -126,6 +141,22 @@ public class CustomFieldsTests : TestBase
 
             customValues = await TrelloClient.GetCustomFieldItemsForCardAsync(card1.Id);
             Assert.Empty(customValues);
+
+
+            await TrelloClient.AddCardAsync(new AddCardOptions
+            {
+                ListId = listForCustomFieldTests.Id,
+                Name = "Add with Custom Fields",
+                CustomFields =
+                [
+                    new AddCardOptionsCustomField(fieldCheckbox, checkboxValue),
+                    new AddCardOptionsCustomField(fieldDate, dateValue),
+                    new AddCardOptionsCustomField(fieldList, listValue),
+                    new AddCardOptionsCustomField(fieldNumber, Convert.ToInt32(numberValue)),
+                    new AddCardOptionsCustomField(fieldNumber, numberValue),
+                    new AddCardOptionsCustomField(fieldText, textValue)
+                ]
+            });
         }
         finally
         {

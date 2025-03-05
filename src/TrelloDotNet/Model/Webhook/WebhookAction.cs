@@ -63,6 +63,14 @@ namespace TrelloDotNet.Model.Webhook
         /// </summary>
         public TrelloClient TrelloClient { get; internal set; }
 
+        internal static WebhookAction CreateDummy(string type)
+        {
+            return new WebhookAction
+            {
+                Type = type,
+            };
+        }
+
         internal static WebhookAction CreateDummy(TrelloClient trelloClient, WebhookActionDummyCreationScenario scenario, Board boardToSimulate = null, List listToSimulate = null, Card cardToSimulate = null)
         {
             var webhookAction = new WebhookAction()

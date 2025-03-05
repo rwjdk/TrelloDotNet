@@ -15,10 +15,47 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     public async Task ExecuteBatchedRequestAsync()
     {
         Board? b = null;
+        (List? list, Card? card) = await AddDummyCardAndList(_boardId);
+        Member member = await TrelloClient.GetTokenMemberAsync();
 
         await TrelloClient.ExecuteBatchedRequestAsync(
         [
-            BatchRequest.GetBoard(_boardId, result => b = result.GetData<Board>())
+            BatchRequest.GetBoard(_boardId, result => b = result.GetData<Board>()),
+            BatchRequest.GetBoard(_boardId, new GetBoardOptions(), result => b = result.GetData<Board>()),
+            BatchRequest.GetActionsForList(list.Id, _ => Console.Write("")),
+            BatchRequest.GetActionsForMember(member.Id, _ => Console.Write("")),
+            BatchRequest.GetActionsForOrganization(fixture.OrganizationId, _ => Console.Write("")),
+            BatchRequest.GetActionsOnBoard(_boardId, _ => Console.Write("")),
+            BatchRequest.GetActionsOnCard(card.Id, _ => Console.Write("")),
+            BatchRequest.GetAttachmentsOnCard(card.Id, _ => Console.Write("")),
+            BatchRequest.GetBoardsForMember(member.Id, _ => Console.Write("")),
+            BatchRequest.GetBoardsForMember(member.Id, new GetBoardOptions(), _ => Console.Write("")),
+            BatchRequest.GetBoardsInOrganization(fixture.OrganizationId, _ => Console.Write("")),
+            BatchRequest.GetBoardsInOrganization(fixture.OrganizationId, new GetBoardOptions(), _ => Console.Write("")),
+            BatchRequest.GetCard(card.Id, _ => Console.Write("")),
+            BatchRequest.GetCard(card.Id, new GetCardOptions(), _ => Console.Write("")),
+            BatchRequest.GetCardsOnBoard(_boardId, _ => Console.Write("")),
+            BatchRequest.GetCardsOnBoard(_boardId, new GetCardOptions(), _ => Console.Write("")),
+            BatchRequest.GetActionsForList(list.Id, _ => Console.Write("")),
+            BatchRequest.GetCardsInList(list.Id, _ => Console.Write("")),
+            BatchRequest.GetCardsInList(list.Id, new GetCardOptions(), _ => Console.Write("")),
+            BatchRequest.GetCardsForMember(member.Id, _ => Console.Write("")),
+            BatchRequest.GetCardsForMember(member.Id, new GetCardOptions(), _ => Console.Write("")),
+            BatchRequest.GetChecklistsOnBoard(_boardId, _ => Console.Write("")),
+            BatchRequest.GetChecklistsOnCard(card.Id, _ => Console.Write("")),
+            BatchRequest.GetLabelsOfBoard(_boardId, _ => Console.Write("")),
+            BatchRequest.GetCustomFieldItemsForCard(card.Id, _ => Console.Write("")),
+            BatchRequest.GetCustomFieldsOnBoard(_boardId, _ => Console.Write("")),
+            BatchRequest.GetList(list.Id, _ => Console.Write("")),
+            BatchRequest.GetListsOnBoard(_boardId, _ => Console.Write("")),
+            BatchRequest.GetMember(member.Id, _ => Console.Write("")),
+            BatchRequest.GetMembersOfBoard(_boardId, _ => Console.Write("")),
+            BatchRequest.GetMembersOfCard(card.Id, _ => Console.Write("")),
+            BatchRequest.GetMembersOfOrganization(fixture.OrganizationId, _ => Console.Write("")),
+            BatchRequest.GetMembershipsOfBoard(_boardId, _ => Console.Write("")),
+            BatchRequest.GetOrganization(fixture.OrganizationId, _ => Console.Write("")),
+            BatchRequest.GetOrganizationsForMember(member.Id, _ => Console.Write("")),
+            BatchRequest.GetStickersOnCard(card.Id, _ => Console.Write("")),
         ]);
 
         Assert.NotNull(b);

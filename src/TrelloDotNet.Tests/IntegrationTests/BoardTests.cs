@@ -35,7 +35,28 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         {
             IncludeLists = GetBoardOptionsIncludeLists.Open,
             IncludeCards = GetBoardOptionsIncludeCards.OpenCards,
-            BoardFields = new BoardFields(BoardFieldsType.Name)
+            BoardFields = new BoardFields(BoardFieldsType.Name),
+            CardFields = new CardFields(CardFieldsType.Cover),
+            Filter = GetBoardOptionsFilter.All,
+            OrganizationFields = OrganizationFields.All,
+            IncludeLabels = true,
+            IncludePluginData = true,
+            ActionsTypes = ActionTypesToInclude.All,
+            CardsOrderBy = CardsOrderBy.CreateDateAsc,
+            AdditionalParameters = [new QueryParameter("x", "x")],
+            CardsFilterConditions =
+            [
+                CardsFilterCondition.Name(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),
+                CardsFilterCondition.Description(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),
+                CardsFilterCondition.MemberCount(CardsConditionCount.NotEqual, -1),
+                CardsFilterCondition.MemberName(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),
+                CardsFilterCondition.Due(CardsConditionDate.NotEqual, true, DateTimeOffset.MinValue),
+                CardsFilterCondition.Start(CardsConditionDate.NotEqual, DateTimeOffset.MinValue),
+                CardsFilterCondition.IsComplete(),
+                CardsFilterCondition.LabelId(CardsConditionIds.NotEqual, Guid.NewGuid().ToString()),
+                CardsFilterCondition.LabelName(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),
+                CardsFilterCondition.ListName(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),
+            ]
         });
 
         Assert.NotNull(getBoardWithOptions.Lists);
@@ -249,7 +270,20 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
 
         boards = await TrelloClient.GetBoardsInOrganizationAsync(_board.OrganizationId, new GetBoardOptions
         {
-            IncludeLists = GetBoardOptionsIncludeLists.All
+            TypesOfBoardsToInclude = GetBoardOptionsTypesOfBoardsToInclude.All,
+            IncludeLists = GetBoardOptionsIncludeLists.All,
+            BoardFields = new BoardFields(BoardFieldsType.Name),
+            IncludeOrganization = true,
+            IncludeCards = GetBoardOptionsIncludeCards.OpenCards,
+            CardFields = new CardFields(CardFieldsType.Name),
+            OrganizationFields = new OrganizationFields(OrganizationFieldsType.Name),
+            CardsOrderBy = CardsOrderBy.CreateDateAsc,
+            Filter = GetBoardOptionsFilter.All,
+            ActionsTypes = ActionTypesToInclude.All,
+            AdditionalParameters = [new QueryParameter("x", "x")],
+            CardsFilterConditions = [CardsFilterCondition.Name(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),],
+            IncludePluginData = true,
+            IncludeLabels = true
         });
         Assert.Single(boards);
         Assert.Equal(_board.Id, boards.First().Id);

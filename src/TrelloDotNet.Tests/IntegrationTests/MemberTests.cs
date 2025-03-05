@@ -20,6 +20,10 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
         Assert.NotEmpty(member.Id);
         Assert.NotEmpty(member.FullName);
         Assert.Null(member.Username);
+        Assert.Null(member.AvatarUrl);
+        Assert.Null(member.AvatarUrl30);
+        Assert.Null(member.AvatarUrl170);
+        Assert.Null(member.AvatarUrlOriginal);
     }
 
     [Fact]
