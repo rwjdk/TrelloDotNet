@@ -338,21 +338,21 @@ namespace TrelloDotNet.Extensions
                         switch (entry.Condition)
                         {
                             case CardsCondition.Equal:
-                                return date.HasValue && date.Value == entry.ValueAsDateTimeOffset;
+                                return date.HasValue && date.Value.ToUnixTimeSeconds() == entry.ValueAsDateTimeOffset?.ToUnixTimeSeconds();
                             case CardsCondition.NotEqual:
-                                return !date.HasValue || date.Value != entry.ValueAsDateTimeOffset;
+                                return !date.HasValue || date.Value.ToUnixTimeSeconds() != entry.ValueAsDateTimeOffset?.ToUnixTimeSeconds();
                             case CardsCondition.GreaterThan:
-                                return date.HasValue && date.Value > entry.ValueAsDateTimeOffset;
+                                return date.HasValue && date.Value.ToUnixTimeSeconds() > entry.ValueAsDateTimeOffset?.ToUnixTimeSeconds();
                             case CardsCondition.LessThan:
-                                return date.HasValue && date.Value < entry.ValueAsDateTimeOffset;
+                                return date.HasValue && date.Value.ToUnixTimeSeconds() < entry.ValueAsDateTimeOffset?.ToUnixTimeSeconds();
                             case CardsCondition.GreaterThanOrEqual:
-                                return date.HasValue && date.Value >= entry.ValueAsDateTimeOffset;
+                                return date.HasValue && date.Value.ToUnixTimeSeconds() >= entry.ValueAsDateTimeOffset?.ToUnixTimeSeconds();
                             case CardsCondition.LessThanOrEqual:
-                                return date.HasValue && date.Value <= entry.ValueAsDateTimeOffset;
+                                return date.HasValue && date.Value.ToUnixTimeSeconds() <= entry.ValueAsDateTimeOffset?.ToUnixTimeSeconds();
                             case CardsCondition.AnyOfThese:
-                                return date.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y == date.Value);
+                                return date.HasValue && entry.ValueAsDateTimeOffsets.Any(y => y.ToUnixTimeSeconds() == date.Value.ToUnixTimeSeconds());
                             case CardsCondition.NoneOfThese:
-                                return date.HasValue && entry.ValueAsDateTimeOffsets.All(y => y != date.Value);
+                                return date.HasValue && entry.ValueAsDateTimeOffsets.All(y => y.ToUnixTimeSeconds() != date.Value.ToUnixTimeSeconds());
                             case CardsCondition.Between:
                             {
                                 if (entry.ValueAsDateTimeOffsets?.Count != 2)
@@ -362,7 +362,7 @@ namespace TrelloDotNet.Extensions
 
                                 DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
                                 DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
-                                return date.HasValue && date.Value >= from && date.Value <= to;
+                                return date.HasValue && date.Value.ToUnixTimeSeconds() >= from.ToUnixTimeSeconds() && date.Value.ToUnixTimeSeconds() <= to.ToUnixTimeSeconds();
                             }
                             case CardsCondition.NotBetween:
                             {
@@ -373,45 +373,45 @@ namespace TrelloDotNet.Extensions
 
                                 DateTimeOffset from = entry.ValueAsDateTimeOffsets.First();
                                 DateTimeOffset to = entry.ValueAsDateTimeOffsets.Last();
-                                return (date.HasValue && date.Value > to) || (date.HasValue && date.Value < from);
+                                return (date.HasValue && date.Value.ToUnixTimeSeconds() > to.ToUnixTimeSeconds()) || (date.HasValue && date.Value.ToUnixTimeSeconds() < from.ToUnixTimeSeconds());
                             }
                             default:
                                 throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a CustomField of Type Date");
                         }
                     case CustomFieldType.List:
-                        string listValue = customFieldDefinition.Options.FirstOrDefault(y => y.Id == customFieldItem?.ValueId)?.Value.Text ?? string.Empty;
+                        string listIdValue = customFieldDefinition.Options.FirstOrDefault(y => y.Id == customFieldItem?.ValueId)?.Id ?? string.Empty;
                         switch (entry.Condition)
                         {
                             case CardsCondition.Equal:
-                                return listValue.Equals(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase);
+                                return listIdValue.Equals(entry.ValueAsString, StringComparison.InvariantCultureIgnoreCase);
                             case CardsCondition.NotEqual:
-                                return listValue != entry.ValueAsString;
+                                return listIdValue != entry.ValueAsString;
                             case CardsCondition.GreaterThan:
-                                return listValue.Length > entry.ValueAsNumber;
+                                return listIdValue.Length > entry.ValueAsNumber;
                             case CardsCondition.LessThan:
-                                return listValue.Length < entry.ValueAsNumber;
+                                return listIdValue.Length < entry.ValueAsNumber;
                             case CardsCondition.GreaterThanOrEqual:
-                                return listValue.Length >= entry.ValueAsNumber;
+                                return listIdValue.Length >= entry.ValueAsNumber;
                             case CardsCondition.LessThanOrEqual:
-                                return listValue.Length <= entry.ValueAsNumber;
+                                return listIdValue.Length <= entry.ValueAsNumber;
                             case CardsCondition.Contains:
-                                return listValue.Contains(entry.ValueAsString);
+                                return listIdValue.Contains(entry.ValueAsString);
                             case CardsCondition.DoNotContains:
-                                return !listValue.Contains(entry.ValueAsString);
+                                return !listIdValue.Contains(entry.ValueAsString);
                             case CardsCondition.AnyOfThese:
-                                return entry.ValueAsStrings?.Any(y => y.Equals(listValue, StringComparison.InvariantCultureIgnoreCase)) ?? false;
+                                return entry.ValueAsStrings?.Any(y => y.Equals(listIdValue, StringComparison.InvariantCultureIgnoreCase)) ?? false;
                             case CardsCondition.NoneOfThese:
-                                return entry.ValueAsStrings?.All(y => y != listValue) ?? false;
+                                return entry.ValueAsStrings?.All(y => y != listIdValue) ?? false;
                             case CardsCondition.RegEx:
-                                return Regex.IsMatch(listValue, entry.ValueAsString, RegexOptions.IgnoreCase);
+                                return Regex.IsMatch(listIdValue, entry.ValueAsString, RegexOptions.IgnoreCase);
                             case CardsCondition.StartsWith:
-                                return listValue.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase);
+                                return listIdValue.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase);
                             case CardsCondition.EndsWith:
-                                return listValue.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase);
+                                return listIdValue.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase);
                             case CardsCondition.DoNotStartWith:
-                                return !listValue.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase);
+                                return !listIdValue.StartsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase);
                             case CardsCondition.DoNotEndWith:
-                                return !listValue.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase);
+                                return !listIdValue.EndsWith(entry.ValueAsString, StringComparison.CurrentCultureIgnoreCase);
                             case CardsCondition.AllOfThese:
                             default:
                                 throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a CustomField of Type List");
@@ -449,7 +449,7 @@ namespace TrelloDotNet.Extensions
                             }
                             case CardsCondition.NotBetween:
                             {
-                                if (entry.ValueAsDateTimeOffsets?.Count != 2)
+                                if (entry.ValueAsNumbers?.Count != 2)
                                 {
                                     throw new TrelloApiException("NotBetween Condition for Custom Field need 2 and only 2 Numbers");
                                 }

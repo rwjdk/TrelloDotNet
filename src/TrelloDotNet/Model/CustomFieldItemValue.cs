@@ -48,7 +48,7 @@ namespace TrelloDotNet.Model
         /// Date Value
         /// </summary>
         [JsonIgnore]
-        public DateTimeOffset? Date => string.IsNullOrWhiteSpace(DateAsString) ? new DateTimeOffset?() : DateTimeOffset.ParseExact(DateAsString, "yyyy-MM-ddTHH:mm:ss.000Z", CultureInfo.InvariantCulture, DateTimeStyles.None);
+        public DateTimeOffset? Date => string.IsNullOrWhiteSpace(DateAsString) ? new DateTimeOffset?() : DateTimeOffset.ParseExact(DateAsString, "yyyy-MM-ddTHH:mm:ss.fffZ", CultureInfo.InvariantCulture, DateTimeStyles.None);
         //2024-09-18T10:00:00.000Z
 
         /// <summary>

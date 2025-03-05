@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using TrelloDotNet.Model;
+using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.AddCardOptions;
+using TrelloDotNet.Model.Options.GetBoardOptions;
 
 namespace TrelloDotNet.Tests;
 
@@ -100,5 +102,16 @@ public abstract class TestBase
         var beforeNow = objectCreationTime < DateTimeOffset.UtcNow.AddMinutes(1);
         var afterAMinuteAgo = objectCreationTime > DateTimeOffset.UtcNow.AddMinutes(-1);
         Assert.True(beforeNow && afterAMinuteAgo);
+    }
+
+    public async Task<Board?> GetSpecialPaidSubscriptionBoard()
+    {
+        var availableBoards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync(new GetBoardOptions
+        {
+            BoardFields = new BoardFields(BoardFieldsType.Name)
+        });
+
+        const string specialSetupBoardsForTheseTests = "67c765705dc85a158981d888";
+        return availableBoards.FirstOrDefault(x => x.Id == specialSetupBoardsForTheseTests);
     }
 }
