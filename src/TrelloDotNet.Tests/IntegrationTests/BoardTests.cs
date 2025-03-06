@@ -143,11 +143,11 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         _board.Description = _boardDescription + "X";
         var updatedBoard = await TrelloClient.UpdateBoardAsync(_board);
         var getBoard = await TrelloClient.GetBoardAsync(_boardId);
-        //Assert.EndsWith("X", updatedBoard.Name); //todo: Add again once bug https://support.atlassian.com/requests/TRELLO-212222/ is resolved
+        Assert.EndsWith("X", updatedBoard.Name);
         Assert.EndsWith("X", updatedBoard.Description);
         Assert.EndsWith("X", getBoard.Name);
         Assert.EndsWith("X", getBoard.Description);
-        //Assert.Equal(updatedBoard.Name, getBoard.Name); //todo: Add again once bug https://support.atlassian.com/requests/TRELLO-212222/ is resolved
+        Assert.Equal(updatedBoard.Name, getBoard.Name);
         Assert.Equal(updatedBoard.Description, getBoard.Description);
 
         var getBoardWithOptions = await TrelloClient.GetBoardAsync(_boardId, new GetBoardOptions
