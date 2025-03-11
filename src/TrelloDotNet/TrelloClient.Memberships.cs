@@ -6,6 +6,7 @@ using TrelloDotNet.Control;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetBoardOptions;
+using TrelloDotNet.Model.Options.GetOrganizationOptions;
 
 namespace TrelloDotNet
 {
@@ -38,16 +39,32 @@ namespace TrelloDotNet
         /// <summary>
         /// Get the Workspace and Board Memberships for current Token User (It is assumed that if user is Admin on Workspace they are also Admin on Boards underneath that workspace)
         /// </summary>
+        /// <param name="cancellationToken">CancellationToken</param>
         /// <returns></returns>
-        public async Task<TokenMembershipOverview> GetCurrentTokenMembershipsAsync()
+        public async Task<TokenMembershipOverview> GetCurrentTokenMembershipsAsync(CancellationToken cancellationToken = default)
         {
-            Member member = await GetTokenMemberAsync();
-            var organizations = await GetOrganizationsCurrentTokenCanAccessAsync();
-            var boards = await GetBoardsCurrentTokenCanAccessAsync(new GetBoardOptions
+            return await GetCurrentTokenMembershipsAsync(new GetBoardOptions
             {
                 BoardFields = new BoardFields(BoardFieldsType.Name),
                 Filter = GetBoardOptionsFilter.Open
-            });
+            }, new GetOrganizationOptions
+            {
+                OrganizationFields = OrganizationFields.All
+            }, cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the Workspace and Board Memberships for current Token User (It is assumed that if user is Admin on Workspace they are also Admin on Boards underneath that workspace)
+        /// </summary>
+        /// <param name="boardOptions">Options for retrieving boards</param>
+        /// <param name="organizationOptions">Options for retrieving organizations</param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>Overview of memberships for the current token user</returns>
+        public async Task<TokenMembershipOverview> GetCurrentTokenMembershipsAsync(GetBoardOptions boardOptions, GetOrganizationOptions organizationOptions, CancellationToken cancellationToken = default)
+        {
+            Member member = await GetTokenMemberAsync(cancellationToken);
+            var organizations = await GetOrganizationsCurrentTokenCanAccessAsync(organizationOptions, cancellationToken);
+            var boards = await GetBoardsCurrentTokenCanAccessAsync(boardOptions, cancellationToken);
             var organizationMemberships = new Dictionary<Organization, MembershipType>();
             var boardMemberships = new Dictionary<Board, MembershipType>();
 
@@ -74,7 +91,7 @@ namespace TrelloDotNet
 
             foreach (Board board in boards.Where(board => !boardMemberships.ContainsKey(board)))
             {
-                var membershipsOfBoard = await GetMembershipsOfBoardAsync(board.Id);
+                var membershipsOfBoard = await GetMembershipsOfBoardAsync(board.Id, cancellationToken);
                 Membership boardMemberShip = membershipsOfBoard.FirstOrDefault(x => x.MemberId == member.Id);
                 if (boardMemberShip != null)
                 {

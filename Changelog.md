@@ -1,5 +1,11 @@
 ﻿# Changelog 
 
+## 2.0.1 (11th of March 2025)
+#### TrelloClient
+- Added overload for [GetCurrentTokenMembershipsAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCurrentTokenMembershipsAsync) where you can provide Board- and OrganizationOptions
+
+<hr>
+
 ## 2.0.0 (5th of March 2025)
 #### Special
 - **This is the first v2.x release. It has a set of breaking changes to streamline the API and make it less confusing to use (aka, fewer options to do the same thing). [See a list of breaking changes here](https://github.com/rwjdk/TrelloDotNet/issues/51)**
