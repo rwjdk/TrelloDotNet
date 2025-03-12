@@ -1,5 +1,11 @@
 ﻿# Changelog 
 
+## 2.0.2 (12th of March 2025)
+#### TrelloClient
+- Fixed that `BoardPreferenceWhoCanAddAndRemoveMembers` `Admins` option was incorrect named `Observers` [BREAKING CHANGE]
+
+<hr>
+
 ## 2.0.1 (11th of March 2025)
 #### TrelloClient
 - Added overload for [GetCurrentTokenMembershipsAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCurrentTokenMembershipsAsync) where you can provide Board- and OrganizationOptions

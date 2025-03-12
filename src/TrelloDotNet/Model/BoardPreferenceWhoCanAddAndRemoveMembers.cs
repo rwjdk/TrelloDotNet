@@ -23,6 +23,6 @@ namespace TrelloDotNet.Model
         /// Only Admins
         /// </summary>
         [JsonPropertyName("admins")]
-        Observers,
+        Admins,
     }
 }

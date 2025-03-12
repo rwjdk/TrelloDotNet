@@ -45,7 +45,7 @@ namespace TrelloDotNet
         {
             return await GetCurrentTokenMembershipsAsync(new GetBoardOptions
             {
-                BoardFields = new BoardFields(BoardFieldsType.Name),
+                BoardFields = BoardFields.All,
                 Filter = GetBoardOptionsFilter.Open
             }, new GetOrganizationOptions
             {
