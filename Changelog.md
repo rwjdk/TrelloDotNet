@@ -1,5 +1,11 @@
 ﻿# Changelog 
 
+## 2.0.3 (18th of March 2025) 
+#### Webhook Receiver
+- Added missing `Text` property to `WebhookActionData` (Thanks to **[Liamth99](https://github.com/Liamth99)** for the contribution 💪) - [PR#57](https://github.com/rwjdk/TrelloDotNet/pull/57)
+
+<hr>
+
 ## 2.0.2 (12th of March 2025)
 #### TrelloClient
 - Fixed that `BoardPreferenceWhoCanAddAndRemoveMembers` `Admins` option was incorrect named `Observers` [BREAKING CHANGE]
