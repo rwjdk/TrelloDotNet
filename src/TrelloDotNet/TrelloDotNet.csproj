@@ -34,9 +34,7 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="X:\TrelloDotNet\src\TrelloDotNet\.editorconfig" />
 	</ItemGroup>
-
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
 	    <PrivateAssets>all</PrivateAssets>
@@ -55,12 +53,4 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Model\Options\GetLabelOptions\" />
-	  <Folder Include="Model\Options\AddCardToInboxOptions\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <EditorConfigFiles Remove="X:\TrelloDotNet\src\TrelloDotNet\.editorconfig" />
-	</ItemGroup>
-
 </Project>
