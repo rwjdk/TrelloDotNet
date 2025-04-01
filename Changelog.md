@@ -1,5 +1,11 @@
 ﻿# Changelog 
 
+## 2.0.4 (1st of April 2025) 
+#### TrelloClient
+- Added auto-fix for if someone provide one or more duplicate LabelIds or MemberIds to a Card in Add/Update Scenarios (since the Trello Rest API do no longer support duplicates, but instead throw error 'label not found')
+
+<hr>
+
 ## 2.0.3 (18th of March 2025) 
 #### Webhook Receiver
 - Added missing `Text` property to `WebhookActionData` (Thanks to **[Liamth99](https://github.com/Liamth99)** for the contribution 💪) - [PR#57](https://github.com/rwjdk/TrelloDotNet/pull/57)

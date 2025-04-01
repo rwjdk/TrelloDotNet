@@ -123,7 +123,7 @@ namespace TrelloDotNet
             card.MemberIds.AddRange(missing);
             return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                CardUpdate.Members(card.MemberIds)
+                CardUpdate.Members(card.MemberIds.Distinct().ToList())
             }, cancellationToken);
         }
 
@@ -156,7 +156,7 @@ namespace TrelloDotNet
             card.MemberIds = card.MemberIds.Except(toRemove).ToList();
             return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                CardUpdate.Members(card.MemberIds)
+                CardUpdate.Members(card.MemberIds.Distinct().ToList())
             }, cancellationToken);
         }
 

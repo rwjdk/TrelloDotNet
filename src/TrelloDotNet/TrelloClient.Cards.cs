@@ -66,12 +66,12 @@ namespace TrelloDotNet
 
             if (options.LabelIds != null)
             {
-                input.LabelIds = options.LabelIds;
+                input.LabelIds = options.LabelIds.Distinct().ToList();
             }
 
             if (options.MemberIds != null)
             {
-                input.MemberIds = options.MemberIds;
+                input.MemberIds = options.MemberIds.Distinct().ToList();
             }
 
             QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(input);
@@ -997,8 +997,8 @@ namespace TrelloDotNet
                 }
             }
 
-            parameters.Add(CardUpdate.Labels(card.LabelIds));
-            parameters.Add(CardUpdate.Members(card.MemberIds));
+            parameters.Add(CardUpdate.Labels(card.LabelIds.Distinct().ToList()));
+            parameters.Add(CardUpdate.Members(card.MemberIds.Distinct().ToList()));
 
             if (options.RemoveDueDate)
             {

@@ -133,28 +133,28 @@ namespace TrelloDotNet.Model
         /// </summary>
         /// <param name="memberIds">Members</param>
         /// <returns>CardUpdate Object</returns>
-        public static CardUpdate Members(List<string> memberIds) => new CardUpdate(CardFieldsType.MemberIds, memberIds);
+        public static CardUpdate Members(List<string> memberIds) => new CardUpdate(CardFieldsType.MemberIds, memberIds.Distinct().ToList());
 
         /// <summary>
         /// Create a Members Parameter
         /// </summary>
         /// <param name="members">Members</param>
         /// <returns>CardUpdate Object</returns>
-        public static CardUpdate Members(List<Member> members) => new CardUpdate(CardFieldsType.MemberIds, members.Select(x => x.Id).ToList());
+        public static CardUpdate Members(List<Member> members) => new CardUpdate(CardFieldsType.MemberIds, members.Select(x => x.Id).Distinct().ToList());
 
         /// <summary>
         /// Create a Labels Parameter
         /// </summary>
         /// <param name="labelIds">Labels</param>
         /// <returns>CardUpdate Object</returns>
-        public static CardUpdate Labels(List<string> labelIds) => new CardUpdate(CardFieldsType.LabelIds, labelIds);
+        public static CardUpdate Labels(List<string> labelIds) => new CardUpdate(CardFieldsType.LabelIds, labelIds.Distinct().ToList());
 
         /// <summary>
         /// Create a Labels Parameter
         /// </summary>
         /// <param name="labels">Labels</param>
         /// <returns>CardUpdate Object</returns>
-        public static CardUpdate Labels(List<Label> labels) => new CardUpdate(CardFieldsType.LabelIds, labels?.Select(x => x.Id).ToList());
+        public static CardUpdate Labels(List<Label> labels) => new CardUpdate(CardFieldsType.LabelIds, labels?.Select(x => x.Id).Distinct().ToList());
 
         /// <summary>
         /// Create an Additional Parameter (aka one that is not a named CardFieldsType)

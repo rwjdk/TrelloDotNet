@@ -79,7 +79,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             {
                 await trelloClient.UpdateCardAsync(card.Id, new List<CardUpdate>()
                 {
-                    CardUpdate.Members(card.MemberIds)
+                    CardUpdate.Members(card.MemberIds.Distinct().ToList())
                 });
                 processingResult.AddToLog($"Added members '{string.Join(",", MemberIds)}' to card '{webhookAction.Data.Card.Name}'");
                 processingResult.ActionsExecuted++;

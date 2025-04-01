@@ -81,7 +81,7 @@ namespace TrelloDotNet.AutomationEngine.Model.Actions
             {
                 await trelloClient.UpdateCardAsync(card.Id, new List<CardUpdate>()
                 {
-                    CardUpdate.Labels(card.LabelIds)
+                    CardUpdate.Labels(card.LabelIds.Distinct().ToList())
                 });
                 processingResult.AddToLog($"Added labels '{string.Join(",", LabelIds)}' to card '{webhookAction.Data.Card.Name}'");
                 processingResult.ActionsExecuted++;

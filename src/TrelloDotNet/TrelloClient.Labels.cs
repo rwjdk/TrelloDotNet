@@ -50,7 +50,7 @@ namespace TrelloDotNet
         /// <param name="labelIdsToAdd">One or more Ids of Labels to add</param>
         public async Task<Card> AddLabelsToCardAsync(string cardId, params string[] labelIdsToAdd)
         {
-            return await AddLabelsToCardAsync(cardId, CancellationToken.None, labelIdsToAdd);
+            return await AddLabelsToCardAsync(cardId, CancellationToken.None, labelIdsToAdd.Distinct().ToArray());
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace TrelloDotNet
             card.LabelIds.AddRange(missing);
             return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                CardUpdate.Labels(card.LabelIds)
+                CardUpdate.Labels(card.LabelIds.Distinct().ToList())
             }, cancellationToken);
         }
 
@@ -106,7 +106,7 @@ namespace TrelloDotNet
             card.LabelIds = card.LabelIds.Except(toRemove).ToList();
             return await UpdateCardAsync(cardId, new List<CardUpdate>
             {
-                CardUpdate.Labels(card.LabelIds)
+                CardUpdate.Labels(card.LabelIds.Distinct().ToList())
             }, cancellationToken);
         }
 

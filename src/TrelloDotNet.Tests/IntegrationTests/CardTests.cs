@@ -763,6 +763,12 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
 
         var member = (await TrelloClient.GetMembersOfBoardAsync(_board.Id)).First();
         var allLabelsOnBoard = await TrelloClient.GetLabelsOfBoardAsync(_board.Id);
+        foreach (Label label in allLabelsOnBoard)
+        {
+            label.Name = Guid.NewGuid().ToString();
+            await TrelloClient.UpdateLabelAsync(label);
+        }
+
         var card1 = await AddDummyCardToList(list1, start: DateTimeOffset.UtcNow, due: DateTimeOffset.UtcNow.AddDays(1));
         await TrelloClient.AddMembersToCardAsync(card1.Id, member.Id);
         await TrelloClient.AddLabelsToCardAsync(card1.Id, allLabelsOnBoard.Select(x => x.Id).ToArray());
