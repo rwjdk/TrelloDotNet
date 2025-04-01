@@ -1,14 +1,20 @@
 ﻿# Changelog 
 
+## 2.0.3 (18th of March 2025) 
+#### Webhook Receiver
+- Added missing `Text` property to `WebhookActionData` (Thanks to **[Liamth99](https://github.com/Liamth99)** for the contribution 💪) - [PR#57](https://github.com/rwjdk/TrelloDotNet/pull/57)
+
+<hr>
+
 ## 2.0.2 (12th of March 2025)
 #### TrelloClient
-- Fixed that `BoardPreferenceWhoCanAddAndRemoveMembers` `Admins` option was incorrect named `Observers` [BREAKING CHANGE]
+- Fixed that `BoardPreferenceWhoCanAddAndRemoveMembers` `Admins` option was incorrectly named `Observers` [BREAKING CHANGE]
 
 <hr>
 
 ## 2.0.1 (11th of March 2025)
 #### TrelloClient
-- Added overload for [GetCurrentTokenMembershipsAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCurrentTokenMembershipsAsync) where you can provide Board- and OrganizationOptions
+- Added overload for [GetCurrentTokenMembershipsAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCurrentTokenMembershipsAsync) where you can provide Board- and `OrganizationOptions`
 
 <hr>
 
@@ -20,19 +26,19 @@
 - Significantly raised Test Coverage Percentage
 
 #### TrelloClient
-- Added `FilterCondition` to `GetCardsOptions` that allows you to filter the cards returned in various ways (Example: _give me all cards on board that have the Red Label, 1-2 Members and the Description contains the word 'Urgent'_). NB: Please note that the filter is an In-Memory Filter as Trello's do not allow Server-side filtering. See more about the Filter Condition System [here](https://github.com/rwjdk/TrelloDotNet/wiki/Filter-Condition-System)
-- Added options for `GetListAsync`, `GetListsAsync` and `GetListsOnBoardAsync` to include the Board and the Cards on the list(s)
+- Added `FilterCondition` to `GetCardsOptions` that allows you to filter the cards returned in various ways (Example: _give me all cards on board that have the Red Label, 1-2 Members and the Description contains the word 'Urgent'_). NB: Please note that the filter is an in-memory filter as Trello does not allow server-side filtering. See more about the Filter Condition System [here](https://github.com/rwjdk/TrelloDotNet/wiki/Filter-Condition-System)
+- Added options for `GetListAsync`, `GetListsAsync`, and `GetListsOnBoardAsync` to include the Board and the Cards on the list(s)
 - Added `IncludeOrganization` to `GetBoardOptions`
 - Added `GetOrganizationOptions` on the various GetOrganization methods
 - Added option to see the Board Preferences of the `Board`
 - Added [UpdateBoardPreferencesAsync](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateBoardPreferencesAsync) to update the various preferences of the board
 - Added [GetCurrentTokenMembershipsAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCurrentTokenMembershipsAsync)  to more easily get if the example token-user is Admin or not on a board
-- Added [GetPluginsForBoardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginsForBoardAsync)
+- Added [GetPluginsOnBoardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginsOnBoardAsync)
 - Added [GetPluginDataOnCardAsync\<T\>(cardId, pluginId)](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOnCardAsync)
 - Added [GetPluginDataOfBoardAsync\<T\>(boardId, pluginId)](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOfBoardAsync)
 - Added Extension Methods for `PlugInData` to cast their values to a Specific Model
 - Fixed that a Custom Field of type Date could not be read if it included milliseconds
-- Introduced an "Unknown" value for all enum-based values returned from the API that ensure that Trello can introduce new Valid Values without breaking this API (will revert to this Unknown value, should value-parsing fail) [NB: You should never send this value to Add/Update Methods as it will result in a failure]
+- Introduced an "Unknown" value for all enum-based values returned from the API that ensures that Trello can introduce new Valid Values without breaking this API (will revert to this Unknown value, should value-parsing fail) [NB: You should never send this value to Add/Update Methods as it will result in a failure]
 
 <hr>
 
@@ -62,14 +68,14 @@
 
 ## Version 1.11.9 (25th of January 2025)
 #### Special
-- **This is the last planned 1.x release. Upcoming 2.x releases will have a set of breaking changes to streamline the API and make it less confusing to use (aka less options to do the same thing). [See a list of breaking changes here](https://github.com/rwjdk/TrelloDotNet/issues/51)**
+- **This is the last planned 1.x release. Upcoming 2.x releases will have a set of breaking changes to streamline the API and make it less confusing to use (aka fewer options to do the same thing). [See a list of breaking changes here](https://github.com/rwjdk/TrelloDotNet/issues/51)**
 
 #### TrelloClient
-- Added new version of [AddCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardAsync) that allow all features on a card to be set in a single command and obsoleted old version.
+- Added a new version of [AddCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardAsync) that allows all features on a card to be set in a single command and obsoleted the old version.
 - Added methods to inteact with you Trello Inbox ([AddCardToInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardToInboxAsync) + [GetCardsInInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsInInboxAsync))
-- Added [GetTokenMemberInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetTokenMemberInboxAsync) to get the Ids of the owner of the Token's Inbox
+- Added [GetTokenMemberInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetTokenMemberInboxAsync) to get the IDs of the owner of the Token's Inbox
 - Added `CardUpdate.Cover` to allow Cover Updates and `CardUpdate.AdditionalParameter` to allow any additional fields that are not a known field (should something new come along)
-- Change: `CardUpdate.DueDate` and `CardUpdate.StartDate` has been changed to be nullable in order to allow removal of value
+- Change: `CardUpdate.DueDate` and `CardUpdate.StartDate` have been changed to be nullable in order to allow the removal of value
 - Obsoleted `UpdateCardAsync(Card cardWithChanges...)` as it have performance issues and overwritten data scenarios. Use one of the two other variants to update your cards as they are faster and more safe.
 - Obsoleted `UpdateCardAsync(string cardId, List<QueryParameter> parameters...)`. User `UpdateCardAsync(string cardId, List<CardUpdate> valuesToUpdate)` version instead.
 - Obsoleted `AddCardTemplateAsync()` (Use `AddCardAsync()` instead and in options set `IsTemplate = true` ) 
@@ -89,7 +95,7 @@
 
 ## Version 1.11.7 (10th of January 2025)
 #### TrelloClient
-- Fixed that [GetCardsOnBoardFilteredAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardFilteredAsync) would not give Lists back on Archived Cards that were on a Archived List but instead return null - [Issue #47](https://github.com/rwjdk/TrelloDotNet/issues/47))
+- Fixed that [GetCardsOnBoardFilteredAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardFilteredAsync) would not give Lists back on Archived Cards that were on an Archived List but instead return null - [Issue #47](https://github.com/rwjdk/TrelloDotNet/issues/47))
 
 <hr/>
 
@@ -120,7 +126,7 @@
 
 ## Version 1.11.2 (9th of October 2024)
 #### TrelloClient
-- `GetBoardOptions` now have Filter options (All, Open, Closed or Starred boards)
+- `GetBoardOptions` now has Filter options (All, Open, Closed, or Starred boards)
 - Added [GetTrelloPlanInformationForOrganization](https://github.com/rwjdk/TrelloDotNet/wiki/GetTrelloPlanInformationForOrganization) and [GetTrelloPlanInformationForBoard](https://github.com/rwjdk/TrelloDotNet/wiki/GetTrelloPlanInformationForBoard) to get information what features the Workspace/Board support 
 - Bumped System.Text.Json dependency to version 8.0.5 due to [Security Vulnerability CVE-2024-43485](https://github.com/rwjdk/TrelloDotNet/security/dependabot/3) in previous version)
  
@@ -131,8 +137,8 @@
 - Started Long-term preparing for v2.0 by obsoleting various things
 
 #### TrelloClient
-- Added overload [GetLabelsOfBoardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetLabelsOfBoardAsync) that let you specify `GetLabelOptions` in order to control fields returned and how many labels are returned (Default: 50, Max: 1000) 
-- All Get`<object>`Options now have an `AddtionalParameters` where you can inject additional QueryParameters should the out-of-the box framework not support it
+- Added overload [GetLabelsOfBoardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetLabelsOfBoardAsync) that lets you specify `GetLabelOptions` in order to control fields returned and how many labels are returned (Default: 50, Max: 1000) 
+- All Get`<object>`Options now have an `AddtionalParameters` where you can inject additional QueryParameters should the out-of-the-box framework not support it
 - Added `Limit`, and `Before`/`Since` (paginating options) to `GetCardOptions`
 
 <hr/>
@@ -146,7 +152,7 @@
 ## Version 1.10.9 (17th of September 2024)
 #### TrelloClient
 - Added option to add/update `Color` on `List` (Only Paid Trello Plans support this feature)
-- Added overload of [UpdateCard](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCard) that is more simple and intuative to use (no need to know magic strings) ([Issue #35](https://github.com/rwjdk/TrelloDotNet/issues/35))
+- Added overload of [UpdateCard](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCard) that is more simple and intuitive to use (no need to know magic strings) ([Issue #35](https://github.com/rwjdk/TrelloDotNet/issues/35))
 
 <hr/>
 
@@ -163,7 +169,7 @@
 
 ## Version 1.10.6 (30th of July 2024)
 #### General
-- Added Sourcelink to Nuget Package (So you can debug source code directly)
+- Added Source link to Nuget Package (So you can debug source code directly)
 
 <hr/>
 
@@ -212,7 +218,7 @@
 
 ## Version 1.9.8 (21st of January 2024)
 #### General
-- Added option to get Label Colors as Enum (`LabelColor`) Value and `ColorInfo` that explains the labels color in RBG and #Hex Value
+- Added option to get Label Colors as Enum (`LabelColor`) Value and `ColorInfo` that explains the color of the labels in RBG and #Hex Value
 
 <hr>
 
@@ -235,7 +241,7 @@
 
 ## Version 1.9.5 (13th of November 2023)
 #### TrelloClient
-- Added option to Add/Update with named positions (Top or Bottom) on `Cards`, `Lists`, `Attachments`, `Checklists` and `Checklist Items`
+- Added option to Add/Update with named positions (Top or Bottom) on `Cards`, `Lists`, `Attachments`, `Checklists`, and `Checklist Items`
 - Added [`UpdateChecklistAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateChecklistAsync)
 
 <hr>
@@ -282,7 +288,7 @@
 ## Version 1.9.0 (3nd of October 2023)
 #### General
 - Tweaked the format of the README
-- Tweaked the description, release-notes, and tags of the NuGet Package
+- Tweaked the description, release notes, and tags of the NuGet Package
 - This changelog now has sub-sections "General", "TrelloClient", "Automation Engine" and "Webhook Receiver" to better allow you to focus on the parts you use of the package
 
 #### TrelloClient

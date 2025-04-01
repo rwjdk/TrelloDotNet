@@ -127,6 +127,13 @@ namespace TrelloDotNet.Model.Webhook
         [JsonPropertyName("plugin")]
         [JsonInclude]
         public WebhookActionDataPlugin Plugin { get; private set; }
+        
+        /// <summary>
+        /// Text of action
+        /// </summary>
+        [JsonPropertyName("text")]
+        [JsonInclude]
+        public string Text { get; private set; }
 
         /// <summary>
         /// Parent
