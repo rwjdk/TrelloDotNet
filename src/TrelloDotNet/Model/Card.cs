@@ -188,7 +188,7 @@ namespace TrelloDotNet.Model
         public CardCover Cover { get; set; }
 
         /// <summary>
-        /// Custom Fields of the Card (Only populated in Get Methods and if enabled in TrelloClientOptions)
+        /// Custom Fields of the Card (Only populated if GetCardOptions.IncludeCustomFieldItems is used)
         /// </summary>
         /// <remarks>Tip: Use Extension methods GetCustomFieldValueAsXYZ on the list for a handy way to get values</remarks>
         [JsonPropertyName("customFieldItems")]
@@ -196,7 +196,7 @@ namespace TrelloDotNet.Model
         public List<CustomFieldItem> CustomFieldItems { get; private set; }
 
         /// <summary>
-        /// Attachments of the Card (Only populated in Get Methods and if enabled in TrelloClientOptions or if GetCardOptions.IncludeAttachments is used)
+        /// Attachments of the Card (Only populated if GetCardOptions.IncludeAttachments is used)
         /// </summary>
         [JsonPropertyName("attachments")]
         [JsonInclude]
