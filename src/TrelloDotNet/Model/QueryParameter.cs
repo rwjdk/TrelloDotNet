@@ -205,7 +205,8 @@ namespace TrelloDotNet.Model
                 case QueryParameterType.Decimal:
                     return ((decimal)_valueAsObject).ToString(CultureInfo.InvariantCulture);
                 case QueryParameterType.DateTimeOffset:
-                    return ((DateTimeOffset)_valueAsObject).ToString("yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
+                    string dateAsString = ((DateTimeOffset)_valueAsObject).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:sss.fffZ", CultureInfo.InvariantCulture);
+                    return dateAsString;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

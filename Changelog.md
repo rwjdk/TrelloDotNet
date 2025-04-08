@@ -1,5 +1,11 @@
 ﻿# Changelog 
 
+## 2.0.5 (9st of April 2025) 
+#### TrelloClient
+- Fixed that the logic around setting `Start` and `DueDate` on Cards did not take timezones correctly into account
+
+<hr>
+
 ## 2.0.4 (1st of April 2025) 
 #### TrelloClient
 - Added auto-fix for if someone provide one or more duplicate LabelIds or MemberIds to a Card in Add/Update Scenarios (since the Trello Rest API do no longer support duplicates, but instead throw error 'label not found')
