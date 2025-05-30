@@ -931,7 +931,7 @@ namespace TrelloDotNet
         {
             if (options == null)
             {
-                throw new ArgumentNullException(nameof(options), "You need to pass an options object to confirm the various options that are invovled with moving a card between boards");
+                throw new ArgumentNullException(nameof(options), "You need to pass an options object to confirm the various options that are involved with moving a card between boards");
             }
 
             List<CardUpdate> parameters = new List<CardUpdate> { CardUpdate.Board(newBoardId) };
