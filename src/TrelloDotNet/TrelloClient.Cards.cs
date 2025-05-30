@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
@@ -40,7 +39,8 @@ namespace TrelloDotNet
 
             var input = new Card(options.ListId, options.Name, options.Description)
             {
-                IsTemplate = options.IsTemplate
+                IsTemplate = options.IsTemplate,
+                DueComplete = options.DueComplete
             };
 
             if (options.Start.HasValue)
@@ -51,9 +51,7 @@ namespace TrelloDotNet
             if (options.Due.HasValue)
             {
                 input.Due = options.Due.Value;
-            }
-
-            input.DueComplete = options.DueComplete;
+            }            
 
             if (options.Position.HasValue)
             {
