@@ -32,6 +32,11 @@ namespace TrelloDotNet
         /// <returns>The Added Card</returns>
         public async Task<Card> AddCardAsync(AddCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(AddCardOptions)} cannot be null");
+            }
+
             if (string.IsNullOrWhiteSpace(options.ListId))
             {
                 throw new TrelloApiException("No ListId provided in options (Mandatory)", string.Empty);
@@ -51,7 +56,7 @@ namespace TrelloDotNet
             if (options.Due.HasValue)
             {
                 input.Due = options.Due.Value;
-            }            
+            }
 
             if (options.Position.HasValue)
             {
@@ -166,6 +171,11 @@ namespace TrelloDotNet
         /// <returns>The Added Card</returns>
         public async Task<Card> AddCardToInboxAsync(AddCardToInboxOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(AddCardToInboxOptions)} cannot be null");
+            }
+
             TokenMemberInbox inbox = await GetTokenMemberInboxAsync(cancellationToken);
             if (inbox == null)
             {
@@ -238,6 +248,10 @@ namespace TrelloDotNet
         /// <returns>The New Card</returns>
         public async Task<Card> AddCardFromTemplateAsync(AddCardFromTemplateOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(AddCardFromTemplateOptions)} cannot be null");
+            }
             var nameOnNewCard = !string.IsNullOrWhiteSpace(options.Name)
                 ? options.Name
                 : (await GetCardAsync(options.SourceTemplateCardId, new GetCardOptions
@@ -300,8 +314,11 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The Card Copy</returns>
         public async Task<Card> CopyCardAsync(CopyCardOptions options, CancellationToken cancellationToken = default)
-
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(CopyCardOptions)} cannot be null");
+            }
             var nameOnNewCard = !string.IsNullOrWhiteSpace(options.Name)
                 ? options.Name
                 : (await GetCardAsync(options.SourceCardId, new GetCardOptions
@@ -365,6 +382,10 @@ namespace TrelloDotNet
         /// <returns>The Mirror Card</returns>
         public async Task<Card> MirrorCardAsync(MirrorCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(MirrorCardOptions)} cannot be null");
+            }
             //Get Source-Card as we need the ShortUrl to make the Card Mirror magic Happen
             Card sourceCard = await GetCardAsync(options.SourceCardId, new GetCardOptions
             {
@@ -497,6 +518,10 @@ namespace TrelloDotNet
         /// <returns>The Card</returns>
         public async Task<Card> GetCardAsync(string cardId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(GetCardOptions)} cannot be null");
+            }
             return await _apiRequestController.Get<Card>(GetUrlBuilder.GetCard(cardId), cancellationToken, options.GetParameters(false));
         }
 
@@ -520,6 +545,10 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsOnBoardAsync(string boardId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(GetCardOptions)} cannot be null");
+            }
             options.AdjustFieldsBasedOnSelectedOptions();
             if (options.IncludeList)
             {
@@ -595,6 +624,10 @@ namespace TrelloDotNet
         /// <returns>List of Cards</returns>
         public async Task<List<Card>> GetCardsInListAsync(string listId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(GetCardOptions)} cannot be null");
+            }
             options.AdjustFieldsBasedOnSelectedOptions();
             if (options.IncludeBoard)
             {
@@ -655,6 +688,10 @@ namespace TrelloDotNet
         /// <returns>The Cards</returns>
         public async Task<List<Card>> GetCardsInInboxAsync(GetInboxCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(GetInboxCardOptions)} cannot be null");
+            }
             TokenMemberInbox inbox = await GetTokenMemberInboxAsync(cancellationToken);
             if (inbox == null)
             {
@@ -687,6 +724,10 @@ namespace TrelloDotNet
         /// <returns></returns>
         public async Task<List<Card>> GetCardsForMemberAsync(string memberId, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(GetCardOptions)} cannot be null");
+            }
             options.AdjustFieldsBasedOnSelectedOptions();
             if (options.IncludeList)
             {
@@ -821,6 +862,10 @@ namespace TrelloDotNet
         /// <returns></returns>
         public async Task<Card> MoveCardToListAsync(string cardId, string newListId, MoveCardToListOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options), $"{nameof(MoveCardToListOptions)} cannot be null");
+            }
             var parameters = new List<CardUpdate> { CardUpdate.List(newListId) };
             if (options.NamedPositionOnNewList.HasValue)
             {
