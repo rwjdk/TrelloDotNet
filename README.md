@@ -1,11 +1,10 @@
-
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rwjdk/TrelloDotNet/Build.yml?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/actions)
 [![GitHub Issues or Pull Requests by label](https://img.shields.io/github/issues/rwjdk/TrelloDotNet/bug?style=for-the-badge&label=Bugs)](https://github.com/rwjdk/TrelloDotNet/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug)
 [![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/rwjdk/TrelloDotNet?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/network/dependencies)
 [![Coveralls](https://img.shields.io/coverallsCoverage/github/rwjdk/TrelloDotNet?style=for-the-badge)](https://coveralls.io/github/rwjdk/TrelloDotNet)
 
 # TrelloDotNet
-_Welcome to TrelloDotNet - A .NET Implementation of the [Trello REST API](https://developer.atlassian.com/cloud/trello/rest)_
+_Welcome to TrelloDotNet - A .NET implementation of the [Trello REST API](https://developer.atlassian.com/cloud/trello/rest)_
 
 [![NuGet](https://img.shields.io/badge/NuGet-blue?style=for-the-badge)](https://www.nuget.org/packages/TrelloDotNet)
 [![WIKI](https://img.shields.io/badge/Wiki-brown?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/wiki)
@@ -16,14 +15,14 @@ _Welcome to TrelloDotNet - A .NET Implementation of the [Trello REST API](https:
 
 
 ## Features
-- A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on the Trello features
-- An [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) and [Webhook Data Receiver](https://github.com/rwjdk/TrelloDotNet/wiki/Webhook-Data-Receiver) for handling Webhook Events
+- A [TrelloClient](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient) for CRUD operations on Trello features
+- An [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) and [Webhook Data Receiver](https://github.com/rwjdk/TrelloDotNet/wiki/Webhook-Data-Receiver) for handling webhook events
 
 ## Getting Started
 1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (`dotnet add package TrelloDotNet`)
 2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8) from the [PowerUps Administration](https://trello.com/power-ups/admin)
 3. Create a new instance of the `TrelloClient` _(located in the namespace 'TrelloDotNet')_
-4. Locate you IDs of your Boards, List, and Cards (see video [here](https://youtu.be/es84INLIiKI) or at the end of this ReadMe)
+4. Locate your IDs of your Boards, Lists, and Cards (see video [here](https://youtu.be/es84INLIiKI) or at the end of this ReadMe)
 5. Use the TrelloClient based on the examples below and/or the [Wiki](https://github.com/rwjdk/TrelloDotNet/wiki).
 
 ### Examples of Usage:
@@ -31,32 +30,32 @@ _Welcome to TrelloDotNet - A .NET Implementation of the [Trello REST API](https:
 ```cs
 TrelloClient client = new TrelloDotNet.TrelloClient("APIKEY", "TOKEN"); //IMPORTANT: Remember to NOT leave Key and Token in clear text!
 
-//Get all boards that the Token Owner can Access
+//Get all boards that the Token Owner can access
 List<Board> boards = await client.GetBoardsCurrentTokenCanAccessAsync();
 
 //Get a specific board
 Board board = await client.GetBoardAsync("<boardId>");
 
-//Get Lists on a board
+//Get lists on a board
 List<List> lists = await client.GetListsOnBoardAsync("<boardId>");
 
-//Get Cards on Board
+//Get cards on a board
 List<Card> cardsOnBoard = await trelloClient.GetCardsOnBoardAsync("<boardId>");
 
-//Get Cards in a specific List
+//Get cards in a specific list
 List<Card> cardsInList = await trelloClient.GetCardsInListAsync("<listId>");
 
 //Get a specific card
 Card card = await client.GetCardAsync("<cardId>");
 
-//Add a card (Simple)
+//Add a card (simple)
 AddCardOptions newCardOptions = new AddCardOptions("<listId>", "My Card", "My Card description");
 Card newCard = await client.AddCardAsync(newCardOptions);
 
-//Add a Card (Advanced with all options set)
+//Add a card (advanced, with all options set)
 Card newAdvancedCard = await client.AddCardAsync(new AddCardOptions
 {
-    //Mandatory options
+    //Required options
     ListId = "<listId>",
     Name = "My Card",
 
@@ -105,14 +104,14 @@ Card newAdvancedCard = await client.AddCardAsync(new AddCardOptions
     }
 });
 
-//Update a Card (with new name and description and removal of Due Date)
+//Update a card (with new name and description and removal of Due Date)
 var updateCard = await TrelloClient.UpdateCardAsync("<cardId>", [
     CardUpdate.Name("New Name"),
     CardUpdate.Description("New Description"),
     CardUpdate.DueDate(null),
 ]);
 
-//Add a Checklist to a card
+//Add a checklist to a card
 var checklistItems = new List<ChecklistItem>
 {
     new("ItemA"),
@@ -127,7 +126,7 @@ Checklist addedChecklist = await client.AddChecklistAsync("<cardId>", newCheckli
 ## Video Guides
 - Trello Developer Fundamentals
   - [How to get your API-Key and Token](https://youtu.be/ndLSAD3StH8)
-  - [How to Find ids on a Trello Board](https://youtu.be/es84INLIiKI)
+  - [How to Find IDs on a Trello Board](https://youtu.be/es84INLIiKI)
 - TrelloDotNet
   - [How to use the TrelloDotNet NuGet Package](https://youtu.be/tf47BCkieus)
   - [E-Learning Playlist](https://www.youtube.com/playlist?list=PLhGl0l5La4sZJxSCNYl0AfCagdRB_c8CD)
@@ -141,26 +140,26 @@ Checklist addedChecklist = await client.AddChecklistAsync("<cardId>", newCheckli
   - [Version 2.0 Migration Guide](https://github.com/rwjdk/TrelloDotNet/issues/51)
 - [Report an issue](https://github.com/rwjdk/TrelloDotNet/issues)
 - [Report a security concern](https://github.com/rwjdk/TrelloDotNet/security)
-- [TrelloDotNet Nuget Package](https://www.nuget.org/packages/TrelloDotNet) 
+- [TrelloDotNet NuGet Package](https://www.nuget.org/packages/TrelloDotNet) 
 - [Developers LinkedIn Group](https://www.linkedin.com/groups/12847286/) 
-- [Power-Up to locate Ids](https://trello.com/power-ups/646cc3622176aebf713bb7f8/api-developer-id-helper)
+- [Power-Up to locate IDs](https://trello.com/power-ups/646cc3622176aebf713bb7f8/api-developer-id-helper)
 - [Trello API YouTube Playlist](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
 - [Power-Ups Admin Center for API Keys and Tokens](https://trello.com/power-ups/admin/)
 - [Trello API Documentation](https://developer.atlassian.com/cloud/trello/rest)
 - [Trello Changelog](https://developer.atlassian.com/cloud/trello/changelog/)
 - [How to build your first Power-Up](https://www.youtube.com/watch?v=dLCkcQnwAQk&ab_channel=TrelloDevelopers)
 
-## On the subject of getting Ids from Trello
-The easiest way to get Ids in Trello is to use this [Power-Up](https://trello.com/power-ups/646cc3622176aebf713bb7f8/api-developer-id-helper) to copy/paste them (Recommended)
+## On the subject of getting IDs from Trello
+The easiest way to get IDs in Trello is to use this [Power-Up](https://trello.com/power-ups/646cc3622176aebf713bb7f8/api-developer-id-helper) to copy/paste them (recommended).
 
 ![API Developer ID Helper Power-Up](https://i.imgur.com/4FR6K2t.gif)
 
-Alternative use the share buttons in the project (require no Power-Up but more cumbersome)
+Alternatively, use the share buttons in the project (requires no Power-Up but is more cumbersome).
 
 ![Trello Board](https://i.imgur.com/D6vxkrm.png)
 
-The Export looks like this (search for id or use a tool to pretty-print the JSON to get a better view)
+The export looks like this (search for ID or use a tool to pretty-print the JSON to get a better view):
 
 ![JSON Example](https://i.imgur.com/qDJgzNz.png)
 
-*Have Fun* :-)
+*Have fun!*
