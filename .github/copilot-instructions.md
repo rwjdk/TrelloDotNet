@@ -8,3 +8,8 @@
 - The cancellationToken parameter should always be documents as '<param name="cancellationToken">Cancellation Token</param>' with no further explanation
 - Never call an 'ID' for 'Unique Identifier' 
 - Always make 'ID' capital letters in comments
+
+## Rules for changelog
+- Each release should have a `<hr>` between them
+- Each release should have a version number and a date (expect if it is marked as #Unreleased)
+- Each entry should be in a section called ####Special, ####General, ####TrelloClient, ####Webhook Receiver or #### Automation Engine
