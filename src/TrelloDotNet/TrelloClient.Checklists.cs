@@ -13,13 +13,13 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Add a Checklist to the card
+        /// Adds a new checklist to the specified card.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="checklist">The Checklist to add</param>
-        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with the same name (case-sensitive) exists and if so return that instead of creating a new</param>
+        /// <param name="cardId">ID of the card to which the checklist will be added</param>
+        /// <param name="checklist">The checklist object to adds</param>
+        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true, checks for an existing checklist with the same name (case-sensitive) on the card and returns it if found; otherwise, creates a new checklist</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>New or Existing Checklist with same name</returns>
+        /// <returns>The newly created checklist, or the existing checklist with the same name if found</returns>
         public async Task<Checklist> AddChecklistAsync(string cardId, Checklist checklist, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, CancellationToken cancellationToken = default)
         {
             var template = checklist;
@@ -59,12 +59,12 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Add a new Checklist item to an existing Checklist
+        /// Adds a new item to an existing checklist.
         /// </summary>
-        /// <param name="checklistId">Checklist Id</param>
-        /// <param name="checkItemToAdd">New Checklist Item</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>The new Checklist Item</returns>
+        /// <param name="checklistId">ID of the checklist to which the item will be added</param>
+        /// <param name="checkItemToAdd">The checklist item to add</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The newly created checklist item</returns>
         public async Task<ChecklistItem> AddChecklistItemAsync(string checklistId, ChecklistItem checkItemToAdd, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(checkItemToAdd);
@@ -86,27 +86,27 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Add a Checklist to the card based on an existing checklist (as a copy)
+        /// Adds a checklist to the specified card by copying an existing checklist.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="existingChecklistIdToCopyFrom">Id of an existing Checklist that should be added to the card as a new copy</param>
-        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case-sensitive) exist and if so return that instead of creating a new</param>
+        /// <param name="cardId">ID of the card to which the checklist will be added</param>
+        /// <param name="existingChecklistIdToCopyFrom">ID of the existing checklist to copy</param>
+        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true, checks for an existing checklist with the same name (case-sensitive) on the card and returns it if found; otherwise, creates a new checklist</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>New Checklist</returns>
+        /// <returns>The newly created checklist, or the existing checklist with the same name if found</returns>
         public async Task<Checklist> AddChecklistAsync(string cardId, string existingChecklistIdToCopyFrom, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, CancellationToken cancellationToken = default)
         {
             return await AddChecklistAsync(cardId, existingChecklistIdToCopyFrom, ignoreIfAChecklistWithThisNameAlreadyExist, null, cancellationToken);
         }
 
         /// <summary>
-        /// Add a Checklist to the card based on an existing checklist (as a copy)
+        /// Adds a checklist to the specified card by copying an existing checklist, with optional named position.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="existingChecklistIdToCopyFrom">Id of an existing Checklist that should be added to the card as a new copy</param>
-        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true the card will be checked if a checklist with same name (case-sensitive) exist and if so return that instead of creating a new</param>
-        /// <param name="namedPosition">Named position of the checklist (Top or Bottom)</param>
+        /// <param name="cardId">ID of the card to which the checklist will be added</param>
+        /// <param name="existingChecklistIdToCopyFrom">ID of the existing checklist to copy</param>
+        /// <param name="ignoreIfAChecklistWithThisNameAlreadyExist">If true, checks for an existing checklist with the same name (case-sensitive) on the card and returns it if found; otherwise, creates a new checklist</param>
+        /// <param name="namedPosition">Optional named position (Top or Bottom) for the new checklist</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>New Checklist</returns>
+        /// <returns>The newly created checklist, or the existing checklist with the same name if found</returns>
         public async Task<Checklist> AddChecklistAsync(string cardId, string existingChecklistIdToCopyFrom, bool ignoreIfAChecklistWithThisNameAlreadyExist = false, NamedPosition? namedPosition = null, CancellationToken cancellationToken = default)
         {
             if (ignoreIfAChecklistWithThisNameAlreadyExist)
@@ -131,13 +131,13 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Update a checklists name and/or position
+        /// Updates the name and/or position of an existing checklist.
         /// </summary>
-        /// <param name="checklistId">Id of the Checklist</param>
-        /// <param name="newName">The new Name or null if you do not wish to change it</param>
-        /// <param name="namedPosition">The new position or null if you do not wish to change it</param>
+        /// <param name="checklistId">ID of the checklist to update</param>
+        /// <param name="newName">The new name for the checklist, or null to leave unchanged</param>
+        /// <param name="namedPosition">The new named position (Top or Bottom) for the checklist, or null to leave unchanged</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Checklist</returns>
+        /// <returns>The updated checklist</returns>
         public async Task<Checklist> UpdateChecklistAsync(string checklistId, string newName = null, NamedPosition? namedPosition = null, CancellationToken cancellationToken = default)
         {
             var parameters = new List<QueryParameter>();
@@ -166,12 +166,12 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Update a Check-item on a Card
+        /// Updates an existing checklist item on a card.
         /// </summary>
-        /// <param name="cardId">The Id of the Card the ChecklistItem is on</param>
-        /// <param name="item">The updated Check-item</param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>The Updated Checklist Item</returns>
+        /// <param name="cardId">ID of the card containing the checklist item</param>
+        /// <param name="item">The updated checklist item object</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The updated checklist item</returns>
         public async Task<ChecklistItem> UpdateChecklistItemAsync(string cardId, ChecklistItem item, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(item);
@@ -180,42 +180,42 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get a Checklist with a specific Id
+        /// Retrieves a checklist by its ID.
         /// </summary>
-        /// <param name="checkListId">Id of the Checklist</param>
+        /// <param name="checkListId">ID of the checklist to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Checklist</returns>
+        /// <returns>The checklist with the specified ID</returns>
         public Task<Checklist> GetChecklistAsync(string checkListId, CancellationToken cancellationToken = default)
         {
             return _apiRequestController.Get<Checklist>(GetUrlBuilder.GetChecklist(checkListId), cancellationToken);
         }
 
         /// <summary>
-        /// Get a list of Checklists that are used on cards on a specific Board
+        /// Retrieves all checklists used on cards on a specific board.
         /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="boardId">ID of the board (long or short version)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Checklists</returns>
+        /// <returns>A list of checklists used on the board</returns>
         public async Task<List<Checklist>> GetChecklistsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Checklist>>(GetUrlBuilder.GetChecklistsOnBoard(boardId), cancellationToken);
         }
 
         /// <summary>
-        /// Get a list of Checklists that are used on a specific card
+        /// Retrieves all checklists attached to a specific card.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cardId">ID of the card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Checklists</returns>
+        /// <returns>A list of checklists attached to the card</returns>
         public async Task<List<Checklist>> GetChecklistsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Checklist>>(GetUrlBuilder.GetChecklistsOnCard(cardId), cancellationToken);
         }
 
         /// <summary>
-        /// Delete a Checklist (WARNING: THERE IS NO WAY GOING BACK!!!)
+        /// Deletes a checklist from Trello. This operation is irreversible.
         /// </summary>
-        /// <param name="checklistId">The id of the Checklist to Delete</param>
+        /// <param name="checklistId">ID of the checklist to delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteChecklistAsync(string checklistId, CancellationToken cancellationToken = default)
         {
@@ -223,10 +223,10 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Delete a Checklist Item from a checklist (WARNING: THERE IS NO WAY GOING BACK!!!)
+        /// Deletes a checklist item from a checklist. This operation is irreversible.
         /// </summary>
-        /// <param name="checklistId">The id of the Checklist</param>
-        /// <param name="checklistItemId">The id of the Checklist Item to delete</param>
+        /// <param name="checklistId">ID of the checklist containing the item</param>
+        /// <param name="checklistItemId">ID of the checklist item to delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteChecklistItemAsync(string checklistId, string checklistItemId, CancellationToken cancellationToken = default)
         {

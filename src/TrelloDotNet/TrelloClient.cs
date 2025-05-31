@@ -11,7 +11,7 @@ using TrelloDotNet.Model;
 namespace TrelloDotNet
 {
     /// <summary>
-    /// The Main Client to communicate with the Trello API (aka everything is done via this)
+    /// The Client to communicate with the Trello API
     /// </summary>
     public partial class TrelloClient
     {
@@ -25,12 +25,12 @@ namespace TrelloDotNet
         private readonly HttpClient _staticHttpClient = new HttpClient();
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the TrelloClient for communicating with the Trello API using the provided API Key and Token.
         /// </summary>
         /// <param name="apiKey">The Trello API Key you get on https://trello.com/power-ups/admin/</param>
-        /// <param name="token">Your Authorization Token you generate get on https://trello.com/power-ups/admin/</param>
-        /// <param name="options">Various options for the client (if null default options will be used)</param>
-        /// <param name="httpClient">Optional HTTP Client if you wish to specify it on your own (else an internal static HttpClient will be used for re-use)</param>
+        /// <param name="token">Your Authorization Token you get on https://trello.com/power-ups/admin/</param>
+        /// <param name="options">Optional client options; if null, default options will be used</param>
+        /// <param name="httpClient">Optional HTTP Client to use for requests; if not provided, an internal static HttpClient will be used</param>
         public TrelloClient(string apiKey, string token, TrelloClientOptions options = null, HttpClient httpClient = null)
         {
             if (string.IsNullOrWhiteSpace(apiKey))
@@ -54,19 +54,20 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get information about the token used by this TrelloClient
+        /// Retrieves information about the token currently used by this TrelloClient instance.
         /// </summary>
-        /// <returns>Information about the Token</returns>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>Information about the token</returns>
         public async Task<TokenInformation> GetTokenInformationAsync(CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<TokenInformation>($"{UrlPaths.Tokens}/{_apiRequestController.Token}", cancellationToken);
         }
 
         /// <summary>
-        /// Get Ids of the owner of the Token's Inbox
+        /// Retrieves the inbox information (IDs) for the owner of the token used by this TrelloClient.
         /// </summary>
-        /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>The Inbox Info</returns>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The inbox information for the token owner</returns>
         public async Task<TokenMemberInbox> GetTokenMemberInboxAsync(CancellationToken cancellationToken = default)
         {
             return (await _apiRequestController.Get<TokenMemberInformationInbox>($"{UrlPaths.Members}/me?fields=inbox", cancellationToken))?.Inbox;

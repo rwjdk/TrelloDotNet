@@ -12,21 +12,21 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Get Attachments on a card
+        /// Retrieves all attachments associated with the specified card, including file uploads and link attachments.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cardId">ID of the Card to retrieve attachments from</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Attachments</returns>
+        /// <returns>A list of all attachments present on the card</returns>
         public async Task<List<Attachment>> GetAttachmentsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Attachment>>(GetUrlBuilder.GetAttachmentsOnCard(cardId), cancellationToken);
         }
 
         /// <summary>
-        /// Delete an Attachments on a card
+        /// Deletes a specific attachment from a card by its ID, removing the file or link from the card's attachments.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="attachmentId">Id of Attachment</param>
+        /// <param name="cardId">ID of the Card containing the attachment</param>
+        /// <param name="attachmentId">ID of the Attachment to delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteAttachmentOnCardAsync(string cardId, string attachmentId, CancellationToken cancellationToken = default)
         {
@@ -34,10 +34,10 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get an Attachments on a card
+        /// Retrieves a single attachment from a card by its ID, returning detailed information about the attachment.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="attachmentId">Id of Attachment</param>
+        /// <param name="cardId">ID of the Card containing the attachment</param>
+        /// <param name="attachmentId">ID of the Attachment to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task<Attachment> GetAttachmentOnCardAsync(string cardId, string attachmentId, CancellationToken cancellationToken = default)
         {
@@ -45,12 +45,12 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Add an Attachment to a Card
+        /// Adds a link attachment (URL) to a card, optionally specifying a name and position for the attachment.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="attachmentUrlLink">A Link Attachment</param>
+        /// <param name="cardId">ID of the Card to add the attachment to</param>
+        /// <param name="attachmentUrlLink">A URL link attachment to add to the card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Created Attachment</returns>
+        /// <returns>The created Attachment object representing the new link attachment</returns>
         public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentUrlLink attachmentUrlLink, CancellationToken cancellationToken = default)
         {
             var parameters = new List<QueryParameter> { new QueryParameter("url", attachmentUrlLink.Url) };
@@ -79,13 +79,13 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Add an Attachment to a Card
+        /// Uploads a file as an attachment to a card, with the option to set the uploaded file as the card's cover image.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="attachmentFileUpload">A Link Attachment</param>
-        /// <param name="setAsCover">Make this attachment the cover of the Card</param>
+        /// <param name="cardId">ID of the Card to add the file attachment to</param>
+        /// <param name="attachmentFileUpload">A file upload attachment to add to the card</param>
+        /// <param name="setAsCover">If true, sets the uploaded attachment as the card's cover image</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Created Attachment</returns>
+        /// <returns>The created Attachment object representing the uploaded file</returns>
         public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentFileUpload attachmentFileUpload, bool setAsCover = false, CancellationToken cancellationToken = default)
         {
             var parameters = new List<QueryParameter>();
@@ -103,12 +103,12 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Download an Attachment
+        /// Downloads the content stream of a specific attachment on a card by its ID, allowing you to access the file data.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="attachmentId">Id of Attachment</param>
+        /// <param name="cardId">ID of the Card containing the attachment</param>
+        /// <param name="attachmentId">ID of the Attachment to download</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns></returns>
+        /// <returns>A stream containing the downloaded attachment data</returns>
         public async Task<Stream> DownloadAttachmentAsync(string cardId, string attachmentId, CancellationToken cancellationToken = default)
         {
             Attachment attachment = await GetAttachmentOnCardAsync(cardId, attachmentId, cancellationToken);
@@ -116,11 +116,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Download an Attachment
+        /// Downloads the content stream of an attachment from a direct URL, using Trello authentication if required.
         /// </summary>
-        /// <param name="url">URL of the attachment</param>
+        /// <param name="url">URL of the attachment to download</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns></returns>
+        /// <returns>A stream containing the downloaded attachment data</returns>
         public async Task<Stream> DownloadAttachmentAsync(string url, CancellationToken cancellationToken = default)
         {
             try

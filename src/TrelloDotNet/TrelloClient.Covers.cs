@@ -8,22 +8,24 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Update a Cover to a card (this is equivalent to AddCoverToCardAsync, but here for discover-ability. Tip: It is also possible to update the cover via UpdateCardAsync)
+        /// Updates the cover of a card. This method is functionally equivalent to AddCoverToCardAsync and is provided for discoverability. You can also update the cover using UpdateCardAsync.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="newCover">The new Cover</param>
+        /// <param name="cardId">ID of the card to update the cover on</param>
+        /// <param name="newCover">The new cover to set on the card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The updated card with the new cover</returns>
         public async Task<Card> UpdateCoverOnCardAsync(string cardId, CardCover newCover, CancellationToken cancellationToken = default)
         {
             return await AddCoverToCardAsync(cardId, newCover, cancellationToken);
         }
 
         /// <summary>
-        /// Add a Cover to a card. Tip: It is also possible to add the cover via UpdateCardAsync
+        /// Adds a cover to a card. You can also add a cover using UpdateCardAsync.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="coverToAdd">The Cover to Add</param>
+        /// <param name="cardId">ID of the card to add the cover to</param>
+        /// <param name="coverToAdd">The cover object to add to the card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The updated card with the added cover</returns>
         public async Task<Card> AddCoverToCardAsync(string cardId, CardCover coverToAdd, CancellationToken cancellationToken = default)
         {
             if (coverToAdd == null)
@@ -37,11 +39,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Remove a cover from a Card
+        /// Removes the cover from a card.
         /// </summary>
-        /// <param name="cardId">Id of Card</param>
+        /// <param name="cardId">ID of the card to remove the cover from</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Card with the removed Cover</returns>
+        /// <returns>The updated card with the cover removed</returns>
         public async Task<Card> RemoveCoverFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter("cover", string.Empty));

@@ -11,9 +11,9 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Delete a Label from the board and remove it from all cards it was added to (WARNING: THERE IS NO WAY GOING BACK!!!). If you are looking to remove a label from a Card then see 'RemoveLabelsFromCardAsync' and 'RemoveAllLabelsFromCardAsync'
+        /// Deletes a label from the board and removes it from all cards it was assigned to. This operation is irreversible. If you want to remove a label from a single card, use 'RemoveLabelsFromCardAsync' or 'RemoveAllLabelsFromCardAsync'.
         /// </summary>
-        /// <param name="labelId">The id of the Label to Delete</param>
+        /// <param name="labelId">The ID of the label to delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteLabelAsync(string labelId, CancellationToken cancellationToken = default)
         {
@@ -21,44 +21,46 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get a list of Labels defined for a board
+        /// Retrieves all labels defined for a specific board.
         /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="boardId">ID of the board (long or short version)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Labels</returns>
+        /// <returns>List of labels on the board</returns>
         public async Task<List<Label>> GetLabelsOfBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Label>>(GetUrlBuilder.GetLabelsOfBoard(boardId), cancellationToken);
         }
 
         /// <summary>
-        /// Get a list of Labels defined for a board
+        /// Retrieves all labels defined for a specific board, with additional options for filtering and selection.
         /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
-        /// <param name="options">Option on how and what to get</param>
+        /// <param name="boardId">ID of the board (long or short version)</param>
+        /// <param name="options">Options for filtering and selecting labels</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Labels</returns>
+        /// <returns>List of labels on the board</returns>
         public async Task<List<Label>> GetLabelsOfBoardAsync(string boardId, GetLabelOptions options, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Label>>(GetUrlBuilder.GetLabelsOfBoard(boardId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
-        /// Add a Label to a Card
+        /// Adds one or more labels to a card by their IDs.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="labelIdsToAdd">One or more Ids of Labels to add</param>
+        /// <param name="cardId">ID of the card to add labels to</param>
+        /// <param name="labelIdsToAdd">One or more IDs of labels to add</param>
+        /// <returns>The updated card with the added labels</returns>
         public async Task<Card> AddLabelsToCardAsync(string cardId, params string[] labelIdsToAdd)
         {
             return await AddLabelsToCardAsync(cardId, CancellationToken.None, labelIdsToAdd.Distinct().ToArray());
         }
 
         /// <summary>
-        /// Add a Label to a Card
+        /// Adds one or more labels to a card by their IDs.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cardId">ID of the card to add labels to</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <param name="labelIdsToAdd">One or more Ids of Labels to add</param>
+        /// <param name="labelIdsToAdd">One or more IDs of labels to add</param>
+        /// <returns>The updated card with the added labels</returns>
         public async Task<Card> AddLabelsToCardAsync(string cardId, CancellationToken cancellationToken = default, params string[] labelIdsToAdd)
         {
             var card = await GetCardAsync(cardId, cancellationToken);
@@ -78,21 +80,23 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Remove a Label of a Card
+        /// Removes one or more labels from a card by their IDs.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="labelIdsToRemove">One or more Ids of Labels to remove</param>
+        /// <param name="cardId">ID of the card to remove labels from</param>
+        /// <param name="labelIdsToRemove">One or more IDs of labels to remove</param>
+        /// <returns>The updated card with the labels removed</returns>
         public async Task<Card> RemoveLabelsFromCardAsync(string cardId, params string[] labelIdsToRemove)
         {
             return await RemoveLabelsFromCardAsync(cardId, CancellationToken.None, labelIdsToRemove);
         }
 
         /// <summary>
-        /// Remove one or more Labels from a Card
+        /// Removes one or more labels from a card by their IDs.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cardId">ID of the card to remove labels from</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <param name="labelIdsToRemove">One or more Ids of Labels to remove</param>
+        /// <param name="labelIdsToRemove">One or more IDs of labels to remove</param>
+        /// <returns>The updated card with the labels removed</returns>
         public async Task<Card> RemoveLabelsFromCardAsync(string cardId, CancellationToken cancellationToken, params string[] labelIdsToRemove)
         {
             var card = await GetCardAsync(cardId, cancellationToken);
@@ -111,10 +115,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Remove all Labels from a Card
+        /// Removes all labels from a card, leaving it without any labels.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cardId">ID of the card to remove all labels from</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The updated card with all labels removed</returns>
         public async Task<Card> RemoveAllLabelsFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             return await UpdateCardAsync(cardId, new List<CardUpdate>
@@ -124,19 +129,20 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Update the definition of a label (Name and Color)
+        /// Updates the definition of a label (Name and Color).
         /// </summary>
-        /// <param name="labelWithUpdates">The label with updates</param>
+        /// <param name="labelWithUpdates">The label object containing the updated name and/or color</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The updated label</returns>
         public async Task<Label> UpdateLabelAsync(Label labelWithUpdates, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<Label>($"{UrlPaths.Labels}/{labelWithUpdates.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(labelWithUpdates));
         }
 
         /// <summary>
-        /// Add a new label to the Board (Not to be confused with 'AddLabelsToCardAsync' that assign labels to cards)
+        /// Adds a new label to the board. (Not to be confused with 'AddLabelsToCardAsync', which assigns labels to cards.)
         /// </summary>
-        /// <param name="label">Definition of the new label</param>
+        /// <param name="label">The definition of the new label to add</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The newly created label</returns>
         public async Task<Label> AddLabelAsync(Label label, CancellationToken cancellationToken = default)

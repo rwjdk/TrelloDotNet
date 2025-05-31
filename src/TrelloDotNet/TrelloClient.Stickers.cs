@@ -9,57 +9,57 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Add a sticker to a card
+        /// Adds a sticker to a card.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="sticker">The Sticker to add</param>
+        /// <param name="cardId">ID of the card to add the sticker to</param>
+        /// <param name="sticker">The sticker object to add</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The new sticker</returns>
+        /// <returns>The newly created sticker</returns>
         public async Task<Sticker> AddStickerToCardAsync(string cardId, Sticker sticker, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Post<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(sticker));
         }
 
         /// <summary>
-        /// Update a sticker
+        /// Updates the properties of an existing sticker on a card.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="stickerWithUpdates">The Sticker to update</param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>The Updated Sticker</returns>
+        /// <param name="cardId">ID of the card containing the sticker</param>
+        /// <param name="stickerWithUpdates">The sticker object with updated properties</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The updated sticker</returns>
         public async Task<Sticker> UpdateStickerAsync(string cardId, Sticker stickerWithUpdates, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<Sticker>($"{UrlPaths.Cards}/{cardId}/stickers/{stickerWithUpdates.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(stickerWithUpdates));
         }
 
         /// <summary>
-        /// Get the List of Stickers on a card
+        /// Retrieves all stickers attached to a specific card.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cardId">ID of the card to retrieve stickers for</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The List of Stickers</returns>
+        /// <returns>List of stickers on the card</returns>
         public async Task<List<Sticker>> GetStickersOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Sticker>>(GetUrlBuilder.GetStickersOnCard(cardId), cancellationToken);
         }
 
         /// <summary>
-        /// Get a Stickers with a specific Id
+        /// Retrieves a sticker with a specific ID from a card.
         /// </summary>
-        /// <param name="cardId">Id of the Card</param>
-        /// <param name="stickerId">Id of the Sticker</param>
+        /// <param name="cardId">ID of the card containing the sticker</param>
+        /// <param name="stickerId">ID of the sticker to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Sticker</returns>
+        /// <returns>The requested sticker</returns>
         public async Task<Sticker> GetStickerAsync(string cardId, string stickerId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<Sticker>(GetUrlBuilder.GetSticker(cardId, stickerId), cancellationToken);
         }
 
         /// <summary>
-        /// Delete a sticker (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// Deletes a sticker from a card. This operation is irreversible.
         /// </summary>
-        /// <param name="cardId">Id of Card that have the sticker</param>
-        /// <param name="stickerId">Id of the sticker</param>
+        /// <param name="cardId">ID of the card containing the sticker</param>
+        /// <param name="stickerId">ID of the sticker to delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteStickerAsync(string cardId, string stickerId, CancellationToken cancellationToken = default)
         {

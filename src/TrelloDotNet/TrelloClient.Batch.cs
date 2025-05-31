@@ -19,46 +19,46 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Get a list of Trello Lists as a batch
+        /// Retrieves multiple Trello lists in a single batch request, given a collection of list IDs.
         /// </summary>
-        /// <param name="ids">List Ids</param>
+        /// <param name="ids">A list of List IDs to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The list of Lists</returns>
+        /// <returns>A list of List objects corresponding to the provided IDs</returns>
         public async Task<List<List>> GetListsAsync(List<string> ids, CancellationToken cancellationToken = default)
         {
             return await ExecuteBatchedRequestAsync<List>(ids.Select(id => $"/{GetUrlBuilder.GetList(id)}").ToList(), cancellationToken);
         }
 
         /// <summary>
-        /// Get a list of Trello Lists as a batch
+        /// Retrieves multiple Trello lists in a single batch request, with additional options for customizing the returned data.
         /// </summary>
-        /// <param name="ids">List Ids</param>
-        /// <param name="options">Options for getting the lists</param>
+        /// <param name="ids">A list of List IDs to retrieve</param>
+        /// <param name="options">Options for customizing which fields and nested data are included for each list</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The list of Lists</returns>
+        /// <returns>A list of List objects corresponding to the provided IDs</returns>
         public async Task<List<List>> GetListsAsync(List<string> ids, GetListOptions options, CancellationToken cancellationToken = default)
         {
             return await ExecuteBatchedRequestAsync<List>(ids.Select(id => $"/{GetUrlBuilder.GetList(id, options)}").ToList(), cancellationToken);
         }
 
         /// <summary>
-        /// Get a list of cards as a batch
+        /// Retrieves multiple Trello cards in a single batch request, given a collection of card IDs.
         /// </summary>
-        /// <param name="ids">Card Ids</param>
+        /// <param name="ids">A list of Card IDs to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The list of Cards</returns>
+        /// <returns>A list of Card objects corresponding to the provided IDs</returns>
         public async Task<List<Card>> GetCardsAsync(List<string> ids, CancellationToken cancellationToken = default)
         {
             return await ExecuteBatchedRequestAsync<Card>(ids.Select(id => $"/{GetUrlBuilder.GetCard(id)}").ToList(), cancellationToken);
         }
 
         /// <summary>
-        /// Get a list of cards as a batch
+        /// Retrieves multiple Trello cards in a single batch request, with additional options for customizing the returned data.
         /// </summary>
-        /// <param name="ids">Card Ids</param>
-        /// <param name="options">Options</param>
+        /// <param name="ids">A list of Card IDs to retrieve</param>
+        /// <param name="options">Options for customizing which fields and nested data are included for each card</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The list of Cards</returns>
+        /// <returns>A list of Card objects corresponding to the provided IDs</returns>
         public async Task<List<Card>> GetCardsAsync(List<string> ids, GetCardOptions options, CancellationToken cancellationToken = default)
         {
             options.AdjustFieldsBasedOnSelectedOptions();
@@ -69,23 +69,23 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get a list of boards as a batch
+        /// Retrieves multiple Trello boards in a single batch request, given a collection of board IDs.
         /// </summary>
-        /// <param name="ids">Board Ids</param>
+        /// <param name="ids">A list of Board IDs to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The list of Boards</returns>
+        /// <returns>A list of Board objects corresponding to the provided IDs</returns>
         public async Task<List<Board>> GetBoardsAsync(List<string> ids, CancellationToken cancellationToken = default)
         {
             return await ExecuteBatchedRequestAsync<Board>(ids.Select(id => $"/{UrlPaths.Boards}/{id}").ToList(), cancellationToken);
         }
 
         /// <summary>
-        /// Get a list of boards as a batch
+        /// Retrieves multiple Trello boards in a single batch request, with additional options for customizing the returned data.
         /// </summary>
-        /// <param name="ids">Board Ids</param>
-        /// <param name="options">Options</param>
+        /// <param name="ids">A list of Board IDs to retrieve</param>
+        /// <param name="options">Options for customizing which fields and nested data are included for each board</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The list of Boards</returns>
+        /// <returns>A list of Board objects corresponding to the provided IDs</returns>
         public async Task<List<Board>> GetBoardsAsync(List<string> ids, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
             StringBuilder parametersAsString = ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1);
@@ -93,35 +93,35 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get a list of members as a batch
+        /// Retrieves multiple Trello members in a single batch request, given a collection of member IDs.
         /// </summary>
-        /// <param name="ids">Member Ids</param>
+        /// <param name="ids">A list of Member IDs to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The list of Members</returns>
+        /// <returns>A list of Member objects corresponding to the provided IDs</returns>
         public async Task<List<Member>> GetMembersAsync(List<string> ids, CancellationToken cancellationToken = default)
         {
             return await ExecuteBatchedRequestAsync<Member>(ids.Select(id => $"/{UrlPaths.Members}/{id}").ToList(), cancellationToken);
         }
 
         /// <summary>
-        /// Get a list of organizations as a batch
+        /// Retrieves multiple Trello organizations in a single batch request, given a collection of organization IDs.
         /// </summary>
-        /// <param name="ids">Organization Ids</param>
+        /// <param name="ids">A list of Organization IDs to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The list of Organizations</returns>
+        /// <returns>A list of Organization objects corresponding to the provided IDs</returns>
         public async Task<List<Organization>> GetOrganizationsAsync(List<string> ids, CancellationToken cancellationToken = default)
         {
             return await ExecuteBatchedRequestAsync<Organization>(ids.Select(id => $"/{UrlPaths.Organizations}/{id}").ToList(), cancellationToken);
         }
 
         /// <summary>
-        /// Get batched data of the same type (T) as a list
+        /// Executes a batch request for a set of Trello API URLs and returns the results as a list of the specified type.
         /// </summary>
-        /// <typeparam name="T">The type to return (example Card or Board)</typeparam>
-        /// <param name="urls">The REST API Suffix Urls (example: /boards/{boardId}/lists)</param>
+        /// <typeparam name="T">The type of object to return for each result (e.g., Card, Board)</typeparam>
+        /// <param name="urls">A list of REST API URL suffixes (e.g., /boards/{boardId}/lists) to request in the batch</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The list of T</returns>
-        /// <exception cref="TrelloApiException"></exception>
+        /// <returns>A list of objects of type T, one for each requested URL</returns>
+        /// <exception cref="TrelloApiException">Thrown if any of the batch requests fail</exception>
         private async Task<List<T>> ExecuteBatchedRequestAsync<T>(List<string> urls, CancellationToken cancellationToken = default)
         {
             var batchResult = await GetBatchedRequestDataAsync(urls, cancellationToken);
@@ -149,11 +149,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Make a generic Batch request of URLs of type GET data
+        /// Executes a generic batch GET request for a set of Trello API URLs and returns a summary of the results.
         /// </summary>
-        /// <param name="urls">The REST API Suffix Urls (example: /boards/{boardId}/lists)</param>
+        /// <param name="urls">A list of REST API URL suffixes (e.g., /boards/{boardId}/lists) to request in the batch</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>a Batch-result</returns>
+        /// <returns>A BatchResultSummary containing the results and any errors</returns>
         private async Task<BatchResultSummary> GetBatchedRequestDataAsync(List<string> urls, CancellationToken cancellationToken = default)
         {
             if (urls == null)
@@ -181,9 +181,9 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Make a generic set of Batch request of type GET data
+        /// Executes a set of batch GET requests, each with a URL and an associated action to process the result data.
         /// </summary>
-        /// <param name="requests">Request, each with a URL and an action for what to do with the result data</param>
+        /// <param name="requests">A list of BatchRequest objects, each containing a URL and an action to handle the result</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task ExecuteBatchedRequestAsync(List<BatchRequest> requests, CancellationToken cancellationToken = default)
         {

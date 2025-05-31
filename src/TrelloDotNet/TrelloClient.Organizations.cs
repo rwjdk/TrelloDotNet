@@ -11,77 +11,78 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Get an Organization (also known as Workspace)
+        /// Retrieves an organization (also known as a workspace).
         /// </summary>
-        /// <param name="organizationId">ID of an Organization</param>
+        /// <param name="organizationId">ID of the organization to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Organization</returns>
+        /// <returns>The requested organization</returns>
         public async Task<Organization> GetOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<Organization>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken);
         }
 
         /// <summary>
-        /// Get an Organization (also known as Workspace)
+        /// Retrieves an organization (also known as a workspace), with additional options for selection.
         /// </summary>
-        /// <param name="organizationId">ID of an Organization</param>
+        /// <param name="organizationId">ID of the organization to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <param name="options">Options how to get the organization</param>
-        /// <returns>The Organization</returns>
+        /// <param name="options">Options for retrieving the organization</param>
+        /// <returns>The requested organization</returns>
         public async Task<Organization> GetOrganizationAsync(string organizationId, GetOrganizationOptions options, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<Organization>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
-        /// Create a new Organization (Workspace)
+        /// Creates a new organization (workspace).
         /// </summary>
-        /// <param name="newOrganization">The new Organization</param>
+        /// <param name="newOrganization">The organization object to create</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The New Organization</returns>
+        /// <returns>The newly created organization</returns>
         public async Task<Organization> AddOrganizationAsync(Organization newOrganization, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Post<Organization>($"{UrlPaths.Organizations}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(newOrganization));
         }
 
         /// <summary>
-        /// Update an Organization (Workspace)
+        /// Updates the properties of an existing organization (workspace).
         /// </summary>
-        /// <param name="organizationWithChanges">Organization with changes</param>
+        /// <param name="organizationWithChanges">The organization object containing the updated properties</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The updated Organization</returns>
+        /// <returns>The updated organization</returns>
         public async Task<Organization> UpdateOrganizationAsync(Organization organizationWithChanges, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<Organization>($"{UrlPaths.Organizations}/{organizationWithChanges.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(organizationWithChanges));
         }
 
         /// <summary>
-        /// Get the Organizations that the specified member has access to
+        /// Retrieves all organizations that a specific member has access to.
         /// </summary>
-        /// <param name="memberId">Id of the Member to find organizations for</param>
+        /// <param name="memberId">ID of the member to find organizations for</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Organizations there is access to</returns>
+        /// <returns>List of organizations the member has access to</returns>
         public async Task<List<Organization>> GetOrganizationsForMemberAsync(string memberId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Organization>>(GetUrlBuilder.GetOrganizationsForMember(memberId), cancellationToken);
         }
 
         /// <summary>
-        /// Get the Organizations that the specified member has access to
+        /// Retrieves all organizations that a specific member has access to, with additional options for selection.
         /// </summary>
-        /// <param name="memberId">Id of the Member to find organizations for</param>
-        /// <param name="options">Options how to get the organization</param>
+        /// <param name="memberId">ID of the member to find organizations for</param>
+        /// <param name="options">Options for retrieving the organizations</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Organizations there is access to</returns>
+        /// <returns>List of organizations the member has access to</returns>
         public async Task<List<Organization>> GetOrganizationsForMemberAsync(string memberId, GetOrganizationOptions options, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Organization>>(GetUrlBuilder.GetOrganizationsForMember(memberId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
-        /// Get the Organizations that the token provided to the TrelloClient can Access
+        /// Retrieves all organizations that the token provided to the TrelloClient can access.
         /// </summary>
-        /// <returns>The Organizations there is access to</returns>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of organizations accessible to the current token</returns>
         public async Task<List<Organization>> GetOrganizationsCurrentTokenCanAccessAsync(CancellationToken cancellationToken = default)
         {
             var tokenMember = await GetTokenMemberAsync(cancellationToken);
@@ -89,11 +90,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get the Organizations that the token provided to the TrelloClient can Access
-        /// <param name="options">Options how to get the organization</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
+        /// Retrieves all organizations that the token provided to the TrelloClient can access, with additional options for selection.
         /// </summary>
-        /// <returns>The Organizations there is access to</returns>
+        /// <param name="options">Options for retrieving the organizations</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of organizations accessible to the current token</returns>
         public async Task<List<Organization>> GetOrganizationsCurrentTokenCanAccessAsync(GetOrganizationOptions options, CancellationToken cancellationToken = default)
         {
             var tokenMember = await GetTokenMemberAsync(cancellationToken);
@@ -101,12 +102,12 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Delete an entire Organization including all Boards it contains (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// Deletes an entire organization (workspace), including all boards it contains. This operation is irreversible and requires secondary confirmation via Options.AllowDeleteOfOrganizations.
         /// </summary>
         /// <remarks>
-        /// As this is a major thing, there is a secondary confirmation needed by setting: Options.AllowDeleteOfOrganizations = true
+        /// As this is a major operation, secondary confirmation is required by setting: Options.AllowDeleteOfOrganizations = true
         /// </remarks>
-        /// <param name="organizationId">The id of the Organization to Delete</param>
+        /// <param name="organizationId">ID of the organization to delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
@@ -121,11 +122,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get Plan Information for a specific Workspace (Free, Standard, Premium, Enterprise) + what features are supported
+        /// Retrieves plan information for a specific workspace (Free, Standard, Premium, Enterprise), including supported features.
         /// </summary>
-        /// <param name="organizationId">Id of the Workspace</param>
+        /// <param name="organizationId">ID of the workspace</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Plan Info</returns>
+        /// <returns>The plan information for the workspace</returns>
         public async Task<TrelloPlanInformation> GetTrelloPlanInformationForOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<TrelloPlanInformation>(GetUrlBuilder.GetOrganization(organizationId), cancellationToken, new QueryParameter("fields", "id,name,premiumFeatures"));

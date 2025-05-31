@@ -14,30 +14,32 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Add a new Comment on a Card
+        /// Adds a new comment to a card.
         /// </summary>
-        /// <paramref name="cardId">Id of the Card</paramref>
-        /// <paramref name="comment">The Comment</paramref>
-        /// <returns>The Comment Action</returns>
+        /// <param name="cardId">ID of the card to add the comment to</param>
+        /// <param name="comment">The comment object containing the text to add</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The resulting comment action</returns>
         public async Task<TrelloAction> AddCommentAsync(string cardId, Comment comment, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Post<TrelloAction>($"{UrlPaths.Cards}/{cardId}/actions/comments", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(comment));
         }
 
         /// <summary>
-        /// Update a comment Action (aka only way to update comments as they are not seen as their own objects)
+        /// Updates the text of an existing comment action (comments in Trello are represented as actions, so this is the only way to update a comment).
         /// </summary>
-        /// <param name="commentAction">The comment Action with the updated text</param>
+        /// <param name="commentAction">The comment action object with updated text</param>
         /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The updated comment action</returns>
         public async Task<TrelloAction> UpdateCommentActionAsync(TrelloAction commentAction, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", cancellationToken, new QueryParameter("text", commentAction.Data.Text));
         }
 
         /// <summary>
-        /// Delete a Comment (WARNING: THERE IS NO WAY GOING BACK!!!).
+        /// Deletes a comment from a card. This operation is irreversible.
         /// </summary>
-        /// <param name="commentActionId">Id of Comment Action Id</param>
+        /// <param name="commentActionId">ID of the comment action to delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteCommentActionAsync(string commentActionId, CancellationToken cancellationToken = default)
         {
@@ -45,11 +47,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get All Comments on a Card
+        /// Retrieves all comments on a specific card, handling pagination automatically to return the complete list.
         /// </summary>
-        /// <param name="cardId">Id of Card</param>
+        /// <param name="cardId">ID of the card to retrieve comments from</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Comments</returns>
+        /// <returns>List of comment actions on the card</returns>
         public async Task<List<TrelloAction>> GetAllCommentsOnCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
             var result = new List<TrelloAction>();
@@ -73,12 +75,12 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get Paged Comments on a Card (Note: this method can max return up to 50 comments. For more use the page parameter [note: the API can't give you back how many there are in total so you need to try until non is returned])
+        /// Retrieves a single page of comments on a card. Each page contains up to 50 comments. Use the page parameter to paginate through results.
         /// </summary>
-        /// <param name="cardId">Id of Card</param>
-        /// <param name="page">The page of results for actions. Each page of results has 50 actions. (Default: 0, Maximum: 19)</param>
+        /// <param name="cardId">ID of the card to retrieve comments from</param>
+        /// <param name="page">The page number of results to retrieve (each page contains 50 comments, default is 0, maximum is 19)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Comments</returns>
+        /// <returns>List of comment actions on the specified page</returns>
         public async Task<List<TrelloAction>> GetPagedCommentsOnCardAsync(string cardId, int page = 0, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<TrelloAction>>(GetUrlBuilder.GetActionsOnCard(cardId), cancellationToken,
@@ -87,23 +89,23 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// The reactions to a comment
+        /// Retrieves all reactions associated with a specific comment action.
         /// </summary>
-        /// <param name="commentActionId">Id of the Comment (ActionId)</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>The Reactions</returns>
+        /// <param name="commentActionId">ID of the comment action to get reactions for</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of reactions for the comment</returns>
         public async Task<List<CommentReaction>> GetCommentReactionsAsync(string commentActionId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<CommentReaction>>(GetUrlBuilder.GetCommentReactions(commentActionId), cancellationToken);
         }
 
         /// <summary>
-        /// Add a Reaction to a comment
+        /// Adds a reaction (emoji) to a specific comment action.
         /// </summary>
-        /// <param name="commentActionId">Id of the comment (and Action Id as comments are actions)</param>
-        /// <param name="reaction">The Reaction to add</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>The Reaction as a Comment Reaction object</returns>
+        /// <param name="commentActionId">ID of the comment action to add the reaction to</param>
+        /// <param name="reaction">The reaction object to add</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The created comment reaction object</returns>
         public async Task<CommentReaction> AddCommentReactionAsync(string commentActionId, Reaction reaction, CancellationToken cancellationToken = default)
         {
             string payload = JsonSerializer.Serialize(reaction);
@@ -111,11 +113,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Delete a reaction from a Comment
+        /// Deletes a reaction from a comment action. This operation is irreversible.
         /// </summary>
-        /// <param name="commentActionId">Id of the Comment</param>
-        /// <param name="commentReactionId">Id of the Reaction</param>
-        /// <param name="cancellationToken">CancellationToken</param>
+        /// <param name="commentActionId">ID of the comment action containing the reaction</param>
+        /// <param name="commentReactionId">ID of the reaction to delete</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteReactionFromCommentAsync(string commentActionId, string commentReactionId, CancellationToken cancellationToken = default)
         {
             await _apiRequestController.Delete($"{UrlPaths.Actions}/{commentActionId}/reactions/{commentReactionId}", cancellationToken, 0);

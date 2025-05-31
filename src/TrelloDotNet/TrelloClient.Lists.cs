@@ -11,14 +11,11 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Add a List to a Board
+        /// Adds a new list (column) to a board.
         /// </summary>
-        /// <remarks>
-        /// The Provided BoardId the list should be added to need to be the long version of the BoardId as API does not support the short version
-        /// </remarks>
-        /// <param name="list">List to add</param>
+        /// <param name="list">The list object to add</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Created list</returns>
+        /// <returns>The created list</returns>
         public async Task<List> AddListAsync(List list, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(list);
@@ -27,20 +24,20 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Archive a List
+        /// Archives a list.
         /// </summary>
-        /// <param name="listId">The id of list that should be Archived</param>
+        /// <param name="listId">The ID of the list to archive</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Archived List</returns>
+        /// <returns>The archived list</returns>
         public async Task<List> ArchiveListAsync(string listId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", true));
         }
 
         /// <summary>
-        /// Delete a List and any Cards that are on it (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use ArchiveListAsync() for non-permanency
+        /// Permanently deletes a list and any cards it contains. This operation is irreversible. Use ArchiveListAsync for a non-permanent alternative.
         /// </summary>
-        /// <param name="listId">The id of list that should be Deleted</param>
+        /// <param name="listId">The ID of the list to delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteListAsync(string listId, CancellationToken cancellationToken = default)
         {
@@ -49,22 +46,22 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Reopen a List (Send back to the board)
+        /// Reopens an archived list, making it active on the board again.
         /// </summary>
-        /// <param name="listId">The id of list that should be Reopened</param>
+        /// <param name="listId">The ID of the list to reopen</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Archived List</returns>
+        /// <returns>The reopened list</returns>
         public async Task<List> ReOpenListAsync(string listId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", false));
         }
 
         /// <summary>
-        /// Update a List
+        /// Updates the properties of an existing list.
         /// </summary>
-        /// <param name="listWithChanges">The List with the changes</param>
+        /// <param name="listWithChanges">The list object containing the updated properties</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Updated List</returns>
+        /// <returns>The updated list</returns>
         public async Task<List> UpdateListAsync(List listWithChanges, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges);
@@ -73,58 +70,58 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Move an entire list to another board
+        /// Moves an entire list to another board.
         /// </summary>
-        /// <param name="listId">The id of the List to move</param>
-        /// <param name="newBoardId">The id of the board the list should be moved to [It needs to be the long version of the boardId]</param>
+        /// <param name="listId">The ID of the list to move</param>
+        /// <param name="newBoardId">The ID of the board to move the list to</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Updated List</returns>
+        /// <returns>The updated list after moving</returns>
         public async Task<List> MoveListToBoardAsync(string listId, string newBoardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", cancellationToken, new QueryParameter("value", newBoardId));
         }
 
         /// <summary>
-        /// Get a specific List (Column) based on its Id
+        /// Retrieves a specific list (column) by its ID.
         /// </summary>
-        /// <param name="listId">Id of the List</param>
+        /// <param name="listId">ID of the list to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns></returns>
+        /// <returns>The requested list</returns>
         public async Task<List> GetListAsync(string listId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List>(GetUrlBuilder.GetList(listId), cancellationToken);
         }
 
         /// <summary>
-        /// Get a specific List (Column) based on its Id
+        /// Retrieves a specific list (column) by its ID, with additional options for selection.
         /// </summary>
-        /// <param name="listId">Id of the List</param>
-        /// <param name="options">Options for getting the List</param>
+        /// <param name="listId">ID of the list to retrieve</param>
+        /// <param name="options">Options for retrieving the list</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns></returns>
+        /// <returns>The requested list</returns>
         public async Task<List> GetListAsync(string listId, GetListOptions options, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List>(GetUrlBuilder.GetList(listId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
-        /// Get Lists (Columns) on a Board
+        /// Retrieves all lists (columns) on a specific board.
         /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="boardId">ID of the board (long or short version) to retrieve lists from</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Lists (Columns)</returns>
+        /// <returns>List of lists (columns) on the board</returns>
         public async Task<List<List>> GetListsOnBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<List>>(GetUrlBuilder.GetListsOnBoard(boardId), cancellationToken);
         }
 
         /// <summary>
-        /// Get Lists (Columns) on a Board
+        /// Retrieves all lists (columns) on a specific board, with additional options for filtering and selection.
         /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
-        /// <param name="options">List Options</param>
+        /// <param name="boardId">ID of the board (long or short version) to retrieve lists from</param>
+        /// <param name="options">Options for retrieving the lists</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of Lists (Columns)</returns>
+        /// <returns>List of lists (columns) on the board</returns>
         public async Task<List<List>> GetListsOnBoardAsync(string boardId, GetListOptions options, CancellationToken cancellationToken = default)
         {
             List<List> lists;

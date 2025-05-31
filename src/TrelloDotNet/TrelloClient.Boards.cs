@@ -17,12 +17,12 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Add a new Board
+        /// Creates a new Trello board with the specified properties and optional configuration options.
         /// </summary>
-        /// <param name="board">The Board to Add</param>
-        /// <param name="options">Options for the new board</param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>The New Board</returns>
+        /// <param name="board">The Board object containing the properties for the new board</param>
+        /// <param name="options">Optional settings for the new board, such as default labels or lists</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The newly created Board object</returns>
         public async Task<Board> AddBoardAsync(Board board, AddBoardOptions options = null, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(board).ToList();
@@ -35,45 +35,45 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Close (Archive) a Board
+        /// Closes (archives) a board, making it inactive but not permanently deleted. The board can be reopened later.
         /// </summary>
-        /// <param name="boardId">The id of board that should be closed</param>
+        /// <param name="boardId">ID of the board to close</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Closed Board</returns>
+        /// <returns>The closed Board object</returns>
         public async Task<Board> CloseBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter("closed", true));
         }
 
         /// <summary>
-        /// ReOpen a Board that was previously archived
+        /// Reopens a board that was previously closed (archived), making it active again.
         /// </summary>
-        /// <param name="boardId">The id of board that should be reopened</param>
+        /// <param name="boardId">ID of the board to reopen</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The ReOpened Board</returns>
+        /// <returns>The reopened Board object</returns>
         public async Task<Board> ReOpenBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter("closed", false));
         }
 
         /// <summary>
-        /// Update a Board
+        /// Updates the properties of an existing board with the specified changes.
         /// </summary>
-        /// <param name="boardWithChanges">The board with the changes</param>
+        /// <param name="boardWithChanges">A Board object containing the updated properties (must include the board's ID)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Updated Card</returns>
+        /// <returns>The updated Board object</returns>
         public async Task<Board> UpdateBoardAsync(Board boardWithChanges, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardWithChanges.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(boardWithChanges));
         }
 
         /// <summary>
-        /// Delete an entire board (WARNING: THERE IS NO WAY GOING BACK!!!). Alternative use CloseBoardAsync() for non-permanency
+        /// Permanently deletes a board by its ID. This action cannot be undone. For a reversible option, use CloseBoardAsync instead.
         /// </summary>
         /// <remarks>
-        /// As this is a major thing, there is a secondary confirm needed by setting: Options.AllowDeleteOfBoards = true
+        /// As this is a major action, deletion is only allowed if TrelloClient.Options.AllowDeleteOfBoards is set to true as a secondary confirmation.
         /// </remarks>
-        /// <param name="boardId">The id of the Board to Delete</param>
+        /// <param name="boardId">ID of the board to delete</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task DeleteBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
@@ -88,22 +88,22 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get a Board by its Id
+        /// Retrieves a board by its ID.
         /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
+        /// <param name="boardId">ID of the board</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Board</returns>
+        /// <returns>The Board object with the specified ID</returns>
         public async Task<Board> GetBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken);
         }
 
         /// <summary>
-        /// Get Plan Information for a specific board (Free, Standard, Premium, Enterprise) + what features are supported
+        /// Retrieves plan information for a specific board, including its subscription level (Free, Standard, Premium, Enterprise) and supported features.
         /// </summary>
-        /// <param name="boardId">Id of the Board</param>
+        /// <param name="boardId">ID of the board to get plan information for</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Plan Info</returns>
+        /// <returns>A TrelloPlanInformation object describing the board's plan and features</returns>
         public async Task<TrelloPlanInformation> GetTrelloPlanInformationForBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<TrelloPlanInformation>(GetUrlBuilder.GetBoard(boardId, new GetBoardOptions
@@ -113,12 +113,12 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get a Board by its Id
+        /// Retrieves a board by its ID, with options to include additional nested data such as cards, lists, or organization details.
         /// </summary>
-        /// <param name="boardId">Id of the Board (in its long or short version)</param>
-        /// <param name="options">Options on what should be included on the board</param>
+        /// <param name="boardId">ID of the board.</param>
+        /// <param name="options">Options specifying which fields and nested data to include</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Board</returns>
+        /// <returns>The Board object with the specified ID and requested details</returns>
         public async Task<Board> GetBoardAsync(string boardId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
             options.AdjustFieldsBasedOnSelectedOptions();
@@ -133,32 +133,33 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get the Boards that the specified member has access to
+        /// Retrieves all boards that a specified member has access to.
         /// </summary>
-        /// <param name="memberId">Id of the Member to find boards for</param>
+        /// <param name="memberId">ID of the member to find boards for</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Active Boards there is access to</returns>
+        /// <returns>A list of Board objects the member can access</returns>
         public async Task<List<Board>> GetBoardsForMemberAsync(string memberId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsForMember(memberId), cancellationToken);
         }
 
         /// <summary>
-        /// Get the Boards that the specified member has access to
+        /// Retrieves all boards that a specified member has access to, with options to include additional nested data.
         /// </summary>
-        /// <param name="memberId">Id of the Member to find boards for</param>
-        /// <param name="options">Options on what should be included on the board</param>
+        /// <param name="memberId">ID of the member to find boards for</param>
+        /// <param name="options">Options specifying which fields and nested data to include</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Active Boards there is access to</returns>
+        /// <returns>A list of Board objects the member can access</returns>
         public async Task<List<Board>> GetBoardsForMemberAsync(string memberId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsForMember(memberId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
-        /// Get the Boards that the token provided to the TrelloClient can Access
+        /// Retrieves all boards that the current Trello API token has access to.
         /// </summary>
-        /// <returns>The Active Boards there is access to</returns>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>A list of Board objects accessible to the current token</returns>
         public async Task<List<Board>> GetBoardsCurrentTokenCanAccessAsync(CancellationToken cancellationToken = default)
         {
             var tokenMember = await GetTokenMemberAsync(cancellationToken);
@@ -166,11 +167,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get the Boards that the token provided to the TrelloClient can Access
-        /// <param name="options">Options on what should be included on the board</param>
-        /// <param name="cancellationToken">Cancellation Token</param>
+        /// Retrieves all boards that the current Trello API token has access to, with options to include additional nested data.
         /// </summary>
-        /// <returns>The Active Boards there is access to</returns>
+        /// <param name="options">Options specifying which fields and nested data to include</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>A list of Board objects accessible to the current token</returns>
         public async Task<List<Board>> GetBoardsCurrentTokenCanAccessAsync(GetBoardOptions options, CancellationToken cancellationToken = default)
         {
             var tokenMember = await GetTokenMemberAsync(cancellationToken);
@@ -178,33 +179,33 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Get the Boards in an Organization
+        /// Retrieves all boards in a specified organization, given the organization's ID.
         /// </summary>
-        /// <param name="organizationId">Id of the Organization</param>
+        /// <param name="organizationId">ID of the organization to get boards for</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Active Boards in the Organization</returns>
+        /// <returns>A list of Board objects in the organization</returns>
         public async Task<List<Board>> GetBoardsInOrganizationAsync(string organizationId, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsInOrganization(organizationId), cancellationToken);
         }
 
         /// <summary>
-        /// Get the Boards in an Organization
+        /// Retrieves all boards in a specified organization, with options to include additional nested data.
         /// </summary>
-        /// <param name="organizationId">Id of the Organization</param>
-        /// <param name="options">Options on what should be included on the board</param>
+        /// <param name="organizationId">ID of the organization to get boards for</param>
+        /// <param name="options">Options specifying which fields and nested data to include</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>The Active Boards in the Organization</returns>
+        /// <returns>A list of Board objects in the organization</returns>
         public async Task<List<Board>> GetBoardsInOrganizationAsync(string organizationId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsInOrganization(organizationId), cancellationToken, options.GetParameters());
         }
 
         /// <summary>
-        /// Update the Board Preferences
+        /// Updates the preferences of a board, such as visibility, voting, comments, and other settings. Only the specified options are changed; others remain unchanged.
         /// </summary>
-        /// <param name="boardId">Id of the Board</param>
-        /// <param name="options">The Preference options to set (ignore those you wish to leave unchanged)</param>
+        /// <param name="boardId">ID of the board to update preferences for</param>
+        /// <param name="options">The preference options to set (leave properties null to keep existing values)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task UpdateBoardPreferencesAsync(string boardId, UpdateBoardPreferencesOptions options, CancellationToken cancellationToken = default)
         {

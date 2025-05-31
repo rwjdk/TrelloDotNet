@@ -11,14 +11,14 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Search Trello for Cards, Boards, and/or Organizations
+        /// Searches Trello for cards, boards, and/or organizations based on the specified search request.
         /// </summary>
         /// <remarks>
         /// Search-tips: https://blog.trello.com/the-secrets-of-superior-trello-searches
         /// </remarks>
-        /// <param name="searchRequest">The Search Request</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>The Search-result</returns>
+        /// <param name="searchRequest">The search request object containing search parameters</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The search result containing matching cards, boards, and organizations</returns>
         public async Task<SearchResult> SearchAsync(SearchRequest searchRequest, CancellationToken cancellationToken = default)
         {
             List<string> modelTypes = new List<string>();
@@ -101,11 +101,11 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Search Members across Trello
+        /// Searches for members (users) across Trello based on the specified search request.
         /// </summary>
-        /// <param name="searchRequest">The Search-request</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>The List of Members from the search</returns>
+        /// <param name="searchRequest">The search request object containing member search parameters</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>List of members matching the search criteria</returns>
         public async Task<List<Member>> SearchMembersAsync(SearchMemberRequest searchRequest, CancellationToken cancellationToken = default)
         {
             List<QueryParameter> parameters = new List<QueryParameter>
