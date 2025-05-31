@@ -42,8 +42,11 @@ namespace TrelloDotNet
                 throw new TrelloApiException("No ListId provided in options (Mandatory)", string.Empty);
             }
 
-            var input = new Card(options.ListId, options.Name, options.Description)
+            var input = new Card
             {
+                ListId = options.ListId,
+                Name = options.Name,
+                Description = options.Description,
                 IsTemplate = options.IsTemplate,
                 DueComplete = options.DueComplete
             };
@@ -181,7 +184,15 @@ namespace TrelloDotNet
                 throw new TrelloApiException("Could not find your inbox", string.Empty);
             }
 
-            var input = new Card(inbox.ListId, options.Name, options.Description);
+            Card input = new Card
+            {
+                ListId = inbox.ListId,
+                Name = options.Name,
+                Description = options.Description,
+                LabelIds = new List<string>(),
+                MemberIds = new List<string>(),
+            };
+
             if (options.Start.HasValue)
             {
                 input.Start = options.Start.Value;

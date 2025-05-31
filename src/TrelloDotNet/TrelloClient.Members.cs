@@ -197,6 +197,11 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task InviteMemberToBoardViaEmailAsync(string boardId, string email, MembershipType membershipType, CancellationToken cancellationToken = default)
         {
+            if (membershipType == MembershipType.Admin)
+            {
+                throw new TrelloApiException($"It is not possible in the API to invite a member as 'Admin'. Instead invite as Normal and once they have accepted and email is confirmed, use '{nameof(UpdateMembershipTypeOfMemberOnBoardAsync)}' to promote them to Admin");
+            }
+
             await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}", cancellationToken, 0,
                 new QueryParameter("type", membershipType.GetJsonPropertyName()),
                 new QueryParameter("email", email));

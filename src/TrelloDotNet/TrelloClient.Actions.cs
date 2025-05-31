@@ -13,63 +13,63 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         /// <summary>
-        /// Get the most recent Actions (Changelog Events) of a board
+        /// Retrieves the most recent actions (Activities) performed on the specified board, such as card movements, updates, and comments. Allows filtering and pagination through options.
         /// </summary>
-        /// <param name="boardId">The Id of the Board</param>
-        /// <param name="options">Options on how and what is retrieved</param>
+        /// <param name="boardId">The ID of the board to retrieve actions for</param>
+        /// <param name="options">Options to control filtering, limits, and additional parameters for the actions to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of most Recent Trello Actions</returns>
+        /// <returns>A list containing the most recent Trello actions for the specified board</returns>
         public async Task<List<TrelloAction>> GetActionsOfBoardAsync(string boardId, GetActionsOptions options, CancellationToken cancellationToken = default)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnBoard(boardId), options, cancellationToken);
         }
 
         /// <summary>
-        /// Get the most recent Actions (Changelog Events) on a Card
+        /// Retrieves the most recent actions (Activities) performed on the specified card, such as comments, updates, and movements. Supports filtering and pagination.
         /// </summary>
-        /// <param name="cardId">The Id of the Card</param>
-        /// <param name="options">Options on how and what is retrieved</param>
+        /// <param name="cardId">The ID of the card to retrieve actions for</param>
+        /// <param name="options">Options to control filtering, limits, and additional parameters for the actions to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of most Recent Trello Actions</returns>
+        /// <returns>A list containing the most recent Trello actions for the specified card</returns>
         public async Task<List<TrelloAction>> GetActionsOnCardAsync(string cardId, GetActionsOptions options, CancellationToken cancellationToken = default)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsOnCard(cardId), options, cancellationToken);
         }
 
         /// <summary>
-        /// Get the most recent Actions (Changelog Events) for a List
+        /// Retrieves the most recent actions (Activities) performed on the specified list, such as card additions, removals, and updates. Allows filtering and pagination.
         /// </summary>
-        /// <param name="listId">The Id of the List</param>
-        /// <param name="options">Options on how and what is retrieved</param>
+        /// <param name="listId">The ID of the list to retrieve actions for</param>
+        /// <param name="options">Options to control filtering, limits, and additional parameters for the actions to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of most Recent Trello Actions</returns>
+        /// <returns>A list containing the most recent Trello actions for the specified list</returns>
         public async Task<List<TrelloAction>> GetActionsForListAsync(string listId, GetActionsOptions options, CancellationToken cancellationToken = default)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForList(listId), options, cancellationToken);
         }
 
         /// <summary>
-        /// Get the most recent Actions (Changelog Events) for a Member
+        /// Retrieves the most recent actions (Activities) performed by the specified member, such as card assignments, comments, and updates. Supports filtering and pagination.
         /// </summary>
-        /// <param name="memberId">The Id of the Member</param>
-        /// <param name="options">Options on how and what is retrieved</param>
+        /// <param name="memberId">The ID of the member to retrieve actions for</param>
+        /// <param name="options">Options to control filtering, limits, and additional parameters for the actions to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of most Recent Trello Actions</returns>
+        /// <returns>A list containing the most recent Trello actions performed by the specified member</returns>
         public async Task<List<TrelloAction>> GetActionsForMemberAsync(string memberId, GetActionsOptions options, CancellationToken cancellationToken = default)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForMember(memberId), options, cancellationToken);
         }
 
         /// <summary>
-        /// Get the most recent Actions (Changelog Events) for an Organization
+        /// Retrieves the most recent actions (Activities) related to the specified organization, such as membership changes and organization updates. Only organization-specific actions are returned; board actions require GetActionsOfBoardAsync.
         /// </summary>
         /// <remarks>
-        /// Only organization-specific actions will be returned. For the actions on the boards, see GetActionsOfBoardAsync
+        /// Only organization-specific actions will be returned. For actions on boards, use GetActionsOfBoardAsync.
         /// </remarks>
-        /// <param name="organizationId">The Id of the Organization</param>
-        /// <param name="options">Options on how and what is retrieved</param>
+        /// <param name="organizationId">The ID of the organization to retrieve actions for</param>
+        /// <param name="options">Options to control filtering, limits, and additional parameters for the actions to retrieve</param>
         /// <param name="cancellationToken">Cancellation Token</param>
-        /// <returns>List of most Recent Trello Actions</returns>
+        /// <returns>A list containing the most recent Trello actions for the specified organization</returns>
         public async Task<List<TrelloAction>> GetActionsForOrganizationsAsync(string organizationId, GetActionsOptions options, CancellationToken cancellationToken = default)
         {
             return await GetActionsFromSuffix(GetUrlBuilder.GetActionsForOrganization(organizationId), options, cancellationToken);

@@ -6,3 +6,5 @@
 
 ## Rules for XML Summaries
 - The cancellationToken parameter should always be documents as '<param name="cancellationToken">Cancellation Token</param>' with no further explanation
+- Never call an 'ID' for 'Unique Identifier' 
+- Always make 'ID' capital letters in comments

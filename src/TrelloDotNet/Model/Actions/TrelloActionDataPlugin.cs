@@ -3,19 +3,19 @@
 namespace TrelloDotNet.Model.Actions
 {
     /// <summary>
-    /// Plugin Data
+    /// Represents plugin data associated with a Trello action, including the plugin's ID and name.
     /// </summary>
     public class TrelloActionDataPlugin
     {
         /// <summary>
-        /// Id of the Plugin 
+        /// The ID of the plugin related to the action.
         /// </summary>
         [JsonPropertyName("id")]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
-        /// Name of the Plugin
+        /// The name of the plugin related to the action.
         /// </summary>
         [JsonPropertyName("name")]
         [JsonInclude]

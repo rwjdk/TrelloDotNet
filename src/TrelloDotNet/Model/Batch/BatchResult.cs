@@ -4,22 +4,22 @@ using System.Text.Json.Serialization;
 namespace TrelloDotNet.Model.Batch
 {
     /// <summary>
-    /// Represent a batch-result
+    /// Represents the result of a batch request to the Trello API, containing the raw response data.
     /// </summary>
     public class BatchResult
     {
         /// <summary>
-        /// The generic data back as a JSON Element (Use GetData&lt;T&gt; to deserialize the data)
+        /// The raw response data from the batch request as a JSON element. Use <see cref="GetData{T}"/> to deserialize this data into a specific type.
         /// </summary>
         [JsonPropertyName("200")]
         [JsonInclude]
         public JsonElement Data { get; private set; }
 
         /// <summary>
-        /// Get the data of the result deserialized
+        /// Deserializes the raw response data into the specified type.
         /// </summary>
-        /// <typeparam name="T">The type to deserialize to</typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">The type to deserialize the response data to.</typeparam>
+        /// <returns>The deserialized response data as the specified type.</returns>
         public T GetData<T>()
         {
             return Data.Deserialize<T>();

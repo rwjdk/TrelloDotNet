@@ -1,6 +1,17 @@
 ﻿# Changelog 
 
-## 2.0.5 (9st of April 2025) 
+## Unreleased
+#### Special
+- Introduced copilot-instructions.md for AI Rules
+
+#### TrelloClient
+- Updated various XML Summaries
+- Added guards on various options methods to check for null
+- Added guard on InviteMemberToBoardViaEmailAsync to explain it is not possible to Invite a user as Admin
+
+<hr>
+
+## 2.0.5 (9th of April 2025) 
 #### TrelloClient
 - Fixed that the logic around setting `Start` and `DueDate` on Cards did not take timezones correctly into account
 
