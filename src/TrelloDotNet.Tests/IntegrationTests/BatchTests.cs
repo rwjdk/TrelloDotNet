@@ -15,7 +15,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     public async Task ExecuteBatchedRequestAsync()
     {
         Board? b = null;
-        (List? list, Card? card) = await AddDummyCardAndList(_boardId);
+        (List list, Card card) = await AddDummyCardAndList(_boardId);
         Member member = await TrelloClient.GetTokenMemberAsync();
 
         await TrelloClient.ExecuteBatchedRequestAsync(
@@ -81,7 +81,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task GetListsAndCards()
     {
-        (List? list, Card? card) = await AddDummyCardAndList(_boardId);
+        (List list, Card card) = await AddDummyCardAndList(_boardId);
         // ReSharper disable once RedundantAssignment
         var listData = await TrelloClient.GetListsAsync([list.Id]);
         listData = await TrelloClient.GetListsAsync([list.Id], new GetListOptions

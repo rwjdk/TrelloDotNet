@@ -237,6 +237,9 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
             CardUpdate.List(list),
             CardUpdate.IsTemplate(true),
         ]);
+        Assert.False(updateCard.DueComplete);
+        Assert.False(updateCard.Closed);
+        Assert.Equal(1, updateCard.Position);
     }
 
     [Fact]
@@ -359,8 +362,8 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var archivedCard = await TrelloClient.ArchiveCardAsync(cardForArchiveAndReopen.Id);
         Assert.True(archivedCard.Closed);
 
-        var reopendCard = await TrelloClient.ReOpenCardAsync(archivedCard.Id);
-        Assert.False(reopendCard.Closed);
+        var reOpenedCard = await TrelloClient.ReOpenCardAsync(archivedCard.Id);
+        Assert.False(reOpenedCard.Closed);
     }
 
     [Fact]
@@ -477,16 +480,16 @@ public class CardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         Assert.Equal(1, updateSticker.Top);
         Assert.Equal(2, updateSticker.ZIndex);
         Assert.Equal(3, updateSticker.Rotation);
-        var getStricker = await TrelloClient.GetStickerAsync(cardForStickerTests.Id, updateSticker.Id);
-        Assert.Equal(updateSticker.Id, getStricker.Id);
-        Assert.Equal(updateSticker.ImageUrl, getStricker.ImageUrl);
-        Assert.Equal(StickerDefaultImageId.Clock, getStricker.ImageIdAsDefaultEnum);
-        Assert.Equal("clock", getStricker.ImageId);
-        Assert.Equal(0, getStricker.Left);
-        Assert.Equal(1, getStricker.Top);
-        Assert.Equal(2, getStricker.ZIndex);
-        Assert.Equal(3, getStricker.Rotation);
-        await TrelloClient.DeleteStickerAsync(cardForStickerTests.Id, getStricker.Id);
+        var getSticker = await TrelloClient.GetStickerAsync(cardForStickerTests.Id, updateSticker.Id);
+        Assert.Equal(updateSticker.Id, getSticker.Id);
+        Assert.Equal(updateSticker.ImageUrl, getSticker.ImageUrl);
+        Assert.Equal(StickerDefaultImageId.Clock, getSticker.ImageIdAsDefaultEnum);
+        Assert.Equal("clock", getSticker.ImageId);
+        Assert.Equal(0, getSticker.Left);
+        Assert.Equal(1, getSticker.Top);
+        Assert.Equal(2, getSticker.ZIndex);
+        Assert.Equal(3, getSticker.Rotation);
+        await TrelloClient.DeleteStickerAsync(cardForStickerTests.Id, getSticker.Id);
         var stickersPresentAfterDelete = await TrelloClient.GetStickersOnCardAsync(cardForStickerTests.Id);
         Assert.Empty(stickersPresentAfterDelete);
     }

@@ -12,7 +12,7 @@ public class EnumViaJsonPropertyConverterTests
     {
         var enumViaJsonPropertyConverter = new EnumViaJsonPropertyConverter<CardCoverColor>();
         byte[] bytes = "\"pink\""u8.ToArray();
-        Utf8JsonReader stringReader = new Utf8JsonReader(bytes.AsSpan());
+        Utf8JsonReader stringReader = new(bytes.AsSpan());
         stringReader.Read();
         var readColor = enumViaJsonPropertyConverter.Read(ref stringReader, typeof(CardCoverColor), JsonSerializerOptions.Default);
         Assert.Equal(CardCoverColor.Pink, readColor);
@@ -23,7 +23,7 @@ public class EnumViaJsonPropertyConverterTests
     {
         var enumViaJsonPropertyConverter = new EnumViaJsonPropertyConverter<CardCoverColor>();
         byte[] bytes = "\"\""u8.ToArray();
-        Utf8JsonReader stringReader = new Utf8JsonReader(bytes.AsSpan());
+        Utf8JsonReader stringReader = new(bytes.AsSpan());
         stringReader.Read();
         var readColor = enumViaJsonPropertyConverter.Read(ref stringReader, typeof(CardCoverColor), JsonSerializerOptions.Default);
         Assert.Equal(CardCoverColor.None, readColor);
@@ -36,7 +36,7 @@ public class EnumViaJsonPropertyConverterTests
         byte[] bytes = "\"aaa\""u8.ToArray();
         Assert.Throws<Exception>(() =>
         {
-            Utf8JsonReader stringReader = new Utf8JsonReader(bytes.AsSpan());
+            Utf8JsonReader stringReader = new(bytes.AsSpan());
             stringReader.Read();
             return enumViaJsonPropertyConverter.Read(ref stringReader, typeof(DateTimeKind), JsonSerializerOptions.Default);
         });

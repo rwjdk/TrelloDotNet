@@ -101,7 +101,7 @@ public class RawCallTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFix
     {
         Card card = await AddDummyCard(_board.Id, "RawPut");
 
-        CardCover coverToAdd = new CardCover(CardCoverColor.Black, CardCoverSize.Full);
+        CardCover coverToAdd = new(CardCoverColor.Black, CardCoverSize.Full);
         coverToAdd.PrepareForAddUpdate();
         string payload = $"{{\"cover\":{JsonSerializer.Serialize(coverToAdd)}}}";
 

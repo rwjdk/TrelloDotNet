@@ -88,7 +88,7 @@ public class ActionTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     }
 
     [Fact]
-    public async Task TestAddChecklistToCardActionToExsitingList()
+    public async Task TestAddChecklistToCardActionToExistingList()
     {
         var list = await TrelloClient.AddListAsync(new List(Guid.NewGuid().ToString(), _board.Id));
         var card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, "Some Card"));
@@ -337,8 +337,8 @@ public class ActionTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
         Assert.Empty(cardAfterPerformAction.MemberIds);
         Assert.Empty(cardAfterPerformAction.LabelIds);
         Assert.Empty(cardAfterPerformAction.ChecklistIds);
-        var strickers = await TrelloClient.GetStickersOnCardAsync(cardAfterPerformAction.Id);
-        Assert.Empty(strickers);
+        var stickers = await TrelloClient.GetStickersOnCardAsync(cardAfterPerformAction.Id);
+        Assert.Empty(stickers);
         Assert.Equal(1, processingResult.ActionsExecuted);
         Assert.Equal(0, processingResult.ActionsSkipped);
 

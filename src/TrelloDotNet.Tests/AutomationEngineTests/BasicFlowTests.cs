@@ -120,8 +120,8 @@ public class BasicFlowTests : TestBase
     [Fact]
     public async Task FalseTrigger()
     {
-        var triggeer = new AlwaysFalseTrigger();
-        var automationController = CreateAutomationController(triggeer, [], [new DummyAction()]);
+        var trigger = new AlwaysFalseTrigger();
+        var automationController = CreateAutomationController(trigger, [], [new DummyAction()]);
         var result = await automationController.ProcessJsonFromWebhookAsync(new ProcessingRequest(GetJsonFromSampleFile("MoveCardFromListToList.json")));
         Assert.Equal(0, result.AutomationsProcessed);
         Assert.Equal(2, result.AutomationsSkipped);
