@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
@@ -8,6 +9,7 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// Contains what Trello Plan a Board/Workspace is using (Free, Standard, Premium, Enterprise) and thereby what features are supported
     /// </summary>
+    [DebuggerDisplay("{Name} (Id: {Id}, Plan: {Plan})")]
     public class TrelloPlanInformation
     {
         /// <summary>

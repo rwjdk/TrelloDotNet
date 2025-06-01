@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -6,6 +7,7 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// Represent a sticker on a Card
     /// </summary>
+    [DebuggerDisplay("Sticker: {ImageId} (Id: {Id})")]
     public class Sticker
     {
         /// <summary>

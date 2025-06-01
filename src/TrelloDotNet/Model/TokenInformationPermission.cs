@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Represent a permission of a token
     /// </summary>
+    [DebuggerDisplay("ModelType = {ModelType}, ModelId = {ModelId}, Read = {Read}, Write = {Write}")]
     public class TokenInformationPermission
     {
         /// <summary>

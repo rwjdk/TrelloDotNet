@@ -10,20 +10,20 @@ using TrelloDotNet.Model.Actions;
 namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// Represents a Trello Card.
+    /// Represents a Card.
     /// </summary>
     [DebuggerDisplay("{Name} (Id: {Id})")]
     public class Card
     {
         /// <summary>
-        /// The ID of the card (long form, globally unique across all boards).
+        /// The ID of the card (globally unique across all boards).
         /// </summary>
         [JsonPropertyName("id")]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
-        /// The short ID of the card (unique only within its board).
+        /// The short ID of the card (unique within its board).
         /// </summary>
         [JsonPropertyName("idShort")]
         [JsonInclude]
@@ -47,7 +47,7 @@ namespace TrelloDotNet.Model
         public string Name { get; set; }
 
         /// <summary>
-        /// The detailed description of the card.
+        /// The description of the card.
         /// </summary>
         [JsonPropertyName("desc")]
         [QueryParameter]
@@ -61,7 +61,7 @@ namespace TrelloDotNet.Model
         public bool Closed { get; set; }
 
         /// <summary>
-        /// The position of the card within its current list, used for ordering cards (the lower the number the higher up it is on the list).
+        /// The position of the card within its current list. Lower numbers are higher in the list.
         /// </summary>
         [JsonPropertyName("pos")]
         [QueryParameter]
@@ -93,7 +93,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The date and time of the last activity on the card (such as an update or comment). Stored in UTC.
         /// <remarks>
-        /// This property is unfortunately also affected by the Position property making it kind of useless as moving another card to same list as this one can affect its last activity timestamp :-(
+        /// This property is also affected by the Position property, so moving another card to the same list can affect this timestamp.
         /// </remarks>
         /// </summary>
         [JsonPropertyName("dateLastActivity")]
@@ -101,28 +101,28 @@ namespace TrelloDotNet.Model
         public DateTimeOffset LastActivity { get; private set; }
 
         /// <summary>
-        /// The start date for work on the card. This is not the same as the Created property and can be null. Stored in UTC.
+        /// The start date for work on the card. Not the same as Created. Stored in UTC.
         /// </summary>
         [JsonPropertyName("start")]
         [QueryParameter]
         public DateTimeOffset? Start { get; set; }
 
         /// <summary>
-        /// The due date of the card (aka when it should be completed). Stored in UTC.
+        /// The due date of the card. Stored in UTC.
         /// </summary>
         [JsonPropertyName("due")]
         [QueryParameter]
         public DateTimeOffset? Due { get; set; }
 
         /// <summary>
-        /// Indicates whether the card is marked as complete
+        /// Indicates whether the card is marked as complete.
         /// </summary>
         [JsonPropertyName("dueComplete")]
         [QueryParameter]
         public bool DueComplete { get; set; }
 
         /// <summary>
-        /// The detailed label objects currently assigned to the card. This property is read-only; to update labels, use the LabelIds property.
+        /// The detailed label objects currently assigned to the card. Read-only; to update labels, use the LabelIds property.
         /// </summary>
         /// <remarks>
         /// This property is not updateable. To change labels, update the LabelIds property instead.
@@ -139,7 +139,7 @@ namespace TrelloDotNet.Model
         public List<string> LabelIds { get; set; }
 
         /// <summary>
-        /// The list of checklist IDs attached to the card. This property is read-only; use dedicated methods to modify checklists.
+        /// The list of checklist IDs attached to the card. Read-only; use dedicated methods to modify checklists.
         /// </summary>
         /// <remarks>
         /// This property is not updateable here. Use dedicated methods to add or remove checklists.

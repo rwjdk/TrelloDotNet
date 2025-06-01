@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model
@@ -6,6 +7,7 @@ namespace TrelloDotNet.Model
     /// <summary>
     /// Represent a Membership on a Board
     /// </summary>
+    [DebuggerDisplay("Id = {Id}, MemberId = {MemberId}, MemberType = {MemberType}")]
     public class Membership
     {
         /// <summary>

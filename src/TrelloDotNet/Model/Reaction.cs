@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Represent a new reaction to a Comment
     /// </summary>
+    [DebuggerDisplay("Native = {Native}")]
     public class Reaction
     {
         /// <summary>

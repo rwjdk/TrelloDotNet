@@ -4,32 +4,32 @@ using System.IO;
 namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// Represent a File Upload as Attachment
+    /// Represents a file to be uploaded as an attachment.
     /// </summary>
     [DebuggerDisplay("{Name} (Filename: {Filename})")]
     public class AttachmentFileUpload
     {
         /// <summary>
-        /// The File Stream
+        /// Gets the file stream containing the attachment data.
         /// </summary>
         public Stream Stream { get; }
 
         /// <summary>
-        /// The Optional name of the Attachment (if not provided the Filename is used)
+        /// Gets the optional name of the attachment. If not provided, the <see cref="Filename"/> is used.
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// The Filename
+        /// Gets the filename of the attachment.
         /// </summary>
         public string Filename { get; }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="AttachmentFileUpload"/> class.
         /// </summary>
-        /// <param name="stream">The File Stream</param>
-        /// <param name="filename">The Filename</param>
-        /// <param name="name">The Optional name of the Attachment (if not provided the Filename is used)</param>
+        /// <param name="stream">The file stream containing the attachment data.</param>
+        /// <param name="filename">The filename of the attachment.</param>
+        /// <param name="name">The optional name of the attachment. If not provided, the <paramref name="filename"/> is used.</param>
         public AttachmentFileUpload(Stream stream, string filename, string name = null)
         {
             Stream = stream;

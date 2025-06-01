@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Represent an Emoji
     /// </summary>
+    [DebuggerDisplay("Name = {Name}, ShortName = {ShortName}")]
     public class Emoji
     {
         /// <summary>

@@ -1,10 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Object representing your Trello Inbox
     /// </summary>
+    [DebuggerDisplay("BoardId = {BoardId}, ListId = {ListId}, OrganizationId = {OrganizationId}")]
     public class TokenMemberInbox
     {
         /// <summary>

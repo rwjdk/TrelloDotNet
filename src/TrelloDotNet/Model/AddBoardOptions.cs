@@ -1,28 +1,30 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
     /// <summary>
-    /// Additional optional options when adding a board
+    /// Optional settings for adding a Board
     /// </summary>
+    [DebuggerDisplay("DefaultLabels = {DefaultLabels}, DefaultLists = {DefaultLists}, WorkspaceId = {WorkspaceId}")]
     public class AddBoardOptions
     {
         /// <summary>
-        /// Determines whether to use the default set of labels. [Default: True]
+        /// Indicates if the default set of labels should be added to the Board. [Default: True]
         /// </summary>
         [JsonPropertyName("defaultLabels")]
         [QueryParameter]
         public bool DefaultLabels { get; set; } = true;
 
         /// <summary>
-        /// Determines whether to add the default set of lists to a board (To Do, Doing, Done) [Default: True]
+        /// Indicates if the default set of lists (To Do, Doing, Done) should be added to the Board. [Default: True]
         /// </summary>
         [JsonPropertyName("defaultLists")]
         [QueryParameter]
         public bool DefaultLists { get; set; } = true;
 
         /// <summary>
-        /// The id or name of the Workspace (Organization) the board should belong to.
+        /// The ID of the Workspace (Organization) the board should belong to.
         /// </summary>
         [JsonPropertyName("idOrganization")]
         [QueryParameter(false)]
