@@ -33,15 +33,6 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="..\..\.github\copilot-instructions.md" Link="copilot-instructions.md" />
-		<None Include="..\..\Changelog.md" Link="Changelog.md" />
-		<None Include="..\..\README.md">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
 	    <PrivateAssets>all</PrivateAssets>
@@ -54,10 +45,14 @@
       <_Parameter1>TrelloDotNet.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-	<ItemGroup>
-		<None Update="trello.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
-		</None>
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\images\trello.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 </Project>
