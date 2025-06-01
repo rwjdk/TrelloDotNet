@@ -57,7 +57,7 @@ namespace TrelloDotNet.Model.Batch
 
             if (result.StatusCode != 200)
             {
-                throw new ArgumentException($"Data-retrival for this url failed: {result.Name} - {result.Message}", nameof(url));
+                throw new ArgumentException($"Data-retrieval for this url failed: {result.Name} - {result.Message}", nameof(url));
             }
 
             return result.GetData<T>();

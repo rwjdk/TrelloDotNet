@@ -1,4 +1,6 @@
-﻿namespace TrelloDotNet.Model
+﻿// ReSharper disable UnusedMember.Global
+
+namespace TrelloDotNet.Model
 {
     /// <summary>
     /// Card Conditions based on numbers (Integer and Decimal based values)

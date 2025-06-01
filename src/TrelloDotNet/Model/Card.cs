@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model.Actions;
-using TrelloDotNet.Model.Options.AddCardOptions;
 
 // ReSharper disable UnusedMember.Global
 

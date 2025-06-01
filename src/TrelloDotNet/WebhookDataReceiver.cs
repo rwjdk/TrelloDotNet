@@ -29,6 +29,7 @@ namespace TrelloDotNet
         /// <returns>If the Event was processed (aka it was a supported event)</returns>
 #pragma warning disable IDE1006 // Naming Styles
         // ReSharper disable once InconsistentNaming
+        // ReSharper disable once AsyncVoidMethod
         public async void ProcessJsonIntoEvents(string json, string signature = null, string webhookUrl = null)
 #pragma warning restore IDE1006 // Naming Styles
         {

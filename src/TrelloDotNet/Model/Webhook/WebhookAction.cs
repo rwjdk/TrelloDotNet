@@ -92,10 +92,6 @@ namespace TrelloDotNet.Model.Webhook
         {
             switch (scenario)
             {
-                case WebhookActionDummyCreationScenario.MoveCardToList:
-                case WebhookActionDummyCreationScenario.MoveCardAwayFromList:
-                case WebhookActionDummyCreationScenario.CardUpdated:
-                    return WebhookActionTypes.UpdateCard;
                 case WebhookActionDummyCreationScenario.CardCreated:
                     return WebhookActionTypes.CreateCard;
                 case WebhookActionDummyCreationScenario.CardEmailed:

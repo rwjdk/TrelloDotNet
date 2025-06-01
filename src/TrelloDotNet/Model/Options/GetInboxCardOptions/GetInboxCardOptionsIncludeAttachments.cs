@@ -1,4 +1,6 @@
-﻿namespace TrelloDotNet.Model.Options.GetInboxCardOptions
+﻿// ReSharper disable UnusedMember.Global
+
+namespace TrelloDotNet.Model.Options.GetInboxCardOptions
 {
     /// <summary>
     /// Represent if Attachments should be included or not

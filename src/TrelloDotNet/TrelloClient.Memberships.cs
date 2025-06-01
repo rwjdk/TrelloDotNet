@@ -24,7 +24,7 @@ namespace TrelloDotNet
         }
 
         /// <summary>
-        /// Changes the membership type of a member on a board (for example, promote a member to Admin).
+        /// Changes the membership-type of a member on a board (for example, promote a member to Admin).
         /// </summary>
         /// <param name="boardId">ID of the board</param>
         /// <param name="membershipId">ID of the member's membership (not the member ID; obtain this via 'GetMembershipsOfBoardAsync')</param>

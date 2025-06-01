@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Text.Json;
 
+// ReSharper disable UnusedMember.Global
+
 namespace TrelloDotNet.Model
 {
     /// <summary>
