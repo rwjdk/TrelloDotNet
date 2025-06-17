@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
@@ -62,9 +63,23 @@ namespace TrelloDotNet
         /// <param name="boardWithChanges">A Board object containing the updated properties (must include the board's ID)</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated Board object</returns>
+        [Obsolete("Use UpdateBoard overload that does delta updates (List<BoardUpdate> valuesToUpdate). This Method will be removed in TrelloDotNet 3.0")]
         public async Task<Board> UpdateBoardAsync(Board boardWithChanges, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardWithChanges.Id}", cancellationToken, _queryParametersBuilder.GetViaQueryParameterAttributes(boardWithChanges));
+        }
+
+        /// <summary>
+        /// Updates one or more specific fields on a Board, such as name, description, etc.
+        /// </summary>
+        /// <param name="boardId">The ID of the board to update.</param>
+        /// <param name="valuesToUpdate">A list of updates to apply to the board. <see cref="BoardUpdate"/></param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The updated <see cref="Board"/>.</returns>
+        public async Task<Board> UpdateBoardAsync(string boardId, List<BoardUpdate> valuesToUpdate, CancellationToken cancellationToken = default)
+        {
+            var parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, parameters.ToArray());
         }
 
         /// <summary>

@@ -16,8 +16,7 @@ public class ActionTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     {
         var nameBefore = _board.Name;
         string newName = _board.Name + "GetActionsOfBoard";
-        _board.Name = newName;
-        await TrelloClient.UpdateBoardAsync(_board);
+        await TrelloClient.UpdateBoardAsync(_board.Id, [BoardUpdate.Name(newName)]);
         var actions = await TrelloClient.GetActionsOfBoardAsync(_boardId, new GetActionsOptions
         {
             Filter = [WebhookActionTypes.UpdateBoard]

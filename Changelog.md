@@ -1,10 +1,14 @@
 ﻿# Changelog
 
-## Unreleased
+## 2.0.6 (17th of June 2025)
 #### Special
 - Introduced copilot-instructions.md for AI Rules
 
 #### TrelloClient
+- Obsoleted `UpdateBoardAsync(Board boardWithChanges)` and introduced `UpdateBoardAsync(string boardId, List<BoardUpdate> valuesToUpdate)` that does delta updates similar to `UpdateCard`
+- Obsoleted `UpdateListAsync(List listWithChanges)` and introduced `UpdateListAsync(string listId, List<ListUpdate> valuesToUpdate)` that does delta updates similar to `UpdateCard`
+- Added `ListFields` in the `GetListOptions`
+- Add option to see/update `Subscribed` (Watch) on Boards for the Token owner
 - Updated various XML summaries
 - Added guards on various options methods to check for null
 - Added guard on InviteMemberToBoardViaEmailAsync to explain it is not possible to invite a user as Admin

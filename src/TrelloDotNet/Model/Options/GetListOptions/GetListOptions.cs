@@ -12,6 +12,11 @@ namespace TrelloDotNet.Model.Options.GetListOptions
         /// <summary>
         /// All or a comma-separated list of fields. Defaults: badges, checkItemStates, closed, dateLastActivity, desc, descData, due, start, email, idBoard, idChecklists, idLabels, idList, idMembers, idShort, idAttachmentCover, manualCoverAttachment, labels, name, pos, shortUrl, url
         /// </summary>
+        public ListFields ListFields { get; set; }
+
+        /// <summary>
+        /// All or a comma-separated list of fields. Defaults: badges, checkItemStates, closed, dateLastActivity, desc, descData, due, start, email, idBoard, idChecklists, idLabels, idList, idMembers, idShort, idAttachmentCover, manualCoverAttachment, labels, name, pos, shortUrl, url
+        /// </summary>
         public CardFields CardFields { get; set; }
 
         /// <summary>
@@ -52,9 +57,14 @@ namespace TrelloDotNet.Model.Options.GetListOptions
         internal QueryParameter[] GetParameters()
         {
             List<QueryParameter> parameters = new List<QueryParameter>();
+            if (ListFields != null)
+            {
+                parameters.Add(new QueryParameter("fields", string.Join(",", ListFields.Fields)));
+            }
+
             if (CardFields != null)
             {
-                parameters.Add(new QueryParameter("fields", string.Join(",", CardFields.Fields)));
+                parameters.Add(new QueryParameter("card_fields", string.Join(",", CardFields.Fields)));
             }
 
             if (BoardFields != null)

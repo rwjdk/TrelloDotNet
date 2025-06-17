@@ -58,6 +58,12 @@ namespace TrelloDotNet.Model.Options
         Pinned,
 
         /// <summary>
+        /// If the Board is Subscribed (watched) or not
+        /// </summary>
+        [JsonPropertyName("subscribed")]
+        Subscribed,
+
+        /// <summary>
         /// The Preferences of the board
         /// </summary>
         [JsonPropertyName("prefs")]

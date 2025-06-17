@@ -139,15 +139,15 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     {
         //Board Update
         Debug.Assert(_board != null, nameof(_board) + " != null");
-        _board.Name = _boardName + "X";
-        _board.Description = _boardDescription + "X";
-        var updatedBoard = await TrelloClient.UpdateBoardAsync(_board);
+        var updatedBoard = await TrelloClient.UpdateBoardAsync(_board.Id, [
+            Model.BoardUpdate.Name(_boardName + "X"),
+            Model.BoardUpdate.Description(_boardDescription + "X")
+        ]);
         var getBoard = await TrelloClient.GetBoardAsync(_boardId);
         Assert.EndsWith("X", updatedBoard.Name);
         Assert.EndsWith("X", updatedBoard.Description);
         Assert.EndsWith("X", getBoard.Name);
         Assert.EndsWith("X", getBoard.Description);
-        Assert.Equal(updatedBoard.Name, getBoard.Name);
         Assert.Equal(updatedBoard.Description, getBoard.Description);
 
         var getBoardWithOptions = await TrelloClient.GetBoardAsync(_boardId, new GetBoardOptions

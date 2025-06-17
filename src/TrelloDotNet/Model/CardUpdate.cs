@@ -36,7 +36,6 @@ namespace TrelloDotNet.Model
         /// <returns>CardUpdate Object</returns>
         public static CardUpdate Cover(CardCover value) => new CardUpdate(CardFieldsType.Cover, JsonSerializer.Serialize(value));
 
-
         /// <summary>
         /// Create a Due Date Parameter
         /// </summary>
@@ -162,7 +161,6 @@ namespace TrelloDotNet.Model
         /// <param name="additionalParameter">The Additional Parameter</param>
         /// <returns>CardUpdate Object</returns>
         public static CardUpdate AdditionalParameter(QueryParameter additionalParameter) => new CardUpdate(additionalParameter);
-
 
         /// <summary>
         /// Constructor

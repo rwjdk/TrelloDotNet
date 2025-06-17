@@ -61,8 +61,8 @@ namespace TrelloDotNet.Model
         /// Indicates if the owner of the Token is subscribed (watching) the List
         /// </summary>
         [JsonPropertyName("subscribed")]
-        [JsonInclude]
-        public bool Subscribed { get; private set; }
+        [QueryParameter]
+        public bool Subscribed { get; set; }
 
         /// <summary>
         /// Soft limit for the number of Cards in the List (provided by PowerUp 'List Limits' from Trello)

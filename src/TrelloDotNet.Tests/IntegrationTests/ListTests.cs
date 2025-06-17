@@ -32,8 +32,9 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var name = Guid.NewGuid().ToString();
         var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
         var updatedName = Guid.NewGuid().ToString();
-        addList.Name = updatedName;
-        var updateList = await TrelloClient.UpdateListAsync(addList);
+        var updateList = await TrelloClient.UpdateListAsync(addList.Id, [
+            ListUpdate.Name(updatedName)
+        ]);
         var getList = await TrelloClient.GetListAsync(addList.Id);
         Assert.Equal(updatedName, getList.Name);
         Assert.Equal(updateList.Name, getList.Name);

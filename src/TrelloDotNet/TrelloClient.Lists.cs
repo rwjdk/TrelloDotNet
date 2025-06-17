@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
@@ -62,11 +64,25 @@ namespace TrelloDotNet
         /// <param name="listWithChanges">The list object containing the updated properties</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns>The updated list</returns>
+        [Obsolete("Use UpdateList overload that does delta updates (List<ListUpdate> valuesToUpdate). This Method will be removed in TrelloDotNet 3.0")]
         public async Task<List> UpdateListAsync(List listWithChanges, CancellationToken cancellationToken = default)
         {
             var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges);
             _queryParametersBuilder.AdjustForNamedPosition(parameters, listWithChanges.NamedPosition);
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listWithChanges.Id}", cancellationToken, parameters);
+        }
+
+        /// <summary>
+        /// Updates one or more specific fields on a List, such as name, position, etc.
+        /// </summary>
+        /// <param name="listId">The ID of the board to update.</param>
+        /// <param name="valuesToUpdate">A collection of updates to apply to the list. <see cref="ListUpdate"/></param>
+        /// <param name="cancellationToken">CancellationToken</param>
+        /// <returns>The updated <see cref="List"/>.</returns>
+        public async Task<List> UpdateListAsync(string listId, List<ListUpdate> valuesToUpdate, CancellationToken cancellationToken = default)
+        {
+            var parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, parameters.ToArray());
         }
 
         /// <summary>

@@ -132,6 +132,13 @@ namespace TrelloDotNet.Model
         public BoardPreferences Preferences { get; private set; }
 
         /// <summary>
+        /// If the Token-use is Subscribed (Watching) the board. (Only populated if BoardFields.Subscribed is requested in GetBoardOptions)
+        /// </summary>
+        [JsonPropertyName("subscribed")]
+        [QueryParameter]
+        public bool Subscribed { get; set; }
+
+        /// <summary>
         /// Initializes a new Board instance for serialization.
         /// </summary>
         public Board()
