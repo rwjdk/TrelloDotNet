@@ -31,7 +31,7 @@ public abstract class TestBase
                 var trelloClientOptions = new TrelloClientOptions
                 {
                     MaxRetryCountForTokenLimitExceeded = 10,
-                    DelayInSecondsToWaitInTokenLimitExceededRetry = 2
+                    DelayInSecondsToWaitInTokenLimitExceededRetry = 3
                 };
                 clients.Add(new TrelloClient(apiKey, token, trelloClientOptions));
             }
@@ -45,7 +45,7 @@ public abstract class TestBase
                     var trelloClientOptions = new TrelloClientOptions
                     {
                         MaxRetryCountForTokenLimitExceeded = 10,
-                        DelayInSecondsToWaitInTokenLimitExceededRetry = 2
+                        DelayInSecondsToWaitInTokenLimitExceededRetry = 3
                     };
                     clients.Add(new TrelloClient(apiKey, token, trelloClientOptions));
                 }
