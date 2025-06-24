@@ -45,7 +45,19 @@ namespace TrelloDotNet.Control
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.GetAsync(uri, cancellationToken);
             var responseContent = await response.Content.ReadAsStringAsync();
-            if (response.StatusCode != HttpStatusCode.OK)
+
+            if (response.StatusCode == HttpStatusCode.Accepted)
+            {
+                var location = response.Headers.Location;
+                if (location == null)
+                {
+                    throw new TrelloApiException("202 Accepted without Location header; cannot track status.");
+                }
+
+                return await PollUntilComplete(location, cancellationToken);
+            }
+
+            if (!response.IsSuccessStatusCode)
             {
                 return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => Get(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
@@ -75,7 +87,19 @@ namespace TrelloDotNet.Control
                 multipartFormContent.Add(new StreamContent(attachmentFile.Stream), name: "file", fileName: attachmentFile.Filename);
                 var response = await _httpClient.PostAsync(uri, multipartFormContent, cancellationToken);
                 var responseContent = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode != HttpStatusCode.OK)
+
+                if (response.StatusCode == HttpStatusCode.Accepted)
+                {
+                    var location = response.Headers.Location;
+                    if (location == null)
+                    {
+                        throw new TrelloApiException("202 Accepted without Location header; cannot track status.");
+                    }
+
+                    return await PollUntilComplete(location, cancellationToken);
+                }
+
+                if (!response.IsSuccessStatusCode)
                 {
                     return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => PostWithAttachmentFileUpload(suffix, attachmentFile, cancellationToken, retry, parameters), retryCount, cancellationToken);
                 }
@@ -89,7 +113,19 @@ namespace TrelloDotNet.Control
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PostAsync(uri, null, cancellationToken);
             var content = await response.Content.ReadAsStringAsync();
-            if (response.StatusCode != HttpStatusCode.OK)
+
+            if (response.StatusCode == HttpStatusCode.Accepted)
+            {
+                var location = response.Headers.Location;
+                if (location == null)
+                {
+                    throw new TrelloApiException("202 Accepted without Location header; cannot track status.");
+                }
+
+                return await PollUntilComplete(location, cancellationToken);
+            }
+
+            if (!response.IsSuccessStatusCode)
             {
                 return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, content, retry => Post(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
@@ -109,7 +145,19 @@ namespace TrelloDotNet.Control
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PutAsync(uri, null, cancellationToken);
             var responseContent = await response.Content.ReadAsStringAsync();
-            if (response.StatusCode != HttpStatusCode.OK)
+
+            if (response.StatusCode == HttpStatusCode.Accepted)
+            {
+                var location = response.Headers.Location;
+                if (location == null)
+                {
+                    throw new TrelloApiException("202 Accepted without Location header; cannot track status.");
+                }
+
+                return await PollUntilComplete(location, cancellationToken);
+            }
+
+            if (!response.IsSuccessStatusCode)
             {
                 return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => Put(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
@@ -129,7 +177,19 @@ namespace TrelloDotNet.Control
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PutAsync(uri, new StringContent(payload, Encoding.UTF8, "application/json"), cancellationToken);
             var responseContent = await response.Content.ReadAsStringAsync();
-            if (response.StatusCode != HttpStatusCode.OK)
+
+            if (response.StatusCode == HttpStatusCode.Accepted)
+            {
+                var location = response.Headers.Location;
+                if (location == null)
+                {
+                    throw new TrelloApiException("202 Accepted without Location header; cannot track status.");
+                }
+
+                return await PollUntilComplete(location, cancellationToken);
+            }
+
+            if (!response.IsSuccessStatusCode)
             {
                 return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => PutWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
             }
@@ -149,7 +209,19 @@ namespace TrelloDotNet.Control
             var uri = BuildUri(suffix, parameters);
             var response = await _httpClient.PostAsync(uri, new StringContent(payload, Encoding.UTF8, "application/json"), cancellationToken);
             var responseContent = await response.Content.ReadAsStringAsync();
-            if (response.StatusCode != HttpStatusCode.OK)
+
+            if (response.StatusCode == HttpStatusCode.Accepted)
+            {
+                var location = response.Headers.Location;
+                if (location == null)
+                {
+                    throw new TrelloApiException("202 Accepted without Location header; cannot track status.");
+                }
+
+                return await PollUntilComplete(location, cancellationToken);
+            }
+
+            if (!response.IsSuccessStatusCode)
             {
                 return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => PostWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
             }
@@ -195,7 +267,19 @@ namespace TrelloDotNet.Control
             var uri = BuildUri(suffix);
             var response = await _httpClient.DeleteAsync(uri, cancellationToken);
             var responseContent = await response.Content.ReadAsStringAsync();
-            if (response.StatusCode != HttpStatusCode.OK)
+
+            if (response.StatusCode == HttpStatusCode.Accepted)
+            {
+                var location = response.Headers.Location;
+                if (location == null)
+                {
+                    throw new TrelloApiException("202 Accepted without Location header; cannot track status.");
+                }
+
+                return await PollUntilComplete(location, cancellationToken);
+            }
+
+            if (!response.IsSuccessStatusCode)
             {
                 return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => Delete(suffix, cancellationToken, retry), retryCount, cancellationToken);
             }
@@ -215,6 +299,21 @@ namespace TrelloDotNet.Control
             }
 
             throw new TrelloApiException($"{responseContent} [{statusCodeAsInteger}: {statusCode}]", FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message       
+        }
+
+        private async Task<string> PollUntilComplete(Uri statusUri, CancellationToken cancellationToken)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
+                var statusResponse = await _httpClient.GetAsync(statusUri, cancellationToken);
+                if (statusResponse.IsSuccessStatusCode && statusResponse.StatusCode != HttpStatusCode.Accepted)
+                {
+                    return await statusResponse.Content.ReadAsStringAsync();
+                }
+            }
+
+            throw new TrelloApiException("Polling timed out waiting for final response.");
         }
     }
 }

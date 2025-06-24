@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## 2.0.8 (24th of June 2025)
+#### TrelloClient
+- Added Experimental Support for Trello REST API now returning Status Code 202 Accepted sometimes instead of 200 OK
+
+<hr>
+
 ## 2.0.7 (24th of June 2025)
 #### TrelloClient
 - Added HTTP Error Code to end of TrelloApiExceptions messages to better understand error from the REST-API
