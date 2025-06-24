@@ -47,7 +47,7 @@ namespace TrelloDotNet.Control
             var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => Get(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
+                return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => Get(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
 
             return responseContent; //Content is assumed JSON
@@ -77,7 +77,7 @@ namespace TrelloDotNet.Control
                 var responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => PostWithAttachmentFileUpload(suffix, attachmentFile, cancellationToken, retry, parameters), retryCount, cancellationToken);
+                    return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => PostWithAttachmentFileUpload(suffix, attachmentFile, cancellationToken, retry, parameters), retryCount, cancellationToken);
                 }
 
                 return responseContent; //Content is assumed JSON
@@ -91,7 +91,7 @@ namespace TrelloDotNet.Control
             var content = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                return await PreformRetryIfNeededOrThrow(uri, content, retry => Post(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
+                return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, content, retry => Post(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
 
             return content; //Content is assumed JSON
@@ -111,7 +111,7 @@ namespace TrelloDotNet.Control
             var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => Put(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
+                return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => Put(suffix, cancellationToken, retry, parameters), retryCount, cancellationToken);
             }
 
             return responseContent; //Content is assumed JSON
@@ -131,7 +131,7 @@ namespace TrelloDotNet.Control
             var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => PutWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
+                return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => PutWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
             }
 
             return responseContent; //Content is assumed JSON
@@ -151,7 +151,7 @@ namespace TrelloDotNet.Control
             var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => PostWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
+                return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => PostWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
             }
 
             return responseContent; //Content is assumed JSON
@@ -197,22 +197,24 @@ namespace TrelloDotNet.Control
             var responseContent = await response.Content.ReadAsStringAsync();
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                return await PreformRetryIfNeededOrThrow(uri, responseContent, retry => Delete(suffix, cancellationToken, retry), retryCount, cancellationToken);
+                return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => Delete(suffix, cancellationToken, retry), retryCount, cancellationToken);
             }
 
             return null;
         }
 
-        private async Task<string> PreformRetryIfNeededOrThrow(Uri uri, string responseContent, Func<int, Task<string>> toRetry, int retryCount, CancellationToken cancellationToken)
+        private async Task<string> PreformRetryIfNeededOrThrow(Uri uri, HttpStatusCode statusCode, string responseContent, Func<int, Task<string>> toRetry, int retryCount, CancellationToken cancellationToken)
         {
-            if (responseContent.Contains("API_TOKEN_LIMIT_EXCEEDED") && retryCount <= _client.Options.MaxRetryCountForTokenLimitExceeded)
+            int statusCodeAsInteger = (int)statusCode;
+            bool isTooManyRequestsStatusCode = statusCodeAsInteger == 429;
+            if ((responseContent.Contains("API_TOKEN_LIMIT_EXCEEDED") || isTooManyRequestsStatusCode) && retryCount <= _client.Options.MaxRetryCountForTokenLimitExceeded)
             {
                 await Task.Delay(TimeSpan.FromSeconds(_client.Options.DelayInSecondsToWaitInTokenLimitExceededRetry), cancellationToken);
                 retryCount++;
                 return await toRetry(retryCount);
             }
 
-            throw new TrelloApiException(responseContent, FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message       
+            throw new TrelloApiException($"{responseContent} [{statusCodeAsInteger}: {statusCode}]", FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message       
         }
     }
 }

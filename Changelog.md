@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## 2.0.7 (24th of June 2025)
+#### TrelloClient
+- Added HTTP Error Code to end of TrelloApiExceptions messages to better understand error from the REST-API
+- Detecting Http Error 429 - Too Many Requests as a reason to retry should error message not contain the normal error messages
+
+<hr>
+
 ## 2.0.6 (17th of June 2025)
 #### Special
 - Introduced copilot-instructions.md for AI Rules
