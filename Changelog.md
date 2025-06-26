@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## 2.0.9 (26th of June 2025)
+#### TrelloClient
+- Reversed experiment done in 2.0.8 as it did not resolve anything and meanwhile Trello have fixed their [202 - Accepted Bug](https://support.atlassian.com/requests/TRELLO-218085)
+
+<hr>
+
 ## 2.0.8 (24th of June 2025)
 #### TrelloClient
 - Added Experimental Support for Trello REST API now returning Status Code 202 Accepted sometimes instead of 200 OK
