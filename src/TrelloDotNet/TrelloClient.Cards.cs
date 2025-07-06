@@ -319,6 +319,49 @@ namespace TrelloDotNet
         }
 
         /// <summary>
+        /// Adds a separator card (with name "---" and cardRole "separator") to the specified list at the given position.
+        /// </summary>
+        /// <param name="listId">The ID of the list to add the separator card to.</param>
+        /// <param name="position">The position in the list to add the separator card (0 for top).</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The created separator <see cref="Card"/>.</returns>
+        public async Task<Card> AddSeparatorCardAsync(string listId, decimal position, CancellationToken cancellationToken = default)
+        {
+            if (position == 0)
+            {
+                return await AddSeparatorCardAsync(listId, NamedPosition.Top, cancellationToken);
+            }
+
+            List<QueryParameter> parameters = new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.ListId, listId),
+                new QueryParameter(CardFieldsType.Name, "---"),
+                new QueryParameter(CardFieldsType.Position, position),
+                new QueryParameter(CardFieldsType.CardRole, "separator")
+            };
+            return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters.ToArray());
+        }
+
+        /// <summary>
+        /// Adds a separator card (with name "---" and cardRole "separator") to the specified list at the given position.
+        /// </summary>
+        /// <param name="listId">The ID of the list to add the separator card to.</param>
+        /// <param name="position">The position in the list to add the separator card.</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns>The created separator <see cref="Card"/>.</returns>
+        public async Task<Card> AddSeparatorCardAsync(string listId, NamedPosition position, CancellationToken cancellationToken = default)
+        {
+            List<QueryParameter> parameters = new List<QueryParameter>
+            {
+                new QueryParameter(CardFieldsType.ListId, listId),
+                new QueryParameter(CardFieldsType.Name, "---"),
+                new QueryParameter(CardFieldsType.Position, position == NamedPosition.Top ? "top" : "bottom"),
+                new QueryParameter(CardFieldsType.CardRole, "separator")
+            };
+            return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters.ToArray());
+        }
+
+        /// <summary>
         /// Creates a copy of an existing card, with options to specify which properties to keep or override.
         /// </summary>
         /// <param name="options">Options for copying the card, including source card ID, target list, name, position, and what to keep. <see cref="CopyCardOptions"/></param>

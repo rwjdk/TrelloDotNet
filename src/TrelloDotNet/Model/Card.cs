@@ -262,7 +262,7 @@ namespace TrelloDotNet.Model
         public List<Sticker> Stickers { get; private set; }
 
         /// <summary>
-        /// The role of the card, used to indicate if the card is a mirror or has a special function.
+        /// The role of the card, used to indicate if the card is a mirror, separator or other special function.
         /// </summary>
         [JsonPropertyName("cardRole")]
         [JsonInclude]
@@ -279,6 +279,11 @@ namespace TrelloDotNet.Model
         /// Indicates whether this card is a mirror of another card.
         /// </summary>
         public bool IsCardMirror => CardRole == "mirror";
+
+        /// <summary>
+        /// Indicates whether this card is a Separator
+        /// </summary>
+        public bool IsSeparator => CardRole == "separator";
 
         /// <summary>
         /// The named position of the card in the list, such as Top or Bottom. Used for positioning cards by name instead of numeric value.

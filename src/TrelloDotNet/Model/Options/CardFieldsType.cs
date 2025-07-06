@@ -139,6 +139,12 @@ namespace TrelloDotNet.Model.Options
         /// If the Card is a Template
         /// </summary>
         [JsonPropertyName("isTemplate")]
-        IsTemplate
+        IsTemplate,
+
+        /// <summary>
+        /// The role of the Card
+        /// </summary>
+        [JsonPropertyName("cardRole")]
+        CardRole
     }
 }

@@ -1,23 +1,29 @@
 ﻿# Changelog
 
+## 2.1.0 (6th of July 2025)
+#### TrelloClient
+- Added [AddSeparatorCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddSeparatorCardAsync) to create Separator Cards
+
+---
+
 ## 2.0.9 (26th of June 2025)
 #### TrelloClient
 - Reversed experiment done in 2.0.8 as it did not resolve anything and meanwhile Trello have fixed their [202 - Accepted Bug](https://support.atlassian.com/requests/TRELLO-218085)
 
-<hr>
+---
 
 ## 2.0.8 (24th of June 2025)
 #### TrelloClient
 - Added Experimental Support for Trello REST API now returning Status Code 202 Accepted sometimes instead of 200 OK
 
-<hr>
+---
 
 ## 2.0.7 (24th of June 2025)
 #### TrelloClient
 - Added HTTP Error Code to end of TrelloApiExceptions messages to better understand error from the REST-API
 - Detecting Http Error 429 - Too Many Requests as a reason to retry should error message not contain the normal error messages
 
-<hr>
+---
 
 ## 2.0.6 (17th of June 2025)
 #### Special
@@ -32,37 +38,37 @@
 - Added guards on various options methods to check for null
 - Added guard on InviteMemberToBoardViaEmailAsync to explain it is not possible to invite a user as Admin
 
-<hr>
+---
 
 ## 2.0.5 (9th of April 2025)
 #### TrelloClient
 - Fixed the logic around setting `Start` and `DueDate` on Cards to correctly account for timezones
 
-<hr>
+---
 
 ## 2.0.4 (1st of April 2025)
 #### TrelloClient
 - Added auto-fix for scenarios where duplicate LabelIds or MemberIds are provided to a Card in Add/Update operations (since the Trello REST API no longer supports duplicates, but instead throws error 'label not found')
 
-<hr>
+---
 
 ## 2.0.3 (18th of March 2025)
 #### Webhook Receiver
 - Added missing `Text` property to `WebhookActionData` (Thanks to **[Liamth99](https://github.com/Liamth99)** for the contribution 💪) - [PR#57](https://github.com/rwjdk/TrelloDotNet/pull/57)
 
-<hr>
+---
 
 ## 2.0.2 (12th of March 2025)
 #### TrelloClient
 - Fixed that `BoardPreferenceWhoCanAddAndRemoveMembers` `Admins` option was incorrectly named `Observers` [BREAKING CHANGE]
 
-<hr>
+---
 
 ## 2.0.1 (11th of March 2025)
 #### TrelloClient
 - Added overload for [GetCurrentTokenMembershipsAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetCurrentTokenMembershipsAsync) where you can provide Board and `OrganizationOptions`
 
-<hr>
+---
 
 ## 2.0.0 (5th of March 2025)
 #### Special
@@ -86,30 +92,30 @@
 - Fixed that a Custom Field of type Date could not be read if it included milliseconds
 - Introduced an "Unknown" value for all enum-based values returned from the API to ensure that Trello can introduce new valid values without breaking this API (will revert to this Unknown value if value-parsing fails) [NB: You should never send this value to Add/Update methods as it will result in a failure]
 
-<hr>
+---
 
 ## 1.11.13 (4th of March 2025)
 #### TrelloClient
 - Fixed that [Search](https://github.com/rwjdk/TrelloDotNet/wiki/Search) failed deserializing JSON
 
-<hr>
+---
 
 ## 1.11.12 (2nd of March 2025)
 - Obsoleted `GetListsOnBoardFilteredAsync`. Use GetListsOnBoardAsync with GetListOptions.Filter instead.
 
-<hr>
+---
 
 ## 1.11.11 (21st of February 2025)
 #### TrelloClient
 - Marked incorrectly named methods as Obsolete and offered new versions with the correct names
 
-<hr>
+---
 
 ## 1.11.10 (27th of January 2025)
 #### TrelloClient
 - Fixed that the new AddCard variant did not properly work with NamePosition
 
-<hr>
+---
 
 ## Version 1.11.9 (25th of January 2025)
 #### Special
@@ -252,20 +258,20 @@
 #### TrelloClient
 - Fixed [Issue #30](https://github.com/rwjdk/TrelloDotNet/issues/30) where providing a Cover to [`AddCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/AddCardAsync) would not add the cover
 
-<hr>
+---
 
 ## Version 1.9.9 (16th of February 2024)
 #### TrelloClient
 - Methods [`GetCardsOnBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardAsync), [`GetCardsOnBoardFilteredAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsOnBoardFilteredAsync), [`GetCardsInListAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsInListAsync), [`GetCardsForMemberAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetCardsForMemberAsync) will now correctly include the `List` a card is on if specified in the `GetCardOptions`
 - Fixed that member type 'ghost' was not supported
 
-<hr>
+---
 
 ## Version 1.9.8 (21st of January 2024)
 #### TrelloClient
 - Added option to get Label Colors as Enum (`LabelColor`) value and `ColorInfo` that explains the color of the labels in RGB and #Hex value
 
-<hr>
+---
 
 ## 1.9.7 (23rd of December 2023)
 #### TrelloClient
@@ -276,20 +282,20 @@
 - Added member properties `Email` and `MemberType`
 - Added properties on Member for the various Avatar URLs (30x30, 50x50, 170x170 pixels and the original image)
 
-<hr>
+---
 
 ## Version 1.9.6 (22nd of December 2023)
 #### General
 - Improved NuGet description and tags
 
-<hr>
+---
 
 ## Version 1.9.5 (13th of November 2023)
 #### TrelloClient
 - Added option to Add/Update with named positions (Top or Bottom) on `Cards`, `Lists`, `Attachments`, `Checklists`, and `Checklist Items`
 - Added [`UpdateChecklistAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateChecklistAsync)
 
-<hr>
+---
 
 ## Version 1.9.4 (1st of November 2023)
 #### TrelloClient
@@ -300,7 +306,7 @@
 - Added [`RemoveVoteFromCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveVoteFromCardAsync)
 - Added [`GetMembersWhoVotedOnCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetMembersWhoVotedOnCardAsync)
 
-<hr>
+---
 
 ## Version 1.9.3 (26th of October 2023)
 #### TrelloClient
@@ -309,7 +315,7 @@
 - Added [`GetPluginDataOnCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOnCardAsync)
 - Added [`GetPluginDataOfBoardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/GetPluginDataOfBoardAsync)
 
-<hr>
+---
 
 ## Version 1.9.2 (12th of October 2023)
 #### General
@@ -318,7 +324,7 @@
 #### TrelloClient
 - Added overload to [`UpdateCardAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCardAsync) that instead of a full update with a card can do partial updates with only the parameters you provide
 
-<hr>
+---
 
 ## Version 1.9.1 (11th of October 2023)
 #### Automation Engine
@@ -328,7 +334,7 @@
 - Added Automation Trigger [`RemoveChecklistFromCardTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveChecklistFromCardTrigger)
 - Added Automation Trigger [`UpdateCheckItemTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/UpdateCheckItemTrigger)
 
-<hr>
+---
 
 ## Version 1.9.0 (3rd of October 2023)
 #### General
@@ -359,7 +365,7 @@
 #### Webhook Receiver
 - Added option to use [Webhook Signature Validation](https://developer.atlassian.com/cloud/trello/guides/rest-api/webhooks/#webhook-signatures) (Thanks to **[compujuckel](https://github.com/compujuckel)** for the contribution 💪) - [PR#26](https://github.com/rwjdk/TrelloDotNet/pull/26)
 
-<hr>
+---
 
 ## Version 1.8.0 (27th of August 2023)
 #### TrelloClient
@@ -370,7 +376,7 @@
 - Added more properties on the `Member` object
 - Added more properties on the `Card` object
 
-<hr>
+---
 
 ## Version 1.7.2 (23rd of August 2023)
 #### General
@@ -381,7 +387,7 @@
 - Fixed that [`AddCommentToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddCommentToCardAction) did not increment property `ActionsExecuted` in `ProcessingResult`
 - Fixed incorrect spelling of property `Position` in `WebhookActionDataList` [COMPILE TIME BREAKING CHANGE]
 
-<hr>
+---
 
 ## Version 1.7.0 (5th of August 2023)
 #### General
@@ -395,39 +401,39 @@
 - Added DebuggerDisplay to `Organization`
 - Added option to set `OrganizationId` when creating a `Board`
 
-<hr>
+---
 
 ## Version 1.6.9 (8th of July 2023)
 #### Automation Engine
 - Fixed that if you used option 'AddCheckItemsToExistingChecklist' in an `AddChecklistToCardAction` and a checklist existed but had no items, the automation failed.
 - Added better error context to the AutomationException (what Board, List, and Card was involved in the event that caused the Exception)
 
-<hr>
+---
 
 ## Version 1.6.8 (7th of July 2023)
 #### TrelloClient
 - Added [`DeleteChecklistItemAsync`](https://github.com/rwjdk/TrelloDotNet/wiki/DeleteChecklistItemAsync)
 
-<hr>
+---
 
 ## Version 1.6.7 (5th of July 2023)
 #### General
 - Changed the Project URL to point at the Wiki
 - Restructured the ReadMe
 
-<hr>
+---
 
 ## Version 1.6.6 (12th of June 2023)
 #### General
 - Added badges in [ReadMe](https://github.com/rwjdk/TrelloDotNet#readme) for easier discovery of additional resources
 
-<hr>
+---
 
 ## Version 1.6.4 (9th of June 2023)
 #### Automation Engine
 - Added Automation Trigger [`CardMovedAwayFromListTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CardMovedAwayFromListTrigger)
 
-<hr>
+---
 
 ## Version 1.6.3 (7th of June 2023)
 #### General
@@ -442,7 +448,7 @@
 - Added Automation Action [`RemoveMembersFromCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveMembersFromCardAction)
 - Added the Webhook object to the `WebhookNotification` (Trello recently exposed this feature)
 
-<hr>
+---
 
 ## Version 1.6.2 (4th of June 2023)
 #### General
@@ -451,7 +457,7 @@
 #### Automation Engine
 - Added Automation Action [`RemoveCardDataAction`](https://github.com/rwjdk/TrelloDotNet/wiki/RemoveCardDataAction)
 
-<hr>
+---
 
 ## Version 1.6.1 (31st of May 2023)
 #### General
@@ -462,7 +468,7 @@
 - Added Automation Trigger [`CheckItemStateUpdatedOnCardTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CheckItemStateUpdatedOnCardTrigger)
 - Added Automation Condition [`ChecklistItemsCompleteCondition`](https://github.com/rwjdk/TrelloDotNet/wiki/ChecklistItemsCompleteCondition)
 
-<hr>
+---
 
 ## Version 1.6.0 (12th of May 2023)
 #### General
@@ -487,19 +493,19 @@
 - Added Automation Action [`StopProcessingFurtherAction`](https://github.com/rwjdk/TrelloDotNet/wiki/StopProcessingFurtherAction) that allows you to conditionally stop any further processing for the specific webhook call
 - Updated Automation Action [`AddChecklistToCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardAction) to now have the option to add items to existing checklists with the same name (Example: two Definition of Done automations for two different labels add their items to a single checklist)
 
-<hr>
+---
 
 ## Version 1.5.2 (30th of March 2023)
 #### Automation Engine
 - Added Automation Action [`AddChecklistToCardIfLabelMatchAction`](https://github.com/rwjdk/TrelloDotNet/wiki/AddChecklistToCardIfLabelMatchAction) to make combining creation of checklists easier to maintain
 
-<hr>
+---
 
 ## Version 1.5.1 (27th of March 2023)
 #### General
 - Fixed that strings were not properly URL encoded if they contained an '&'
 
-<hr>
+---
 
 ## Version 1.5.0 (27th of March 2023)
 #### TrelloClient
@@ -518,7 +524,7 @@
 - Fixed that [`CardCoverCondition`](https://github.com/rwjdk/TrelloDotNet/wiki/CardCoverCondition) was not evaluated correctly in all scenarios
 - Fixed that [`SetFieldsOnCardAction`](https://github.com/rwjdk/TrelloDotNet/wiki/SetFieldsOnCardAction) did not update processing result (Executed and Skipped Actions counts)
 
-<hr>
+---
 
 ## Version 1.4.0 (3rd of April 2023)
 #### TrelloClient
@@ -532,13 +538,13 @@
 - Added RegEx option for string-comparison in Triggers and Conditions
 - Added Automation Trigger [`CardUpdatedTrigger`](https://github.com/rwjdk/TrelloDotNet/wiki/CardUpdatedTrigger)
 
-<hr>
+---
 
 ## Version 1.3.1 (30th of March 2023)
 #### Automation Engine
 - Updated Automation Condition [`ChecklistIncompleteCondition`](https://github.com/rwjdk/TrelloDotNet/wiki/ChecklistIncompleteCondition) to now have the option to define `ChecklistNameMatchCriteria` if, for example, you want to check lists with a certain name prefix
 
-<hr>
+---
 
 ## Version 1.3.0 (27th of March 2023)
 #### General
@@ -558,7 +564,7 @@
 - Added support for basic events `OnDeleteCustomField`, `OnAddCustomField`, `OnUpdateCustomField` and `OnUpdateCustomFieldItem`
 - Added `ListBefore` and `ListAfter` to `TrelloActionData`
 
-<hr>
+---
 
 ## Version 1.2.1 (25th of Feb. 2023)
 #### TrelloClient
@@ -571,7 +577,7 @@
 #### Webhook Receiver
 - Added generic WebHookNotification that does not care if Webhook returned from a Board, List, Card, etc
 
-<hr>
+---
 
 ## Version 1.2.0 (23rd of Feb. 2023)
 #### General
@@ -583,7 +589,7 @@
 - Added support for [`Card Stickers`](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#sticker-features)
 - Added support to add [`Comments`](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloClient#comments-features) on cards
 
-<hr>
+---
 
 ## Version 1.1.1 (17th of Feb. 2023)
 #### TrelloClient
@@ -596,7 +602,7 @@
 #### Webhook Receiver
 - Fixed that Smart-events did not do a proper internal await so could technically be delayed
 
-<hr>
+---
 
 ## Version 1.1.0 (8th of Feb. 2023)
 #### General
@@ -608,7 +614,7 @@
 - Added various 'ease of use' methods to do common actions (for example, add or remove Members/Labels from Cards)
 - Made class `EnumViaJsonPropertyConverter` internal (incorrectly public) [COMPILE TIME BREAKING CHANGE]
 
-<hr>
+---
 
 ## Version 1.0.0 (6th of Feb. 2023)
 #### General

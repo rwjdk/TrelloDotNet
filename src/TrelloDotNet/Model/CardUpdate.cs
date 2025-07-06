@@ -156,6 +156,13 @@ namespace TrelloDotNet.Model
         public static CardUpdate Labels(List<Label> labels) => new CardUpdate(CardFieldsType.LabelIds, labels?.Select(x => x.Id).Distinct().ToList());
 
         /// <summary>
+        /// Create a CardRole Parameter
+        /// </summary>
+        /// <param name="value">CardRole to change to</param>
+        /// <returns>CardUpdate Object</returns>
+        public static CardUpdate CardRole(string value) => new CardUpdate(CardFieldsType.CardRole, value);
+
+        /// <summary>
         /// Create an Additional Parameter (aka one that is not a named CardFieldsType)
         /// </summary>
         /// <param name="additionalParameter">The Additional Parameter</param>
