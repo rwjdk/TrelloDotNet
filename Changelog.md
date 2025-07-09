@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## 2.1.1 (9th of July 2025)
+#### Special
+- Added [TrelloDotNet MCP Server](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloDotNet-MCP-Server) to let AI assist you and Vibe Code the whole thing 8-)
+
+---
+
 ## 2.1.0 (6th of July 2025)
 #### TrelloClient
 - Added [AddSeparatorCardAsync](https://github.com/rwjdk/TrelloDotNet/wiki/AddSeparatorCardAsync) to create Separator Cards

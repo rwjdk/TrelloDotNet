@@ -12,6 +12,7 @@ _Welcome to TrelloDotNet - A .NET implementation of the [Trello REST API](https:
 [![YouTube](https://img.shields.io/badge/-YouTube-darkred?style=for-the-badge)](https://www.youtube.com/playlist?list=PLhGl0l5La4saguVChJ3jmlAXqFDkmYjdC)
 [![Rest API](https://img.shields.io/badge/API_Reference-gray?style=for-the-badge)](https://developer.atlassian.com/cloud/trello/rest/)
 [![API Keys](https://img.shields.io/badge/Power--Ups_Admin-purple?style=for-the-badge)](https://trello.com/power-ups/admin/)
+[![MCP Server](https://img.shields.io/badge/MCP--Server-green?style=for-the-badge)](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloDotNet-MCP-Server)
 
 
 ## Features
@@ -19,6 +20,8 @@ _Welcome to TrelloDotNet - A .NET implementation of the [Trello REST API](https:
 - An [Automation Engine](https://github.com/rwjdk/TrelloDotNet/wiki/Automation-Engine) and [Webhook Data Receiver](https://github.com/rwjdk/TrelloDotNet/wiki/Webhook-Data-Receiver) for handling webhook events
 
 ## Getting Started
+*To get started you can either follow the steps below or use the [TrelloDotNet MCP Server](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloDotNet-MCP-Server) to let AI assist you and Vibe Code the whole thing* 8-)
+
 1. Install the '[TrelloDotNet](https://www.nuget.org/packages/TrelloDotNet)' NuGet Package (`dotnet add package TrelloDotNet`)
 2. Retrieve your [API-Key and Token](https://youtu.be/ndLSAD3StH8) from the [PowerUps Administration](https://trello.com/power-ups/admin)
 3. Create a new instance of the `TrelloClient` _(located in the namespace 'TrelloDotNet')_
