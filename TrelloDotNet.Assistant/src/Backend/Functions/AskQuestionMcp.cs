@@ -16,13 +16,26 @@ namespace Backend.Functions
             [McpToolProperty(ToolIds.ParameterQuestion, ToolIds.StringType, ToolIds.ParameterQuestionDescription)]
             string searchQuery)
         {
-            SearchResult searchResult = await search.SearchAsync(new SearchOptions
+            SearchResult docsSearchResult = await search.SearchAsync(new SearchOptions
             {
                 SearchQuery = searchQuery,
                 NumberOfRecordsBack = 10,
-                Filter = entity => entity.SourceCollectionId == VectorStoreIds.CollectionId
+                Filter = entity => entity.SourceCollectionId == VectorStoreIds.CollectionId && entity.SourceId == VectorStoreIds.SourceIdMarkdownInCode
             });
-            return new OkObjectResult(searchResult.GetAsStringResult(citationBuilder: entity =>
+
+            SearchResult codeSearchResult = await search.SearchAsync(new SearchOptions
+            {
+                SearchQuery = searchQuery,
+                NumberOfRecordsBack = 20,
+                Filter = entity => entity.SourceCollectionId == VectorStoreIds.CollectionId && entity.SourceId == VectorStoreIds.SourceIdCode
+            });
+
+            SearchResult result = new SearchResult
+            {
+                Entities = docsSearchResult.Entities.Union(codeSearchResult.Entities).ToArray()
+            };
+
+            return new OkObjectResult(result.GetAsStringResult(citationBuilder: entity =>
             {
                 return entity.SourceKind switch
                 {

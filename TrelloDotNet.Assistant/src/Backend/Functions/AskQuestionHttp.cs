@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Extensions.Mcp;
+using Microsoft.Extensions.Primitives;
 using SimpleRag;
 using SimpleRag.VectorStorage.Models;
 
@@ -13,13 +14,28 @@ namespace Backend.Functions
         [Function("AskQuestionHttp")]
         public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req, CancellationToken cancellationToken)
         {
-            SearchResult searchResult = await search.SearchAsync(new SearchOptions
+            string searchQuery = req.Query["question"]!;
+
+            SearchResult docsSearchResult = await search.SearchAsync(new SearchOptions
             {
-                SearchQuery = req.Query["question"]!,
+                SearchQuery = searchQuery,
                 NumberOfRecordsBack = 10,
-                Filter = entity => entity.SourceCollectionId == VectorStoreIds.CollectionId,
+                Filter = entity => entity.SourceCollectionId == VectorStoreIds.CollectionId && entity.SourceId == VectorStoreIds.SourceIdMarkdownInCode
             });
-            return new OkObjectResult(searchResult.GetAsStringResult(citationBuilder: entity =>
+
+            SearchResult codeSearchResult = await search.SearchAsync(new SearchOptions
+            {
+                SearchQuery = searchQuery,
+                NumberOfRecordsBack = 20,
+                Filter = entity => entity.SourceCollectionId == VectorStoreIds.CollectionId && entity.SourceId == VectorStoreIds.SourceIdCode
+            });
+
+            SearchResult result = new SearchResult
+            {
+                Entities = docsSearchResult.Entities.Union(codeSearchResult.Entities).ToArray()
+            };
+
+            return new OkObjectResult(result.GetAsStringResult(citationBuilder: entity =>
             {
                 return entity.SourceKind switch
                 {
