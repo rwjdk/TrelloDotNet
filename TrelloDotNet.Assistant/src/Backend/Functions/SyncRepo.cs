@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using SimpleRag;
 using SimpleRag.DataSources.CSharp.Models;
 using SimpleRag.DataSources.Markdown.Models;
+using SimpleRag.Integrations.GitHub;
 
 namespace Backend.Functions;
 
@@ -19,8 +20,11 @@ public class SyncRepo(Ingestion ingestion, IConfiguration configuration)
             return new UnauthorizedResult();
         }
 
-        const string gitHubOwner = "rwjdk";
-        const string gitHubRepo = "TrelloDotNet";
+        GitHubRepository repository = new()
+        {
+            Owner = "rwjdk",
+            Name = "TrelloDotNet"
+        };
 
         try
         {
@@ -33,8 +37,7 @@ public class SyncRepo(Ingestion ingestion, IConfiguration configuration)
                     Recursive = true,
                     Path = "src",
                     FileIgnorePatterns = "TrelloDotNet.Tests",
-                    GitHubOwner = gitHubOwner,
-                    GitHubRepo = gitHubRepo,
+                    GitHubRepository = repository
                 },
                 new MarkdownDataSourceGitHub
                 {
@@ -42,11 +45,13 @@ public class SyncRepo(Ingestion ingestion, IConfiguration configuration)
                     Id = VectorStoreIds.SourceIdMarkdownInCode,
                     Recursive = true,
                     Path = "/",
-                    GitHubOwner = gitHubOwner,
-                    GitHubRepo = gitHubRepo,
+                    GitHubRepository = repository,
                     LevelsToChunk = 3,
                 }
-            ], onProgressNotification: notification => Console.WriteLine(notification.GetFormattedMessageWithDetails()), cancellationToken: cancellationToken);
+            ], new IngestionOptions
+            {
+                OnProgressNotification = notification => Console.WriteLine(notification.GetFormattedMessageWithDetails()),
+            }, cancellationToken);
         }
         catch (OperationCanceledException)
         {

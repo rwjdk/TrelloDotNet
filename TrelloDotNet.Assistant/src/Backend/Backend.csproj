@@ -21,7 +21,6 @@
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.53.1" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureAISearch" Version="1.60.0-preview" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqlServer" Version="1.53.1-preview" />
-    <PackageReference Include="SimpleRag" Version="0.0.1-preview5" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
@@ -38,5 +37,8 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Constants\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\SimpleRag\src\SimpleRag.csproj" />
   </ItemGroup>
 </Project>

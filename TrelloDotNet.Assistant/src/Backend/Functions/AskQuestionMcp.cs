@@ -7,7 +7,7 @@ using SimpleRag.VectorStorage.Models;
 
 namespace Backend.Functions
 {
-    public class AskQuestion(Search search)
+    public class AskQuestionMcp(Search search)
     {
         [Function("AskQuestion")]
         public async Task<IActionResult> Run(
@@ -22,7 +22,15 @@ namespace Backend.Functions
                 NumberOfRecordsBack = 10,
                 Filter = entity => entity.SourceCollectionId == VectorStoreIds.CollectionId
             });
-            return new OkObjectResult(searchResult.GetAsStringResult());
+            return new OkObjectResult(searchResult.GetAsStringResult(citationBuilder: entity =>
+            {
+                return entity.SourceKind switch
+                {
+                    SimpleRag.DataSources.CSharp.CSharpDataSourceCommand.SourceKind => "https://github.com/rwjdk/TrelloDotNet/blob/main/src" + entity.SourcePath,
+                    SimpleRag.DataSources.Markdown.MarkdownDataSourceCommand.SourceKind => "https://github.com/rwjdk/TrelloDotNet/wiki/" + Path.GetFileNameWithoutExtension(entity.SourcePath.Replace("TrelloDotNet.wiki", "")),
+                    _ => "https://github.com/rwjdk/TrelloDotNet"
+                };
+            }));
         }
     }
 }

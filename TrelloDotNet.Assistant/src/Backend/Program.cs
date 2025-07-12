@@ -33,7 +33,7 @@ switch (VectorStoreIds.VectorStoreToUse)
 {
     // ReSharper disable once UnreachableSwitchCaseDueToIntegerAnalysis
     case VectorStoreToUse.SqlServer:
-        builder.Services.AddSimpleRagWithGithubIntegration(vectorStoreConfiguration, options => new SqlServerVectorStore(sqlServerConnectionString, new SqlServerVectorStoreOptions
+        builder.Services.AddSimpleRagWithGitHubIntegration(vectorStoreConfiguration, options => new SqlServerVectorStore(sqlServerConnectionString, new SqlServerVectorStoreOptions
         {
             EmbeddingGenerator = options.GetRequiredService<IEmbeddingGenerator<string, Embedding<float>>>()
         }), githubToken);
@@ -41,7 +41,7 @@ switch (VectorStoreIds.VectorStoreToUse)
         break;
     // ReSharper disable once UnreachableSwitchCaseDueToIntegerAnalysis
     case VectorStoreToUse.AzureAiSearch:
-        builder.Services.AddSimpleRagWithGithubIntegration(vectorStoreConfiguration, options =>
+        builder.Services.AddSimpleRagWithGitHubIntegration(vectorStoreConfiguration, options =>
         {
             SearchIndexClient searchIndexClient = new(new Uri(azureAiSearchEndpoint), new AzureKeyCredential(azureAiSearchKey));
             return new AzureAISearchVectorStore(searchIndexClient, new AzureAISearchVectorStoreOptions
