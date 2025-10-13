@@ -26,7 +26,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// "Organization" Id of your Inbox
         /// </summary>
-        [JsonPropertyName("idOrganizations")]
+        [JsonPropertyName("idOrganization")]
         [JsonInclude]
         public string OrganizationId { get; private set; }
     }

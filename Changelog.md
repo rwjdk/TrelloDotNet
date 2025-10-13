@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## 2.1.2 (13th of October 2025)
+#### TrelloClient
+- Fixed that [GetTokenMemberInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetTokenMemberInboxAsync) returned null as OrganizationId (due to breaking change from the Trello Team; they renamed the technical field)
+
+---
+
 ## 2.1.1 (9th of July 2025)
 #### Special
 - Added [TrelloDotNet MCP Server](https://github.com/rwjdk/TrelloDotNet/wiki/TrelloDotNet-MCP-Server) to let AI assist you and Vibe Code the whole thing 8-)
