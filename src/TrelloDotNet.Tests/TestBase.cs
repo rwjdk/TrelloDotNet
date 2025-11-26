@@ -35,9 +35,12 @@ public abstract class TestBase
                 var trelloClientOptions = new TrelloClientOptions
                 {
                     MaxRetryCountForTokenLimitExceeded = 10,
-                    DelayInSecondsToWaitInTokenLimitExceededRetry = 3
+                    DelayInSecondsToWaitInTokenLimitExceededRetry = 3,
                 };
-                clients.Add(new TrelloClient(apiKey, token, trelloClientOptions));
+                clients.Add(new TrelloClient(apiKey, token, trelloClientOptions, new HttpClient
+                {
+                    Timeout = TimeSpan.FromMinutes(5)
+                }));
             }
 
             for (int i = 1; i < 10; i++)
