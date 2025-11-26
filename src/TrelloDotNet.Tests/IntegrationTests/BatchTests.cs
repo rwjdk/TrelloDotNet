@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Batch;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetBoardOptions;
@@ -16,7 +16,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     {
         Board? b = null;
         (List list, Card card) = await AddDummyCardAndList(_boardId);
-        Member member = await TrelloClient.GetTokenMemberAsync();
+        Member member = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
 
         await TrelloClient.ExecuteBatchedRequestAsync(
         [
@@ -56,7 +56,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
             BatchRequest.GetOrganization(fixture.OrganizationId, _ => Console.Write("")),
             BatchRequest.GetOrganizationsForMember(member.Id, _ => Console.Write("")),
             BatchRequest.GetStickersOnCard(card.Id, _ => Console.Write("")),
-        ]);
+        ], cancellationToken: TestCancellationToken);
 
         Assert.NotNull(b);
     }
@@ -64,7 +64,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task GetOrganizations()
     {
-        var data = await TrelloClient.GetOrganizationsAsync([fixture.OrganizationId!]);
+        var data = await TrelloClient.GetOrganizationsAsync([fixture.OrganizationId!], cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
     }
 
@@ -73,7 +73,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     {
         await Assert.ThrowsAsync<TrelloApiException>(async () =>
         {
-            var data = await TrelloClient.GetOrganizationsAsync(["non-Exist"]);
+            var data = await TrelloClient.GetOrganizationsAsync(["non-Exist"], cancellationToken: TestCancellationToken);
             Assert.NotEmpty(data);
         });
     }
@@ -83,12 +83,12 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     {
         (List list, Card card) = await AddDummyCardAndList(_boardId);
         // ReSharper disable once RedundantAssignment
-        var listData = await TrelloClient.GetListsAsync([list.Id]);
+        var listData = await TrelloClient.GetListsAsync([list.Id], cancellationToken: TestCancellationToken);
         listData = await TrelloClient.GetListsAsync([list.Id], new GetListOptions
         {
             IncludeBoard = true,
             IncludeCards = GetListOptionsIncludeCards.All
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.NotEmpty(listData);
         Assert.Equal(list.Id, listData[0].Id);
         Assert.Equal(list.Name, listData[0].Name);
@@ -96,7 +96,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         Assert.Equal(list.Closed, listData[0].Closed);
         Assert.Equal(list.Position, listData[0].Position);
 
-        var data = await TrelloClient.GetCardsAsync([card.Id]);
+        var data = await TrelloClient.GetCardsAsync([card.Id], cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
         Assert.Equal(card.Id, data[0].Id);
         Assert.Equal(card.Name, data[0].Name);
@@ -114,7 +114,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         data = await TrelloClient.GetCardsAsync([card.Id], new GetCardOptions
         {
             CardFields = new CardFields(CardFieldsType.Name)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
         Assert.Equal(card.Id, data[0].Id);
         Assert.Equal(card.Name, data[0].Name);
@@ -127,21 +127,21 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task GetMembers()
     {
-        Member member = await TrelloClient.GetTokenMemberAsync();
-        var data = await TrelloClient.GetMembersAsync([member.Id]);
+        Member member = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
+        var data = await TrelloClient.GetMembersAsync([member.Id], cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
     }
 
     [Fact]
     public async Task GetBoards()
     {
-        var data = await TrelloClient.GetBoardsAsync([fixture.BoardId!]);
+        var data = await TrelloClient.GetBoardsAsync([fixture.BoardId!], cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
 
         data = await TrelloClient.GetBoardsAsync([fixture.BoardId!], new GetBoardOptions
         {
             IncludeLabels = true
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
     }
 }

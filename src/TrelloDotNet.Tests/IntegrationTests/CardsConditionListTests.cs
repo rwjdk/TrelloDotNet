@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetCardOptions;
 
@@ -28,7 +28,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.Equal, list1.Id)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
         Assert.Contains(cards, x => x.Name == card1.Name);
 
@@ -36,7 +36,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.Equal, list1.Id, list1.Id)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
         Assert.Contains(cards, x => x.Name == card1.Name);
 
@@ -44,7 +44,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.Equal, list2.Name)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
         Assert.Contains(cards, x => x.Name == card2.Name);
 
@@ -52,7 +52,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.Equal, list2.Name, list2.Name)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
         Assert.Contains(cards, x => x.Name == card2.Name);
 
@@ -63,7 +63,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.NotEqual, list1.Id)]
-        });
+        }, cancellationToken: TestCancellationToken);
 
         Assert.Equal(2, cards.Count);
         Assert.Contains(cards, x => x.Name == card2.Name);
@@ -73,7 +73,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.NotEqual, list1.Id, list1.Id)]
-        });
+        }, cancellationToken: TestCancellationToken);
 
         Assert.Equal(2, cards.Count);
         Assert.Contains(cards, x => x.Name == card2.Name);
@@ -83,7 +83,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.NotEqual, list2.Name)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
         Assert.Contains(cards, x => x.Name == card1.Name);
         Assert.Contains(cards, x => x.Name == card3.Name);
@@ -92,7 +92,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.NotEqual, list2.Name, list2.Name)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
         Assert.Contains(cards, x => x.Name == card1.Name);
         Assert.Contains(cards, x => x.Name == card3.Name);
@@ -103,7 +103,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.AnyOfThese, list1.Id)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
         Assert.Contains(cards, x => x.Name == card1.Name);
 
@@ -111,7 +111,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.AnyOfThese, list1.Id, list2.Id)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
         Assert.Contains(cards, x => x.Name == card1.Name);
         Assert.Contains(cards, x => x.Name == card2.Name);
@@ -120,7 +120,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.AnyOfThese, list1.Name)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
         Assert.Contains(cards, x => x.Name == card1.Name);
 
@@ -128,7 +128,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.AnyOfThese, list1.Name, list2.Name)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
         Assert.Contains(cards, x => x.Name == card1.Name);
         Assert.Contains(cards, x => x.Name == card2.Name);
@@ -139,7 +139,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.NoneOfThese, list1.Id)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
         Assert.Contains(cards, x => x.Name == card2.Name);
         Assert.Contains(cards, x => x.Name == card3.Name);
@@ -148,7 +148,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.NoneOfThese, list1.Id, list2.Id)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
         Assert.Contains(cards, x => x.Name == card3.Name);
 
@@ -156,7 +156,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.NoneOfThese, list1.Name)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
         Assert.Contains(cards, x => x.Name == card2.Name);
         Assert.Contains(cards, x => x.Name == card3.Name);
@@ -165,7 +165,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.NoneOfThese, list1.Name, list2.Name)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
         Assert.Contains(cards, x => x.Name == card3.Name);
 
@@ -177,7 +177,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
             {
                 CardFields = cardFields,
                 FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.AllOfThese, list1.Id)]
-            });
+            }, cancellationToken: TestCancellationToken);
         });
 
         await Assert.ThrowsAsync<TrelloApiException>(async () =>
@@ -186,7 +186,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
             {
                 CardFields = cardFields,
                 FilterConditions = [CardsFilterCondition.ListId(CardsConditionIds.AllOfThese, list1.Id, list2.Id)]
-            });
+            }, cancellationToken: TestCancellationToken);
         });
 
 
@@ -196,7 +196,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
             {
                 CardFields = cardFields,
                 FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.AllOfThese, list1.Name)]
-            });
+            }, cancellationToken: TestCancellationToken);
         });
 
         await Assert.ThrowsAsync<TrelloApiException>(async () =>
@@ -205,7 +205,7 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
             {
                 CardFields = cardFields,
                 FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.AllOfThese, list1.Name, list2.Name)]
-            });
+            }, cancellationToken: TestCancellationToken);
         });
 
         //Other *****************************************************************************************************************
@@ -214,98 +214,98 @@ public class CardsConditionListTests(TestFixtureWithNewBoard fixture) : TestBase
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.Contains, "Hello")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(0, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.Contains, "Hello", "World")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(0, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.DoNotContains, "Hello")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.DoNotContains, "Hello", "World")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.StartsWith, "Li")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.StartsWith, "Li", Guid.NewGuid().ToString())]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.DoNotStartWith, "Li")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(0, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.DoNotStartWith, "Li", Guid.NewGuid().ToString())]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(0, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.EndsWith, "1")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.EndsWith, "1", "2")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.DoNotEndWith, "1")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.DoNotEndWith, "1", "2")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.RegEx, "is")]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.ListName(CardsConditionString.RegEx, "is", Guid.NewGuid().ToString())]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
     }
 }

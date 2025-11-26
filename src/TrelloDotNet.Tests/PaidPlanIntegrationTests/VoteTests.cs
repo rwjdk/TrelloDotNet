@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.GetListOptions;
 
@@ -19,33 +19,33 @@ public class VoteTests : TestBase
         await CleanUp(board, listPrefix);
         try
         {
-            List listForVoteTests = await TrelloClient.AddListAsync(new List(listPrefix + Guid.NewGuid(), board.Id));
+            List listForVoteTests = await TrelloClient.AddListAsync(new List(listPrefix + Guid.NewGuid(), board.Id), cancellationToken: TestCancellationToken);
             Card card1 = await AddDummyCardToList(listForVoteTests, "Card 1");
 
-            Member member = await TrelloClient.GetTokenMemberAsync();
+            Member member = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
 
             var votedCard = await TrelloClient.GetCardAsync(card1.Id, new GetCardOptions
             {
                 IncludeMemberVotes = true
-            });
+            }, cancellationToken: TestCancellationToken);
             Assert.Empty(votedCard.MembersVotedIds);
 
-            await TrelloClient.AddVoteToCardAsync(card1.Id, member.Id);
+            await TrelloClient.AddVoteToCardAsync(card1.Id, member.Id, cancellationToken: TestCancellationToken);
 
             votedCard = await TrelloClient.GetCardAsync(card1.Id, new GetCardOptions
             {
                 IncludeMemberVotes = true
-            });
+            }, cancellationToken: TestCancellationToken);
 
             Assert.Single(votedCard.MembersVotedIds);
             Assert.Contains(votedCard.MembersVotedIds, x => x == member.Id);
 
-            await TrelloClient.RemoveVoteFromCardAsync(card1.Id, member.Id);
+            await TrelloClient.RemoveVoteFromCardAsync(card1.Id, member.Id, cancellationToken: TestCancellationToken);
 
             votedCard = await TrelloClient.GetCardAsync(card1.Id, new GetCardOptions
             {
                 IncludeMemberVotes = true
-            });
+            }, cancellationToken: TestCancellationToken);
             Assert.Empty(votedCard.MembersVotedIds);
         }
         finally
@@ -60,10 +60,10 @@ public class VoteTests : TestBase
         var lists = await TrelloClient.GetListsOnBoardAsync(board.Id, new GetListOptions
         {
             Filter = ListFilter.All
-        });
+        }, cancellationToken: TestCancellationToken);
         foreach (List list in lists.Where(x => x.Name.StartsWith(listPrefix)))
         {
-            await TrelloClient.DeleteListAsync(list.Id);
+            await TrelloClient.DeleteListAsync(list.Id, cancellationToken: TestCancellationToken);
         }
     }
 }

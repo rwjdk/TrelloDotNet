@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -11,7 +11,7 @@ public class BoardCustomTests : TestBase
         string? organizationId = null;
         try
         {
-            Organization organization = await TrelloClient.AddOrganizationAsync(new Organization("UnitTestOrganization-CustomTestOrg"));
+            Organization organization = await TrelloClient.AddOrganizationAsync(new Organization("UnitTestOrganization-CustomTestOrg"), cancellationToken: TestCancellationToken);
             organizationId = organization.Id;
 
             var addBoardOptions = new AddBoardOptions
@@ -24,10 +24,10 @@ public class BoardCustomTests : TestBase
             {
                 OrganizationId = organizationId
             };
-            var board = await TrelloClient.AddBoardAsync(custom, addBoardOptions);
+            var board = await TrelloClient.AddBoardAsync(custom, addBoardOptions, cancellationToken: TestCancellationToken);
             boardId = board.Id;
-            var lists = await TrelloClient.GetListsOnBoardAsync(boardId);
-            var labels = await TrelloClient.GetLabelsOfBoardAsync(boardId);
+            var lists = await TrelloClient.GetListsOnBoardAsync(boardId, cancellationToken: TestCancellationToken);
+            var labels = await TrelloClient.GetLabelsOfBoardAsync(boardId, cancellationToken: TestCancellationToken);
             Assert.Empty(lists);
             Assert.Empty(labels);
         }
@@ -36,14 +36,14 @@ public class BoardCustomTests : TestBase
             if (boardId != null)
             {
                 TrelloClient.Options.AllowDeleteOfBoards = true;
-                await TrelloClient.DeleteBoardAsync(boardId);
+                await TrelloClient.DeleteBoardAsync(boardId, cancellationToken: TestCancellationToken);
                 TrelloClient.Options.AllowDeleteOfBoards = false;
             }
 
             if (organizationId != null)
             {
                 TrelloClient.Options.AllowDeleteOfOrganizations = true;
-                await TrelloClient.DeleteOrganizationAsync(organizationId);
+                await TrelloClient.DeleteOrganizationAsync(organizationId, cancellationToken: TestCancellationToken);
                 TrelloClient.Options.AllowDeleteOfOrganizations = false;
             }
         }

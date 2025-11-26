@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Search;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
@@ -13,7 +13,7 @@ public class SearchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
         var searchMembersAsync = await TrelloClient.SearchMembersAsync(new SearchMemberRequest("Rasmus Wulff Jensen")
         {
             Limit = 10,
-        });
+        }, cancellationToken: TestCancellationToken);
 
         Member? firstOrDefault = searchMembersAsync.FirstOrDefault(x => x.Id == "63c14bd0466af2001c308467");
         Assert.NotNull(firstOrDefault);
@@ -40,7 +40,7 @@ public class SearchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
             SearchOrganizations = true,
             CardFilter = new SearchRequestCardFilter(card.Card.Id),
             CardPage = 0,
-        });
+        }, cancellationToken: TestCancellationToken);
 
         Assert.NotNull(searchResult.Cards);
         Assert.NotNull(searchResult.Boards);

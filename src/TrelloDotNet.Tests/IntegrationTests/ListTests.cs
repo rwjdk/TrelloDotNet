@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.AddCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
@@ -14,13 +14,13 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task AddList()
     {
         var name = Guid.NewGuid().ToString();
-        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId), cancellationToken: TestCancellationToken);
         AssertTimeIsNow(addList.Created);
         Assert.False(addList.Closed);
         Assert.Equal(name, addList.Name);
         Assert.False(addList.Subscribed);
         Assert.Null(addList.SoftLimit);
-        var listsAfter = await TrelloClient.GetListsOnBoardAsync(_boardId);
+        var listsAfter = await TrelloClient.GetListsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         var foundList = listsAfter.FirstOrDefault(x => x.Id == addList.Id);
         Assert.NotNull(foundList);
         Assert.Equal(name, foundList.Name);
@@ -30,12 +30,12 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task UpdateList()
     {
         var name = Guid.NewGuid().ToString();
-        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId), cancellationToken: TestCancellationToken);
         var updatedName = Guid.NewGuid().ToString();
         var updateList = await TrelloClient.UpdateListAsync(addList.Id, [
             ListUpdate.Name(updatedName)
-        ]);
-        var getList = await TrelloClient.GetListAsync(addList.Id);
+        ], cancellationToken: TestCancellationToken);
+        var getList = await TrelloClient.GetListAsync(addList.Id, cancellationToken: TestCancellationToken);
         Assert.Equal(updatedName, getList.Name);
         Assert.Equal(updateList.Name, getList.Name);
     }
@@ -44,12 +44,12 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task ArchiveAndReopenList()
     {
         var name = Guid.NewGuid().ToString();
-        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId), cancellationToken: TestCancellationToken);
 
         //Archive
-        var archivedList = await TrelloClient.ArchiveListAsync(addList.Id);
+        var archivedList = await TrelloClient.ArchiveListAsync(addList.Id, cancellationToken: TestCancellationToken);
         Assert.True(archivedList.Closed);
-        var listsAfter = await TrelloClient.GetListsOnBoardAsync(_boardId);
+        var listsAfter = await TrelloClient.GetListsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         Assert.True(listsAfter.TrueForAll(x => x.Id != addList.Id));
         Assert.True(listsAfter.TrueForAll(x => x.Name != name));
 
@@ -64,17 +64,17 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
             CardsOrderBy = CardsOrderBy.CreateDateDesc,
             IncludeBoard = true,
             IncludeCards = GetListOptionsIncludeCards.All
-        });
+        }, cancellationToken: TestCancellationToken);
         List foundList = closedLists.Single(x => x.Id == addList.Id);
         Assert.Equal(addList.Name, foundList.Name);
 
         //Re-open
-        var reopenedList = await TrelloClient.ReOpenListAsync(foundList.Id);
+        var reopenedList = await TrelloClient.ReOpenListAsync(foundList.Id, cancellationToken: TestCancellationToken);
         Assert.False(reopenedList.Closed);
         Assert.Equal(addList.Id, reopenedList.Id);
         Assert.Equal(name, reopenedList.Name);
 
-        var listsAfterReopen = await TrelloClient.GetListsOnBoardAsync(_boardId);
+        var listsAfterReopen = await TrelloClient.GetListsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         Assert.Contains(listsAfterReopen, x => x.Id == reopenedList.Id);
         Assert.Contains(listsAfterReopen, x => x.Name == name);
     }
@@ -85,16 +85,16 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         var listsBefore = await TrelloClient.GetListsOnBoardAsync(_boardId, new GetListOptions
         {
             Filter = ListFilter.All
-        });
+        }, cancellationToken: TestCancellationToken);
         var name = Guid.NewGuid().ToString();
-        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId), cancellationToken: TestCancellationToken);
 
         //Delete
-        await TrelloClient.DeleteListAsync(addList.Id);
+        await TrelloClient.DeleteListAsync(addList.Id, cancellationToken: TestCancellationToken);
         var listsAfter = await TrelloClient.GetListsOnBoardAsync(_boardId, new GetListOptions
         {
             Filter = ListFilter.All
-        });
+        }, cancellationToken: TestCancellationToken);
 
         Assert.Equal(listsAfter.Count, listsBefore.Count);
         Assert.Contains(listsAfter, x => x.Name != name);
@@ -104,37 +104,37 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task ArchiveAllCardsInList()
     {
         var name = Guid.NewGuid().ToString();
-        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId), cancellationToken: TestCancellationToken);
         //Add some cards so we can test Archive All Cards In List
-        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C1"));
-        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C2"));
-        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C3"));
-        var cardsOnListAfterAdd = await TrelloClient.GetCardsInListAsync(addList.Id);
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C1"), cancellationToken: TestCancellationToken);
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C2"), cancellationToken: TestCancellationToken);
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C3"), cancellationToken: TestCancellationToken);
+        var cardsOnListAfterAdd = await TrelloClient.GetCardsInListAsync(addList.Id, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cardsOnListAfterAdd.Count);
-        await TrelloClient.ArchiveAllCardsInListAsync(addList.Id);
-        var cardsOnListAfterArchive = await TrelloClient.GetCardsInListAsync(addList.Id);
+        await TrelloClient.ArchiveAllCardsInListAsync(addList.Id, cancellationToken: TestCancellationToken);
+        var cardsOnListAfterArchive = await TrelloClient.GetCardsInListAsync(addList.Id, cancellationToken: TestCancellationToken);
         Assert.Empty(cardsOnListAfterArchive);
     }
 
     [Fact]
     public async Task MoveCardToList()
     {
-        var sourceList = await TrelloClient.AddListAsync(new List("Source", _boardId));
-        var targetList = await TrelloClient.AddListAsync(new List("Target", _boardId));
+        var sourceList = await TrelloClient.AddListAsync(new List("Source", _boardId), cancellationToken: TestCancellationToken);
+        var targetList = await TrelloClient.AddListAsync(new List("Target", _boardId), cancellationToken: TestCancellationToken);
 
-        Card card1 = await TrelloClient.AddCardAsync(new AddCardOptions(sourceList.Id, "C1"));
-        Card card2 = await TrelloClient.AddCardAsync(new AddCardOptions(sourceList.Id, "C2"));
-        Card card3 = await TrelloClient.AddCardAsync(new AddCardOptions(sourceList.Id, "C3"));
+        Card card1 = await TrelloClient.AddCardAsync(new AddCardOptions(sourceList.Id, "C1"), cancellationToken: TestCancellationToken);
+        Card card2 = await TrelloClient.AddCardAsync(new AddCardOptions(sourceList.Id, "C2"), cancellationToken: TestCancellationToken);
+        Card card3 = await TrelloClient.AddCardAsync(new AddCardOptions(sourceList.Id, "C3"), cancellationToken: TestCancellationToken);
 
-        await TrelloClient.MoveCardToListAsync(card2.Id, targetList.Id);
+        await TrelloClient.MoveCardToListAsync(card2.Id, targetList.Id, cancellationToken: TestCancellationToken);
 
-        var sourceAfter = await TrelloClient.GetCardsInListAsync(sourceList.Id);
+        var sourceAfter = await TrelloClient.GetCardsInListAsync(sourceList.Id, cancellationToken: TestCancellationToken);
         Assert.Equal(2, sourceAfter.Count);
         Assert.Contains(sourceAfter, x => x.Id == card1.Id);
         Assert.Contains(sourceAfter, x => x.Id == card3.Id);
 
 
-        var targetAfter = await TrelloClient.GetCardsInListAsync(targetList.Id);
+        var targetAfter = await TrelloClient.GetCardsInListAsync(targetList.Id, cancellationToken: TestCancellationToken);
         Assert.Single(targetAfter);
         Assert.Contains(targetAfter, x => x.Id == card2.Id);
     }
@@ -143,16 +143,16 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
     public async Task MoveAllCardsInList()
     {
         var name = Guid.NewGuid().ToString();
-        var addList = await TrelloClient.AddListAsync(new List(name, _boardId));
+        var addList = await TrelloClient.AddListAsync(new List(name, _boardId), cancellationToken: TestCancellationToken);
         //Add some cards so we can test Move All Cards In List
-        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C1"));
-        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C2"));
-        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C3"));
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C1"), cancellationToken: TestCancellationToken);
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C2"), cancellationToken: TestCancellationToken);
+        await TrelloClient.AddCardAsync(new AddCardOptions(addList.Id, "C3"), cancellationToken: TestCancellationToken);
 
         //Add new list to move cards to
-        var listToMoveTo = await TrelloClient.AddListAsync(new List("List to move to", _boardId));
-        await TrelloClient.MoveAllCardsInListAsync(addList.Id, listToMoveTo.Id);
-        var cardsOnListAfterMove = await TrelloClient.GetCardsInListAsync(listToMoveTo.Id);
+        var listToMoveTo = await TrelloClient.AddListAsync(new List("List to move to", _boardId), cancellationToken: TestCancellationToken);
+        await TrelloClient.MoveAllCardsInListAsync(addList.Id, listToMoveTo.Id, cancellationToken: TestCancellationToken);
+        var cardsOnListAfterMove = await TrelloClient.GetCardsInListAsync(listToMoveTo.Id, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cardsOnListAfterMove.Count);
     }
 
@@ -172,7 +172,7 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
             ActionsTypes = ActionTypesToInclude.All,
             Limit = 10,
             CardFields = new CardFields(CardFieldsType.Name)
-        });
+        }, cancellationToken: TestCancellationToken);
 
         Assert.Equal(3, cards.Count);
     }
@@ -187,7 +187,7 @@ public class ListTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtur
         {
             IncludeBoard = true,
             IncludeCards = GetListOptionsIncludeCards.All
-        });
+        }, cancellationToken: TestCancellationToken);
 
         Assert.Equal(list.Id, listWithOptions.Id);
         Assert.Equal(list.Name, listWithOptions.Name);

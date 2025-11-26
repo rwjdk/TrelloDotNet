@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options.AddCardOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.GetListOptions;
@@ -20,7 +20,7 @@ public class CustomFieldsTests : TestBase
         await CleanUp(board, listPrefix);
         try
         {
-            var customFields = await TrelloClient.GetCustomFieldsOnBoardAsync(board.Id);
+            var customFields = await TrelloClient.GetCustomFieldsOnBoardAsync(board.Id, cancellationToken: TestCancellationToken);
             Assert.Equal(5, customFields.Count);
             CustomField? fieldList = customFields.FirstOrDefault(x => x.Name == "Priority");
             CustomField? fieldCheckbox = customFields.FirstOrDefault(x => x.Name == "IsSomething");
@@ -41,20 +41,20 @@ public class CustomFieldsTests : TestBase
             const string textValue = "Hello World";
             CustomFieldOption listValue = fieldList.Options[2];
 
-            List listForCustomFieldTests = await TrelloClient.AddListAsync(new List(listPrefix + Guid.NewGuid(), board.Id));
+            List listForCustomFieldTests = await TrelloClient.AddListAsync(new List(listPrefix + Guid.NewGuid(), board.Id), cancellationToken: TestCancellationToken);
             Card card1 = await AddDummyCardToList(listForCustomFieldTests, "Card 1");
 
-            var customValues = await TrelloClient.GetCustomFieldItemsForCardAsync(card1.Id);
+            var customValues = await TrelloClient.GetCustomFieldItemsForCardAsync(card1.Id, cancellationToken: TestCancellationToken);
             Assert.Empty(customValues);
 
-            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldList, listValue);
-            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldCheckbox, checkboxValue);
-            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldNumber, Convert.ToInt32(numberValue));
-            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldNumber, numberValue);
-            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldDate, dateValue);
-            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldText, textValue);
+            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldList, listValue, cancellationToken: TestCancellationToken);
+            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldCheckbox, checkboxValue, cancellationToken: TestCancellationToken);
+            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldNumber, Convert.ToInt32(numberValue), cancellationToken: TestCancellationToken);
+            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldNumber, numberValue, cancellationToken: TestCancellationToken);
+            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldDate, dateValue, cancellationToken: TestCancellationToken);
+            await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldText, textValue, cancellationToken: TestCancellationToken);
 
-            customValues = await TrelloClient.GetCustomFieldItemsForCardAsync(card1.Id);
+            customValues = await TrelloClient.GetCustomFieldItemsForCardAsync(card1.Id, cancellationToken: TestCancellationToken);
             Assert.Equal(5, customValues.Count);
             CustomFieldItem? valueList = customValues.FirstOrDefault(x => x.CustomFieldId == fieldList.Id && x.ValueId == listValue.Id);
             CustomFieldItem? valueCheckbox = customValues.FirstOrDefault(x => x.CustomFieldId == fieldCheckbox.Id && x.Value.Checked);
@@ -129,17 +129,17 @@ public class CustomFieldsTests : TestBase
                     CardsFilterCondition.CustomField(fieldList, CardsConditionString.Equal, listValue.Id),
                     CardsFilterCondition.CustomField(fieldList, CardsConditionString.NotEqual, Guid.NewGuid().ToString()),
                 ]
-            });
+            }, cancellationToken: TestCancellationToken);
             Assert.Single(cards);
             Assert.Equal(card1.Id, cards.First().Id);
 
-            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldList);
-            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldCheckbox);
-            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldNumber);
-            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldDate);
-            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldText);
+            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldList, cancellationToken: TestCancellationToken);
+            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldCheckbox, cancellationToken: TestCancellationToken);
+            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldNumber, cancellationToken: TestCancellationToken);
+            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldDate, cancellationToken: TestCancellationToken);
+            await TrelloClient.ClearCustomFieldValueOnCardAsync(card1.Id, fieldText, cancellationToken: TestCancellationToken);
 
-            customValues = await TrelloClient.GetCustomFieldItemsForCardAsync(card1.Id);
+            customValues = await TrelloClient.GetCustomFieldItemsForCardAsync(card1.Id, cancellationToken: TestCancellationToken);
             Assert.Empty(customValues);
 
 
@@ -156,7 +156,7 @@ public class CustomFieldsTests : TestBase
                     new AddCardOptionsCustomField(fieldNumber, numberValue),
                     new AddCardOptionsCustomField(fieldText, textValue)
                 ]
-            });
+            }, cancellationToken: TestCancellationToken);
         }
         finally
         {
@@ -170,10 +170,10 @@ public class CustomFieldsTests : TestBase
         var lists = await TrelloClient.GetListsOnBoardAsync(board.Id, new GetListOptions
         {
             Filter = ListFilter.All
-        });
+        }, cancellationToken: TestCancellationToken);
         foreach (List list in lists.Where(x => x.Name.StartsWith(listPrefix)))
         {
-            await TrelloClient.DeleteListAsync(list.Id);
+            await TrelloClient.DeleteListAsync(list.Id, cancellationToken: TestCancellationToken);
         }
     }
 }

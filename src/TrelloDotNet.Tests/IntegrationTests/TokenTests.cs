@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetOrganizationOptions;
 
@@ -12,14 +12,14 @@ public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task GetBoardsCurrentTokenCanAccess()
     {
-        var boards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync();
+        var boards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync(cancellationToken: TestCancellationToken);
         Assert.Contains(boards, x => x.Id == _board.Id);
     }
 
     [Fact]
     public async Task GetCurrentTokenMembershipsAsync()
     {
-        TokenMembershipOverview memberships = await TrelloClient.GetCurrentTokenMembershipsAsync();
+        TokenMembershipOverview memberships = await TrelloClient.GetCurrentTokenMembershipsAsync(cancellationToken: TestCancellationToken);
         Assert.NotNull(memberships);
         Assert.NotEmpty(memberships.OrganizationMemberships);
         Assert.Contains(memberships.OrganizationMemberships, pair => pair.Key.Id == _board.OrganizationId);
@@ -30,7 +30,7 @@ public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task GetOrganizationsCurrentTokenCanAccess()
     {
-        var organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync();
+        var organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync(cancellationToken: TestCancellationToken);
         Assert.Contains(organizations, x => x.Id == _organization.Id);
     }
 
@@ -40,14 +40,14 @@ public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         var organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync(new GetOrganizationOptions
         {
             OrganizationFields = new OrganizationFields(OrganizationFieldsType.Name, OrganizationFieldsType.Url)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Contains(organizations, x => x.Id == _organization.Id);
     }
 
     [Fact]
     public async Task TokenInformation()
     {
-        var tokenInformation = await TrelloClient.GetTokenInformationAsync();
+        var tokenInformation = await TrelloClient.GetTokenInformationAsync(cancellationToken: TestCancellationToken);
         Assert.NotNull(tokenInformation);
         Assert.NotNull(tokenInformation.Created);
         Assert.Null(tokenInformation.Expires);
@@ -60,7 +60,7 @@ public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         Assert.True(tokenInformation.Permissions[0].Read);
         Assert.True(tokenInformation.Permissions[0].Write);
 
-        var tokenMember = await TrelloClient.GetTokenMemberAsync();
+        var tokenMember = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
         Assert.NotNull(tokenMember);
     }
 }

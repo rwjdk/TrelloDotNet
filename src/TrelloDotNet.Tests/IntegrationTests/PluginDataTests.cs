@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests.IntegrationTests;
 
@@ -12,7 +12,7 @@ public class PluginDataTests(TestFixtureWithNewBoard fixture) : TestBase, IClass
         var list = await AddDummyList(_board.Id);
         var card = await AddDummyCardToList(list);
 
-        var pluginData = await TrelloClient.GetPluginDataOnCardAsync(card.Id);
+        var pluginData = await TrelloClient.GetPluginDataOnCardAsync(card.Id, cancellationToken: TestCancellationToken);
 
         Assert.NotNull(pluginData);
         Assert.Empty(pluginData);
@@ -25,7 +25,7 @@ public class PluginDataTests(TestFixtureWithNewBoard fixture) : TestBase, IClass
         var card = await AddDummyCardToList(list);
         const string pluginId = "com.example.plugin";
 
-        PluginData pluginData = await TrelloClient.GetPluginDataOnCardAsync(card.Id, pluginId);
+        PluginData pluginData = await TrelloClient.GetPluginDataOnCardAsync(card.Id, pluginId, cancellationToken: TestCancellationToken);
 
         Assert.Null(pluginData);
     }
@@ -37,7 +37,7 @@ public class PluginDataTests(TestFixtureWithNewBoard fixture) : TestBase, IClass
         var card = await AddDummyCardToList(list);
         const string pluginId = "com.example.plugin";
 
-        var pluginData = await TrelloClient.GetPluginDataOnCardAsync<DummyPlugin>(card.Id, pluginId);
+        var pluginData = await TrelloClient.GetPluginDataOnCardAsync<DummyPlugin>(card.Id, pluginId, cancellationToken: TestCancellationToken);
 
         Assert.Null(pluginData);
     }
@@ -45,7 +45,7 @@ public class PluginDataTests(TestFixtureWithNewBoard fixture) : TestBase, IClass
     [Fact]
     public async Task GetPluginDataOnBoard()
     {
-        var pluginData = await TrelloClient.GetPluginDataOfBoardAsync(_board.Id);
+        var pluginData = await TrelloClient.GetPluginDataOfBoardAsync(_board.Id, cancellationToken: TestCancellationToken);
 
         Assert.NotNull(pluginData);
         Assert.Empty(pluginData);
@@ -56,7 +56,7 @@ public class PluginDataTests(TestFixtureWithNewBoard fixture) : TestBase, IClass
     {
         const string pluginId = "com.example.plugin";
 
-        var pluginData = await TrelloClient.GetPluginDataOfBoardAsync(_board.Id, pluginId);
+        var pluginData = await TrelloClient.GetPluginDataOfBoardAsync(_board.Id, pluginId, cancellationToken: TestCancellationToken);
 
         Assert.Null(pluginData);
     }
@@ -66,7 +66,7 @@ public class PluginDataTests(TestFixtureWithNewBoard fixture) : TestBase, IClass
     {
         const string pluginId = "com.example.plugin";
 
-        DummyPlugin pluginData = await TrelloClient.GetPluginDataOfBoardAsync<DummyPlugin>(_board.Id, pluginId);
+        DummyPlugin pluginData = await TrelloClient.GetPluginDataOfBoardAsync<DummyPlugin>(_board.Id, pluginId, cancellationToken: TestCancellationToken);
 
         Assert.Null(pluginData);
     }

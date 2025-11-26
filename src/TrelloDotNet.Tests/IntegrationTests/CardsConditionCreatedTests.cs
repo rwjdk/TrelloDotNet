@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetCardOptions;
 
@@ -16,11 +16,11 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
         List list3 = await AddDummyList(_board.Id, "List 3");
 
         Card card1 = await AddDummyCardToList(list1, "Card 1");
-        await Task.Delay(1000);
+        await Task.Delay(1000, TestCancellationToken);
         Card card2 = await AddDummyCardToList(list2, "Card 2");
-        await Task.Delay(1000);
+        await Task.Delay(1000, TestCancellationToken);
         Card card3 = await AddDummyCardToList(list3, "Card 3");
-        await Task.Delay(1000);
+        await Task.Delay(1000, TestCancellationToken);
 
         // ReSharper disable once JoinDeclarationAndInitializer
         List<Card> cards;
@@ -30,28 +30,28 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.AnyOfThese, card1.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.AnyOfThese, card1.Created!.Value, card2.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
         //*********************************************************
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.Equal, card1.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.Equal, card1.Created!.Value, card2.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(0, cards.Count);
 
         //*********************************************************
@@ -59,14 +59,14 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.NotEqual, card1.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.NotEqual, card1.Created!.Value, card2.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         //*********************************************************
@@ -74,14 +74,14 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.Between, card1.Created!.Value, card3.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.NotBetween, card1.Created!.Value, card2.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         //*********************************************************
@@ -90,7 +90,7 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
             {
                 CardFields = cardFields,
                 FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.DoNotHaveAnyValue)]
-            })
+            }, cancellationToken: TestCancellationToken)
         );
 
         await Assert.ThrowsAsync<TrelloApiException>(async () =>
@@ -98,7 +98,7 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
             {
                 CardFields = cardFields,
                 FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.HasAnyValue)]
-            })
+            }, cancellationToken: TestCancellationToken)
         );
 
         //*********************************************************
@@ -106,14 +106,14 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.GreaterThan, card1.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.GreaterThanOrEqual, card1.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         //*********************************************************
@@ -121,14 +121,14 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.LessThan, card1.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(0, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.LessThanOrEqual, card1.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         //*********************************************************
@@ -136,14 +136,14 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.NoneOfThese, card1.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Created(CardsConditionDate.NoneOfThese, card1.Created!.Value, card2.Created!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
     }
 }

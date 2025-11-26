@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetBoardOptions;
@@ -21,17 +21,20 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task DefaultBoardData()
     {
+        await using TemporaryBoardContext boardContext = await CreateTemporaryBoardAsync(nameof(DefaultBoardData));
+        Board boardUnderTest = boardContext.Board;
+
         //Check Create date
-        AssertTimeIsNow(_board.Created);
+        AssertTimeIsNow(boardUnderTest.Created);
 
-        Assert.False(_board.Closed);
-        Assert.NotEmpty(_board.ShortUrl);
-        Assert.NotEmpty(_board.Url);
-        Assert.False(_board.Pinned);
-        Assert.Null(_board.EnterpriseId);
-        Assert.NotEmpty(_board.OrganizationId);
+        Assert.False(boardUnderTest.Closed);
+        Assert.NotEmpty(boardUnderTest.ShortUrl);
+        Assert.NotEmpty(boardUnderTest.Url);
+        Assert.False(boardUnderTest.Pinned);
+        Assert.Null(boardUnderTest.EnterpriseId);
+        Assert.NotEmpty(boardUnderTest.OrganizationId);
 
-        var getBoardWithOptions = await TrelloClient.GetBoardAsync(_boardId, new GetBoardOptions
+        var getBoardWithOptions = await TrelloClient.GetBoardAsync(boardUnderTest.Id, new GetBoardOptions
         {
             IncludeLists = GetBoardOptionsIncludeLists.Open,
             IncludeCards = GetBoardOptionsIncludeCards.OpenCards,
@@ -57,15 +60,15 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
                 CardsFilterCondition.LabelName(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),
                 CardsFilterCondition.ListName(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),
             ]
-        });
+        }, cancellationToken: TestCancellationToken);
 
         Assert.NotNull(getBoardWithOptions.Lists);
         Assert.Contains(getBoardWithOptions.Lists, x => x.Name == "To Do");
         Assert.NotNull(getBoardWithOptions.Cards);
         Assert.Null(getBoardWithOptions.Url);
 
-        TrelloPlanInformation plan = await TrelloClient.GetTrelloPlanInformationForBoardAsync(_boardId);
-        Assert.Equal(_boardName, plan.Name);
+        TrelloPlanInformation plan = await TrelloClient.GetTrelloPlanInformationForBoardAsync(boardUnderTest.Id, cancellationToken: TestCancellationToken);
+        Assert.Equal(boardUnderTest.Name, plan.Name);
         Assert.NotEmpty(plan.Features);
     }
 
@@ -73,9 +76,9 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     public async Task DefaultMembers()
     {
         //Member Tests
-        var members = await TrelloClient.GetMembersOfBoardAsync(_boardId);
+        var members = await TrelloClient.GetMembersOfBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         Assert.Single(members);
-        var member = await TrelloClient.GetMemberAsync(members.First().Id);
+        var member = await TrelloClient.GetMemberAsync(members.First().Id, cancellationToken: TestCancellationToken);
         Assert.Equal(member.FullName, members.First().FullName);
         Assert.Equal(member.Username, members.First().Username);
     }
@@ -86,7 +89,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         var members = await TrelloClient.GetMembersOfBoardAsync(_boardId, new GetMemberOptions
         {
             MemberFields = new MemberFields(MemberFieldsType.FullName)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Single(members);
         Assert.NotEmpty(members[0].Id);
         Assert.NotEmpty(members[0].FullName);
@@ -96,7 +99,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task DefaultLists()
     {
-        var lists = await TrelloClient.GetListsOnBoardAsync(_boardId);
+        var lists = await TrelloClient.GetListsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         var todoList = lists.FirstOrDefault(x => x.Name == "To Do");
         var doingList = lists.FirstOrDefault(x => x.Name == "Doing");
         var doneList = lists.FirstOrDefault(x => x.Name == "Done");
@@ -112,7 +115,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         var listsFiltered = await TrelloClient.GetListsOnBoardAsync(_boardId, new GetListOptions
         {
             Filter = ListFilter.Closed
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Empty(listsFiltered);
     }
 
@@ -120,18 +123,18 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     public async Task DefaultCards()
     {
         //No Cards on the lists
-        var lists = await TrelloClient.GetListsOnBoardAsync(_boardId);
+        var lists = await TrelloClient.GetListsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         foreach (List list in lists)
         {
-            Assert.Empty(await TrelloClient.GetCardsInListAsync(list.Id));
+            Assert.Empty(await TrelloClient.GetCardsInListAsync(list.Id, cancellationToken: TestCancellationToken));
         }
 
-        Assert.Empty(await TrelloClient.GetCardsOnBoardAsync(_boardId));
+        Assert.Empty(await TrelloClient.GetCardsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken));
         Assert.Empty(await TrelloClient.GetCardsOnBoardAsync(_boardId, new GetCardOptions
             {
                 Filter = CardsFilter.All
             }
-        ));
+            , cancellationToken: TestCancellationToken));
     }
 
     [Fact]
@@ -142,8 +145,8 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         var updatedBoard = await TrelloClient.UpdateBoardAsync(_board.Id, [
             Model.BoardUpdate.Name(_boardName + "X"),
             Model.BoardUpdate.Description(_boardDescription + "X")
-        ]);
-        var getBoard = await TrelloClient.GetBoardAsync(_boardId);
+        ], cancellationToken: TestCancellationToken);
+        var getBoard = await TrelloClient.GetBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         Assert.EndsWith("X", updatedBoard.Name);
         Assert.EndsWith("X", updatedBoard.Description);
         Assert.EndsWith("X", getBoard.Name);
@@ -153,7 +156,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         var getBoardWithOptions = await TrelloClient.GetBoardAsync(_boardId, new GetBoardOptions
         {
             ActionsTypes = new ActionTypesToInclude(WebhookActionTypes.UpdateBoard)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.NotEmpty(getBoardWithOptions.Actions);
     }
 
@@ -171,12 +174,12 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
             WhoCanComment = BoardPreferenceWhoCanComment.Disabled,
             WhoCanVote = BoardPreferenceWhoCanVote.Disabled,
             WhoCanAddAndRemoveMembers = BoardPreferenceWhoCanAddAndRemoveMembers.Members
-        });
+        }, cancellationToken: TestCancellationToken);
 
         Board board = await TrelloClient.GetBoardAsync(_boardId, new GetBoardOptions
         {
             BoardFields = new BoardFields(BoardFieldsType.Preferences)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.NotNull(board.Preferences);
         Assert.Equal(BoardPreferenceCardAging.Regular, board.Preferences.CardAging);
         Assert.Equal(BoardPreferenceCardCovers.DoNotShow, board.Preferences.CardCovers);
@@ -193,7 +196,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     public async Task DefaultChecklists()
     {
         //Checklist Defaults
-        var checklists = await TrelloClient.GetChecklistsOnBoardAsync(_boardId);
+        var checklists = await TrelloClient.GetChecklistsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         Assert.Empty(checklists);
     }
 
@@ -201,7 +204,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     public async Task DefaultLabels()
     {
         //Label Defaults
-        var labels = await TrelloClient.GetLabelsOfBoardAsync(_boardId);
+        var labels = await TrelloClient.GetLabelsOfBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         Assert.Equal(6, labels.Count);
         foreach (var label in labels)
         {
@@ -219,25 +222,25 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         {
             Limit = 2,
             LabelFields = new LabelFields(LabelFieldsType.Name)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, labelsWithOptions.Count);
         Assert.Null(labelsWithOptions[0].Color);
         Assert.Null(labelsWithOptions[1].Color);
 
 
-        Label addedLabel = await TrelloClient.AddLabelAsync(new Label(_boardId, "MyLabel", "red"));
+        Label addedLabel = await TrelloClient.AddLabelAsync(new Label(_boardId, "MyLabel", "red"), cancellationToken: TestCancellationToken);
         Assert.NotNull(addedLabel.Id);
         Assert.Equal("red", addedLabel.Color);
 
         Label updateLabel = labels[0];
         updateLabel.Name = "Hello world";
         updateLabel.Color = "red";
-        await TrelloClient.UpdateLabelAsync(updateLabel);
+        await TrelloClient.UpdateLabelAsync(updateLabel, cancellationToken: TestCancellationToken);
 
-        await TrelloClient.DeleteLabelAsync(labels[1].Id);
-        await TrelloClient.DeleteLabelAsync(labels[2].Id);
+        await TrelloClient.DeleteLabelAsync(labels[1].Id, cancellationToken: TestCancellationToken);
+        await TrelloClient.DeleteLabelAsync(labels[2].Id, cancellationToken: TestCancellationToken);
 
-        var labelsAfterAddUpdateAndRemove = await TrelloClient.GetLabelsOfBoardAsync(_boardId);
+        var labelsAfterAddUpdateAndRemove = await TrelloClient.GetLabelsOfBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         Assert.Equal(5, labelsAfterAddUpdateAndRemove.Count);
         Assert.Equal(3, labelsAfterAddUpdateAndRemove.Count(x => x.Color == "red"));
     }
@@ -245,8 +248,8 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task MembershipInformation()
     {
-        var tokenMember = await TrelloClient.GetTokenMemberAsync();
-        List<Membership> memberships = await TrelloClient.GetMembershipsOfBoardAsync(_boardId);
+        var tokenMember = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
+        List<Membership> memberships = await TrelloClient.GetMembershipsOfBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         Assert.Single(memberships);
         Membership membership = memberships.Single(x => x.MemberId == tokenMember.Id);
         Assert.Equal(MembershipType.Admin, membership.MemberType);
@@ -257,14 +260,14 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task PluginInformation()
     {
-        var plugins = await TrelloClient.GetPluginsOnBoardAsync(_boardId);
+        var plugins = await TrelloClient.GetPluginsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
         Assert.Contains(plugins, x => x.Name == "Butler");
     }
 
     [Fact]
     public async Task BoardsInOrganization()
     {
-        var boards = await TrelloClient.GetBoardsInOrganizationAsync(_board.OrganizationId);
+        var boards = await TrelloClient.GetBoardsInOrganizationAsync(_board.OrganizationId, cancellationToken: TestCancellationToken);
         Assert.Single(boards);
         Assert.Equal(_board.Id, boards.First().Id);
 
@@ -284,7 +287,7 @@ public class BoardTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
             CardsFilterConditions = [CardsFilterCondition.Name(CardsConditionString.NotEqual, Guid.NewGuid().ToString()),],
             IncludePluginData = true,
             IncludeLabels = true
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Single(boards);
         Assert.Equal(_board.Id, boards.First().Id);
         foreach (Board board in boards)

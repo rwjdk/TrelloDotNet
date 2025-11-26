@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 
 namespace TrelloDotNet.Tests;
 
@@ -12,14 +12,14 @@ public class TestFixtureWithNewBoard : TestBase, IAsyncLifetime
     public string? OrganizationId { get; set; }
     public string? OrganizationName { get; set; }
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         Assert.True(TrelloClient.Options.MaxRetryCountForTokenLimitExceeded > 0);
         Assert.True(TrelloClient.Options.DelayInSecondsToWaitInTokenLimitExceededRetry > 0);
 
         var organizationName = Guid.NewGuid().ToString();
         OrganizationName = $"UnitTestOrganization-{organizationName}";
-        Organization = await TrelloClient.AddOrganizationAsync(new Organization(OrganizationName));
+        Organization = await TrelloClient.AddOrganizationAsync(new Organization(OrganizationName), cancellationToken: TestCancellationToken);
         OrganizationId = Organization.Id;
         Assert.Equal(OrganizationName, Organization.DisplayName);
 
@@ -30,18 +30,18 @@ public class TestFixtureWithNewBoard : TestBase, IAsyncLifetime
         {
             OrganizationId = Organization.Id
         };
-        Board = await TrelloClient.AddBoardAsync(board);
+        Board = await TrelloClient.AddBoardAsync(board, cancellationToken: TestCancellationToken);
         BoardId = Board.Id;
         Assert.Equal(BoardName, Board.Name);
         Assert.Equal(BoardDescription, Board.Description);
         Assert.Equal(OrganizationId, Board.OrganizationId);
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         try
         {
-            await TrelloClient.DeleteBoardAsync(BoardId);
+            await TrelloClient.DeleteBoardAsync(BoardId, cancellationToken: TestCancellationToken);
         }
         catch (Exception e)
         {
@@ -50,12 +50,12 @@ public class TestFixtureWithNewBoard : TestBase, IAsyncLifetime
         finally
         {
             TrelloClient.Options.AllowDeleteOfBoards = true;
-            await TrelloClient.DeleteBoardAsync(BoardId);
+            await TrelloClient.DeleteBoardAsync(BoardId, cancellationToken: TestCancellationToken);
         }
 
         try
         {
-            await TrelloClient.DeleteOrganizationAsync(OrganizationId);
+            await TrelloClient.DeleteOrganizationAsync(OrganizationId, cancellationToken: TestCancellationToken);
         }
         catch (Exception e)
         {
@@ -64,7 +64,7 @@ public class TestFixtureWithNewBoard : TestBase, IAsyncLifetime
         finally
         {
             TrelloClient.Options.AllowDeleteOfOrganizations = true;
-            await TrelloClient.DeleteOrganizationAsync(OrganizationId);
+            await TrelloClient.DeleteOrganizationAsync(OrganizationId, cancellationToken: TestCancellationToken);
         }
 
         TrelloClient.Options.AllowDeleteOfBoards = false;

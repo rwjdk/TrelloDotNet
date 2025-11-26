@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.AddCardOptions;
@@ -9,6 +11,8 @@ namespace TrelloDotNet.Tests;
 public abstract class TestBase
 {
     public TrelloClient TrelloClient;
+
+    protected CancellationToken TestCancellationToken => TestContext.Current?.CancellationToken ?? CancellationToken.None;
 
     protected TestBase()
     {
@@ -61,7 +65,7 @@ public abstract class TestBase
 
     protected async Task<List> AddDummyList(string boardId, string? name = null)
     {
-        return await TrelloClient.AddListAsync(new List(name ?? Guid.NewGuid().ToString(), boardId));
+        return await TrelloClient.AddListAsync(new List(name ?? Guid.NewGuid().ToString(), boardId), TestCancellationToken);
     }
 
     protected async Task<Card> AddDummyCard(string boardId, string? name = null)
@@ -87,14 +91,29 @@ public abstract class TestBase
             addCardOptions.DueComplete = dueComplete.Value;
         }
 
-        return await TrelloClient.AddCardAsync(addCardOptions);
+        return await TrelloClient.AddCardAsync(addCardOptions, TestCancellationToken);
     }
 
     protected async Task<(List List, Card Card)> AddDummyCardAndList(string boardId, string? name = null)
     {
         List list = await AddDummyList(boardId, name);
-        Card card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString()));
+        Card card = await TrelloClient.AddCardAsync(new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString()), TestCancellationToken);
         return (list, card);
+    }
+
+    protected async Task<TemporaryBoardContext> CreateTemporaryBoardAsync(string? scenarioName = null, string? description = null)
+    {
+        var organizationName = $"UnitTestOrganization-{scenarioName ?? "Temp"}-{Guid.NewGuid()}";
+        Organization organization = await TrelloClient.AddOrganizationAsync(new Organization(organizationName), TestCancellationToken);
+
+        var boardNameSeed = scenarioName ?? "UnitTestBoard";
+        var boardName = $"{boardNameSeed}-{Guid.NewGuid()}";
+        var board = await TrelloClient.AddBoardAsync(new Board(boardName, description ?? $"BoardDescription-{boardName}")
+        {
+            OrganizationId = organization.Id
+        }, cancellationToken: TestCancellationToken);
+
+        return new TemporaryBoardContext(TrelloClient, board, organization);
     }
 
     public void AssertTimeIsNow(DateTimeOffset? objectCreationTime)
@@ -109,7 +128,7 @@ public abstract class TestBase
         var availableBoards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync(new GetBoardOptions
         {
             BoardFields = new BoardFields(BoardFieldsType.Name)
-        });
+        }, cancellationToken: TestCancellationToken);
 
         const string specialSetupBoardsForTheseTests = "67c765705dc85a158981d888";
         return availableBoards.FirstOrDefault(x => x.Id == specialSetupBoardsForTheseTests);

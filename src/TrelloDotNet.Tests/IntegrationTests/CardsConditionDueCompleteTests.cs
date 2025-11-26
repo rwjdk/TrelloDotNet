@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetCardOptions;
 
@@ -27,14 +27,14 @@ public class CardsConditionDueCompleteTests(TestFixtureWithNewBoard fixture) : T
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.IsComplete()]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.IsNotComplete()]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Security;
+using System.Security;
 using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetOrganizationOptions;
@@ -20,45 +20,45 @@ public class OrganizationTests : TestBase
             input.Description = description;
             input.Website = "https://www.rwj.dk";
 
-            Organization added = await TrelloClient.AddOrganizationAsync(input);
+            Organization added = await TrelloClient.AddOrganizationAsync(input, cancellationToken: TestCancellationToken);
             id = added.Id;
             Assert.Equal(displayName, added.DisplayName);
             Assert.Equal(description, added.Description);
             Assert.NotNull(added.Id);
             Assert.NotEmpty(added.Url);
 
-            Organization get = await TrelloClient.GetOrganizationAsync(id);
+            Organization get = await TrelloClient.GetOrganizationAsync(id, cancellationToken: TestCancellationToken);
             Assert.Equal(added.Id, get.Id);
             Assert.Equal(added.Name, get.Name);
 
             Organization getWithOptions = await TrelloClient.GetOrganizationAsync(id, new GetOrganizationOptions
             {
                 OrganizationFields = new OrganizationFields(OrganizationFieldsType.Name)
-            });
+            }, cancellationToken: TestCancellationToken);
             Assert.Equal(added.Id, getWithOptions.Id);
             Assert.Equal(added.Name, getWithOptions.Name);
             Assert.NotEqual(added.Url, getWithOptions.Url);
             Assert.Null(getWithOptions.Url);
 
-            TrelloPlanInformation plan = await TrelloClient.GetTrelloPlanInformationForOrganizationAsync(id);
+            TrelloPlanInformation plan = await TrelloClient.GetTrelloPlanInformationForOrganizationAsync(id, cancellationToken: TestCancellationToken);
             Assert.Equal(added.Name, plan.Name);
             Assert.NotEmpty(plan.Features);
 
             get.Description = "Some other description";
-            Organization updated = await TrelloClient.UpdateOrganizationAsync(added);
+            Organization updated = await TrelloClient.UpdateOrganizationAsync(added, cancellationToken: TestCancellationToken);
             Assert.Equal(added.Description, updated.Description);
 
-            var members = await TrelloClient.GetMembersOfOrganizationAsync(updated.Id);
+            var members = await TrelloClient.GetMembersOfOrganizationAsync(updated.Id, cancellationToken: TestCancellationToken);
             Assert.Single(members);
         }
         finally
         {
             if (id != null)
             {
-                await Assert.ThrowsAsync<SecurityException>(async () => { await TrelloClient.DeleteOrganizationAsync(id); });
+                await Assert.ThrowsAsync<SecurityException>(async () => { await TrelloClient.DeleteOrganizationAsync(id, cancellationToken: TestCancellationToken); });
 
                 TrelloClient.Options.AllowDeleteOfOrganizations = true;
-                await TrelloClient.DeleteOrganizationAsync(id);
+                await TrelloClient.DeleteOrganizationAsync(id, cancellationToken: TestCancellationToken);
                 TrelloClient.Options.AllowDeleteOfOrganizations = false;
             }
         }

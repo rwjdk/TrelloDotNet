@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetMemberOptions;
 
@@ -15,7 +15,7 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
         Member member = await TrelloClient.GetTokenMemberAsync(new GetMemberOptions
         {
             MemberFields = new MemberFields(MemberFieldsType.FullName)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.NotNull(member);
         Assert.NotEmpty(member.Id);
         Assert.NotEmpty(member.FullName);
@@ -29,26 +29,26 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     [Fact]
     public async Task GetCardsForMember()
     {
-        Member member = await TrelloClient.GetTokenMemberAsync();
+        Member member = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
         (List list, Card card) = await AddDummyCardAndList(_board.Id, "GetCardsForMember");
-        await TrelloClient.AddMembersToCardAsync(card.Id, member.Id);
-        var cardForMember = await TrelloClient.GetCardsForMemberAsync(member.Id);
+        await TrelloClient.AddMembersToCardAsync(card.Id, TestCancellationToken, member.Id);
+        var cardForMember = await TrelloClient.GetCardsForMemberAsync(member.Id, cancellationToken: TestCancellationToken);
         Assert.Contains(cardForMember, x => x.Id == card.Id && x.ListId == list.Id);
     }
 
     [Fact]
     public async Task GetBoardsForMember()
     {
-        Member member = await TrelloClient.GetTokenMemberAsync();
-        var boards = await TrelloClient.GetBoardsForMemberAsync(member.Id);
+        Member member = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
+        var boards = await TrelloClient.GetBoardsForMemberAsync(member.Id, cancellationToken: TestCancellationToken);
         Assert.Contains(boards, x => x.Id == _board.Id);
     }
 
     [Fact]
     public async Task GetOrganizationsForMember()
     {
-        Member member = await TrelloClient.GetTokenMemberAsync();
-        var organizations = await TrelloClient.GetOrganizationsForMemberAsync(member.Id);
+        Member member = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
+        var organizations = await TrelloClient.GetOrganizationsForMemberAsync(member.Id, cancellationToken: TestCancellationToken);
         Assert.Contains(organizations, x => x.Id == _organization.Id);
     }
 
@@ -56,28 +56,28 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     public async Task AddRemoveChangeMemberOnBoard()
     {
         const string memberId = "64ce44c552fd41aa6937e866"; //Test_user rwj_test1@outlook.com
-        await TrelloClient.AddMemberToBoardAsync(_board.Id, memberId, MembershipType.Normal);
+        await TrelloClient.AddMemberToBoardAsync(_board.Id, memberId, MembershipType.Normal, cancellationToken: TestCancellationToken);
 
-        var members = await TrelloClient.GetMembersOfBoardAsync(_board.Id);
+        var members = await TrelloClient.GetMembersOfBoardAsync(_board.Id, cancellationToken: TestCancellationToken);
         Assert.Contains(members, x => x.Id == memberId);
 
-        var memberships = await TrelloClient.GetMembershipsOfBoardAsync(_board.Id);
+        var memberships = await TrelloClient.GetMembershipsOfBoardAsync(_board.Id, cancellationToken: TestCancellationToken);
         Assert.Contains(memberships, x => x.MemberId == memberId && x.MemberType == MembershipType.Normal);
         Membership membership = memberships.Single(x => x.MemberId == memberId && x.MemberType == MembershipType.Normal);
 
-        await TrelloClient.UpdateMembershipTypeOfMemberOnBoardAsync(_board.Id, membership.Id, MembershipType.Admin);
+        await TrelloClient.UpdateMembershipTypeOfMemberOnBoardAsync(_board.Id, membership.Id, MembershipType.Admin, cancellationToken: TestCancellationToken);
 
-        var membershipsAfter = await TrelloClient.GetMembershipsOfBoardAsync(_board.Id);
+        var membershipsAfter = await TrelloClient.GetMembershipsOfBoardAsync(_board.Id, cancellationToken: TestCancellationToken);
         Assert.Contains(membershipsAfter, x => x.MemberId == memberId && x.MemberType == MembershipType.Admin);
 
-        await TrelloClient.RemoveMemberFromBoardAsync(_board.Id, memberId);
+        await TrelloClient.RemoveMemberFromBoardAsync(_board.Id, memberId, cancellationToken: TestCancellationToken);
 
-        var membersAfter = await TrelloClient.GetMembersOfBoardAsync(_board.Id);
+        var membersAfter = await TrelloClient.GetMembersOfBoardAsync(_board.Id, cancellationToken: TestCancellationToken);
         Assert.True(membersAfter.All(x => x.Id != memberId));
 
-        await TrelloClient.InviteMemberToBoardViaEmailAsync(_board.Id, "rwj_test1@outlook.com", MembershipType.Normal);
+        await TrelloClient.InviteMemberToBoardViaEmailAsync(_board.Id, "rwj_test1@outlook.com", MembershipType.Normal, cancellationToken: TestCancellationToken);
 
-        var membersAfterInvite = await TrelloClient.GetMembersOfBoardAsync(_board.Id);
+        var membersAfterInvite = await TrelloClient.GetMembersOfBoardAsync(_board.Id, cancellationToken: TestCancellationToken);
         Assert.Contains(membersAfterInvite, x => x.Id == memberId);
     }
 
@@ -86,18 +86,18 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     {
         var list = await AddDummyList(_board.Id);
         var card = await AddDummyCardToList(list);
-        var member = await TrelloClient.GetTokenMemberAsync();
+        var member = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
 
-        await TrelloClient.AddMembersToCardAsync(card.Id, member.Id);
+        await TrelloClient.AddMembersToCardAsync(card.Id, TestCancellationToken, member.Id);
 
-        var membersOnCard = await TrelloClient.GetMembersOfCardAsync(card.Id);
+        var membersOnCard = await TrelloClient.GetMembersOfCardAsync(card.Id, cancellationToken: TestCancellationToken);
         Assert.Contains(membersOnCard, x => x.Id == member.Id);
 
         // Test with options
         var membersWithOptions = await TrelloClient.GetMembersOfCardAsync(card.Id, new GetMemberOptions
         {
             MemberFields = new MemberFields(MemberFieldsType.FullName)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Contains(membersWithOptions, x => x.Id == member.Id);
     }
 
@@ -107,14 +107,14 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
         var list = await AddDummyList(_board.Id);
         var card = await AddDummyCardToList(list);
 
-        var votingMembers = await TrelloClient.GetMembersWhoVotedOnCardAsync(card.Id);
+        var votingMembers = await TrelloClient.GetMembersWhoVotedOnCardAsync(card.Id, cancellationToken: TestCancellationToken);
         Assert.Empty(votingMembers);
 
         // Test with options
         var votingMembersWithOptions = await TrelloClient.GetMembersWhoVotedOnCardAsync(card.Id, new GetMemberOptions
         {
             MemberFields = new MemberFields(MemberFieldsType.FullName)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Empty(votingMembersWithOptions);
     }
 
@@ -125,7 +125,7 @@ public class MemberTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
         var membersWithOptions = await TrelloClient.GetMembersOfOrganizationAsync(fixture.OrganizationId!, new GetMemberOptions
         {
             MemberFields = new MemberFields(MemberFieldsType.FullName)
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.NotEmpty(membersWithOptions);
         Assert.All(membersWithOptions, member => Assert.NotNull(member.FullName));
     }

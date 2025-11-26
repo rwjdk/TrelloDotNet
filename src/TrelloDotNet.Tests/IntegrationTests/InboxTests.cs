@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options.AddCardToInboxOptions;
 using TrelloDotNet.Model.Options.GetInboxCardOptions;
 
@@ -9,7 +9,7 @@ public class InboxTests : TestBase
     [Fact]
     public async Task GetInbox()
     {
-        TokenMemberInbox memberInbox = await TrelloClient.GetTokenMemberInboxAsync();
+        TokenMemberInbox memberInbox = await TrelloClient.GetTokenMemberInboxAsync(cancellationToken: TestCancellationToken);
         if (memberInbox != null) //Needed for now as it is a beta feature
         {
             Assert.NotNull(memberInbox.ListId);
@@ -21,7 +21,7 @@ public class InboxTests : TestBase
     [Fact]
     public async Task AddCardToInbox()
     {
-        TokenMemberInbox memberInbox = await TrelloClient.GetTokenMemberInboxAsync();
+        TokenMemberInbox memberInbox = await TrelloClient.GetTokenMemberInboxAsync(cancellationToken: TestCancellationToken);
 
         if (memberInbox != null) //Needed for now as it is a beta feature
         {
@@ -32,14 +32,14 @@ public class InboxTests : TestBase
                 card = await TrelloClient.AddCardToInboxAsync(new AddCardToInboxOptions
                 {
                     Name = name
-                });
+                }, cancellationToken: TestCancellationToken);
                 Assert.Equal(name, card.Name);
             }
             finally
             {
                 if (card != null)
                 {
-                    await TrelloClient.DeleteCardAsync(card.Id);
+                    await TrelloClient.DeleteCardAsync(card.Id, cancellationToken: TestCancellationToken);
                 }
             }
         }
@@ -48,15 +48,15 @@ public class InboxTests : TestBase
     [Fact]
     public async Task GetCardsToInbox()
     {
-        TokenMemberInbox memberInbox = await TrelloClient.GetTokenMemberInboxAsync();
+        TokenMemberInbox memberInbox = await TrelloClient.GetTokenMemberInboxAsync(cancellationToken: TestCancellationToken);
         if (memberInbox != null) //Needed for now as it is a beta feature
         {
-            var cards = await TrelloClient.GetCardsInInboxAsync();
+            var cards = await TrelloClient.GetCardsInInboxAsync(cancellationToken: TestCancellationToken);
             Assert.NotNull(cards);
             cards = await TrelloClient.GetCardsInInboxAsync(new GetInboxCardOptions
             {
                 Limit = 1
-            });
+            }, cancellationToken: TestCancellationToken);
             Assert.NotNull(cards);
         }
     }

@@ -1,4 +1,4 @@
-﻿using TrelloDotNet.Model;
+using TrelloDotNet.Model;
 using TrelloDotNet.Model.Options;
 using TrelloDotNet.Model.Options.GetCardOptions;
 
@@ -13,10 +13,10 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
     [InlineData(false)]
     public async Task DueFilter(bool includeCardsThatAreMarkedAsComplete)
     {
-        var existingCards = await TrelloClient.GetCardsOnBoardAsync(_board.Id);
+        var existingCards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, cancellationToken: TestCancellationToken);
         foreach (Card existingCard in existingCards)
         {
-            await TrelloClient.DeleteCardAsync(existingCard.Id);
+            await TrelloClient.DeleteCardAsync(existingCard.Id, cancellationToken: TestCancellationToken);
         }
 
         List list1 = await AddDummyList(_board.Id, "List 1");
@@ -35,28 +35,28 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.AnyOfThese, includeCardsThatAreMarkedAsComplete, card1.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.AnyOfThese, includeCardsThatAreMarkedAsComplete, card1.Due!.Value, card2.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
         //*********************************************************
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.Equal, includeCardsThatAreMarkedAsComplete, card1.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.Equal, includeCardsThatAreMarkedAsComplete, card1.Due!.Value, card2.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(0, cards.Count);
 
         //*********************************************************
@@ -64,14 +64,14 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.NotEqual, includeCardsThatAreMarkedAsComplete, card1.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.NotEqual, includeCardsThatAreMarkedAsComplete, card1.Due!.Value, card2.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         //*********************************************************
@@ -79,14 +79,14 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.Between, includeCardsThatAreMarkedAsComplete, card1.Due!.Value, card3.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.NotBetween, includeCardsThatAreMarkedAsComplete, card1.Due!.Value, card2.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         //*********************************************************
@@ -94,14 +94,14 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.DoNotHaveAnyValue, includeCardsThatAreMarkedAsComplete)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(0, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.HasAnyValue, includeCardsThatAreMarkedAsComplete)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         //*********************************************************
@@ -109,14 +109,14 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.GreaterThan, includeCardsThatAreMarkedAsComplete, card1.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.GreaterThanOrEqual, includeCardsThatAreMarkedAsComplete, card1.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(3, cards.Count);
 
         //*********************************************************
@@ -124,14 +124,14 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.LessThan, includeCardsThatAreMarkedAsComplete, card1.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(0, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.LessThanOrEqual, includeCardsThatAreMarkedAsComplete, card1.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
 
         //*********************************************************
@@ -139,14 +139,14 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.NoneOfThese, includeCardsThatAreMarkedAsComplete, card1.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(2, cards.Count);
 
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
             FilterConditions = [CardsFilterCondition.Due(CardsConditionDate.NoneOfThese, includeCardsThatAreMarkedAsComplete, card1.Due!.Value, card2.Due!.Value)]
-        });
+        }, cancellationToken: TestCancellationToken);
         Assert.Equal(1, cards.Count);
     }
 }
