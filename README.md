@@ -43,10 +43,10 @@ Board board = await client.GetBoardAsync("<boardId>");
 List<List> lists = await client.GetListsOnBoardAsync("<boardId>");
 
 //Get cards on a board
-List<Card> cardsOnBoard = await trelloClient.GetCardsOnBoardAsync("<boardId>");
+List<Card> cardsOnBoard = await client.GetCardsOnBoardAsync("<boardId>");
 
 //Get cards in a specific list
-List<Card> cardsInList = await trelloClient.GetCardsInListAsync("<listId>");
+List<Card> cardsInList = await client.GetCardsInListAsync("<listId>");
 
 //Get a specific card
 Card card = await client.GetCardAsync("<cardId>");
@@ -108,7 +108,7 @@ Card newAdvancedCard = await client.AddCardAsync(new AddCardOptions
 });
 
 //Update a card (with new name and description and removal of Due Date)
-var updateCard = await TrelloClient.UpdateCardAsync("<cardId>", [
+var updateCard = await client.UpdateCardAsync("<cardId>", [
     CardUpdate.Name("New Name"),
     CardUpdate.Description("New Description"),
     CardUpdate.DueDate(null),
