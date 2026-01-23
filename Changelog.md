@@ -1,5 +1,10 @@
 ﻿# Changelog
 
+## Unreleased
+- Fixed incorrect code samples in the README.md (Thanks @AldeRoberge)
+
+---
+
 ## 2.1.2 (13th of October 2025)
 #### TrelloClient
 - Fixed that [GetTokenMemberInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetTokenMemberInboxAsync) returned null as OrganizationId (due to breaking change from the Trello Team; they renamed the technical field)
