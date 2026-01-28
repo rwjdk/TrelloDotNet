@@ -49,6 +49,11 @@ namespace TrelloDotNet.Model.Webhook
         /// <returns>The Board</returns>
         public async Task<Board> GetAsync(GetBoardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetAsync(cancellationToken);
+            }
+
             return await Parent.Parent.TrelloClient.GetBoardAsync(Id, options, cancellationToken);
         }
 

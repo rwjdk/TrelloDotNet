@@ -63,8 +63,13 @@ namespace TrelloDotNet
         public async Task<TokenMembershipOverview> GetCurrentTokenMembershipsAsync(GetBoardOptions boardOptions, GetOrganizationOptions organizationOptions, CancellationToken cancellationToken = default)
         {
             Member member = await GetTokenMemberAsync(cancellationToken);
-            var organizations = await GetOrganizationsCurrentTokenCanAccessAsync(organizationOptions, cancellationToken);
-            var boards = await GetBoardsCurrentTokenCanAccessAsync(boardOptions, cancellationToken);
+            var organizations = organizationOptions == null
+                ? await GetOrganizationsCurrentTokenCanAccessAsync(cancellationToken)
+                : await GetOrganizationsCurrentTokenCanAccessAsync(organizationOptions, cancellationToken);
+
+            var boards = boardOptions == null
+                ? await GetBoardsCurrentTokenCanAccessAsync(cancellationToken)
+                : await GetBoardsCurrentTokenCanAccessAsync(boardOptions, cancellationToken);
             var organizationMemberships = new Dictionary<Organization, MembershipType>();
             var boardMemberships = new Dictionary<Board, MembershipType>();
 

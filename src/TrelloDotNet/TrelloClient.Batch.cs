@@ -61,6 +61,11 @@ namespace TrelloDotNet
         /// <returns>A list of Card objects corresponding to the provided IDs</returns>
         public async Task<List<Card>> GetCardsAsync(List<string> ids, GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetCardsAsync(ids, cancellationToken);
+            }
+
             options.AdjustFieldsBasedOnSelectedOptions();
             StringBuilder parametersAsString = ApiRequestController.GetParametersAsString(options.GetParameters(false)).Replace("&", "?", 0, 1);
             List<Card> cards = await ExecuteBatchedRequestAsync<Card>(ids.Select(id => $"/{UrlPaths.Cards}/{id}{parametersAsString}").ToList(), cancellationToken);
@@ -88,6 +93,11 @@ namespace TrelloDotNet
         /// <returns>A list of Board objects corresponding to the provided IDs</returns>
         public async Task<List<Board>> GetBoardsAsync(List<string> ids, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetBoardsAsync(ids, cancellationToken);
+            }
+
             StringBuilder parametersAsString = ApiRequestController.GetParametersAsString(options.GetParameters()).Replace("&", "?", 0, 1);
             return await ExecuteBatchedRequestAsync<Board>(ids.Select(id => $"/{UrlPaths.Boards}/{id}{parametersAsString}").ToList(), cancellationToken);
         }

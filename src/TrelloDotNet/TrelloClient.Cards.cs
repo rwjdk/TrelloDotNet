@@ -577,7 +577,7 @@ namespace TrelloDotNet
         {
             if (options == null)
             {
-                throw new ArgumentNullException(nameof(options), $"{nameof(GetCardOptions)} cannot be null");
+                return await GetCardAsync(cardId, cancellationToken);
             }
 
             return await _apiRequestController.Get<Card>(GetUrlBuilder.GetCard(cardId), cancellationToken, options.GetParameters(false));
@@ -605,7 +605,7 @@ namespace TrelloDotNet
         {
             if (options == null)
             {
-                throw new ArgumentNullException(nameof(options), $"{nameof(GetCardOptions)} cannot be null");
+                return await GetCardsOnBoardAsync(boardId, cancellationToken);
             }
 
             options.AdjustFieldsBasedOnSelectedOptions();
@@ -685,7 +685,7 @@ namespace TrelloDotNet
         {
             if (options == null)
             {
-                throw new ArgumentNullException(nameof(options), $"{nameof(GetCardOptions)} cannot be null");
+                return await GetCardsInListAsync(listId, cancellationToken);
             }
 
             options.AdjustFieldsBasedOnSelectedOptions();
@@ -787,7 +787,7 @@ namespace TrelloDotNet
         {
             if (options == null)
             {
-                throw new ArgumentNullException(nameof(options), $"{nameof(GetCardOptions)} cannot be null");
+                return await GetCardsForMemberAsync(memberId, cancellationToken);
             }
 
             options.AdjustFieldsBasedOnSelectedOptions();

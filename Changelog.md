@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## 2.1.3 (28th of January 2026)
+#### TrelloClient
+- Allowed the various GetXyzOptions to be null (not resulting in null-ref exception but instead use method without options)
+- Fix a few errors in the README.md code samples (thanks @AldeRoberge 👍)
+- Added AGENTS.md for AI Agent Rules
+
+---
+
 ## 2.1.2 (13th of October 2025)
 #### TrelloClient
 - Fixed that [GetTokenMemberInboxAsync](https://github.com/rwjdk/TrelloDotNet/wiki/GetTokenMemberInboxAsync) returned null as OrganizationId (due to breaking change from the Trello Team; they renamed the technical field)

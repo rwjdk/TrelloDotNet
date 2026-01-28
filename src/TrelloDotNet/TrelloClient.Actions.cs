@@ -77,6 +77,11 @@ namespace TrelloDotNet
 
         private async Task<List<TrelloAction>> GetActionsFromSuffix(string suffix, GetActionsOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await _apiRequestController.Get<List<TrelloAction>>(suffix, cancellationToken);
+            }
+
             var parameters = new List<QueryParameter>();
             if (options.Filter != null)
             {

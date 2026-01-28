@@ -182,6 +182,11 @@ namespace TrelloDotNet.Control
         internal static StringBuilder GetParametersAsString(QueryParameter[] parameters)
         {
             StringBuilder parameterString = new StringBuilder();
+            if (parameters == null || parameters.Length == 0)
+            {
+                return parameterString;
+            }
+
             foreach (var parameter in parameters)
             {
                 parameterString.Append($"&{parameter.Name}={parameter.GetValueAsApiFormattedString()}");

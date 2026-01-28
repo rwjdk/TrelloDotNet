@@ -40,6 +40,11 @@ namespace TrelloDotNet
         /// <returns>List of labels on the board</returns>
         public async Task<List<Label>> GetLabelsOfBoardAsync(string boardId, GetLabelOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetLabelsOfBoardAsync(boardId, cancellationToken);
+            }
+
             return await _apiRequestController.Get<List<Label>>(GetUrlBuilder.GetLabelsOfBoard(boardId), cancellationToken, options.GetParameters());
         }
 

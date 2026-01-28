@@ -117,6 +117,11 @@ namespace TrelloDotNet
         /// <returns>The requested list</returns>
         public async Task<List> GetListAsync(string listId, GetListOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetListAsync(listId, cancellationToken);
+            }
+
             return await _apiRequestController.Get<List>(GetUrlBuilder.GetList(listId), cancellationToken, options.GetParameters());
         }
 
@@ -140,6 +145,11 @@ namespace TrelloDotNet
         /// <returns>List of lists (columns) on the board</returns>
         public async Task<List<List>> GetListsOnBoardAsync(string boardId, GetListOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetListsOnBoardAsync(boardId, cancellationToken);
+            }
+
             List<List> lists;
             options.AdjustFieldsBasedOnSelectedOptions();
 

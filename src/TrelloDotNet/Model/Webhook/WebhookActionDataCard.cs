@@ -128,6 +128,11 @@ namespace TrelloDotNet.Model.Webhook
         /// <returns>The Card</returns>
         public async Task<Card> GetAsync(GetCardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetAsync(cancellationToken);
+            }
+
             return await Parent.Parent.TrelloClient.GetCardAsync(Id, options, cancellationToken);
         }
 

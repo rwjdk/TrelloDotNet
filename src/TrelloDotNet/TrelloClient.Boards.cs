@@ -136,6 +136,11 @@ namespace TrelloDotNet
         /// <returns>The Board object with the specified ID and requested details</returns>
         public async Task<Board> GetBoardAsync(string boardId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetBoardAsync(boardId, cancellationToken);
+            }
+
             options.AdjustFieldsBasedOnSelectedOptions();
             var board = await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken, options.GetParameters());
             if (options.IncludeCards != GetBoardOptionsIncludeCards.None)
@@ -167,6 +172,11 @@ namespace TrelloDotNet
         /// <returns>A list of Board objects the member can access</returns>
         public async Task<List<Board>> GetBoardsForMemberAsync(string memberId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetBoardsForMemberAsync(memberId, cancellationToken);
+            }
+
             return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsForMember(memberId), cancellationToken, options.GetParameters());
         }
 
@@ -189,6 +199,11 @@ namespace TrelloDotNet
         /// <returns>A list of Board objects accessible to the current token</returns>
         public async Task<List<Board>> GetBoardsCurrentTokenCanAccessAsync(GetBoardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetBoardsCurrentTokenCanAccessAsync(cancellationToken);
+            }
+
             var tokenMember = await GetTokenMemberAsync(cancellationToken);
             return await GetBoardsForMemberAsync(tokenMember.Id, options, cancellationToken);
         }
@@ -213,6 +228,11 @@ namespace TrelloDotNet
         /// <returns>A list of Board objects in the organization</returns>
         public async Task<List<Board>> GetBoardsInOrganizationAsync(string organizationId, GetBoardOptions options, CancellationToken cancellationToken = default)
         {
+            if (options == null)
+            {
+                return await GetBoardsInOrganizationAsync(organizationId, cancellationToken);
+            }
+
             return await _apiRequestController.Get<List<Board>>(GetUrlBuilder.GetBoardsInOrganization(organizationId), cancellationToken, options.GetParameters());
         }
 
