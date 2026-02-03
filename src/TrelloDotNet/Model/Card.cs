@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 using TrelloDotNet.Model.Actions;
@@ -353,6 +354,46 @@ namespace TrelloDotNet.Model
         public Card()
         {
             //Serialization
+        }
+
+        /// <summary>
+        /// Have the specific Member
+        /// </summary>
+        /// <param name="memberId">Id of the Member to check</param>
+        /// <returns>True/False</returns>
+        public bool HasMember(string memberId)
+        {
+            return MemberIds.Any(x=> x == memberId);
+        }
+
+        /// <summary>
+        /// Have the specific Member
+        /// </summary>
+        /// <param name="label">Member to check</param>
+        /// <returns>True/False</returns>
+        public bool HasMember(Member label)
+        {
+            return MemberIds.Any(x => x == label.Id);
+        }
+
+        /// <summary>
+        /// Have the specific Label
+        /// </summary>
+        /// <param name="labelId">Id of the Label to check</param>
+        /// <returns>True/False</returns>
+        public bool HasLabel(string labelId)
+        {
+            return LabelIds.Any(x=> x == labelId);
+        }
+
+        /// <summary>
+        /// Have the specific Label
+        /// </summary>
+        /// <param name="label">Label to check</param>
+        /// <returns>True/False</returns>
+        public bool HasLabel(Label label)
+        {
+            return LabelIds.Any(x => x == label.Id);
         }
 
         private void InitializeLists()

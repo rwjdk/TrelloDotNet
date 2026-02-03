@@ -631,15 +631,8 @@ namespace TrelloDotNet
                 }
             }
 
-            List<Card> cards;
-            if (options.Filter.HasValue)
-            {
-                cards = await _apiRequestController.Get<List<Card>>($"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{options.Filter.Value.GetJsonPropertyName()}", cancellationToken, options.GetParameters(true));
-            }
-            else
-            {
-                cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsOnBoard(boardId), cancellationToken, options.GetParameters(true));
-            }
+            var cardsSuffix = options.Filter.HasValue ? $"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{options.Filter.Value.GetJsonPropertyName()}" : GetUrlBuilder.GetCardsOnBoard(boardId);
+            var cards = await GetCardsNormalOrViaPagination(options, cancellationToken, cardsSuffix);
 
             if (options.IncludeList)
             {
@@ -661,6 +654,56 @@ namespace TrelloDotNet
 
             cards = FilterCards(cards, options.FilterConditions);
             return OrderCards(cards, options.OrderBy);
+        }
+
+        private async Task<List<Card>> GetCardsNormalOrViaPagination(GetCardOptions options, CancellationToken cancellationToken, string cardsSuffix)
+        {
+            List<Card> cards = new List<Card>();
+            if (options.PageSize.HasValue)
+            {
+                string idOfOldestCardRetrieved = string.Empty;
+                int? orgLimit = options.Limit;
+                string orgBefore = options.Before;
+                string orgSince = options.Since;
+                List<QueryParameter> orgAdditionalParameters = options.AdditionalParameters;
+
+                try
+                {
+                    List<Card> pageCards;
+                    options.Limit = options.PageSize.Value;
+                    if (options.AdditionalParameters == null)
+                    {
+                        options.AdditionalParameters = new List<QueryParameter>();
+                    }
+                    options.AdditionalParameters.Add(new QueryParameter("sort", "-id"));
+                    do
+                    {
+                        options.Before = idOfOldestCardRetrieved;
+                        pageCards = await _apiRequestController.Get<List<Card>>(cardsSuffix, cancellationToken, options.GetParameters(true));
+                        cards.AddRange(pageCards);
+                        idOfOldestCardRetrieved = pageCards.LastOrDefault()?.Id;
+                    }
+                    while (pageCards.Count > 0 && (orgLimit ?? int.MaxValue) > cards.Count);
+
+                    if (orgLimit.HasValue)
+                    {
+                        cards = cards.Take(orgLimit.Value).ToList();
+                    }
+                }
+                finally
+                {
+                    options.Limit = orgLimit;
+                    options.Before = orgBefore;
+                    options.Since = orgSince;
+                    options.AdditionalParameters = orgAdditionalParameters;
+                }
+            }
+            else
+            {
+                cards = await _apiRequestController.Get<List<Card>>(cardsSuffix, cancellationToken, options.GetParameters(true));
+            }
+
+            return cards;
         }
 
         /// <summary>
@@ -700,7 +743,8 @@ namespace TrelloDotNet
                 }
             }
 
-            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsInList(listId), cancellationToken, options.GetParameters(true));
+            var suffix = GetUrlBuilder.GetCardsInList(listId);
+            var cards = await GetCardsNormalOrViaPagination(options, cancellationToken, suffix);
             if (options.IncludeList)
             {
                 var list = await GetListAsync(listId, cancellationToken);
@@ -821,7 +865,9 @@ namespace TrelloDotNet
                 }
             }
 
-            var cards = await _apiRequestController.Get<List<Card>>(GetUrlBuilder.GetCardsForMember(memberId), cancellationToken, options.GetParameters(true));
+            var suffix = GetUrlBuilder.GetCardsForMember(memberId);
+            var cards = await GetCardsNormalOrViaPagination(options, cancellationToken, suffix);
+
             if (options.IncludeList)
             {
                 var boardsToGetListsFor = cards.Select(x => x.BoardId).Distinct().ToArray();
@@ -1031,73 +1077,73 @@ namespace TrelloDotNet
                 switch (options.LabelOptions)
                 {
                     case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndCreateMissing:
-                    {
-                        var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
-                        foreach (Label cardLabel in card.Labels)
                         {
-                            Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name && x.Color == cardLabel.Color);
-                            if (existingLabel != null)
+                            var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                            foreach (Label cardLabel in card.Labels)
                             {
-                                card.LabelIds.Add(existingLabel.Id);
+                                Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name && x.Color == cardLabel.Color);
+                                if (existingLabel != null)
+                                {
+                                    card.LabelIds.Add(existingLabel.Id);
+                                }
+                                else
+                                {
+                                    //Label need to be added
+                                    Label newLabel = await AddLabelAsync(new Label(newBoardId, cardLabel.Name, cardLabel.Color), cancellationToken);
+                                    card.LabelIds.Add(newLabel.Id);
+                                }
                             }
-                            else
-                            {
-                                //Label need to be added
-                                Label newLabel = await AddLabelAsync(new Label(newBoardId, cardLabel.Name, cardLabel.Color), cancellationToken);
-                                card.LabelIds.Add(newLabel.Id);
-                            }
-                        }
 
-                        break;
-                    }
+                            break;
+                        }
                     case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndRemoveMissing:
-                    {
-                        var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
-                        foreach (Label cardLabel in card.Labels)
                         {
-                            Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name && x.Color == cardLabel.Color);
-                            if (existingLabel != null)
+                            var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                            foreach (Label cardLabel in card.Labels)
                             {
-                                card.LabelIds.Add(existingLabel.Id);
+                                Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name && x.Color == cardLabel.Color);
+                                if (existingLabel != null)
+                                {
+                                    card.LabelIds.Add(existingLabel.Id);
+                                }
                             }
-                        }
 
-                        break;
-                    }
+                            break;
+                        }
                     case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndCreateMissing:
-                    {
-                        var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
-                        foreach (Label cardLabel in card.Labels)
                         {
-                            Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name);
-                            if (existingLabel != null)
+                            var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                            foreach (Label cardLabel in card.Labels)
                             {
-                                card.LabelIds.Add(existingLabel.Id);
+                                Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name);
+                                if (existingLabel != null)
+                                {
+                                    card.LabelIds.Add(existingLabel.Id);
+                                }
+                                else
+                                {
+                                    //Label need to be added
+                                    Label newLabel = await AddLabelAsync(new Label(newBoardId, cardLabel.Name, cardLabel.Color), cancellationToken);
+                                    card.LabelIds.Add(newLabel.Id);
+                                }
                             }
-                            else
-                            {
-                                //Label need to be added
-                                Label newLabel = await AddLabelAsync(new Label(newBoardId, cardLabel.Name, cardLabel.Color), cancellationToken);
-                                card.LabelIds.Add(newLabel.Id);
-                            }
-                        }
 
-                        break;
-                    }
+                            break;
+                        }
                     case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndRemoveMissing:
-                    {
-                        var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
-                        foreach (Label cardLabel in card.Labels)
                         {
-                            Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name);
-                            if (existingLabel != null)
+                            var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                            foreach (Label cardLabel in card.Labels)
                             {
-                                card.LabelIds.Add(existingLabel.Id);
+                                Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name);
+                                if (existingLabel != null)
+                                {
+                                    card.LabelIds.Add(existingLabel.Id);
+                                }
                             }
-                        }
 
-                        break;
-                    }
+                            break;
+                        }
                     case MoveCardToBoardOptionsLabelOptions.RemoveAllLabelsOnCard:
                         //No more Work needed
                         break;

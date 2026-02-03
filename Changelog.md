@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## 2.2.0 (3rd of February 2026)
+#### TrelloClient
+- Added option to set page size when getting multiple cards, allowing you to do pagination (to get around 'API_TOO_MANY_CARDS_REQUESTED' errors)
+- Added `HasMember(string memberId)` and `HasMember(Member member)` on `Card` to make it easier to check if a specific Member is on the Card
+- Added `HasLabel(string labelId)` and `HasLabel(Label label)` on `Card` to make it easier to check if a specific Label is on the Card
+
+---
+
 ## 2.1.3 (28th of January 2026)
 #### TrelloClient
 - Allowed the various GetXyzOptions to be null (not resulting in null-ref exception but instead use method without options)

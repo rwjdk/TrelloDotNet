@@ -115,9 +115,15 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         public CardsFilter? Filter { get; set; }
 
         /// <summary>
-        /// Order the cards returned by this (only used when multiple cards are returned)
+        /// Order the cards returned by this (only used when multiple cards are returned) [Note: This ordering happens In-memory as the REST API can't do ordering]
         /// </summary>
         public CardsOrderBy? OrderBy { get; set; }
+
+        /// <summary>
+        /// Set how many cards the API should get per request to the API (Use this if you get an 'API_TOO_MANY_CARDS_REQUESTED' error)
+        /// Behind the scenes this use the 'Before' parameter + 'sort = -id' parameter to do multiple calls until the amount of cards you set as limit is retrieved (or all in no limit)
+        /// </summary>
+        public int? PageSize { get; set; }
 
         /// <summary>
         /// Add conditions of which of the data from the call is actually returned (Note: this is in-memory filtering as Trello's API is not able to filter on server-side)
