@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## Unreleased
+#### TrelloClient
+- Added HttpStatusCode to TrelloAPIExceptions to be able to see the underlying REST-API StatusCode
+
+---
+
 ## 2.2.0 (3rd of February 2026)
 #### TrelloClient
 - Added option to set page size when getting multiple cards, allowing you to do pagination (to get around 'API_TOO_MANY_CARDS_REQUESTED' errors)

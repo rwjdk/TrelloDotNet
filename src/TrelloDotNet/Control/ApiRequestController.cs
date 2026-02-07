@@ -226,7 +226,7 @@ namespace TrelloDotNet.Control
                 return await toRetry(retryCount);
             }
 
-            throw new TrelloApiException($"{responseContent} [{statusCodeAsInteger}: {statusCode}]", FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri)); //Content is assumed Error Message       
+            throw new TrelloApiException($"{responseContent} [{statusCodeAsInteger}: {statusCode}]", FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri), statusCode); //Content is assumed Error Message       
         }
     }
 }

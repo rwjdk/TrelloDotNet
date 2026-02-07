@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -152,7 +153,13 @@ namespace TrelloDotNet
 
             if (batchResult.ErrorCount > 0)
             {
-                throw new TrelloApiException($"{batchResult.ErrorCount} of {batchResult.Results.Count} batched results failed: {string.Join(" | ", errors)}", string.Empty);
+                IEnumerable<int> statusCodes = batchResult.Results.Select(x => x.StatusCode).Distinct().ToArray();
+                if (statusCodes.Count() == 1)
+                {
+                    throw new TrelloApiException($"{batchResult.ErrorCount} of {batchResult.Results.Count} batched results failed: {string.Join(" | ", errors)}", string.Empty, (HttpStatusCode)statusCodes.First());
+
+                }
+                throw new TrelloApiException($"{batchResult.ErrorCount} of {batchResult.Results.Count} batched results failed: {string.Join(" | ", errors)}", string.Empty, HttpStatusCode.Ambiguous);
             }
 
             return batchResult.Results.Select(x => x.StatusCode == 200 ? x.GetData<T>() : default).ToList();
