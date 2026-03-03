@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
@@ -15,35 +15,35 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the checklist
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Name of the Checklist
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.Name)]
         [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// Id of the Card the checklist is on
         /// </summary>
-        [JsonPropertyName("idCard")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IdCard)]
         [JsonInclude]
         public string CardId { get; private set; }
 
         /// <summary>
         /// The position of the Checklist on the card
         /// </summary>
-        [JsonPropertyName("pos")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Pos)]
         [QueryParameter]
         public decimal Position { get; set; }
 
         /// <summary>
         /// The items of the Checklist
         /// </summary>
-        [JsonPropertyName("checkItems")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.CheckItems)]
         public List<ChecklistItem> Items { get; set; }
 
         /// <summary>
@@ -72,3 +72,8 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+

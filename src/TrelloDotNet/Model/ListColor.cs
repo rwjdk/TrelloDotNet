@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -17,61 +17,67 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Gray (default)
         /// </summary>
-        [JsonPropertyName("gray")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Gray)]
         Gray,
 
         /// <summary>
         /// Green
         /// </summary>
-        [JsonPropertyName("green")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Green)]
         Green,
 
         /// <summary>
         /// Yellow
         /// </summary>
-        [JsonPropertyName("yellow")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Yellow)]
         Yellow,
 
         /// <summary>
         /// Orange
         /// </summary>
-        [JsonPropertyName("orange")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Orange)]
         Orange,
 
         /// <summary>
         /// Red
         /// </summary>
-        [JsonPropertyName("red")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Red)]
         Red,
 
         /// <summary>
         /// Purple
         /// </summary>
-        [JsonPropertyName("purple")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Purple)]
         Purple,
 
         /// <summary>
         /// Blue
         /// </summary>
-        [JsonPropertyName("blue")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Blue)]
         Blue,
 
         /// <summary>
         /// Teal
         /// </summary>
-        [JsonPropertyName("teal")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Teal)]
         Teal,
 
         /// <summary>
         /// Lime
         /// </summary>
-        [JsonPropertyName("lime")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Lime)]
         Lime,
 
         /// <summary>
         /// Magenta
         /// </summary>
-        [JsonPropertyName("magenta")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Magenta)]
         Magenta,
     }
 }
+
+
+
+
+
+

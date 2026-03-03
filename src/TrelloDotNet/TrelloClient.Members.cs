@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -203,8 +203,8 @@ namespace TrelloDotNet
         public async Task AddMemberToBoardAsync(string boardId, string memberId, MembershipType membershipType, bool allowBillableGuest = false, CancellationToken cancellationToken = default)
         {
             await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}/{memberId}", cancellationToken, 0,
-                new QueryParameter("type", membershipType.GetJsonPropertyName()),
-                new QueryParameter("allowBillableGuest", allowBillableGuest));
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Type, membershipType.GetJsonPropertyName()),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.AllowBillableGuest, allowBillableGuest));
         }
 
         /// <summary>
@@ -222,8 +222,8 @@ namespace TrelloDotNet
             }
 
             await _apiRequestController.Put($"{UrlPaths.Boards}/{boardId}/{UrlPaths.Members}", cancellationToken, 0,
-                new QueryParameter("type", membershipType.GetJsonPropertyName()),
-                new QueryParameter("email", email));
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Type, membershipType.GetJsonPropertyName()),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Email, email));
         }
 
         /// <summary>
@@ -299,7 +299,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task AddVoteToCardAsync(string cardId, string memberId, CancellationToken cancellationToken = default)
         {
-            await _apiRequestController.Post($"{UrlPaths.Cards}/{cardId}/membersVoted", cancellationToken, 0, new QueryParameter("value", memberId));
+            await _apiRequestController.Post($"{UrlPaths.Cards}/{cardId}/membersVoted", cancellationToken, 0, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Value, memberId));
         }
 
         /// <summary>
@@ -314,3 +314,6 @@ namespace TrelloDotNet
         }
     }
 }
+
+
+

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -10,15 +10,18 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// The Action of the Webhook-notification
         /// </summary>
-        [JsonPropertyName("action")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Action)]
         [JsonInclude]
         public WebhookAction Action { get; private set; }
 
         /// <summary>
         /// The Webhook that sent the notification
         /// </summary>
-        [JsonPropertyName("webhook")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Webhook)]
         [JsonInclude]
         public Webhook Webhook { get; private set; }
     }
 }
+
+
+

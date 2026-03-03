@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -12,22 +12,25 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// "Board" Id of your Inbox
         /// </summary>
-        [JsonPropertyName("idBoard")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.IdBoard)]
         [JsonInclude]
         public string BoardId { get; set; }
 
         /// <summary>
         /// "List" Id of your Inbox
         /// </summary>
-        [JsonPropertyName("idList")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.IdList)]
         [JsonInclude]
         public string ListId { get; set; }
 
         /// <summary>
         /// "Organization" Id of your Inbox
         /// </summary>
-        [JsonPropertyName("idOrganization")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.IdOrganization)]
         [JsonInclude]
         public string OrganizationId { get; private set; }
     }
 }
+
+
+

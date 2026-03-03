@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -10,8 +10,11 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// If the Field is shown on the front of card or not
         /// </summary>
-        [JsonPropertyName("cardFront")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.CardFront)]
         [JsonInclude]
         public bool ShowFieldOnFrontOfCard { get; private set; }
     }
 }
+
+
+

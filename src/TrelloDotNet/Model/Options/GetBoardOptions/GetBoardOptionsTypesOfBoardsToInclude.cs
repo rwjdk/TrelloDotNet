@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
@@ -14,43 +14,48 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         /// <summary>
         /// All Boards (including closed)
         /// </summary>
-        [JsonPropertyName("all")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.All)]
         All = 1,
 
         /// <summary>
         /// Closed Boards
         /// </summary>
-        [JsonPropertyName("closed")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Closed)]
         Closed = 2,
 
         /// <summary>
         /// Unknown set of Boards (not documented by Trello). If you know what this does then please add an issue on GitHub
         /// </summary>
-        [JsonPropertyName("members")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Members)]
         Members = 4,
 
         /// <summary>
         /// Open Boards
         /// </summary>
-        [JsonPropertyName("open")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Open)]
         Open = 8,
 
         /// <summary>
         /// Unknown set of Boards (not documented by Trello). If you know what this does then please add an issue on GitHub
         /// </summary>
-        [JsonPropertyName("organization")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Organization)]
         Organization = 16,
 
         /// <summary>
         /// Public Boards
         /// </summary>
-        [JsonPropertyName("public")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Public)]
         Public = 32,
 
         /// <summary>
         /// Starred Boards (by the member owning the Trello Token)
         /// </summary>
-        [JsonPropertyName("starred")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Starred)]
         Starred = 64,
     }
 }
+
+
+
+
+

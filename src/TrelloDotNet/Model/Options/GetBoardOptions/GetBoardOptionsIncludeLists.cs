@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -12,25 +12,30 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         /// <summary>
         /// No Lists should be included [value in API: none]
         /// </summary>
-        [JsonPropertyName("none")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.None)]
         None,
 
         /// <summary>
         /// All Lists (including archived) [value in API: all]
         /// </summary>
-        [JsonPropertyName("all")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.All)]
         All,
 
         /// <summary>
         /// Lists that are archived [value in API: closed]
         /// </summary>
-        [JsonPropertyName("closed")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Closed)]
         Closed,
 
         /// <summary>
         /// Open Lists [value in API: open]
         /// </summary>
-        [JsonPropertyName("open")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Open)]
         Open,
     }
 }
+
+
+
+
+

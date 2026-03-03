@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -12,25 +12,30 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// All Cards
         /// </summary>
-        [JsonPropertyName("all")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.All)]
         All,
 
         /// <summary>
         /// Only Closed (Archived) cards
         /// </summary>
-        [JsonPropertyName("closed")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Closed)]
         Closed,
 
         /// <summary>
         /// Only open cards (including those on archived lists)
         /// </summary>
-        [JsonPropertyName("open")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Open)]
         Open,
 
         /// <summary>
         /// Only open cards (excluding those on archived lists)
         /// </summary>
-        [JsonPropertyName("visible")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Visible)]
         Visible
     }
 }
+
+
+
+
+

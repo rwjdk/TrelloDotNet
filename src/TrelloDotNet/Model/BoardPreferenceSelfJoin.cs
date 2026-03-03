@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -16,13 +16,18 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Workspace Member can Self-Join
         /// </summary>
-        [JsonPropertyName("true")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.TrueValue)]
         Yes,
 
         /// <summary>
         /// Workspace Member can not Self-Join
         /// </summary>
-        [JsonPropertyName("false")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.FalseValue)]
         No,
     }
 }
+
+
+
+
+

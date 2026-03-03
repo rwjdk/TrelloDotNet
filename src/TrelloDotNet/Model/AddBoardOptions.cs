@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -12,22 +12,26 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Indicates if the default set of labels should be added to the Board. [Default: True]
         /// </summary>
-        [JsonPropertyName("defaultLabels")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.DefaultLabels)]
         [QueryParameter]
         public bool DefaultLabels { get; set; } = true;
 
         /// <summary>
         /// Indicates if the default set of lists (To Do, Doing, Done) should be added to the Board. [Default: True]
         /// </summary>
-        [JsonPropertyName("defaultLists")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.DefaultLists)]
         [QueryParameter]
         public bool DefaultLists { get; set; } = true;
 
         /// <summary>
         /// The ID of the Workspace (Organization) the board should belong to.
         /// </summary>
-        [JsonPropertyName("idOrganization")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.IdOrganization)]
         [QueryParameter(false)]
         public string WorkspaceId { get; set; } = null;
     }
 }
+
+
+
+

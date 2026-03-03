@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -12,7 +12,12 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The Native Emoji (aka the visual emoji) [see https://developer.atlassian.com/cloud/trello/rest/api-group-emoji/#api-emoji-get]
         /// </summary>
-        [JsonPropertyName("native")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Native)]
         public string Native { get; set; }
     }
 }
+
+
+
+
+

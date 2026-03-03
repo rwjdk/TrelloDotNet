@@ -36,6 +36,11 @@
         public string Secret { get; set; }
 
         /// <summary>
+        /// Controls whether credentials are sent via query string or header
+        /// </summary>
+        public SendCredentialsMode SendCredentialsMode { get; set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public TrelloClientOptions()
@@ -46,6 +51,7 @@
             MaxRetryCountForTokenLimitExceeded = 3;
             DelayInSecondsToWaitInTokenLimitExceededRetry = 1;
             Secret = null;
+            SendCredentialsMode = TrelloDotNet.SendCredentialsMode.QueryString;
         }
     }
 }

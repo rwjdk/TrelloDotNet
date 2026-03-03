@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
@@ -13,7 +13,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the Organization
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
@@ -23,49 +23,49 @@ namespace TrelloDotNet.Model
         /// <remarks>
         /// At least 3 lowercase letters, underscores, and numbers
         /// </remarks>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Name)]
         [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// Display Name of the Organization
         /// </summary>
-        [JsonPropertyName("displayName")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.DisplayName)]
         [QueryParameter]
         public string DisplayName { get; set; }
 
         /// <summary>
         /// Description of the Organization (Optional)
         /// </summary>
-        [JsonPropertyName("desc")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Desc)]
         [QueryParameter]
         public string Description { get; set; }
 
         /// <summary>
         /// URL of the Organization
         /// </summary>
-        [JsonPropertyName("url")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Url)]
         [JsonInclude]
         public string Url { get; private set; }
 
         /// <summary>
         /// Website of the Organization (optional)
         /// </summary>
-        [JsonPropertyName("website")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Website)]
         [QueryParameter]
         public string Website { get; set; }
 
         /// <summary>
         /// Memberships of the Workspace
         /// </summary>
-        [JsonPropertyName("memberships")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Memberships)]
         [JsonInclude]
         public List<Membership> Memberships { get; private set; }
 
         /// <summary>
         /// Id of Boards Linked to the Workspace
         /// </summary>
-        [JsonPropertyName("idBoards")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.IdBoards)]
         [JsonInclude]
         public List<string> BoardIds { get; private set; }
 
@@ -88,3 +88,8 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -33,7 +33,7 @@ namespace TrelloDotNet
         /// <returns>The updated comment action</returns>
         public async Task<TrelloAction> UpdateCommentActionAsync(TrelloAction commentAction, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", cancellationToken, new QueryParameter("text", commentAction.Data.Text));
+            return await _apiRequestController.Put<TrelloAction>($"{UrlPaths.Actions}/{commentAction.Id}", cancellationToken, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Text, commentAction.Data.Text));
         }
 
         /// <summary>
@@ -84,8 +84,8 @@ namespace TrelloDotNet
         public async Task<List<TrelloAction>> GetPagedCommentsOnCardAsync(string cardId, int page = 0, CancellationToken cancellationToken = default)
         {
             return await _apiRequestController.Get<List<TrelloAction>>(GetUrlBuilder.GetActionsOnCard(cardId), cancellationToken,
-                new QueryParameter("filter", "commentCard"),
-                new QueryParameter("page", page));
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Filter, "commentCard"),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Page, page));
         }
 
         /// <summary>
@@ -124,3 +124,5 @@ namespace TrelloDotNet
         }
     }
 }
+
+

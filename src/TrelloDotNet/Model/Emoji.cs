@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -12,36 +12,41 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Unified Id of Emoji
         /// </summary>
-        [JsonPropertyName("unified")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Unified)]
         [JsonInclude]
         public string UnifiedId { get; set; }
 
         /// <summary>
         /// The Native value (aka the visual emoji)
         /// </summary>
-        [JsonPropertyName("native")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Native)]
         [JsonInclude]
         public string Native { get; set; }
 
         /// <summary>
         /// Name of the Emoji
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Name)]
         [JsonInclude]
         public string Name { get; set; }
 
         /// <summary>
         /// The Skin-variation of the Emoji
         /// </summary>
-        [JsonPropertyName("skinVariation")]
+        [JsonPropertyName(Constants.TrelloIds.LabelFields.SkinVariation)]
         [JsonInclude]
         public string SkinVariation { get; set; }
 
         /// <summary>
         /// ShortName of the Emoji
         /// </summary>
-        [JsonPropertyName("shortName")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.ShortName)]
         [JsonInclude]
         public string ShortName { get; set; }
     }
 }
+
+
+
+
+

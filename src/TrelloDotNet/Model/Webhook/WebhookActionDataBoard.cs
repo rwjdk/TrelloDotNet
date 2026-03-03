@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Model.Options.GetBoardOptions;
@@ -13,21 +13,21 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// Id of the Board
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Name of the board
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Name)]
         [JsonInclude]
         public string Name { get; private set; }
 
         /// <summary>
         /// Short Version of Id for the Board
         /// </summary>
-        [JsonPropertyName("shortLink")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.ShortLink)]
         [JsonInclude]
         public string ShortLink { get; private set; }
 
@@ -83,3 +83,9 @@ namespace TrelloDotNet.Model.Webhook
         }
     }
 }
+
+
+
+
+
+

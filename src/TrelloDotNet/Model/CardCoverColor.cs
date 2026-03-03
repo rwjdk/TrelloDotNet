@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -17,67 +17,73 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// None
         /// </summary>
-        [JsonPropertyName("null")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.NullValue)]
         None = 0,
 
         /// <summary>
         /// Pink
         /// </summary>
-        [JsonPropertyName("pink")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Pink)]
         Pink,
 
         /// <summary>
         /// Yellow
         /// </summary>
-        [JsonPropertyName("yellow")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Yellow)]
         Yellow,
 
         /// <summary>
         /// Lime
         /// </summary>
-        [JsonPropertyName("lime")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Lime)]
         Lime,
 
         /// <summary>
         /// Blue
         /// </summary>
-        [JsonPropertyName("blue")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Blue)]
         Blue,
 
         /// <summary>
         /// Black
         /// </summary>
-        [JsonPropertyName("black")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Black)]
         Black,
 
         /// <summary>
         /// Orange
         /// </summary>
-        [JsonPropertyName("orange")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Orange)]
         Orange,
 
         /// <summary>
         /// Red
         /// </summary>
-        [JsonPropertyName("red")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Red)]
         Red,
 
         /// <summary>
         /// Purple
         /// </summary>
-        [JsonPropertyName("purple")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Purple)]
         Purple,
 
         /// <summary>
         /// Sky
         /// </summary>
-        [JsonPropertyName("sky")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Sky)]
         Sky,
 
         /// <summary>
         /// Green
         /// </summary>
-        [JsonPropertyName("green")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Green)]
         Green
     }
 }
+
+
+
+
+
+

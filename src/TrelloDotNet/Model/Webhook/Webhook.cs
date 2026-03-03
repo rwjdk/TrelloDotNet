@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Webhook
@@ -11,7 +11,7 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// Id of the Webhook (You can find these via method 'GetWebhooksForCurrentTokenAsync()')
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
@@ -19,42 +19,42 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// Number of consecutive Failures (Will auto-disable if it ever reaches 1000)
         /// </summary>
-        [JsonPropertyName("consecutiveFailures")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.ConsecutiveFailures)]
         [JsonInclude]
         public int ConsecutiveFailures { get; private set; }
 
         /// <summary>
         /// Date (UTC) since first consecutive Failure (Will auto-disable more than 30 days old)
         /// </summary>
-        [JsonPropertyName("firstConsecutiveFailDate")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.FirstConsecutiveFailDate)]
         [JsonInclude]
         public DateTimeOffset? FirstConsecutiveFailDate { get; private set; }
 
         /// <summary>
         /// Description of the Webhook
         /// </summary>
-        [JsonPropertyName("description")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Description)]
         [QueryParameter]
         public string Description { get; set; }
 
         /// <summary>
         /// The URL that the webhook should notify (Need to be a valid HTTPS URL that is reachable with a HEAD and POST requests).
         /// </summary>
-        [JsonPropertyName("callbackURL")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.CallbackUrl)]
         [QueryParameter]
         public string CallbackUrl { get; set; }
 
         /// <summary>
         /// Here you specify the Id of the API Object you wish to monitor (aka get notifications for). This can be an Id of a Board, List, Card, Member or Organization)
         /// </summary>
-        [JsonPropertyName("idModel")]
+        [JsonPropertyName(Constants.TrelloIds.TokenFields.IdModel)]
         [QueryParameter]
         public string IdOfTypeYouWishToMonitor { get; set; }
 
         /// <summary>
         /// If the Webhook is active or not
         /// </summary>
-        [JsonPropertyName("active")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Active)]
         [QueryParameter]
         public bool Active { get; set; }
 
@@ -80,3 +80,8 @@ namespace TrelloDotNet.Model.Webhook
         }
     }
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -12,37 +12,43 @@ namespace TrelloDotNet.Model.Options
         /// <summary>
         /// Name of the board
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Name)]
         Name,
 
         /// <summary>
         /// If the List is Archived (closed)
         /// </summary>
-        [JsonPropertyName("closed")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Closed)]
         Closed,
 
         /// <summary>
         /// ID of Board
         /// </summary>
-        [JsonPropertyName("idBoard")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.IdBoard)]
         BoardId,
 
         /// <summary>
         /// Color of the List
         /// </summary>
-        [JsonPropertyName("color")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Color)]
         Color,
 
         /// <summary>
         /// The position of the list in the current board (lowest = Leftmost)
         /// </summary>
-        [JsonPropertyName("pos")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Pos)]
         Position,
 
         /// <summary>
         /// If the Board is Subscribed (watched) or not
         /// </summary>
-        [JsonPropertyName("subscribed")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Subscribed)]
         Subscribed,
     }
 }
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -12,29 +12,34 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The Id of the Trello Object indicated by the ModelType Field (Aka id of a Member, Board or Organization)
         /// </summary>
-        [JsonPropertyName("idModel")]
+        [JsonPropertyName(Constants.TrelloIds.TokenFields.IdModel)]
         [JsonInclude]
         public string ModelId { get; private set; }
 
         /// <summary>
         /// The Type of Model the ModelId represent (Member, Board or Organization)
         /// </summary>
-        [JsonPropertyName("modelType")]
+        [JsonPropertyName(Constants.TrelloIds.TokenFields.ModelType)]
         [JsonInclude]
         public string ModelType { get; private set; }
 
         /// <summary>
         /// If the Token have Read rights or not
         /// </summary>
-        [JsonPropertyName("read")]
+        [JsonPropertyName(Constants.TrelloIds.TokenFields.Read)]
         [JsonInclude]
         public bool Read { get; private set; }
 
         /// <summary>
         /// If the Token have Write rights or not
         /// </summary>
-        [JsonPropertyName("write")]
+        [JsonPropertyName(Constants.TrelloIds.TokenFields.Write)]
         [JsonInclude]
         public bool Write { get; private set; }
     }
 }
+
+
+
+
+

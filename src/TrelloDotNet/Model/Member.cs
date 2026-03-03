@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
@@ -16,35 +16,35 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// ID of the Member
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Full name of the Member, if it is public
         /// </summary>
-        [JsonPropertyName("fullName")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.FullName)]
         [JsonInclude]
         public string FullName { get; private set; }
 
         /// <summary>
         /// Username of the Member
         /// </summary>
-        [JsonPropertyName("username")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Username)]
         [JsonInclude]
         public string Username { get; private set; }
 
         /// <summary>
         /// Initials of the Member, if it is public
         /// </summary>
-        [JsonPropertyName("initials")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Initials)]
         [JsonInclude]
         public string Initials { get; private set; }
 
         /// <summary>
         /// Base URL of the Member's avatar
         /// </summary>
-        [JsonPropertyName("avatarUrl")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.AvatarUrl)]
         [JsonInclude]
         public string AvatarUrl { get; private set; }
 
@@ -71,35 +71,35 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Indicates whether the Member has confirmed their email address
         /// </summary>
-        [JsonPropertyName("confirmed")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Confirmed)]
         [JsonInclude]
         public bool Confirmed { get; private set; }
 
         /// <summary>
         /// Email of the Member (only populated if field is included in GetMemberOptions)
         /// </summary>
-        [JsonPropertyName("email")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Email)]
         [JsonInclude]
         public string Email { get; private set; }
 
         /// <summary>
         /// Last interaction date and time (when the Member did something in the system)
         /// </summary>
-        [JsonPropertyName("dateLastImpression")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.DateLastImpression)]
         [JsonInclude]
         public DateTimeOffset? LastActivity { get; private set; }
 
         /// <summary>
         /// Last login date and time (when the Member visited Trello.com)
         /// </summary>
-        [JsonPropertyName("dateLastActive")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.DateLastActive)]
         [JsonInclude]
         public DateTimeOffset? LastLogin { get; private set; }
 
         /// <summary>
         /// Type of the Member (admin, normal, observer, ghost). Only populated if field is included in GetMemberOptions
         /// </summary>
-        [JsonPropertyName("memberType")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.MemberType)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<MembershipType>))]
         public MembershipType MemberType { get; private set; }
@@ -118,3 +118,8 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+

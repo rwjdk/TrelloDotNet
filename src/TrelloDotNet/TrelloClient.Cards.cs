@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -319,11 +319,11 @@ namespace TrelloDotNet
 
             QueryParameter[] parameters =
             {
-                new QueryParameter("name", nameOnNewCard),
-                new QueryParameter("idList", options.TargetListId),
-                new QueryParameter("pos", position),
-                new QueryParameter("idCardSource", options.SourceTemplateCardId),
-                new QueryParameter("keepFromSource", keepFromSource)
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Name, nameOnNewCard),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdList, options.TargetListId),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Pos, position),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdCardSource, options.SourceTemplateCardId),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.KeepFromSource, keepFromSource)
             };
             return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
         }
@@ -430,11 +430,11 @@ namespace TrelloDotNet
 
             QueryParameter[] parameters =
             {
-                new QueryParameter("name", nameOnNewCard),
-                new QueryParameter("idList", options.TargetListId),
-                new QueryParameter("pos", position),
-                new QueryParameter("idCardSource", options.SourceCardId),
-                new QueryParameter("keepFromSource", keepFromSource)
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Name, nameOnNewCard),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdList, options.TargetListId),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Pos, position),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdCardSource, options.SourceCardId),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.KeepFromSource, keepFromSource)
             };
             return await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
         }
@@ -472,12 +472,12 @@ namespace TrelloDotNet
 
             var parameters = new List<QueryParameter>
             {
-                new QueryParameter("idList", options.TargetListId),
-                new QueryParameter("name", sourceCard.ShortUrl),
-                new QueryParameter("isTemplate", false),
-                new QueryParameter("closed", false),
-                new QueryParameter("pos", position),
-                new QueryParameter("cardRole", "mirror"),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdList, options.TargetListId),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Name, sourceCard.ShortUrl),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.IsTemplate, false),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Closed, false),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Pos, position),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.CardRole, "mirror"),
             };
 
             var result = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters.ToArray());
@@ -492,7 +492,7 @@ namespace TrelloDotNet
         /// <returns>The archived <see cref="Card"/>.</returns>
         public async Task<Card> ArchiveCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter("closed", true));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Closed, true));
         }
 
         /// <summary>
@@ -503,7 +503,7 @@ namespace TrelloDotNet
         /// <returns>The reopened <see cref="Card"/>.</returns>
         public async Task<Card> ReOpenCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter("closed", false));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Closed, false));
         }
 
         /// <summary>
@@ -564,8 +564,8 @@ namespace TrelloDotNet
             var newList = await GetListAsync(newListId, cancellationToken); //Get the new list's BoardId so the user do not need to provide it.
             await _apiRequestController.Post($"{UrlPaths.Lists}/{currentListId}/moveAllCards", cancellationToken,
                 0,
-                new QueryParameter("idBoard", newList.BoardId),
-                new QueryParameter("idList", newListId)
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdBoard, newList.BoardId),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdList, newListId)
             );
         }
 
@@ -699,7 +699,7 @@ namespace TrelloDotNet
                     {
                         options.AdditionalParameters = new List<QueryParameter>();
                     }
-                    options.AdditionalParameters.Add(new QueryParameter("sort", "-id"));
+                    options.AdditionalParameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Sort, "-id"));
                     do
                     {
                         options.Before = idOfOldestCardRetrieved;
@@ -1199,7 +1199,7 @@ namespace TrelloDotNet
             if (cardCover == null)
             {
                 //Remove cover
-                parameters.Add(new QueryParameter("cover", ""));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Cover, ""));
             }
             else
             {
@@ -1273,3 +1273,6 @@ namespace TrelloDotNet
         }
     }
 }
+
+
+

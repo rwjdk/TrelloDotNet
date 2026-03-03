@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace TrelloDotNet.Model.Options.GetOrganizationOptions
 {
@@ -23,7 +23,7 @@ namespace TrelloDotNet.Model.Options.GetOrganizationOptions
 
             if (OrganizationFields != null)
             {
-                parameters.Add(new QueryParameter("fields", string.Join(",", OrganizationFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Fields, string.Join(",", OrganizationFields.Fields)));
             }
 
             parameters.AddRange(AdditionalParameters);
@@ -32,3 +32,5 @@ namespace TrelloDotNet.Model.Options.GetOrganizationOptions
         }
     }
 }
+
+

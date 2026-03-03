@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
@@ -17,35 +17,35 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// ID of the List
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Name of the List
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Name)]
         [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// Indicates if the List is archived (closed)
         /// </summary>
-        [JsonPropertyName("closed")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Closed)]
         [QueryParameter]
         public bool Closed { get; set; }
 
         /// <summary>
         /// ID of the Board the List belongs to
         /// </summary>
-        [JsonPropertyName("idBoard")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.IdBoard)]
         [QueryParameter]
         public string BoardId { get; set; }
 
         /// <summary>
         /// Color of the List
         /// </summary>
-        [JsonPropertyName("color")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Color)]
         [QueryParameter]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<ListColor>))]
         public ListColor Color { get; set; }
@@ -53,21 +53,21 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Position of the List on the Board
         /// </summary>
-        [JsonPropertyName("pos")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Pos)]
         [QueryParameter]
         public decimal Position { get; set; }
 
         /// <summary>
         /// Indicates if the owner of the Token is subscribed (watching) the List
         /// </summary>
-        [JsonPropertyName("subscribed")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Subscribed)]
         [QueryParameter]
         public bool Subscribed { get; set; }
 
         /// <summary>
         /// Soft limit for the number of Cards in the List (provided by PowerUp 'List Limits' from Trello)
         /// </summary>
-        [JsonPropertyName("softLimit")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.SoftLimit)]
         [JsonInclude]
         public int? SoftLimit { get; private set; }
 
@@ -86,14 +86,14 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Board the List is on (only included if IncludeBoard = true in GetListOptions)
         /// </summary>
-        [JsonPropertyName("board")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Board)]
         [JsonInclude]
         public Board Board { get; internal set; }
 
         /// <summary>
         /// Cards on the List (only included if IncludeCards = true in GetListOptions)
         /// </summary>
-        [JsonPropertyName("cards")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Cards)]
         [JsonInclude]
         public List<Card> Cards { get; internal set; }
 
@@ -117,3 +117,9 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+
+

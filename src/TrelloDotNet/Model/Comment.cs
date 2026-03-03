@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -12,7 +12,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Text of the comment
         /// </summary>
-        [JsonPropertyName("text")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Text)]
         [QueryParameter]
         public string Text { get; set; }
 
@@ -34,3 +34,6 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+

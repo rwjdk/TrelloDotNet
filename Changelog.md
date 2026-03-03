@@ -1,10 +1,12 @@
 ﻿# Changelog
 
-## Unreleased
+## 2.3.0 (3rd of March 2026)
 #### TrelloClient
+- Added option to send the API Key and Token using Header instead of the QueryString (The `SendCredentialsMode` on `TrelloClientOptions` when creating the `TrelloClient`)
 - Added HttpStatusCode to TrelloAPIExceptions to be able to see the underlying REST-API StatusCode
 - Added Better Error Message if a Batch Request fail due to a TooManyRequests Rate Limiting
 - Added Support for Adding/Updating Cards with Descriptions bigger than 2000 chars. Now the max is 16384 chars (The Trello upper limit)
+- Added TrelloIds constants for the various technical fields
 
 ---
 

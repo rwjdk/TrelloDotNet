@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -10,13 +10,16 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Top
         /// </summary>
-        [JsonPropertyName("top")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Top)]
         Top,
 
         /// <summary>
         /// Bottom
         /// </summary>
-        [JsonPropertyName("bottom")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Bottom)]
         Bottom,
     }
 }
+
+
+

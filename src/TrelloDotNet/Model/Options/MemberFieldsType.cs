@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -12,55 +12,58 @@ namespace TrelloDotNet.Model.Options
         /// <summary>
         /// The full name related to the account, if it is public.
         /// </summary>
-        [JsonPropertyName("fullName")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.FullName)]
         FullName,
 
         /// <summary>
         /// Username of the Member
         /// </summary>
-        [JsonPropertyName("username")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Username)]
         Username,
 
         /// <summary>
         /// The initials related to the account, if it is public.
         /// </summary>
-        [JsonPropertyName("initials")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Initials)]
         Initials,
 
         /// <summary>
         /// The url of this member's avatar
         /// </summary>
-        [JsonPropertyName("avatarUrl")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.AvatarUrl)]
         AvatarUrl,
 
         /// <summary>
         /// Whether the user has confirmed their email address for their account.
         /// </summary>
-        [JsonPropertyName("confirmed")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Confirmed)]
         Confirmed,
 
         /// <summary>
         /// Email of Member
         /// </summary>
-        [JsonPropertyName("email")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Email)]
         Email,
 
         /// <summary>
         /// Type Member (admin, normal, observer)
         /// </summary>
-        [JsonPropertyName("memberType")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.MemberType)]
         MemberType,
 
         /// <summary>
         /// Last time of activity (did something in Trello)
         /// </summary>
-        [JsonPropertyName("dateLastImpression")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.DateLastImpression)]
         LastActivityDate,
 
         /// <summary>
         /// Last time of user logged in
         /// </summary>
-        [JsonPropertyName("dateLastActive")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.DateLastActive)]
         LastLoginDate,
     }
 }
+
+
+

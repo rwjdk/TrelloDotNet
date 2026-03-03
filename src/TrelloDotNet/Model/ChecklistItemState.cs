@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -16,19 +16,24 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// None
         /// </summary>
-        [JsonPropertyName("null")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.NullValue)]
         None = 0,
 
         /// <summary>
         /// incomplete
         /// </summary>
-        [JsonPropertyName("incomplete")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.Incomplete)]
         Incomplete,
 
         /// <summary>
         /// complete
         /// </summary>
-        [JsonPropertyName("complete")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.Complete)]
         Complete
     }
 }
+
+
+
+
+

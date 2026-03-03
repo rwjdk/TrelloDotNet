@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
@@ -15,28 +15,28 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the CustomField
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Name of the CustomField
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.Name)]
         [JsonInclude]
         public string Name { get; private set; }
 
         /// <summary>
         /// The position of the Custom Field
         /// </summary>
-        [JsonPropertyName("pos")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Pos)]
         [JsonInclude]
         public decimal Position { get; private set; }
 
         /// <summary>
         /// The Type of the Custom Field (Checkbox, Date, List, Number or Text)
         /// </summary>
-        [JsonPropertyName("type")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Type)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<CustomFieldType>))]
         public CustomFieldType Type { get; private set; }
@@ -50,43 +50,48 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the type the item is linked to (Card, Board or Member)
         /// </summary>
-        [JsonPropertyName("idModel")]
+        [JsonPropertyName(Constants.TrelloIds.TokenFields.IdModel)]
         [JsonInclude]
         public string ModelId { get; private set; }
 
         /// <summary>
         /// The type the ModelId (Card, Board or Member)
         /// </summary>
-        [JsonPropertyName("modelType")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.ModelType)]
         [JsonInclude]
         public string ModelType { get; private set; }
 
         /// <summary>
         /// FieldGroup (From Trello Docs (https://developer.atlassian.com/cloud/trello/guides/rest-api/getting-started-with-custom-fields/): In order for us to accommodate grouping field values across boards, we needed a way to determine whether "different" custom fields should be considered the "same". We have proposed a "matching" logic relies on a generating a unique hash property on the CustomField entity named fieldGroup. The hash (SHA256) is composed of the following custom field entity properties name, and type. The hash is generated when a field is created and re-generated when the field is updated. By comparing the hashes of two fields, we can roughly determine whether the fields are similar enough that we would consider them the same.)
         /// </summary>
-        [JsonPropertyName("fieldGroup")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.FieldGroup)]
         [JsonInclude]
         public string FieldGroup { get; private set; }
 
         /// <summary>
         /// The Display Options of the Custom Field
         /// </summary>
-        [JsonPropertyName("display")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Display)]
         [JsonInclude]
         public CustomFieldDisplay Display { get; private set; }
 
         /// <summary>
         /// If the Field Is Suggested (Not documented in docs what this represents :-( )
         /// </summary>
-        [JsonPropertyName("isSuggestedField")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.IsSuggestedField)]
         [JsonInclude]
         public bool IsSuggestedField { get; private set; }
 
         /// <summary>
         /// Options of the Custom field (Only present for Custom Fields of Type 'List')
         /// </summary>
-        [JsonPropertyName("options")]
+        [JsonPropertyName(Constants.TrelloIds.SearchFields.Options)]
         [JsonInclude]
         public List<CustomFieldOption> Options { get; private set; }
     }
 }
+
+
+
+
+

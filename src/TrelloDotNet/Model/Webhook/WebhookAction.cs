@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -12,49 +12,49 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// Id of the Action
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// The Id of the Member (User) that did the action
         /// </summary>
-        [JsonPropertyName("idMemberCreator")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.IdMemberCreator)]
         [JsonInclude]
         public string MemberCreatorId { get; private set; }
 
         /// <summary>
         /// Type of the Action (example Update of a Card)
         /// </summary>
-        [JsonPropertyName("type")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Type)]
         [JsonInclude]
         public string Type { get; private set; }
 
         /// <summary>
         /// Date of the Action
         /// </summary>
-        [JsonPropertyName("date")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Date)]
         [JsonInclude]
         public DateTimeOffset Date { get; private set; }
 
         /// <summary>
         /// The Id of the Member (User) that did the action
         /// </summary>
-        [JsonPropertyName("memberCreator")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.MemberCreator)]
         [JsonInclude]
         public Member MemberCreator { get; private set; }
 
         /// <summary>
         /// Data about the Action
         /// </summary>
-        [JsonPropertyName("data")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Data)]
         [JsonInclude]
         public WebhookActionData Data { get; private set; }
 
         /// <summary>
         /// Display of the Action
         /// </summary>
-        [JsonPropertyName("display")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Display)]
         [JsonInclude]
         public WebhookActionDisplay Display { get; private set; }
 
@@ -162,3 +162,8 @@ namespace TrelloDotNet.Model.Webhook
         }
     }
 }
+
+
+
+
+

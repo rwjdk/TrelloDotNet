@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
@@ -15,14 +15,14 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the Board/Workspace
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Id)]
         [JsonInclude]
         public string Id { get; set; }
 
         /// <summary>
         /// Name of the Board/Workspace
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Name)]
         [JsonInclude]
         public string Name { get; set; }
 
@@ -60,7 +60,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// List of Features for the Board/Workspace
         /// </summary>
-        [JsonPropertyName("premiumFeatures")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.PremiumFeatures)]
         [JsonInclude]
         public List<string> Features { get; private set; }
 
@@ -82,3 +82,8 @@ namespace TrelloDotNet.Model
         public bool IsListColorsSupported => Plan == TrelloPlan.Standard || Plan == TrelloPlan.Premium || Plan == TrelloPlan.Enterprise;
     }
 }
+
+
+
+
+

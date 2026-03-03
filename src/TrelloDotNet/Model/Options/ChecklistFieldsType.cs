@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -12,19 +12,24 @@ namespace TrelloDotNet.Model.Options
         /// <summary>
         /// Name of the Checklist
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Name)]
         Name,
 
         /// <summary>
         /// Id of the Card the checklist is on
         /// </summary>
-        [JsonPropertyName("idCard")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IdCard)]
         CardId,
 
         /// <summary>
         /// The position of the Checklist on the card
         /// </summary>
-        [JsonPropertyName("pos")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Pos)]
         Position
     }
 }
+
+
+
+
+

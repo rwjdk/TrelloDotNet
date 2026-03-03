@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Model;
@@ -46,7 +46,9 @@ namespace TrelloDotNet
         /// <returns>The updated card with the cover removed</returns>
         public async Task<Card> RemoveCoverFromCardAsync(string cardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter("cover", string.Empty));
+            return await _apiRequestController.Put<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Cover, string.Empty));
         }
     }
 }
+
+

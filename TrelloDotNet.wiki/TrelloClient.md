@@ -117,6 +117,16 @@ The TrelloClientOptions can be passed optionally to the TrelloClient Constructor
 |`AllowDeleteOfOrganizations`| Controls if it is allowed to delete Organizations (secondary confirmation) |
 |`MaxRetryCountForTokenLimitExceeded` | Controls how many automated Retries the API should try in case if get an 'API_TOKEN_LIMIT_EXCEEDED' error from Trello (Default 3) set to -1 to disable the system |
 |`DelayInSecondsToWaitInTokenLimitExceededRetry` | Controls how long in seconds system should wait between retries, should it receive an 'API_TOKEN_LIMIT_EXCEEDED' error from Trello (Default 1 sec) |
+|`SendCredentialsMode` | Controls if credentials are sent as query string (`QueryString`, default) or via `Authorization` header (`Header`) |
+
+**Example of sending credentials via headers**
+```cs
+var options = new TrelloClientOptions
+{
+    SendCredentialsMode = SendCredentialsMode.Header
+};
+TrelloClient client = new TrelloClient("APIKEY", "TOKEN", options);
+```
 
 ## Features of the API
 - [Action Features](TrelloClient#action-features)

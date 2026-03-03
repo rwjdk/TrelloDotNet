@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
@@ -43,7 +43,7 @@ namespace TrelloDotNet
         /// <returns>The closed Board object</returns>
         public async Task<Board> CloseBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter("closed", true));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Closed, true));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace TrelloDotNet
         /// <returns>The reopened Board object</returns>
         public async Task<Board> ReOpenBoardAsync(string boardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter("closed", false));
+            return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Closed, false));
         }
 
         /// <summary>
@@ -270,3 +270,6 @@ namespace TrelloDotNet
         }
     }
 }
+
+
+

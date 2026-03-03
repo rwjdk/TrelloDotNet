@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -16,31 +16,36 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// None
         /// </summary>
-        [JsonPropertyName("checkbox")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.Checkbox)]
         Checkbox,
 
         /// <summary>
         /// None
         /// </summary>
-        [JsonPropertyName("date")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Date)]
         Date,
 
         /// <summary>
         /// None
         /// </summary>
-        [JsonPropertyName("list")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.List)]
         List,
 
         /// <summary>
         /// None
         /// </summary>
-        [JsonPropertyName("number")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.Number)]
         Number,
 
         /// <summary>
         /// None
         /// </summary>
-        [JsonPropertyName("text")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Text)]
         Text
     }
 }
+
+
+
+
+

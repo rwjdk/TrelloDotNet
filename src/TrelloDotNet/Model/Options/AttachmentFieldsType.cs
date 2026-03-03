@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -12,61 +12,66 @@ namespace TrelloDotNet.Model.Options
         /// <summary>
         /// Name of the attachment
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.Name)]
         Name,
 
         /// <summary>
         /// FileName of the attachment
         /// </summary>
-        [JsonPropertyName("fileName")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.FileName)]
         FileName,
 
         /// <summary>
         /// URL of the attachment
         /// </summary>
-        [JsonPropertyName("url")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.Url)]
         Url,
 
         /// <summary>
         /// Position of the attachment
         /// </summary>
-        [JsonPropertyName("pos")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Pos)]
         Position,
 
         /// <summary>
         /// Bytes of the Attachment
         /// </summary>
-        [JsonPropertyName("bytes")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.Bytes)]
         Bytes,
 
         /// <summary>
         /// Date [stored UTC]
         /// </summary>
-        [JsonPropertyName("date")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Date)]
         Date,
 
         /// <summary>
         /// Date [stored UTC]
         /// </summary>
-        [JsonPropertyName("edgeColor")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.EdgeColor)]
         EdgeColor,
 
         /// <summary>
         /// MemberId of the Attachment (who uploaded it)
         /// </summary>
-        [JsonPropertyName("idMember")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.IdMember)]
         MemberId,
 
         /// <summary>
         /// MimeType of the attachment
         /// </summary>
-        [JsonPropertyName("mimeType")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.MimeType)]
         MimeType,
 
         /// <summary>
         /// If attachment is uploaded or not
         /// </summary>
-        [JsonPropertyName("isUpload")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.IsUpload)]
         IsUpload
     }
 }
+
+
+
+
+

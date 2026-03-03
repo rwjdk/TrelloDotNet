@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -18,13 +18,18 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Any Board Member
         /// </summary>
-        [JsonPropertyName("members")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Members)]
         Members,
 
         /// <summary>
         /// Only Admins
         /// </summary>
-        [JsonPropertyName("admins")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Admins)]
         Admins,
     }
 }
+
+
+
+
+

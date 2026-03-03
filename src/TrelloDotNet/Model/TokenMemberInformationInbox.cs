@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -7,8 +7,13 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Your Inbox Ids
         /// </summary>
-        [JsonPropertyName("inbox")]
+        [JsonPropertyName(Constants.TrelloIds.TokenFields.Inbox)]
         [JsonInclude]
         public TokenMemberInbox Inbox { get; private set; }
     }
 }
+
+
+
+
+

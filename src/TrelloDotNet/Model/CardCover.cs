@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
@@ -13,21 +13,21 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The Size of the Cover (Normal or full)
         /// </summary>
-        [JsonPropertyName("size")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Size)]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<CardCoverSize>))]
         public CardCoverSize? Size { get; set; }
 
         /// <summary>
         /// Color of the Cover (null if Background is used instead) - Options (pink, yellow, lime, blue, black, orange, red, purple, sky, green)
         /// </summary>
-        [JsonPropertyName("color")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Color)]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<CardCoverColor>))]
         public CardCoverColor? Color { get; set; }
 
         /// <summary>
         /// Brightness of the Cover - Options (None, Dark, Light) [This option is only used when BackgroundImageId is used]
         /// </summary>
-        [JsonPropertyName("brightness")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Brightness)]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<CardCoverBrightness>))]
         public CardCoverBrightness? Brightness { get; set; }
 
@@ -37,7 +37,7 @@ namespace TrelloDotNet.Model
         /// <remarks>
         /// Remember to set Color to None or Null, else that will override and color is used instead
         /// </remarks>
-        [JsonPropertyName("idUploadedBackground")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IdUploadedBackground)]
         public string BackgroundImageId { get; set; }
 
         /// <summary>
@@ -89,3 +89,9 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+
+

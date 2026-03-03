@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -17,21 +17,21 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the Label
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.LabelFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Name of the Label
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.LabelFields.Name)]
         [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// Color of the Label (Valid values: yellow, purple, blue, red, green, orange, black, sky, pink, lime (+ _light and _dark variants))
         /// </summary>
-        [JsonPropertyName("color")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Color)]
         [QueryParameter]
         public string Color { get; set; }
 
@@ -50,7 +50,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the Board the Label belong to
         /// </summary>
-        [JsonPropertyName("idBoard")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.IdBoard)]
         [JsonInclude]
         [QueryParameter]
         public string BoardId { get; private set; }
@@ -75,3 +75,9 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+
+

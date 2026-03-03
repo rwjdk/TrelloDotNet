@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -16,19 +16,24 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Board is Private
         /// </summary>
-        [JsonPropertyName("private")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Private)]
         Private,
 
         /// <summary>
         /// Board is Workspace (All workspace members can see/edit this board)
         /// </summary>
-        [JsonPropertyName("org")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Org)]
         Workspace,
 
         /// <summary>
         /// The Board is Public
         /// </summary>
-        [JsonPropertyName("public")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Public)]
         Public
     }
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -10,8 +10,11 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The Option Text
         /// </summary>
-        [JsonPropertyName("text")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Text)]
         [JsonInclude]
         public string Text { get; private set; }
     }
 }
+
+
+

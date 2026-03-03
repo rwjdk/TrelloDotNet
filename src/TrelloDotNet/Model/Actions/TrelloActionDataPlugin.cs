@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Actions
 {
@@ -10,15 +10,19 @@ namespace TrelloDotNet.Model.Actions
         /// <summary>
         /// The ID of the plugin related to the action.
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// The name of the plugin related to the action.
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Name)]
         [JsonInclude]
         public string Name { get; private set; }
     }
 }
+
+
+
+

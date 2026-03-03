@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Search
@@ -11,22 +11,25 @@ namespace TrelloDotNet.Model.Search
         /// <summary>
         /// The Search-terms used in the search
         /// </summary>
-        [JsonPropertyName("terms")]
+        [JsonPropertyName(Constants.TrelloIds.SearchFields.Terms)]
         [JsonInclude]
         public List<SearchResultOptionsTerms> Terms { get; private set; }
 
         /// <summary>
         /// The different types of things that was searched (Boards, Cards, and/or Organizations)
         /// </summary>
-        [JsonPropertyName("modelTypes")]
+        [JsonPropertyName(Constants.TrelloIds.SearchFields.ModelTypes)]
         [JsonInclude]
         public List<string> ModelTypes { get; private set; }
 
         /// <summary>
         /// If the search was partial search term matching
         /// </summary>
-        [JsonPropertyName("partial")]
+        [JsonPropertyName(Constants.TrelloIds.SearchFields.Partial)]
         [JsonInclude]
         public bool Partial { get; private set; }
     }
 }
+
+
+

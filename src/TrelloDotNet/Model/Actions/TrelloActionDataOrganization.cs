@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Actions
 {
@@ -10,29 +10,33 @@ namespace TrelloDotNet.Model.Actions
         /// <summary>
         /// Id of the Organization 
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Name of the Organization
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Name)]
         [JsonInclude]
         public string Name { get; private set; }
 
         /// <summary>
         /// Display Name of the Organization
         /// </summary>
-        [JsonPropertyName("displayName")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.DisplayName)]
         [JsonInclude]
         public string DisplayName { get; private set; }
 
         /// <summary>
         /// Website of the Organization
         /// </summary>
-        [JsonPropertyName("website")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Website)]
         [JsonInclude]
         public string Website { get; private set; }
     }
 }
+
+
+
+

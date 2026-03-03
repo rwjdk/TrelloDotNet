@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Model;
@@ -40,26 +40,26 @@ namespace TrelloDotNet
 
             var parameters = new List<QueryParameter>
             {
-                new QueryParameter("query", searchRequest.SearchTerm),
-                new QueryParameter("partial", searchRequest.PartialSearch),
-                new QueryParameter("modelTypes", string.Join(",", modelTypes))
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Query, searchRequest.SearchTerm),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Partial, searchRequest.PartialSearch),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.ModelTypes, string.Join(",", modelTypes))
             };
 
             #region Boards-options
 
             if (searchRequest.BoardFilter != null)
             {
-                parameters.Add(new QueryParameter("idBoards", string.Join(",", searchRequest.BoardFilter.BoardIds)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdBoards, string.Join(",", searchRequest.BoardFilter.BoardIds)));
             }
 
             if (searchRequest.BoardFields != null)
             {
-                parameters.Add(new QueryParameter("board_fields", string.Join(",", searchRequest.BoardFields.FieldNames)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.BoardFields, string.Join(",", searchRequest.BoardFields.FieldNames)));
             }
 
             if (searchRequest.BoardLimit.HasValue)
             {
-                parameters.Add(new QueryParameter("boards_limit", searchRequest.BoardLimit.Value));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.BoardsLimit, searchRequest.BoardLimit.Value));
             }
 
             #endregion
@@ -68,7 +68,7 @@ namespace TrelloDotNet
 
             if (searchRequest.OrganizationFilter != null)
             {
-                parameters.Add(new QueryParameter("idOrganizations", string.Join(",", searchRequest.OrganizationFilter.OrganizationIds)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdOrganizations, string.Join(",", searchRequest.OrganizationFilter.OrganizationIds)));
             }
 
             #endregion
@@ -77,22 +77,22 @@ namespace TrelloDotNet
 
             if (searchRequest.CardFilter != null)
             {
-                parameters.Add(new QueryParameter("idCards", string.Join(",", searchRequest.CardFilter.CardIds)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdCards, string.Join(",", searchRequest.CardFilter.CardIds)));
             }
 
             if (searchRequest.CardFields != null)
             {
-                parameters.Add(new QueryParameter("card_fields", string.Join(",", searchRequest.CardFields.FieldNames)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.CardFields, string.Join(",", searchRequest.CardFields.FieldNames)));
             }
 
             if (searchRequest.CardLimit.HasValue)
             {
-                parameters.Add(new QueryParameter("cards_limit", searchRequest.CardLimit.Value));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.CardsLimit, searchRequest.CardLimit.Value));
             }
 
             if (searchRequest.CardPage.HasValue)
             {
-                parameters.Add(new QueryParameter("cards_page", searchRequest.CardPage.Value));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.CardsPage, searchRequest.CardPage.Value));
             }
 
             #endregion
@@ -110,26 +110,28 @@ namespace TrelloDotNet
         {
             List<QueryParameter> parameters = new List<QueryParameter>
             {
-                new QueryParameter("query", searchRequest.SearchTerm),
-                new QueryParameter("onlyOrgMembers", searchRequest.OnlyOrgMembersFilter)
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.Query, searchRequest.SearchTerm),
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.OnlyOrgMembers, searchRequest.OnlyOrgMembersFilter)
             };
 
             if (searchRequest.Limit.HasValue)
             {
-                parameters.Add(new QueryParameter("limit", searchRequest.Limit.Value));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Limit, searchRequest.Limit.Value));
             }
 
             if (!string.IsNullOrWhiteSpace(searchRequest.BoardIdFilter))
             {
-                parameters.Add(new QueryParameter("idBoard", searchRequest.BoardIdFilter));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdBoard, searchRequest.BoardIdFilter));
             }
 
             if (!string.IsNullOrWhiteSpace(searchRequest.OrganizationIdFilter))
             {
-                parameters.Add(new QueryParameter("idOrganization", searchRequest.OrganizationIdFilter));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdOrganization, searchRequest.OrganizationIdFilter));
             }
 
             return await _apiRequestController.Get<List<Member>>($"{UrlPaths.Search}/{UrlPaths.Members}", cancellationToken, parameters.ToArray());
         }
     }
 }
+
+

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TrelloDotNet.Control;
@@ -85,27 +85,27 @@ namespace TrelloDotNet
             var parameters = new List<QueryParameter>();
             if (options.Filter != null)
             {
-                parameters.Add(new QueryParameter("filter", string.Join(",", options.Filter)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Filter, string.Join(",", options.Filter)));
             }
 
             if (options.Limit > 0)
             {
-                parameters.Add(new QueryParameter("limit", options.Limit));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Limit, options.Limit));
             }
 
             if (options.Page > 0)
             {
-                parameters.Add(new QueryParameter("page", options.Page));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Page, options.Page));
             }
 
             if (options.Before != null)
             {
-                parameters.Add(new QueryParameter("before", options.Before));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Before, options.Before));
             }
 
             if (options.Since != null)
             {
-                parameters.Add(new QueryParameter("since", options.Since));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Since, options.Since));
             }
 
             parameters.AddRange(options.AdditionalParameters);
@@ -114,3 +114,6 @@ namespace TrelloDotNet
         }
     }
 }
+
+
+

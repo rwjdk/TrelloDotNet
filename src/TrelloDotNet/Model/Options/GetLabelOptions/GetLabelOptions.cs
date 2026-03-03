@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace TrelloDotNet.Model.Options.GetLabelOptions
 {
@@ -27,12 +27,12 @@ namespace TrelloDotNet.Model.Options.GetLabelOptions
             List<QueryParameter> parameters = new List<QueryParameter>();
             if (LabelFields != null)
             {
-                parameters.Add(new QueryParameter("fields", string.Join(",", LabelFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Fields, string.Join(",", LabelFields.Fields)));
             }
 
             if (Limit != null)
             {
-                parameters.Add(new QueryParameter("limit", Limit.Value));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Limit, Limit.Value));
             }
 
             parameters.AddRange(AdditionalParameters);
@@ -41,3 +41,5 @@ namespace TrelloDotNet.Model.Options.GetLabelOptions
         }
     }
 }
+
+

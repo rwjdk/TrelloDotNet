@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -183,7 +183,7 @@ namespace TrelloDotNet
             {
                 var urlsToProcessThisBatch = urls.Skip(batchResultForUrls.Count).Take(10).ToList();
                 var preparedUrls = urlsToProcessThisBatch.Select(url => url.StartsWith("/") ? url : $"/{url}").ToList();
-                string json = await _apiRequestController.Get("batch", cancellationToken, 0, new QueryParameter("urls", string.Join(",", preparedUrls)));
+                string json = await _apiRequestController.Get("batch", cancellationToken, 0, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Urls, string.Join(",", preparedUrls)));
                 try
                 {
                     var results = JsonSerializer.Deserialize<List<BatchResultForUrl>>(json);
@@ -221,7 +221,7 @@ namespace TrelloDotNet
             {
                 var urlsToProcessThisBatch = requests.Skip(batchResultForUrls.Count).Take(10).ToList();
                 var preparedUrls = urlsToProcessThisBatch.Select(x => x.Url.StartsWith("/") ? x.Url : $"/{x.Url}").ToList();
-                string json = await _apiRequestController.Get("batch", cancellationToken, 0, new QueryParameter("urls", string.Join(",", preparedUrls)));
+                string json = await _apiRequestController.Get("batch", cancellationToken, 0, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Urls, string.Join(",", preparedUrls)));
                 try
                 {
                     List<BatchResultForUrl> results = JsonSerializer.Deserialize<List<BatchResultForUrl>>(json);
@@ -253,3 +253,6 @@ namespace TrelloDotNet
         }
     }
 }
+
+
+

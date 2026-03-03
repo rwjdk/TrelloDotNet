@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -140,63 +140,63 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
             List<QueryParameter> parameters = new List<QueryParameter>();
             if (CardFields != null)
             {
-                parameters.Add(new QueryParameter("fields", string.Join(",", CardFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Fields, string.Join(",", CardFields.Fields)));
             }
 
             if (ActionsTypes != null)
             {
-                parameters.Add(new QueryParameter("actions", string.Join(",", ActionsTypes.ActionTypes)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Actions, string.Join(",", ActionsTypes.ActionTypes)));
             }
 
             if (AttachmentFields != null)
             {
-                parameters.Add(new QueryParameter("attachment_fields", string.Join(",", AttachmentFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.AttachmentFields, string.Join(",", AttachmentFields.Fields)));
             }
 
             if (MemberFields != null)
             {
-                parameters.Add(new QueryParameter("member_fields", string.Join(",", MemberFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.MemberFields, string.Join(",", MemberFields.Fields)));
             }
 
             if (BoardFields != null)
             {
-                parameters.Add(new QueryParameter("board_fields", string.Join(",", BoardFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.BoardFields, string.Join(",", BoardFields.Fields)));
             }
 
             if (ChecklistFields != null)
             {
-                parameters.Add(new QueryParameter("checklist_fields", string.Join(",", ChecklistFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.ChecklistFields, string.Join(",", ChecklistFields.Fields)));
             }
 
             if (StickerFields != null)
             {
-                parameters.Add(new QueryParameter("sticker_fields", string.Join(",", StickerFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.StickerFields, string.Join(",", StickerFields.Fields)));
             }
 
             if (MembersVotedFields != null)
             {
-                parameters.Add(new QueryParameter("memberVoted_fields", string.Join(",", MembersVotedFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.MemberVotedFields, string.Join(",", MembersVotedFields.Fields)));
             }
 
-            parameters.Add(new QueryParameter("members", IncludeMembers));
-            parameters.Add(new QueryParameter("board", IncludeBoard));
-            parameters.Add(new QueryParameter("list", IncludeList));
-            parameters.Add(new QueryParameter("checklists", IncludeChecklists ? "all" : "none"));
-            parameters.Add(new QueryParameter("pluginData", IncludePluginData));
-            parameters.Add(new QueryParameter("stickers", IncludeStickers));
-            parameters.Add(new QueryParameter("customFieldItems", IncludeCustomFieldItems));
-            parameters.Add(new QueryParameter("membersVoted", IncludeMemberVotes));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Members, IncludeMembers));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Board, IncludeBoard));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.List, IncludeList));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Checklists, IncludeChecklists ? "all" : "none"));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.PluginData, IncludePluginData));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Stickers, IncludeStickers));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.CustomFieldItems, IncludeCustomFieldItems));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.MembersVoted, IncludeMemberVotes));
 
             switch (IncludeAttachments)
             {
                 case GetCardOptionsIncludeAttachments.True:
-                    parameters.Add(new QueryParameter("attachments", true));
+                    parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Attachments, true));
                     break;
                 case GetCardOptionsIncludeAttachments.False:
-                    parameters.Add(new QueryParameter("attachments", false));
+                    parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Attachments, false));
                     break;
                 case GetCardOptionsIncludeAttachments.Cover:
-                    parameters.Add(new QueryParameter("attachments", "cover"));
+                    parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Attachments, "cover"));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -206,17 +206,17 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
             {
                 if (Limit.HasValue)
                 {
-                    parameters.Add(new QueryParameter("limit", Limit.Value));
+                    parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Limit, Limit.Value));
                 }
 
                 if (Before != null)
                 {
-                    parameters.Add(new QueryParameter("before", Before));
+                    parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Before, Before));
                 }
 
                 if (Since != null)
                 {
-                    parameters.Add(new QueryParameter("since", Since));
+                    parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Since, Since));
                 }
             }
 
@@ -311,3 +311,5 @@ namespace TrelloDotNet.Model.Options.GetCardOptions
         }
     }
 }
+
+

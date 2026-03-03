@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
@@ -16,70 +16,70 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The Board ID (long form).
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Name of the Board.
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Name)]
         [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// Description of the Board.
         /// </summary>
-        [JsonPropertyName("desc")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Desc)]
         [QueryParameter]
         public string Description { get; set; }
 
         /// <summary>
         /// Full URL to the Board.
         /// </summary>
-        [JsonPropertyName("url")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Url)]
         [JsonInclude]
         public string Url { get; private set; }
 
         /// <summary>
         /// Short URL to the Board.
         /// </summary>
-        [JsonPropertyName("shortUrl")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.ShortUrl)]
         [JsonInclude]
         public string ShortUrl { get; private set; }
 
         /// <summary>
         /// True if the Board is archived (closed).
         /// </summary>
-        [JsonPropertyName("closed")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Closed)]
         [JsonInclude]
         public bool Closed { get; private set; }
 
         /// <summary>
         /// Organization ID for the Board.
         /// </summary>
-        [JsonPropertyName("idOrganization")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.IdOrganization)]
         [QueryParameter(false)]
         public string OrganizationId { get; set; }
 
         /// <summary>
         /// Organization for the Board. Only populated if 'IncludeOrganization' is set in GetBoardOptions.
         /// </summary>
-        [JsonPropertyName("organization")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Organization)]
         [JsonInclude]
         public Organization Organization { get; private set; }
 
         /// <summary>
         /// Enterprise ID for the Board.
         /// </summary>
-        [JsonPropertyName("idEnterprise")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.IdEnterprise)]
         [JsonInclude]
         public string EnterpriseId { get; private set; }
 
         /// <summary>
         /// True if the Board is pinned for the user.
         /// </summary>
-        [JsonPropertyName("pinned")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Pinned)]
         [JsonInclude]
         public bool Pinned { get; private set; }
 
@@ -92,49 +92,49 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Actions on the Board. Only populated if included in GetBoardOptions.
         /// </summary>
-        [JsonPropertyName("actions")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Actions)]
         [JsonInclude]
         public List<TrelloAction> Actions { get; private set; }
 
         /// <summary>
         /// Cards on the Board. Only populated if 'IncludeCards' in GetBoardOptions is not None.
         /// </summary>
-        [JsonPropertyName("cards")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Cards)]
         [JsonInclude]
         public List<Card> Cards { get; internal set; }
 
         /// <summary>
         /// Labels on the Board. Only populated if 'IncludeLabels' in GetBoardOptions is true.
         /// </summary>
-        [JsonPropertyName("labels")]
+        [JsonPropertyName(Constants.TrelloIds.LabelFields.Labels)]
         [JsonInclude]
         public List<Label> Labels { get; private set; }
 
         /// <summary>
         /// Lists on the Board. Only populated if 'IncludeLists' in GetBoardOptions is set.
         /// </summary>
-        [JsonPropertyName("lists")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Lists)]
         [JsonInclude]
         public List<List> Lists { get; private set; }
 
         /// <summary>
         /// Plugin data for the Board. Only populated if GetBoardOptions.IncludePluginData is used.
         /// </summary>
-        [JsonPropertyName("pluginData")]
+        [JsonPropertyName(Constants.TrelloIds.PluginFields.PluginData)]
         [JsonInclude]
         public List<PluginData> PluginData { get; private set; }
 
         /// <summary>
         /// Preferences and settings for the Board.
         /// </summary>
-        [JsonPropertyName("prefs")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Prefs)]
         [JsonInclude]
         public BoardPreferences Preferences { get; private set; }
 
         /// <summary>
         /// If the Token-use is Subscribed (Watching) the board. (Only populated if BoardFields.Subscribed is requested in GetBoardOptions)
         /// </summary>
-        [JsonPropertyName("subscribed")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Subscribed)]
         [QueryParameter]
         public bool Subscribed { get; set; }
 
@@ -158,3 +158,8 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+

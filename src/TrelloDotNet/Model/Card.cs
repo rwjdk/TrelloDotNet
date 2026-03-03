@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,14 +19,14 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The ID of the card (globally unique across all boards).
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// The short ID of the card (unique within its board).
         /// </summary>
-        [JsonPropertyName("idShort")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IdShort)]
         [JsonInclude]
         public int IdShort { get; private set; }
 
@@ -36,42 +36,42 @@ namespace TrelloDotNet.Model
         /// <remarks>
         /// If you move the card to another board, ensure ListId, MemberIds, and LabelIds are valid for the new board.
         /// </remarks>
-        [JsonPropertyName("idBoard")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.IdBoard)]
         [QueryParameter]
         public string BoardId { get; set; }
 
         /// <summary>
         /// The name (title) of the card.
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Name)]
         [QueryParameter]
         public string Name { get; set; }
 
         /// <summary>
         /// The description of the card.
         /// </summary>
-        [JsonPropertyName("desc")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Desc)]
         [QueryParameter]
         public string Description { get; set; }
 
         /// <summary>
         /// Indicates whether the card is archived (closed).
         /// </summary>
-        [JsonPropertyName("closed")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Closed)]
         [QueryParameter]
         public bool Closed { get; set; }
 
         /// <summary>
         /// The position of the card within its current list. Lower numbers are higher in the list.
         /// </summary>
-        [JsonPropertyName("pos")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Pos)]
         [QueryParameter]
         public decimal Position { get; set; }
 
         /// <summary>
         /// Indicates if the card is watched (subscribed) by the owner of the API token.
         /// </summary>
-        [JsonPropertyName("subscribed")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Subscribed)]
         [QueryParameter]
         public bool Subscribed { get; set; }
 
@@ -81,7 +81,7 @@ namespace TrelloDotNet.Model
         /// <remarks>
         /// If you move the card to another board, set this to null (to place in the first column of the new board) or to a valid list ID on the new board.
         /// </remarks>
-        [JsonPropertyName("idList")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.IdList)]
         [QueryParameter(false)]
         public string ListId { get; set; }
 
@@ -97,28 +97,28 @@ namespace TrelloDotNet.Model
         /// This property is also affected by the Position property, so moving another card to the same list can affect this timestamp.
         /// </remarks>
         /// </summary>
-        [JsonPropertyName("dateLastActivity")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.DateLastActivity)]
         [JsonInclude]
         public DateTimeOffset LastActivity { get; private set; }
 
         /// <summary>
         /// The start date for work on the card. Not the same as Created. Stored in UTC.
         /// </summary>
-        [JsonPropertyName("start")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Start)]
         [QueryParameter]
         public DateTimeOffset? Start { get; set; }
 
         /// <summary>
         /// The due date of the card. Stored in UTC.
         /// </summary>
-        [JsonPropertyName("due")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Due)]
         [QueryParameter]
         public DateTimeOffset? Due { get; set; }
 
         /// <summary>
         /// Indicates whether the card is marked as complete.
         /// </summary>
-        [JsonPropertyName("dueComplete")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.DueComplete)]
         [QueryParameter]
         public bool DueComplete { get; set; }
 
@@ -128,14 +128,14 @@ namespace TrelloDotNet.Model
         /// <remarks>
         /// This property is not updateable. To change labels, update the LabelIds property instead.
         /// </remarks>
-        [JsonPropertyName("labels")]
+        [JsonPropertyName(Constants.TrelloIds.LabelFields.Labels)]
         [JsonInclude]
         public List<Label> Labels { get; private set; }
 
         /// <summary>
         /// The list of label IDs currently assigned to the card.
         /// </summary>
-        [JsonPropertyName("idLabels")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IdLabels)]
         [QueryParameter]
         public List<string> LabelIds { get; set; }
 
@@ -145,28 +145,28 @@ namespace TrelloDotNet.Model
         /// <remarks>
         /// This property is not updateable here. Use dedicated methods to add or remove checklists.
         /// </remarks>
-        [JsonPropertyName("idChecklists")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IdChecklists)]
         [JsonInclude]
         public List<string> ChecklistIds { get; private set; }
 
         /// <summary>
         /// The list of member IDs assigned to the card.
         /// </summary>
-        [JsonPropertyName("idMembers")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IdMembers)]
         [QueryParameter]
         public List<string> MemberIds { get; set; }
 
         /// <summary>
         /// The list of member IDs who have voted on this card.
         /// </summary>
-        [JsonPropertyName("idMembersVoted")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IdMembersVoted)]
         [JsonInclude]
         public List<string> MembersVotedIds { get; private set; }
 
         /// <summary>
         /// The ID of the image attachment to use as the card's cover image.
         /// </summary>
-        [JsonPropertyName("idAttachmentCover")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IdAttachmentCover)]
         [QueryParameter]
         [JsonInclude]
         public string AttachmentCover { get; set; }
@@ -174,105 +174,105 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The full URL to access this card directly in Trello.
         /// </summary>
-        [JsonPropertyName("url")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Url)]
         [JsonInclude]
         public string Url { get; private set; }
 
         /// <summary>
         /// The short URL to access this card directly in Trello.
         /// </summary>
-        [JsonPropertyName("shortUrl")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.ShortUrl)]
         [JsonInclude]
         public string ShortUrl { get; private set; }
 
         /// <summary>
         /// The cover of the card, which can be a color or an image.
         /// </summary>
-        [JsonPropertyName("cover")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Cover)]
         public CardCover Cover { get; set; }
 
         /// <summary>
         /// The custom field items assigned to the card. Only populated if GetCardOptions.IncludeCustomFieldItems is used.
         /// </summary>
         /// <remarks>Use extension methods such as GetCustomFieldValueAsXYZ for convenient value retrieval.</remarks>
-        [JsonPropertyName("customFieldItems")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.CustomFieldItems)]
         [JsonInclude]
         public List<CustomFieldItem> CustomFieldItems { get; private set; }
 
         /// <summary>
         /// The list of attachments on the card. Only populated if GetCardOptions.IncludeAttachments is used.
         /// </summary>
-        [JsonPropertyName("attachments")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.Attachments)]
         [JsonInclude]
         public List<Attachment> Attachments { get; internal set; }
 
         /// <summary>
         /// The list of members assigned to the card. Only populated if GetCardOptions.IncludeMembers is used.
         /// </summary>
-        [JsonPropertyName("members")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Members)]
         [JsonInclude]
         public List<Member> Members { get; private set; }
 
         /// <summary>
         /// The list of members who have voted for the card. Only populated if GetCardOptions.IncludeMemberVotes is used.
         /// </summary>
-        [JsonPropertyName("membersVoted")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.MembersVoted)]
         [JsonInclude]
         public List<Member> MembersVoted { get; private set; }
 
         /// <summary>
         /// The board this card is on. Only populated if GetCardOptions.IncludeBoard is used.
         /// </summary>
-        [JsonPropertyName("board")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Board)]
         [JsonInclude]
         public Board Board { get; internal set; }
 
         /// <summary>
         /// The list this card is in. Only populated if GetCardOptions.IncludeList is used.
         /// </summary>
-        [JsonPropertyName("list")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.List)]
         [JsonInclude]
         public List List { get; internal set; }
 
         /// <summary>
         /// The list of actions performed on this card. Only populated if 'ActionTypes' in GetCardOptions is included.
         /// </summary>
-        [JsonPropertyName("actions")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Actions)]
         [JsonInclude]
         public List<TrelloAction> Actions { get; private set; }
 
         /// <summary>
         /// The list of checklists attached to the card. Only populated if GetCardOptions.IncludeChecklist is used.
         /// </summary>
-        [JsonPropertyName("checklists")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.Checklists)]
         [JsonInclude]
         public List<Checklist> Checklists { get; internal set; }
 
         /// <summary>
         /// The plugin data associated with the card. Only populated if GetCardOptions.IncludePluginData is used.
         /// </summary>
-        [JsonPropertyName("pluginData")]
+        [JsonPropertyName(Constants.TrelloIds.PluginFields.PluginData)]
         [JsonInclude]
         public List<PluginData> PluginData { get; private set; }
 
         /// <summary>
         /// The list of stickers attached to the card. Only populated if GetCardOptions.IncludeStickers is used.
         /// </summary>
-        [JsonPropertyName("stickers")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Stickers)]
         [JsonInclude]
         public List<Sticker> Stickers { get; private set; }
 
         /// <summary>
         /// The role of the card, used to indicate if the card is a mirror, separator or other special function.
         /// </summary>
-        [JsonPropertyName("cardRole")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.CardRole)]
         [JsonInclude]
         public string CardRole { get; private set; }
 
         /// <summary>
         /// If the card is a mirror, this contains the ID of the original card being mirrored.
         /// </summary>
-        [JsonPropertyName("mirrorSourceId")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.MirrorSourceId)]
         [JsonInclude]
         public string MirrorSourceId { get; private set; }
 
@@ -295,7 +295,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Indicates whether this card is a template card, which can be used as a reusable pattern for new cards.
         /// </summary>
-        [JsonPropertyName("isTemplate")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.IsTemplate)]
         [QueryParameter]
         public bool IsTemplate { get; set; }
 
@@ -403,3 +403,8 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+

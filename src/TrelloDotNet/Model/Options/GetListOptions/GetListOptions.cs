@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using TrelloDotNet.Control;
 
@@ -59,21 +59,21 @@ namespace TrelloDotNet.Model.Options.GetListOptions
             List<QueryParameter> parameters = new List<QueryParameter>();
             if (ListFields != null)
             {
-                parameters.Add(new QueryParameter("fields", string.Join(",", ListFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Fields, string.Join(",", ListFields.Fields)));
             }
 
             if (CardFields != null)
             {
-                parameters.Add(new QueryParameter("card_fields", string.Join(",", CardFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.CardFields, string.Join(",", CardFields.Fields)));
             }
 
             if (BoardFields != null)
             {
-                parameters.Add(new QueryParameter("board_fields", string.Join(",", BoardFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.BoardFields, string.Join(",", BoardFields.Fields)));
             }
 
-            parameters.Add(new QueryParameter("board", IncludeBoard));
-            parameters.Add(new QueryParameter("cards", IncludeCards.GetJsonPropertyName()));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Board, IncludeBoard));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Cards, IncludeCards.GetJsonPropertyName()));
 
             parameters.AddRange(AdditionalParameters);
 
@@ -161,3 +161,5 @@ namespace TrelloDotNet.Model.Options.GetListOptions
         }
     }
 }
+
+

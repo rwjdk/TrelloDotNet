@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Search
 {
@@ -10,15 +10,18 @@ namespace TrelloDotNet.Model.Search
         /// <summary>
         /// The Test searched for
         /// </summary>
-        [JsonPropertyName("text")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Text)]
         [JsonInclude]
         public string Text { get; private set; }
 
         /// <summary>
         /// If the search was partial search term matching
         /// </summary>
-        [JsonPropertyName("partial")]
+        [JsonPropertyName(Constants.TrelloIds.SearchFields.Partial)]
         [JsonInclude]
         public bool Partial { get; private set; }
     }
 }
+
+
+

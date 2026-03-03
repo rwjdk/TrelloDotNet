@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -16,19 +16,24 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// None
         /// </summary>
-        [JsonPropertyName("null")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.NullValue)]
         None = 0,
 
         /// <summary>
         /// Normal (aka a colored bar at the top)
         /// </summary>
-        [JsonPropertyName("normal")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Normal)]
         Normal,
 
         /// <summary>
         /// Full (aka entire card is filled with the color)
         /// </summary>
-        [JsonPropertyName("full")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Full)]
         Full
     }
 }
+
+
+
+
+

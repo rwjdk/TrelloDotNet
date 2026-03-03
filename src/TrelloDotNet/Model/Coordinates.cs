@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -12,14 +12,14 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// longitude
         /// </summary>
-        [JsonPropertyName("longitude")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Longitude)]
         [JsonInclude]
         public decimal Longitude { get; private set; }
 
         /// <summary>
         /// latitude
         /// </summary>
-        [JsonPropertyName("latitude")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Latitude)]
         [JsonInclude]
         public decimal Latitude { get; private set; }
 
@@ -33,3 +33,8 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+

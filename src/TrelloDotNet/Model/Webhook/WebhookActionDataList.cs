@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,21 +12,21 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// List Id
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// List Name
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Name)]
         [JsonInclude]
         public string Name { get; private set; }
 
         /// <summary>
         /// Position (Only present when list is moved)
         /// </summary>
-        [JsonPropertyName("pos")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Pos)]
         [JsonInclude]
         public decimal Position { get; private set; }
 
@@ -66,3 +66,8 @@ namespace TrelloDotNet.Model.Webhook
         }
     }
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -33,7 +33,7 @@ namespace TrelloDotNet
         /// <returns>The archived list</returns>
         public async Task<List> ArchiveListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", true));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Closed, true));
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace TrelloDotNet
         /// <returns>The reopened list</returns>
         public async Task<List> ReOpenListAsync(string listId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter("closed", false));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Closed, false));
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace TrelloDotNet
         /// <returns>The updated list after moving</returns>
         public async Task<List> MoveListToBoardAsync(string listId, string newBoardId, CancellationToken cancellationToken = default)
         {
-            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", cancellationToken, new QueryParameter("value", newBoardId));
+            return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}/idBoard", cancellationToken, new QueryParameter(Constants.TrelloIds.QueryParameterNames.Value, newBoardId));
         }
 
         /// <summary>
@@ -188,3 +188,6 @@ namespace TrelloDotNet
         }
     }
 }
+
+
+

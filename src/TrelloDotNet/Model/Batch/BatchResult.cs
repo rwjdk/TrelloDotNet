@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Batch
@@ -11,7 +11,7 @@ namespace TrelloDotNet.Model.Batch
         /// <summary>
         /// The raw response data from the batch request as a JSON element. Use <see cref="GetData{T}"/> to deserialize this data into a specific type.
         /// </summary>
-        [JsonPropertyName("200")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Value200)]
         [JsonInclude]
         public JsonElement Data { get; private set; }
 
@@ -26,3 +26,7 @@ namespace TrelloDotNet.Model.Batch
         }
     }
 }
+
+
+
+

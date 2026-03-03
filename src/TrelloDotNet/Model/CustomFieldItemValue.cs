@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Text.Json.Serialization;
 
@@ -14,7 +14,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Text Value representation
         /// </summary>
-        [JsonPropertyName("text")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Text)]
         [JsonInclude]
         public string TextAsString { get; private set; }
 
@@ -27,7 +27,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Number Value representation
         /// </summary>
-        [JsonPropertyName("number")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.Number)]
         [JsonInclude]
         public string NumberAsString { get; private set; }
 
@@ -40,7 +40,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Date Value representation
         /// </summary>
-        [JsonPropertyName("date")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Date)]
         [JsonInclude]
         public string DateAsString { get; private set; }
 
@@ -54,7 +54,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Checkbox Value representation
         /// </summary>
-        [JsonPropertyName("checked")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.Checked)]
         [JsonInclude]
         public string CheckedAsString { get; private set; }
 
@@ -65,3 +65,8 @@ namespace TrelloDotNet.Model
         public bool Checked => CheckedAsString == "true";
     }
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TrelloDotNet.Control;
@@ -86,37 +86,37 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
 
             if (BoardFields != null)
             {
-                parameters.Add(new QueryParameter("fields", string.Join(",", BoardFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Fields, string.Join(",", BoardFields.Fields)));
             }
 
             if (CardFields != null)
             {
-                parameters.Add(new QueryParameter("card_fields", string.Join(",", CardFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.CardFields, string.Join(",", CardFields.Fields)));
             }
 
             if (OrganizationFields != null)
             {
-                parameters.Add(new QueryParameter("organization_fields", string.Join(",", OrganizationFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.OrganizationFields, string.Join(",", OrganizationFields.Fields)));
             }
 
             if (ActionsTypes != null)
             {
-                parameters.Add(new QueryParameter("actions", string.Join(",", ActionsTypes.ActionTypes)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Actions, string.Join(",", ActionsTypes.ActionTypes)));
             }
 
             if (TypesOfBoardsToInclude != GetBoardOptionsTypesOfBoardsToInclude.All)
             {
                 var selected = Enum.GetValues(TypesOfBoardsToInclude.GetType()).Cast<Enum>().Where(TypesOfBoardsToInclude.HasFlag).ToArray();
 
-                parameters.Add(new QueryParameter("filter", string.Join(",", selected.Select(x => x.GetJsonPropertyName()))));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Filter, string.Join(",", selected.Select(x => x.GetJsonPropertyName()))));
             }
 
-            parameters.Add(new QueryParameter("lists", IncludeLists.GetJsonPropertyName()));
-            parameters.Add(new QueryParameter("organization", IncludeOrganization));
-            parameters.Add(new QueryParameter("filter", Filter.GetJsonPropertyName()));
-            parameters.Add(new QueryParameter("cards", IncludeCards.GetJsonPropertyName()));
-            parameters.Add(new QueryParameter("labels", IncludeLabels ? "all" : "none"));
-            parameters.Add(new QueryParameter("pluginData", IncludePluginData));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Lists, IncludeLists.GetJsonPropertyName()));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Organization, IncludeOrganization));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Filter, Filter.GetJsonPropertyName()));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Cards, IncludeCards.GetJsonPropertyName()));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Labels, IncludeLabels ? "all" : "none"));
+            parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.PluginData, IncludePluginData));
             parameters.AddRange(AdditionalParameters);
 
             return parameters.ToArray();
@@ -203,3 +203,5 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         }
     }
 }
+
+

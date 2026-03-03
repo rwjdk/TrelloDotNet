@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
@@ -14,61 +14,66 @@ namespace TrelloDotNet.Model.Options.CopyCardOptions
         /// <summary>
         /// Copy Everything
         /// </summary>
-        [JsonPropertyName("all")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.All)]
         All = -1,
 
         /// <summary>
         /// Attachments
         /// </summary>
-        [JsonPropertyName("attachments")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.Attachments)]
         Attachments = 1,
 
         /// <summary>
         /// Checklists
         /// </summary>
-        [JsonPropertyName("checklists")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.Checklists)]
         Checklists = 2,
 
         /// <summary>
         /// Comments
         /// </summary>
-        [JsonPropertyName("comments")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Comments)]
         Comments = 4,
 
         /// <summary>
         /// Custom Fields
         /// </summary>
-        [JsonPropertyName("customFields")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.CustomFields)]
         CustomFields = 8,
 
         /// <summary>
         /// Due date
         /// </summary>
-        [JsonPropertyName("due")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Due)]
         Due = 16,
 
         /// <summary>
         /// Labels
         /// </summary>
-        [JsonPropertyName("labels")]
+        [JsonPropertyName(Constants.TrelloIds.LabelFields.Labels)]
         Labels = 32,
 
         /// <summary>
         /// Members
         /// </summary>
-        [JsonPropertyName("members")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Members)]
         Members = 64,
 
         /// <summary>
         /// Start Date
         /// </summary>
-        [JsonPropertyName("start")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Start)]
         Start = 128,
 
         /// <summary>
         /// Stickers
         /// </summary>
-        [JsonPropertyName("stickers")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Stickers)]
         Stickers = 254
     }
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model
@@ -11,28 +11,28 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the CustomField Option Value
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Id of the CustomField (aka the generic Id of the custom field across all cards)
         /// </summary>
-        [JsonPropertyName("idCustomField")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.IdCustomField)]
         [JsonInclude]
         public string CustomFieldId { get; private set; }
 
         /// <summary>
         /// Value Text of the Option
         /// </summary>
-        [JsonPropertyName("value")]
+        [JsonPropertyName(Constants.TrelloIds.CustomFieldFields.Value)]
         [JsonInclude]
         public CustomFieldOptionValue Value { get; private set; }
 
         /// <summary>
         /// Color of the option
         /// </summary>
-        [JsonPropertyName("color")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Color)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<CustomFieldOptionColor>))]
         public CustomFieldOptionColor Color { get; private set; }
@@ -41,8 +41,14 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The position of the Option
         /// </summary>
-        [JsonPropertyName("pos")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Pos)]
         [JsonInclude]
         public decimal Position { get; private set; }
     }
 }
+
+
+
+
+
+

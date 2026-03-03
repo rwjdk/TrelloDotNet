@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
 {
@@ -10,43 +10,47 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The Id
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// The Member Id
         /// </summary>
-        [JsonPropertyName("idMember")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.IdMember)]
         [JsonInclude]
         public string MemberId { get; private set; }
 
         /// <summary>
         /// The Parent CommentActionId
         /// </summary>
-        [JsonPropertyName("idModel")]
+        [JsonPropertyName(Constants.TrelloIds.TokenFields.IdModel)]
         [JsonInclude]
         public string CommentId { get; private set; }
 
         /// <summary>
         /// The Id of the Emojis
         /// </summary>
-        [JsonPropertyName("idEmoji")]
+        [JsonPropertyName(Constants.TrelloIds.LabelFields.IdEmoji)]
         [JsonInclude]
         public string EmojiId { get; private set; }
 
         /// <summary>
         /// The Member
         /// </summary>
-        [JsonPropertyName("member")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Member)]
         [JsonInclude]
         public Member Member { get; private set; }
 
         /// <summary>
         /// The Emojis
         /// </summary>
-        [JsonPropertyName("emoji")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Emoji)]
         [JsonInclude]
         public Emoji Emoji { get; private set; }
     }
 }
+
+
+
+

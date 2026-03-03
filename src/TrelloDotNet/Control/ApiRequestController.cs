@@ -43,7 +43,12 @@ namespace TrelloDotNet.Control
         internal async Task<string> Get(string suffix, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.GetAsync(uri, cancellationToken);
+            HttpResponseMessage response;
+            using (var request = new HttpRequestMessage(HttpMethod.Get, uri))
+            {
+                AddCredentialsToHeaderIfNeeded(request);
+                response = await _httpClient.SendAsync(request, cancellationToken);
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -74,7 +79,12 @@ namespace TrelloDotNet.Control
             using (var multipartFormContent = new MultipartFormDataContent())
             {
                 multipartFormContent.Add(new StreamContent(attachmentFile.Stream), name: "file", fileName: attachmentFile.Filename);
-                var response = await _httpClient.PostAsync(uri, multipartFormContent, cancellationToken);
+                HttpResponseMessage response;
+                using (var request = new HttpRequestMessage(HttpMethod.Post, uri) { Content = multipartFormContent })
+                {
+                    AddCredentialsToHeaderIfNeeded(request);
+                    response = await _httpClient.SendAsync(request, cancellationToken);
+                }
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -89,7 +99,12 @@ namespace TrelloDotNet.Control
         internal async Task<string> Post(string suffix, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.PostAsync(uri, null, cancellationToken);
+            HttpResponseMessage response;
+            using (var request = new HttpRequestMessage(HttpMethod.Post, uri))
+            {
+                AddCredentialsToHeaderIfNeeded(request);
+                response = await _httpClient.SendAsync(request, cancellationToken);
+            }
             var content = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -110,7 +125,12 @@ namespace TrelloDotNet.Control
         internal async Task<string> Put(string suffix, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.PutAsync(uri, null, cancellationToken);
+            HttpResponseMessage response;
+            using (var request = new HttpRequestMessage(HttpMethod.Put, uri))
+            {
+                AddCredentialsToHeaderIfNeeded(request);
+                response = await _httpClient.SendAsync(request, cancellationToken);
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -131,7 +151,15 @@ namespace TrelloDotNet.Control
         internal async Task<string> PutWithJsonPayload(string suffix, CancellationToken cancellationToken, string payload, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.PutAsync(uri, new StringContent(payload, Encoding.UTF8, "application/json"), cancellationToken);
+            HttpResponseMessage response;
+            using (var request = new HttpRequestMessage(HttpMethod.Put, uri)
+            {
+                Content = new StringContent(payload, Encoding.UTF8, "application/json")
+            })
+            {
+                AddCredentialsToHeaderIfNeeded(request);
+                response = await _httpClient.SendAsync(request, cancellationToken);
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -152,7 +180,15 @@ namespace TrelloDotNet.Control
         internal async Task<string> PostWithJsonPayload(string suffix, CancellationToken cancellationToken, string payload, int retryCount, params QueryParameter[] parameters)
         {
             var uri = BuildUri(suffix, parameters);
-            var response = await _httpClient.PostAsync(uri, new StringContent(payload, Encoding.UTF8, "application/json"), cancellationToken);
+            HttpResponseMessage response;
+            using (var request = new HttpRequestMessage(HttpMethod.Post, uri)
+            {
+                Content = new StringContent(payload, Encoding.UTF8, "application/json")
+            })
+            {
+                AddCredentialsToHeaderIfNeeded(request);
+                response = await _httpClient.SendAsync(request, cancellationToken);
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -171,7 +207,7 @@ namespace TrelloDotNet.Control
                     return fullUrl;
                 case ApiCallExceptionOption.IncludeUrlButMaskCredentials:
                     // ReSharper disable StringLiteralTypo
-                    return fullUrl.Replace($"?key={_apiKey}&token={_token}", "?key=XXXXX&token=XXXXXXXXXX");
+                    return fullUrl.Replace($"key={_apiKey}&token={_token}", "key=XXXXX&token=XXXXXXXXXX");
                 case ApiCallExceptionOption.DoNotIncludeTheUrl:
                     return string.Empty.PadLeft(5, 'X');
                 default:
@@ -197,19 +233,36 @@ namespace TrelloDotNet.Control
 
         internal int GetQueryStringLength(params QueryParameter[] parameters)
         {
-            return $"?key={_apiKey}&token={_token}".Length + GetParametersAsString(parameters).Length;
+            return GetQueryStringCredentialPrefixLength() + GetParametersAsString(parameters).Length;
         }
 
         private Uri BuildUri(string suffix, params QueryParameter[] parameters)
         {
+            string queryString = GetQueryStringCredentials();
+            string additionalParameters = GetParametersAsString(parameters).ToString();
+            if (string.IsNullOrWhiteSpace(queryString))
+            {
+                additionalParameters = additionalParameters.TrimStart('&');
+            }
+
+            if (string.IsNullOrWhiteSpace(queryString) && string.IsNullOrWhiteSpace(additionalParameters))
+            {
+                return new Uri($"{BaseUrl}{suffix}");
+            }
+
             string separator = suffix.Contains("?") ? "&" : "?";
-            return new Uri($"{BaseUrl}{suffix}{separator}key={_apiKey}&token={_token}" + GetParametersAsString(parameters));
+            return new Uri($"{BaseUrl}{suffix}{separator}{queryString}{additionalParameters}");
         }
 
         internal async Task<string> Delete(string suffix, CancellationToken cancellationToken, int retryCount)
         {
             var uri = BuildUri(suffix);
-            var response = await _httpClient.DeleteAsync(uri, cancellationToken);
+            HttpResponseMessage response;
+            using (var request = new HttpRequestMessage(HttpMethod.Delete, uri))
+            {
+                AddCredentialsToHeaderIfNeeded(request);
+                response = await _httpClient.SendAsync(request, cancellationToken);
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
@@ -232,6 +285,36 @@ namespace TrelloDotNet.Control
             }
 
             throw new TrelloApiException($"{responseContent} [{statusCodeAsInteger}: {statusCode}]", FormatExceptionUrlAccordingToClientOptions(uri.AbsoluteUri), statusCode); //Content is assumed Error Message       
+        }
+
+        private int GetQueryStringCredentialPrefixLength()
+        {
+            if (_client.Options.SendCredentialsMode == SendCredentialsMode.Header)
+            {
+                return 0;
+            }
+
+            return $"?{GetQueryStringCredentials()}".Length;
+        }
+
+        private string GetQueryStringCredentials()
+        {
+            if (_client.Options.SendCredentialsMode == SendCredentialsMode.Header)
+            {
+                return string.Empty;
+            }
+
+            return $"key={_apiKey}&token={_token}";
+        }
+
+        private void AddCredentialsToHeaderIfNeeded(HttpRequestMessage request)
+        {
+            if (_client.Options.SendCredentialsMode != SendCredentialsMode.Header)
+            {
+                return;
+            }
+
+            request.Headers.Authorization = AuthenticationHeaderValue.Parse($"OAuth oauth_consumer_key=\"{_apiKey}\", oauth_token=\"{_token}\"");
         }
     }
 }

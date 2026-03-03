@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
@@ -13,21 +13,21 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the Sticker
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// The top position of the sticker, from -60 to 100
         /// </summary>
-        [JsonPropertyName("top")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Top)]
         [QueryParameter]
         public decimal Top { get; set; }
 
         /// <summary>
         /// Id of the Sticker Image (real Id for custom stickers and string-identifier for default stickers)
         /// </summary>
-        [JsonPropertyName("image")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Image)]
         [QueryParameter]
         public string ImageId { get; set; }
 
@@ -41,28 +41,28 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// URL of the Sticker Image
         /// </summary>
-        [JsonPropertyName("imageUrl")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.ImageUrl)]
         [JsonInclude]
         public string ImageUrl { get; private set; }
 
         /// <summary>
         /// The left position of the sticker, from -60 to 100
         /// </summary>
-        [JsonPropertyName("left")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.Left)]
         [QueryParameter]
         public decimal Left { get; set; }
 
         /// <summary>
         /// The z-index of the sticker
         /// </summary>
-        [JsonPropertyName("zIndex")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.ZIndex)]
         [QueryParameter]
         public decimal ZIndex { get; set; }
 
         /// <summary>
         /// The Rotation of the sticker, from -60 to 100
         /// </summary>
-        [JsonPropertyName("rotate")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Rotate)]
         [QueryParameter]
         public decimal Rotation { get; set; }
 
@@ -188,3 +188,8 @@ namespace TrelloDotNet.Model
         }
     }
 }
+
+
+
+
+

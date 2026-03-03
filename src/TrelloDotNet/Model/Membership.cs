@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
@@ -13,21 +13,21 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the Membership
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Id of the Member this Membership-entry represent
         /// </summary>
-        [JsonPropertyName("idMember")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.IdMember)]
         [JsonInclude]
         public string MemberId { get; private set; }
 
         /// <summary>
         /// The Type of the Members (admin, normal, observer)
         /// </summary>
-        [JsonPropertyName("memberType")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.MemberType)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<MembershipType>))]
         public MembershipType MemberType { get; private set; }
@@ -35,15 +35,20 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// If the member is unconfirmed
         /// </summary>
-        [JsonPropertyName("unconfirmed")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Unconfirmed)]
         [JsonInclude]
         public bool Unconfirmed { get; private set; }
 
         /// <summary>
         /// If the member is deactivated
         /// </summary>
-        [JsonPropertyName("deactivated")]
+        [JsonPropertyName(Constants.TrelloIds.WebhookFields.Deactivated)]
         [JsonInclude]
         public bool Deactivated { get; private set; }
     }
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model
@@ -12,63 +12,63 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Id of the Plugin
         /// </summary>
-        [JsonPropertyName("id")]
+        [JsonPropertyName(Constants.TrelloIds.PluginFields.Id)]
         [JsonInclude]
         public string Id { get; private set; }
 
         /// <summary>
         /// Name of the Plugin
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.PluginFields.Name)]
         [JsonInclude]
         public string Name { get; private set; }
 
         /// <summary>
         /// The ID of the Workspace that Own the Add-on
         /// </summary>
-        [JsonPropertyName("idOrganizationOwner")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.IdOrganizationOwner)]
         [JsonInclude]
         public string OrganizationOwnerId { get; private set; }
 
         /// <summary>
         /// The Author of the Plugin
         /// </summary>
-        [JsonPropertyName("author")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Author)]
         [JsonInclude]
         public string Author { get; private set; }
 
         /// <summary>
         /// The iFrameUrl of the Plugin
         /// </summary>
-        [JsonPropertyName("iframeConnectorUrl")]
+        [JsonPropertyName(Constants.TrelloIds.PluginFields.IframeConnectorUrl)]
         [JsonInclude]
         public string IframeConnectorUrl { get; private set; }
 
         /// <summary>
         /// The Capabilities the Plugin have registered
         /// </summary>
-        [JsonPropertyName("capabilities")]
+        [JsonPropertyName(Constants.TrelloIds.PluginFields.Capabilities)]
         [JsonInclude]
         public string[] Capabilities { get; private set; }
 
         /// <summary>
         /// The Categories the Plugin is listed under
         /// </summary>
-        [JsonPropertyName("categories")]
+        [JsonPropertyName(Constants.TrelloIds.PluginFields.Categories)]
         [JsonInclude]
         public string[] Categories { get; private set; }
 
         /// <summary>
         /// The Privacy URL of the Plugin
         /// </summary>
-        [JsonPropertyName("privacyUrl")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.PrivacyUrl)]
         [JsonInclude]
         public string PrivacyUrl { get; private set; }
 
         /// <summary>
         /// Is the Plugin Public (In PowerUps Marketplace) or not
         /// </summary>
-        [JsonPropertyName("public")]
+        [JsonPropertyName(Constants.TrelloIds.PluginFields.Public)]
         [JsonInclude]
         public bool Public { get; private set; }
 
@@ -76,8 +76,13 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The Support Email of the Plugin
         /// </summary>
-        [JsonPropertyName("supportEmail")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.SupportEmail)]
         [JsonInclude]
         public string SupportEmail { get; private set; }
     }
 }
+
+
+
+
+

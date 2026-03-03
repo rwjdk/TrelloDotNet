@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model.Webhook
@@ -11,84 +11,84 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// List Data Object
         /// </summary>
-        [JsonPropertyName("list")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.List)]
         [JsonInclude]
         public WebhookActionDataList List { get; private set; }
 
         /// <summary>
         /// Board Data Object
         /// </summary>
-        [JsonPropertyName("board")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Board)]
         [JsonInclude]
         public WebhookActionDataBoard Board { get; private set; }
 
         /// <summary>
         /// Card Data Object
         /// </summary>
-        [JsonPropertyName("card")]
+        [JsonPropertyName(Constants.TrelloIds.CardFields.Card)]
         [JsonInclude]
         public WebhookActionDataCard Card { get; private set; }
 
         /// <summary>
         /// Label Data Object
         /// </summary>
-        [JsonPropertyName("label")]
+        [JsonPropertyName(Constants.TrelloIds.LabelFields.Label)]
         [JsonInclude]
         public WebhookActionDataLabel Label { get; private set; }
 
         /// <summary>
         /// Checklist Data Object
         /// </summary>
-        [JsonPropertyName("checklist")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.Checklist)]
         [JsonInclude]
         public WebhookActionDataChecklist Checklist { get; private set; }
 
         /// <summary>
         /// CheckItem Data Object
         /// </summary>
-        [JsonPropertyName("checkItem")]
+        [JsonPropertyName(Constants.TrelloIds.ChecklistFields.CheckItem)]
         [JsonInclude]
         public WebhookActionDataCheckItem CheckItem { get; private set; }
 
         /// <summary>
         /// Before List
         /// </summary>
-        [JsonPropertyName("listBefore")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.ListBefore)]
         [JsonInclude]
         public WebhookActionDataList ListBefore { get; private set; }
 
         /// <summary>
         /// After List
         /// </summary>
-        [JsonPropertyName("listAfter")]
+        [JsonPropertyName(Constants.TrelloIds.ListFields.ListAfter)]
         [JsonInclude]
         public WebhookActionDataList ListAfter { get; private set; }
 
         /// <summary>
         /// Old
         /// </summary>
-        [JsonPropertyName("old")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Old)]
         [JsonInclude]
         public WebhookActionDataOld Old { get; private set; }
 
         /// <summary>
         /// Organization Data
         /// </summary>
-        [JsonPropertyName("organization")]
+        [JsonPropertyName(Constants.TrelloIds.OrganizationFields.Organization)]
         [JsonInclude]
         public WebhookActionDataOrganization Organization { get; private set; }
 
         /// <summary>
         /// Member
         /// </summary>
-        [JsonPropertyName("member")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.Member)]
         [JsonInclude]
         public WebhookActionDataMember Member { get; set; }
 
         /// <summary>
         /// The Type of added member (Only there when event is 'addMemberToBoard')
         /// </summary>
-        [JsonPropertyName("memberType")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.MemberType)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<MembershipType>))]
         public MembershipType MemberType { get; private set; }
@@ -96,42 +96,42 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// The Id of an Added Member (Only there when event is 'addMemberToBoard')
         /// </summary>
-        [JsonPropertyName("idMemberAdded")]
+        [JsonPropertyName(Constants.TrelloIds.MemberFields.IdMemberAdded)]
         [JsonInclude]
         public string MemberIdAdded { get; private set; }
 
         /// <summary>
         /// BoardTarget of the Action (Only there when event is 'moveCardFromBoard')
         /// </summary>
-        [JsonPropertyName("boardTarget")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.BoardTarget)]
         [JsonInclude]
         public WebhookActionDataBoard BoardTarget { get; private set; }
 
         /// <summary>
         /// BoardSource of the Action (Only there when event is 'moveCardToBoard')
         /// </summary>
-        [JsonPropertyName("boardSource")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.BoardSource)]
         [JsonInclude]
         public WebhookActionDataBoard BoardSource { get; private set; }
 
         /// <summary>
         /// Attachment Data Object
         /// </summary>
-        [JsonPropertyName("attachment")]
+        [JsonPropertyName(Constants.TrelloIds.AttachmentFields.Attachment)]
         [JsonInclude]
         public WebhookActionDataAttachment Attachment { get; private set; }
 
         /// <summary>
         /// Plugin of the Action (Only there when event is 'enablePlugin' or 'disablePlugin')
         /// </summary>
-        [JsonPropertyName("plugin")]
+        [JsonPropertyName(Constants.TrelloIds.PluginFields.Plugin)]
         [JsonInclude]
         public WebhookActionDataPlugin Plugin { get; private set; }
         
         /// <summary>
         /// Text of action
         /// </summary>
-        [JsonPropertyName("text")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.Text)]
         [JsonInclude]
         public string Text { get; private set; }
 
@@ -230,3 +230,6 @@ namespace TrelloDotNet.Model.Webhook
         }
     }
 }
+
+
+

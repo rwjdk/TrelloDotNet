@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace TrelloDotNet.Model.Options.GetMemberOptions
 {
@@ -22,7 +22,7 @@ namespace TrelloDotNet.Model.Options.GetMemberOptions
             List<QueryParameter> parameters = new List<QueryParameter>();
             if (MemberFields != null)
             {
-                parameters.Add(new QueryParameter("fields", string.Join(",", MemberFields.Fields)));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Fields, string.Join(",", MemberFields.Fields)));
             }
 
             parameters.AddRange(AdditionalParameters);
@@ -31,3 +31,5 @@ namespace TrelloDotNet.Model.Options.GetMemberOptions
         }
     }
 }
+
+

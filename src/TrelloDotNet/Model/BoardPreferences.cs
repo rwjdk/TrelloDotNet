@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using TrelloDotNet.Control;
 
 namespace TrelloDotNet.Model
@@ -11,7 +11,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// What Visibility the Board have (Private, Workspace or Public)
         /// </summary>
-        [JsonPropertyName("permissionLevel")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.PermissionLevel)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<BoardPreferenceVisibility>))]
         public BoardPreferenceVisibility Visibility { get; private set; }
@@ -19,7 +19,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// If the Completed Status is shown on the Card Front
         /// </summary>
-        [JsonPropertyName("showCompleteStatus")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.ShowCompleteStatus)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<BoardPreferenceShowCompletedStatusOnCardFront>))]
         public BoardPreferenceShowCompletedStatusOnCardFront ShowCompletedStatusOnCardFront { get; private set; }
@@ -27,7 +27,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// If Card Covers are enabled on the board
         /// </summary>
-        [JsonPropertyName("cardCovers")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.CardCovers)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<BoardPreferenceCardCovers>))]
         public BoardPreferenceCardCovers CardCovers { get; private set; }
@@ -35,7 +35,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// If Votes from the PowerUp Votes should be hidden from other Members or not (If a Member can only see their own votes)
         /// </summary>
-        [JsonPropertyName("hideVotes")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.HideVotes)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<BoardPreferenceHideVotes>))]
         public BoardPreferenceHideVotes HideVotes { get; private set; }
@@ -43,7 +43,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Who can vote (if the Vote PowerUp is enabled)
         /// </summary>
-        [JsonPropertyName("voting")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Voting)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<BoardPreferenceWhoCanVote>))]
         public BoardPreferenceWhoCanVote WhoCanVote { get; private set; }
@@ -51,7 +51,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Who can Comment
         /// </summary>
-        [JsonPropertyName("comments")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Comments)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<BoardPreferenceWhoCanComment>))]
         public BoardPreferenceWhoCanComment WhoCanComment { get; private set; }
@@ -59,7 +59,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// Who can add/remove members to this board
         /// </summary>
-        [JsonPropertyName("invitations")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Invitations)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<BoardPreferenceWhoCanAddAndRemoveMembers>))]
         public BoardPreferenceWhoCanAddAndRemoveMembers WhoCanAddAndRemoveMembers { get; private set; }
@@ -67,7 +67,7 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// If Workspace Members Self-join this board
         /// </summary>
-        [JsonPropertyName("selfJoin")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.SelfJoin)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<BoardPreferenceSelfJoin>))]
         public BoardPreferenceSelfJoin SelfJoin { get; private set; }
@@ -75,9 +75,12 @@ namespace TrelloDotNet.Model
         /// <summary>
         /// The Card Aging type (require Card Aging PowerUp)
         /// </summary>
-        [JsonPropertyName("cardAging")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.CardAging)]
         [JsonInclude]
         [JsonConverter(typeof(EnumViaJsonPropertyConverter<BoardPreferenceCardAging>))]
         public BoardPreferenceCardAging CardAging { get; private set; }
     }
 }
+
+
+

@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -12,25 +12,30 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
         /// <summary>
         /// All Boards regardless if they are open or note
         /// </summary>
-        [JsonPropertyName("all")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.All)]
         All,
 
         /// <summary>
         /// Closed Boards
         /// </summary>
-        [JsonPropertyName("closed")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Closed)]
         Closed,
 
         /// <summary>
         /// Open Boards
         /// </summary>
-        [JsonPropertyName("open")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Open)]
         Open,
 
         /// <summary>
         /// Boards current Member have starred
         /// </summary>
-        [JsonPropertyName("starred")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.Starred)]
         Starred
     }
 }
+
+
+
+
+

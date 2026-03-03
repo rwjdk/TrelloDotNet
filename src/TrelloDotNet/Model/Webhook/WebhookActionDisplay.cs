@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TrelloDotNet.Model.Webhook
 {
@@ -10,7 +10,7 @@ namespace TrelloDotNet.Model.Webhook
         /// <summary>
         /// Translation Key
         /// </summary>
-        [JsonPropertyName("translationKey")]
+        [JsonPropertyName(Constants.TrelloIds.ActionFields.TranslationKey)]
         [JsonInclude]
         public string TranslationKey { get; private set; }
 
@@ -24,3 +24,6 @@ namespace TrelloDotNet.Model.Webhook
         }
     }
 }
+
+
+

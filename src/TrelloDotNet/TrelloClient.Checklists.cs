@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -124,7 +124,7 @@ namespace TrelloDotNet
 
             QueryParameter[] parameters =
             {
-                new QueryParameter("idChecklistSource", existingChecklistIdToCopyFrom)
+                new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdChecklistSource, existingChecklistIdToCopyFrom)
             };
             _queryParametersBuilder.AdjustForNamedPosition(parameters, namedPosition);
             return await _apiRequestController.Post<Checklist>($"{UrlPaths.Cards}/{cardId}/{UrlPaths.Checklists}", cancellationToken, parameters);
@@ -143,7 +143,7 @@ namespace TrelloDotNet
             var parameters = new List<QueryParameter>();
             if (!string.IsNullOrWhiteSpace(newName))
             {
-                parameters.Add(new QueryParameter("name", newName));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Name, newName));
             }
 
             if (namedPosition.HasValue)
@@ -151,13 +151,13 @@ namespace TrelloDotNet
                 switch (namedPosition.Value)
                 {
                     case NamedPosition.Top:
-                        parameters.Add(new QueryParameter("pos", "top"));
+                        parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Pos, "top"));
                         break;
                     case NamedPosition.Bottom:
-                        parameters.Add(new QueryParameter("pos", "bottom"));
+                        parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Pos, "bottom"));
                         break;
                     default:
-                        parameters.Add(new QueryParameter("pos", Convert.ToInt32(namedPosition.Value)));
+                        parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Pos, Convert.ToInt32(namedPosition.Value)));
                         break;
                 }
             }
@@ -234,3 +234,5 @@ namespace TrelloDotNet
         }
     }
 }
+
+

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
@@ -53,10 +53,10 @@ namespace TrelloDotNet
         /// <returns>The created Attachment object representing the new link attachment</returns>
         public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentUrlLink attachmentUrlLink, CancellationToken cancellationToken = default)
         {
-            var parameters = new List<QueryParameter> { new QueryParameter("url", attachmentUrlLink.Url) };
+            var parameters = new List<QueryParameter> { new QueryParameter(Constants.TrelloIds.QueryParameterNames.Url, attachmentUrlLink.Url) };
             if (!string.IsNullOrWhiteSpace(attachmentUrlLink.Name))
             {
-                parameters.Add(new QueryParameter("name", attachmentUrlLink.Name));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Name, attachmentUrlLink.Name));
             }
 
             if (attachmentUrlLink.NamedPosition.HasValue)
@@ -64,13 +64,13 @@ namespace TrelloDotNet
                 switch (attachmentUrlLink.NamedPosition.Value)
                 {
                     case NamedPosition.Top:
-                        parameters.Add(new QueryParameter("pos", "bottom")); //NB: Trello have a mis-implementation where these are reversed on attachments so however wrong this looks, it is correct
+                        parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Pos, "bottom")); //NB: Trello have a mis-implementation where these are reversed on attachments so however wrong this looks, it is correct
                         break;
                     case NamedPosition.Bottom:
-                        parameters.Add(new QueryParameter("pos", "top")); //NB: Trello have a mis-implementation where these are reversed on attachments so however wrong this looks, it is correct
+                        parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Pos, "top")); //NB: Trello have a mis-implementation where these are reversed on attachments so however wrong this looks, it is correct
                         break;
                     default:
-                        parameters.Add(new QueryParameter("pos", Convert.ToInt32(attachmentUrlLink.NamedPosition.Value)));
+                        parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Pos, Convert.ToInt32(attachmentUrlLink.NamedPosition.Value)));
                         break;
                 }
             }
@@ -91,12 +91,12 @@ namespace TrelloDotNet
             var parameters = new List<QueryParameter>();
             if (!string.IsNullOrWhiteSpace(attachmentFileUpload.Name))
             {
-                parameters.Add(new QueryParameter("name", attachmentFileUpload.Name));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Name, attachmentFileUpload.Name));
             }
 
             if (setAsCover)
             {
-                parameters.Add(new QueryParameter("setCover", "true"));
+                parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.SetCover, "true"));
             }
 
             return await _apiRequestController.PostWithAttachmentFileUpload<Attachment>($"{UrlPaths.Cards}/{cardId}/attachments", attachmentFileUpload, cancellationToken, parameters.ToArray());
@@ -135,3 +135,5 @@ namespace TrelloDotNet
         }
     }
 }
+
+

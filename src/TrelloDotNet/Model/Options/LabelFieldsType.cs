@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 // ReSharper disable UnusedMember.Global
 
@@ -12,19 +12,25 @@ namespace TrelloDotNet.Model.Options
         /// <summary>
         /// Id of the board the label is on
         /// </summary>
-        [JsonPropertyName("idBoard")]
+        [JsonPropertyName(Constants.TrelloIds.BoardFields.IdBoard)]
         BoardId,
 
         /// <summary>
         /// Name of the label
         /// </summary>
-        [JsonPropertyName("name")]
+        [JsonPropertyName(Constants.TrelloIds.LabelFields.Name)]
         Name,
 
         /// <summary>
         /// Color of the label
         /// </summary>
-        [JsonPropertyName("color")]
+        [JsonPropertyName(Constants.TrelloIds.ColorFields.Color)]
         Color,
     }
 }
+
+
+
+
+
+
