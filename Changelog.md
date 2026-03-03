@@ -4,6 +4,7 @@
 #### TrelloClient
 - Added HttpStatusCode to TrelloAPIExceptions to be able to see the underlying REST-API StatusCode
 - Added Better Error Message if a Batch Request fail due to a TooManyRequests Rate Limiting
+- Added Support for Adding/Updating Cards with Descriptions bigger than 2000 chars. Now the max is 16384 chars (The Trello upper limit)
 
 ---
 

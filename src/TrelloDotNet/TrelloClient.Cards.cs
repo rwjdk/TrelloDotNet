@@ -24,6 +24,10 @@ namespace TrelloDotNet
 {
     public partial class TrelloClient
     {
+        private const int MaxCardDescriptionLength = 16_384;
+        private const int MaxQueryStringLength = 16_384;
+        private const string DescriptionQueryParameterName = "desc";
+
         /// <summary>
         /// Creates a new card in a specified list with the provided options.
         /// </summary>
@@ -80,10 +84,16 @@ namespace TrelloDotNet
                 input.MemberIds = options.MemberIds.Distinct().ToList();
             }
 
-            QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(input);
-
+            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(input).ToList();
             _queryParametersBuilder.AdjustForNamedPosition(parameters, input.NamedPosition);
-            Card addedCard = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters);
+
+            var descriptionParameter = parameters.FirstOrDefault(x => x.Name == DescriptionQueryParameterName);
+            EnsureDescriptionIsWithinAllowedLimit(descriptionParameter?.GetRawStringValue());
+
+            string payload = ExtractDescriptionFromQueryStringAndBuildPayloadIfNeeded(parameters);
+            Card addedCard = payload == null
+                ? await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters.ToArray())
+                : await _apiRequestController.PostWithJsonPayload<Card>($"{UrlPaths.Cards}", cancellationToken, payload, parameters.ToArray());
 
             bool needGet = false;
             var getCardOptions = new GetCardOptions();
@@ -506,13 +516,27 @@ namespace TrelloDotNet
         public async Task<Card> UpdateCardAsync(string cardId, List<CardUpdate> valuesToUpdate, CancellationToken cancellationToken = default)
         {
             var parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
+            var descriptionParameter = parameters.FirstOrDefault(x => x.Name == DescriptionQueryParameterName);
+            EnsureDescriptionIsWithinAllowedLimit(descriptionParameter?.GetRawStringValue());
+
             QueryParameter coverParameter = parameters.FirstOrDefault(x => x.Name == "cover");
+            string payload = null;
             if (coverParameter != null && !string.IsNullOrWhiteSpace(coverParameter.GetRawStringValue()))
             {
                 //Special Cover Card
                 parameters.Remove(coverParameter);
                 CardCover cover = JsonSerializer.Deserialize<CardCover>(coverParameter.GetRawStringValue());
-                var payload = GeneratePayloadForCoverUpdate(cover, parameters);
+                payload = GeneratePayloadForCoverUpdate(cover, parameters);
+            }
+
+            string descriptionPayload = ExtractDescriptionFromQueryStringAndBuildPayloadIfNeeded(parameters);
+            if (descriptionPayload != null)
+            {
+                payload = MergePayload(payload, descriptionPayload);
+            }
+
+            if (payload != null)
+            {
                 return await _apiRequestController.PutWithJsonPayload<Card>($"{UrlPaths.Cards}/{cardId}", cancellationToken, payload, parameters.ToArray());
             }
 
@@ -1193,6 +1217,59 @@ namespace TrelloDotNet
             }
 
             return payload;
+        }
+
+        private static void EnsureDescriptionIsWithinAllowedLimit(string description)
+        {
+            if (description == null)
+            {
+                return;
+            }
+
+            if (description.Length > MaxCardDescriptionLength)
+            {
+                throw new TrelloApiException($"Description is too long. Maximum allowed length is {MaxCardDescriptionLength} characters.", string.Empty);
+            }
+        }
+
+        private string ExtractDescriptionFromQueryStringAndBuildPayloadIfNeeded(List<QueryParameter> parameters)
+        {
+            QueryParameter descriptionParameter = parameters.FirstOrDefault(x => x.Name == DescriptionQueryParameterName);
+            if (descriptionParameter == null)
+            {
+                return null;
+            }
+
+            if (_apiRequestController.GetQueryStringLength(parameters.ToArray()) <= MaxQueryStringLength)
+            {
+                return null;
+            }
+
+            parameters.Remove(descriptionParameter);
+            string description = descriptionParameter.GetRawStringValue() ?? string.Empty;
+            return $"{{\"{DescriptionQueryParameterName}\":{JsonSerializer.Serialize(description)}}}";
+        }
+
+        private static string MergePayload(string firstPayload, string secondPayload)
+        {
+            if (string.IsNullOrWhiteSpace(firstPayload))
+            {
+                return secondPayload;
+            }
+
+            if (string.IsNullOrWhiteSpace(secondPayload))
+            {
+                return firstPayload;
+            }
+
+            string firstPayloadTrimmed = firstPayload.Trim();
+            string secondPayloadTrimmed = secondPayload.Trim();
+            if (!firstPayloadTrimmed.EndsWith("}", StringComparison.Ordinal) || !secondPayloadTrimmed.StartsWith("{", StringComparison.Ordinal))
+            {
+                throw new TrelloApiException("Could not merge card update payload", string.Empty);
+            }
+
+            return $"{firstPayloadTrimmed.Substring(0, firstPayloadTrimmed.Length - 1)},{secondPayloadTrimmed.Substring(1)}";
         }
     }
 }

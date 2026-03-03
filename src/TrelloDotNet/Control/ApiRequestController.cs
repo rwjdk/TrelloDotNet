@@ -195,6 +195,11 @@ namespace TrelloDotNet.Control
             return parameterString;
         }
 
+        internal int GetQueryStringLength(params QueryParameter[] parameters)
+        {
+            return $"?key={_apiKey}&token={_token}".Length + GetParametersAsString(parameters).Length;
+        }
+
         private Uri BuildUri(string suffix, params QueryParameter[] parameters)
         {
             string separator = suffix.Contains("?") ? "&" : "?";
