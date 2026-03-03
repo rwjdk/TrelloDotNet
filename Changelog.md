@@ -3,6 +3,7 @@
 ## Unreleased
 #### TrelloClient
 - Added HttpStatusCode to TrelloAPIExceptions to be able to see the underlying REST-API StatusCode
+- Added Better Error Message if a Batch Request fail due to a TooManyRequests Rate Limiting
 
 ---
 

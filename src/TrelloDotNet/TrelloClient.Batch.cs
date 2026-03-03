@@ -113,7 +113,7 @@ namespace TrelloDotNet
         {
             return await ExecuteBatchedRequestAsync<Member>(ids.Select(id => $"/{UrlPaths.Members}/{id}").ToList(), cancellationToken);
         }
-
+        
         /// <summary>
         /// Retrieves multiple Trello organizations in a single batch request, given a collection of organization IDs.
         /// </summary>
@@ -184,14 +184,21 @@ namespace TrelloDotNet
                 var urlsToProcessThisBatch = urls.Skip(batchResultForUrls.Count).Take(10).ToList();
                 var preparedUrls = urlsToProcessThisBatch.Select(url => url.StartsWith("/") ? url : $"/{url}").ToList();
                 string json = await _apiRequestController.Get("batch", cancellationToken, 0, new QueryParameter("urls", string.Join(",", preparedUrls)));
-                var results = JsonSerializer.Deserialize<List<BatchResultForUrl>>(json);
-                //Attach URL to each result
-                for (int i = 0; i < results.Count; i++)
+                try
                 {
-                    results[i].Url = urls[i + batchResultForUrls.Count];
-                }
+                    var results = JsonSerializer.Deserialize<List<BatchResultForUrl>>(json);
+                    //Attach URL to each result
+                    for (int i = 0; i < results.Count; i++)
+                    {
+                        results[i].Url = urls[i + batchResultForUrls.Count];
+                    }
 
-                batchResultForUrls.AddRange(results);
+                    batchResultForUrls.AddRange(results);
+                }
+                catch
+                {
+                    throw new TrelloApiException("Error deserializing Batched Request: " + json);
+                }
             }
 
             return new BatchResultSummary(batchResultForUrls);
@@ -215,26 +222,33 @@ namespace TrelloDotNet
                 var urlsToProcessThisBatch = requests.Skip(batchResultForUrls.Count).Take(10).ToList();
                 var preparedUrls = urlsToProcessThisBatch.Select(x => x.Url.StartsWith("/") ? x.Url : $"/{x.Url}").ToList();
                 string json = await _apiRequestController.Get("batch", cancellationToken, 0, new QueryParameter("urls", string.Join(",", preparedUrls)));
-                List<BatchResultForUrl> results = JsonSerializer.Deserialize<List<BatchResultForUrl>>(json);
-
-                //Attach URL to each result
-                for (int i = 0; i < results.Count; i++)
+                try
                 {
-                    results[i].Url = requests[i + batchResultForUrls.Count].Url;
-                }
+                    List<BatchResultForUrl> results = JsonSerializer.Deserialize<List<BatchResultForUrl>>(json);
 
-                var batchResult = new BatchResultSummary(results);
-                if (batchResult.ErrorCount > 0)
+                    //Attach URL to each result
+                    for (int i = 0; i < results.Count; i++)
+                    {
+                        results[i].Url = requests[i + batchResultForUrls.Count].Url;
+                    }
+
+                    var batchResult = new BatchResultSummary(results);
+                    if (batchResult.ErrorCount > 0)
+                    {
+                        throw new Exception($"Error getting Trello data: {string.Join(" | ", batchResult.Errors)}");
+                    }
+
+                    for (int i = 0; i < results.Count; i++)
+                    {
+                        requests[i + batchResultForUrls.Count].Action.Invoke(results[i]);
+                    }
+
+                    batchResultForUrls.AddRange(results);
+                }
+                catch
                 {
-                    throw new Exception($"Error getting Trello data: {string.Join(" | ", batchResult.Errors)}");
+                    throw new TrelloApiException("Error deserializing Batched Request: " + json);
                 }
-
-                for (int i = 0; i < results.Count; i++)
-                {
-                    requests[i + batchResultForUrls.Count].Action.Invoke(results[i]);
-                }
-
-                batchResultForUrls.AddRange(results);
             }
         }
     }
