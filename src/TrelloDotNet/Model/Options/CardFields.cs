@@ -66,7 +66,7 @@ namespace TrelloDotNet.Model.Options
 
         internal void AddIfMissing(CardFieldsType field)
         {
-            var propertyName = field.GetJsonPropertyName();
+            string propertyName = field.GetJsonPropertyName();
             if (!Fields.Contains(propertyName))
             {
                 Fields = Fields.Union(new List<string>

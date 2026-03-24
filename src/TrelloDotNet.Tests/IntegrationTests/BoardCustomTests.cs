@@ -14,20 +14,20 @@ public class BoardCustomTests : TestBase
             Organization organization = await TrelloClient.AddOrganizationAsync(new Organization("UnitTestOrganization-CustomTestOrg"), cancellationToken: TestCancellationToken);
             organizationId = organization.Id;
 
-            var addBoardOptions = new AddBoardOptions
+            AddBoardOptions addBoardOptions = new AddBoardOptions
             {
                 DefaultLabels = false,
                 DefaultLists = false,
                 WorkspaceId = null
             };
-            var custom = new Board("UnitTestBoard-CustomTest")
+            Board custom = new Board("UnitTestBoard-CustomTest")
             {
                 OrganizationId = organizationId
             };
-            var board = await TrelloClient.AddBoardAsync(custom, addBoardOptions, cancellationToken: TestCancellationToken);
+            Board? board = await TrelloClient.AddBoardAsync(custom, addBoardOptions, cancellationToken: TestCancellationToken);
             boardId = board.Id;
-            var lists = await TrelloClient.GetListsOnBoardAsync(boardId, cancellationToken: TestCancellationToken);
-            var labels = await TrelloClient.GetLabelsOfBoardAsync(boardId, cancellationToken: TestCancellationToken);
+            List<List>? lists = await TrelloClient.GetListsOnBoardAsync(boardId, cancellationToken: TestCancellationToken);
+            List<Label>? labels = await TrelloClient.GetLabelsOfBoardAsync(boardId, cancellationToken: TestCancellationToken);
             Assert.Empty(lists);
             Assert.Empty(labels);
         }

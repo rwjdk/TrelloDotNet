@@ -9,7 +9,7 @@ public class VoteTests : TestBase
     [Fact]
     public async Task AddRemoveVotes()
     {
-        var board = await GetSpecialPaidSubscriptionBoard();
+        Board? board = await GetSpecialPaidSubscriptionBoard();
         if (board == null)
         {
             return; //Special Test-board not available
@@ -24,7 +24,7 @@ public class VoteTests : TestBase
 
             Member member = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
 
-            var votedCard = await TrelloClient.GetCardAsync(card1.Id, new GetCardOptions
+            Card? votedCard = await TrelloClient.GetCardAsync(card1.Id, new GetCardOptions
             {
                 IncludeMemberVotes = true
             }, cancellationToken: TestCancellationToken);
@@ -57,7 +57,7 @@ public class VoteTests : TestBase
     private async Task CleanUp(Board board, string listPrefix)
     {
         //Potential previous cleanup
-        var lists = await TrelloClient.GetListsOnBoardAsync(board.Id, new GetListOptions
+        List<List>? lists = await TrelloClient.GetListsOnBoardAsync(board.Id, new GetListOptions
         {
             Filter = ListFilter.All
         }, cancellationToken: TestCancellationToken);

@@ -308,7 +308,7 @@ namespace TrelloDotNet.Model
         /// <returns>The Condition</returns>
         public static CardsFilterCondition LabelCountBetween(int min, int max)
         {
-            var decimals = new List<decimal>() { min, max };
+            List<decimal> decimals = new List<decimal>() { min, max };
             return AdvancedNumberCondition(CardsConditionField.LabelId, CardsConditionNumber.Between, decimals.ToArray());
         }
 
@@ -320,7 +320,7 @@ namespace TrelloDotNet.Model
         /// <returns>The Condition</returns>
         public static CardsFilterCondition LabelCountNotBetween(int mustBeBelow, int mustBeAbove)
         {
-            var decimals = new List<decimal>() { mustBeBelow, mustBeAbove };
+            List<decimal> decimals = new List<decimal>() { mustBeBelow, mustBeAbove };
             return AdvancedNumberCondition(CardsConditionField.LabelId, CardsConditionNumber.NotBetween, decimals.ToArray());
         }
 
@@ -391,7 +391,7 @@ namespace TrelloDotNet.Model
         /// <returns>The Condition</returns>
         public static CardsFilterCondition MemberCountBetween(int min, int max)
         {
-            var decimals = new List<decimal>() { min, max };
+            List<decimal> decimals = new List<decimal>() { min, max };
             return AdvancedNumberCondition(CardsConditionField.MemberId, CardsConditionNumber.Between, decimals.ToArray());
         }
 
@@ -403,7 +403,7 @@ namespace TrelloDotNet.Model
         /// <returns>The Condition</returns>
         public static CardsFilterCondition MemberCountNotBetween(int mustBeBelow, int mustBeAbove)
         {
-            var decimals = new List<decimal>() { mustBeBelow, mustBeAbove };
+            List<decimal> decimals = new List<decimal>() { mustBeBelow, mustBeAbove };
             return AdvancedNumberCondition(CardsConditionField.MemberId, CardsConditionNumber.Between, decimals.ToArray());
         }
 

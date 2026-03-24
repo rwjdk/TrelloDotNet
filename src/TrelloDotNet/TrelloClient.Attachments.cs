@@ -53,7 +53,7 @@ namespace TrelloDotNet
         /// <returns>The created Attachment object representing the new link attachment</returns>
         public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentUrlLink attachmentUrlLink, CancellationToken cancellationToken = default)
         {
-            var parameters = new List<QueryParameter> { new QueryParameter(Constants.TrelloIds.QueryParameterNames.Url, attachmentUrlLink.Url) };
+            List<QueryParameter> parameters = new List<QueryParameter> { new QueryParameter(Constants.TrelloIds.QueryParameterNames.Url, attachmentUrlLink.Url) };
             if (!string.IsNullOrWhiteSpace(attachmentUrlLink.Name))
             {
                 parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Name, attachmentUrlLink.Name));
@@ -88,7 +88,7 @@ namespace TrelloDotNet
         /// <returns>The created Attachment object representing the uploaded file</returns>
         public async Task<Attachment> AddAttachmentToCardAsync(string cardId, AttachmentFileUpload attachmentFileUpload, bool setAsCover = false, CancellationToken cancellationToken = default)
         {
-            var parameters = new List<QueryParameter>();
+            List<QueryParameter> parameters = new List<QueryParameter>();
             if (!string.IsNullOrWhiteSpace(attachmentFileUpload.Name))
             {
                 parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Name, attachmentFileUpload.Name));

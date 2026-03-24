@@ -10,7 +10,7 @@ public class CustomFieldsTests : TestBase
     [Fact]
     public async Task CustomFields()
     {
-        var board = await GetSpecialPaidSubscriptionBoard();
+        Board? board = await GetSpecialPaidSubscriptionBoard();
         if (board == null)
         {
             return; //Special Test-board not available
@@ -20,7 +20,7 @@ public class CustomFieldsTests : TestBase
         await CleanUp(board, listPrefix);
         try
         {
-            var customFields = await TrelloClient.GetCustomFieldsOnBoardAsync(board.Id, cancellationToken: TestCancellationToken);
+            List<CustomField>? customFields = await TrelloClient.GetCustomFieldsOnBoardAsync(board.Id, cancellationToken: TestCancellationToken);
             Assert.Equal(5, customFields.Count);
             CustomField? fieldList = customFields.FirstOrDefault(x => x.Name == "Priority");
             CustomField? fieldCheckbox = customFields.FirstOrDefault(x => x.Name == "IsSomething");
@@ -44,7 +44,7 @@ public class CustomFieldsTests : TestBase
             List listForCustomFieldTests = await TrelloClient.AddListAsync(new List(listPrefix + Guid.NewGuid(), board.Id), cancellationToken: TestCancellationToken);
             Card card1 = await AddDummyCardToList(listForCustomFieldTests, "Card 1");
 
-            var customValues = await TrelloClient.GetCustomFieldItemsForCardAsync(card1.Id, cancellationToken: TestCancellationToken);
+            List<CustomFieldItem>? customValues = await TrelloClient.GetCustomFieldItemsForCardAsync(card1.Id, cancellationToken: TestCancellationToken);
             Assert.Empty(customValues);
 
             await TrelloClient.UpdateCustomFieldValueOnCardAsync(card1.Id, fieldList, listValue, cancellationToken: TestCancellationToken);
@@ -82,7 +82,7 @@ public class CustomFieldsTests : TestBase
             Assert.Throws<ArgumentOutOfRangeException>(() => customValues.GetCustomFieldValueAsDateTimeOffset(fieldText));
             Assert.Throws<ArgumentOutOfRangeException>(() => customValues.GetCustomFieldValueAsInteger(fieldDate));
 
-            var cards = await TrelloClient.GetCardsOnBoardAsync(board.Id, new GetCardOptions
+            List<Card>? cards = await TrelloClient.GetCardsOnBoardAsync(board.Id, new GetCardOptions
             {
                 FilterConditions =
                 [
@@ -167,7 +167,7 @@ public class CustomFieldsTests : TestBase
     private async Task CleanUp(Board board, string listPrefix)
     {
         //Potential previous cleanup
-        var lists = await TrelloClient.GetListsOnBoardAsync(board.Id, new GetListOptions
+        List<List>? lists = await TrelloClient.GetListsOnBoardAsync(board.Id, new GetListOptions
         {
             Filter = ListFilter.All
         }, cancellationToken: TestCancellationToken);

@@ -29,7 +29,7 @@ public sealed class TemporaryBoardContext : IAsyncDisposable
             return;
         }
 
-        var cancellationToken = TestContext.Current?.CancellationToken ?? CancellationToken.None;
+        CancellationToken cancellationToken = TestContext.Current?.CancellationToken ?? CancellationToken.None;
 
         try
         {

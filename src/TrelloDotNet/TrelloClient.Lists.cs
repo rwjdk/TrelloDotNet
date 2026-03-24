@@ -20,7 +20,7 @@ namespace TrelloDotNet
         /// <returns>The created list</returns>
         public async Task<List> AddListAsync(List list, CancellationToken cancellationToken = default)
         {
-            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(list);
+            QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(list);
             _queryParametersBuilder.AdjustForNamedPosition(parameters, list.NamedPosition);
             return await _apiRequestController.Post<List>($"{UrlPaths.Lists}", cancellationToken, parameters);
         }
@@ -67,7 +67,7 @@ namespace TrelloDotNet
         [Obsolete("Use UpdateList overload that does delta updates (List<ListUpdate> valuesToUpdate). This Method will be removed in TrelloDotNet 3.0")]
         public async Task<List> UpdateListAsync(List listWithChanges, CancellationToken cancellationToken = default)
         {
-            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges);
+            QueryParameter[] parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(listWithChanges);
             _queryParametersBuilder.AdjustForNamedPosition(parameters, listWithChanges.NamedPosition);
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listWithChanges.Id}", cancellationToken, parameters);
         }
@@ -81,7 +81,7 @@ namespace TrelloDotNet
         /// <returns>The updated <see cref="List"/>.</returns>
         public async Task<List> UpdateListAsync(string listId, List<ListUpdate> valuesToUpdate, CancellationToken cancellationToken = default)
         {
-            var parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
+            List<QueryParameter> parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
             return await _apiRequestController.Put<List>($"{UrlPaths.Lists}/{listId}", cancellationToken, parameters.ToArray());
         }
 
@@ -165,7 +165,7 @@ namespace TrelloDotNet
             // ReSharper disable once InvertIf
             if (options.IncludeBoard)
             {
-                var board = await GetBoardAsync(boardId, new GetBoardOptions
+                Board board = await GetBoardAsync(boardId, new GetBoardOptions
                 {
                     BoardFields = options.BoardFields
                 }, cancellationToken);

@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## 2.4.0 (24th of March 2026)
+- Added support for the new Recurring Due System (Warning: This seems to not be part of the official API (do not use the api.trello.com endpoint) but can still be set, but Atlassian might not promise backward compatibility / that this endpoint stay available to us)
+  - `SetRecurringDueDateAsync` + `RemoveRecurringDueDateAsync`
+
+---
+
 ## 2.3.0 (3rd of March 2026)
 #### TrelloClient
 - Added option to send the API Key and Token using Header instead of the QueryString (The `SendCredentialsMode` on `TrelloClientOptions` when creating the `TrelloClient`)

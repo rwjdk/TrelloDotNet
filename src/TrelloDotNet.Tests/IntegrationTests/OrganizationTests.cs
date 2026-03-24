@@ -14,8 +14,8 @@ public class OrganizationTests : TestBase
         string? id = null;
         try
         {
-            var displayName = "UnitTestOrganization-" + Guid.NewGuid();
-            var input = new Organization(displayName);
+            string displayName = "UnitTestOrganization-" + Guid.NewGuid();
+            Organization input = new Organization(displayName);
             const string description = "Some Description";
             input.Description = description;
             input.Website = "https://www.rwj.dk";
@@ -48,7 +48,7 @@ public class OrganizationTests : TestBase
             Organization updated = await TrelloClient.UpdateOrganizationAsync(added, cancellationToken: TestCancellationToken);
             Assert.Equal(added.Description, updated.Description);
 
-            var members = await TrelloClient.GetMembersOfOrganizationAsync(updated.Id, cancellationToken: TestCancellationToken);
+            List<Member>? members = await TrelloClient.GetMembersOfOrganizationAsync(updated.Id, cancellationToken: TestCancellationToken);
             Assert.Single(members);
         }
         finally

@@ -12,6 +12,7 @@ using TrelloDotNet.Model.Options.AddCardFromTemplateOptions;
 using TrelloDotNet.Model.Options.AddCardOptions;
 using TrelloDotNet.Model.Options.AddCardToInboxOptions;
 using TrelloDotNet.Model.Options.CopyCardOptions;
+using TrelloDotNet.Model.Options.DueRecurrenceOptions;
 using TrelloDotNet.Model.Options.GetCardOptions;
 using TrelloDotNet.Model.Options.GetInboxCardOptions;
 using TrelloDotNet.Model.Options.MirrorCardOptions;
@@ -46,7 +47,7 @@ namespace TrelloDotNet
                 throw new TrelloApiException("No ListId provided in options (Mandatory)", string.Empty);
             }
 
-            var input = new Card
+            Card input = new Card
             {
                 ListId = options.ListId,
                 Name = options.Name,
@@ -84,10 +85,10 @@ namespace TrelloDotNet
                 input.MemberIds = options.MemberIds.Distinct().ToList();
             }
 
-            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(input).ToList();
+            List<QueryParameter> parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(input).ToList();
             _queryParametersBuilder.AdjustForNamedPosition(parameters, input.NamedPosition);
 
-            var descriptionParameter = parameters.FirstOrDefault(x => x.Name == DescriptionQueryParameterName);
+            QueryParameter descriptionParameter = parameters.FirstOrDefault(x => x.Name == DescriptionQueryParameterName);
             EnsureDescriptionIsWithinAllowedLimit(descriptionParameter?.GetRawStringValue());
 
             string payload = ExtractDescriptionFromQueryStringAndBuildPayloadIfNeeded(parameters);
@@ -96,7 +97,7 @@ namespace TrelloDotNet
                 : await _apiRequestController.PostWithJsonPayload<Card>($"{UrlPaths.Cards}", cancellationToken, payload, parameters.ToArray());
 
             bool needGet = false;
-            var getCardOptions = new GetCardOptions();
+            GetCardOptions getCardOptions = new GetCardOptions();
             if (options.Checklists != null)
             {
                 needGet = true;
@@ -139,7 +140,7 @@ namespace TrelloDotNet
             {
                 needGet = true;
                 getCardOptions.IncludeCustomFieldItems = true;
-                foreach (var customField in options.CustomFields)
+                foreach (AddCardOptionsCustomField customField in options.CustomFields)
                 {
                     switch (customField.Field.Type)
                     {
@@ -273,7 +274,7 @@ namespace TrelloDotNet
                 throw new ArgumentNullException(nameof(options), $"{nameof(AddCardFromTemplateOptions)} cannot be null");
             }
 
-            var nameOnNewCard = !string.IsNullOrWhiteSpace(options.Name)
+            string nameOnNewCard = !string.IsNullOrWhiteSpace(options.Name)
                 ? options.Name
                 : (await GetCardAsync(options.SourceTemplateCardId, new GetCardOptions
                 {
@@ -303,8 +304,8 @@ namespace TrelloDotNet
                 }
                 else
                 {
-                    var keepStrings = new List<string>();
-                    var enumValues = Enum.GetValues(typeof(AddCardFromTemplateOptionsToKeep)).Cast<AddCardFromTemplateOptionsToKeep>().ToList();
+                    List<string> keepStrings = new List<string>();
+                    List<AddCardFromTemplateOptionsToKeep> enumValues = Enum.GetValues(typeof(AddCardFromTemplateOptionsToKeep)).Cast<AddCardFromTemplateOptionsToKeep>().ToList();
                     foreach (AddCardFromTemplateOptionsToKeep toKeep in enumValues.Where(x => x != AddCardFromTemplateOptionsToKeep.All))
                     {
                         if (keep.HasFlag(toKeep))
@@ -384,7 +385,7 @@ namespace TrelloDotNet
                 throw new ArgumentNullException(nameof(options), $"{nameof(CopyCardOptions)} cannot be null");
             }
 
-            var nameOnNewCard = !string.IsNullOrWhiteSpace(options.Name)
+            string nameOnNewCard = !string.IsNullOrWhiteSpace(options.Name)
                 ? options.Name
                 : (await GetCardAsync(options.SourceCardId, new GetCardOptions
                 {
@@ -414,8 +415,8 @@ namespace TrelloDotNet
                 }
                 else
                 {
-                    var keepStrings = new List<string>();
-                    var enumValues = Enum.GetValues(typeof(CopyCardOptionsToKeep)).Cast<CopyCardOptionsToKeep>().ToList();
+                    List<string> keepStrings = new List<string>();
+                    List<CopyCardOptionsToKeep> enumValues = Enum.GetValues(typeof(CopyCardOptionsToKeep)).Cast<CopyCardOptionsToKeep>().ToList();
                     foreach (CopyCardOptionsToKeep toKeep in enumValues.Where(x => x != CopyCardOptionsToKeep.All))
                     {
                         if (keep.HasFlag(toKeep))
@@ -470,7 +471,7 @@ namespace TrelloDotNet
                 position = options.NamedPosition.Value == NamedPosition.Bottom ? "bottom" : "top";
             }
 
-            var parameters = new List<QueryParameter>
+            List<QueryParameter> parameters = new List<QueryParameter>
             {
                 new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdList, options.TargetListId),
                 new QueryParameter(Constants.TrelloIds.QueryParameterNames.Name, sourceCard.ShortUrl),
@@ -480,7 +481,7 @@ namespace TrelloDotNet
                 new QueryParameter(Constants.TrelloIds.QueryParameterNames.CardRole, "mirror"),
             };
 
-            var result = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters.ToArray());
+            Card result = await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters.ToArray());
             return result;
         }
 
@@ -515,8 +516,8 @@ namespace TrelloDotNet
         /// <returns>The updated <see cref="Card"/>.</returns>
         public async Task<Card> UpdateCardAsync(string cardId, List<CardUpdate> valuesToUpdate, CancellationToken cancellationToken = default)
         {
-            var parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
-            var descriptionParameter = parameters.FirstOrDefault(x => x.Name == DescriptionQueryParameterName);
+            List<QueryParameter> parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
+            QueryParameter descriptionParameter = parameters.FirstOrDefault(x => x.Name == DescriptionQueryParameterName);
             EnsureDescriptionIsWithinAllowedLimit(descriptionParameter?.GetRawStringValue());
 
             QueryParameter coverParameter = parameters.FirstOrDefault(x => x.Name == "cover");
@@ -561,7 +562,7 @@ namespace TrelloDotNet
         /// <param name="cancellationToken">Cancellation Token</param>
         public async Task MoveAllCardsInListAsync(string currentListId, string newListId, CancellationToken cancellationToken = default)
         {
-            var newList = await GetListAsync(newListId, cancellationToken); //Get the new list's BoardId so the user do not need to provide it.
+            List newList = await GetListAsync(newListId, cancellationToken); //Get the new list's BoardId so the user do not need to provide it.
             await _apiRequestController.Post($"{UrlPaths.Lists}/{currentListId}/moveAllCards", cancellationToken,
                 0,
                 new QueryParameter(Constants.TrelloIds.QueryParameterNames.IdBoard, newList.BoardId),
@@ -655,12 +656,12 @@ namespace TrelloDotNet
                 }
             }
 
-            var cardsSuffix = options.Filter.HasValue ? $"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{options.Filter.Value.GetJsonPropertyName()}" : GetUrlBuilder.GetCardsOnBoard(boardId);
-            var cards = await GetCardsNormalOrViaPagination(options, cancellationToken, cardsSuffix);
+            string cardsSuffix = options.Filter.HasValue ? $"{GetUrlBuilder.GetCardsOnBoard(boardId)}/{options.Filter.Value.GetJsonPropertyName()}" : GetUrlBuilder.GetCardsOnBoard(boardId);
+            List<Card> cards = await GetCardsNormalOrViaPagination(options, cancellationToken, cardsSuffix);
 
             if (options.IncludeList)
             {
-                var lists = await GetListsOnBoardAsync(boardId, cancellationToken);
+                List<List> lists = await GetListsOnBoardAsync(boardId, cancellationToken);
                 foreach (Card card in cards)
                 {
                     card.List = lists.FirstOrDefault(x => x.Id == card.ListId);
@@ -669,7 +670,7 @@ namespace TrelloDotNet
 
             if (options.IncludeBoard)
             {
-                var board = await GetBoardAsync(boardId, cancellationToken);
+                Board board = await GetBoardAsync(boardId, cancellationToken);
                 foreach (Card card in cards)
                 {
                     card.Board = board;
@@ -767,11 +768,11 @@ namespace TrelloDotNet
                 }
             }
 
-            var suffix = GetUrlBuilder.GetCardsInList(listId);
-            var cards = await GetCardsNormalOrViaPagination(options, cancellationToken, suffix);
+            string suffix = GetUrlBuilder.GetCardsInList(listId);
+            List<Card> cards = await GetCardsNormalOrViaPagination(options, cancellationToken, suffix);
             if (options.IncludeList)
             {
-                var list = await GetListAsync(listId, cancellationToken);
+                List list = await GetListAsync(listId, cancellationToken);
                 foreach (Card card in cards)
                 {
                     card.ListId = listId;
@@ -781,7 +782,7 @@ namespace TrelloDotNet
 
             if (options.IncludeBoard && cards.Count > 0)
             {
-                var board = await GetBoardAsync(cards[0].BoardId, cancellationToken);
+                Board board = await GetBoardAsync(cards[0].BoardId, cancellationToken);
                 foreach (Card card in cards)
                 {
                     card.Board = board;
@@ -828,7 +829,7 @@ namespace TrelloDotNet
             }
 
             GetCardOptions getCardOptions = options.ToCardOptions();
-            var cards = await GetCardsOnBoardAsync(inbox.BoardId, getCardOptions, cancellationToken);
+            List<Card> cards = await GetCardsOnBoardAsync(inbox.BoardId, getCardOptions, cancellationToken);
             cards = FilterCards(cards, getCardOptions.FilterConditions);
             return OrderCards(cards, getCardOptions.OrderBy);
         }
@@ -889,14 +890,14 @@ namespace TrelloDotNet
                 }
             }
 
-            var suffix = GetUrlBuilder.GetCardsForMember(memberId);
-            var cards = await GetCardsNormalOrViaPagination(options, cancellationToken, suffix);
+            string suffix = GetUrlBuilder.GetCardsForMember(memberId);
+            List<Card> cards = await GetCardsNormalOrViaPagination(options, cancellationToken, suffix);
 
             if (options.IncludeList)
             {
-                var boardsToGetListsFor = cards.Select(x => x.BoardId).Distinct().ToArray();
+                string[] boardsToGetListsFor = cards.Select(x => x.BoardId).Distinct().ToArray();
                 List<List> lists = new List<List>();
-                foreach (var boardId in boardsToGetListsFor)
+                foreach (string boardId in boardsToGetListsFor)
                 {
                     lists.AddRange(await GetListsOnBoardAsync(boardId, cancellationToken));
                 }
@@ -909,8 +910,8 @@ namespace TrelloDotNet
 
             if (options.IncludeBoard)
             {
-                var boardIds = cards.Select(x => x.BoardId).Distinct().ToList();
-                var boards = await GetBoardsAsync(boardIds, cancellationToken);
+                List<string> boardIds = cards.Select(x => x.BoardId).Distinct().ToList();
+                List<Board> boards = await GetBoardsAsync(boardIds, cancellationToken);
                 foreach (Card card in cards)
                 {
                     card.Board = boards.FirstOrDefault(x => x.Id == card.BoardId);
@@ -1002,7 +1003,7 @@ namespace TrelloDotNet
                 throw new ArgumentNullException(nameof(options), $"{nameof(MoveCardToListOptions)} cannot be null");
             }
 
-            var parameters = new List<CardUpdate> { CardUpdate.List(newListId) };
+            List<CardUpdate> parameters = new List<CardUpdate> { CardUpdate.List(newListId) };
             if (options.NamedPositionOnNewList.HasValue)
             {
                 parameters.Add(CardUpdate.Position(options.NamedPositionOnNewList.Value));
@@ -1059,7 +1060,7 @@ namespace TrelloDotNet
             }
 
             List<CardUpdate> parameters = new List<CardUpdate> { CardUpdate.Board(newBoardId) };
-            var newListId = options.NewListId;
+            string newListId = options.NewListId;
             if (string.IsNullOrWhiteSpace(newListId))
             {
                 //No list specified, so we need to find the first list on the board
@@ -1085,7 +1086,7 @@ namespace TrelloDotNet
             switch (options.MemberOptions)
             {
                 case MoveCardToBoardOptionsMemberOptions.KeepMembersAlsoOnNewBoardAndRemoveRest:
-                    var existingMemberIdsOnNewBoard = (await GetMembersOfBoardAsync(newBoardId, cancellationToken)).Select(x => x.Id);
+                    IEnumerable<string> existingMemberIdsOnNewBoard = (await GetMembersOfBoardAsync(newBoardId, cancellationToken)).Select(x => x.Id);
                     card.MemberIds = card.MemberIds.Intersect(existingMemberIdsOnNewBoard).ToList();
                     break;
                 case MoveCardToBoardOptionsMemberOptions.RemoveAllMembersOnCard:
@@ -1102,7 +1103,7 @@ namespace TrelloDotNet
                 {
                     case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndCreateMissing:
                         {
-                            var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                            List<Label> existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
                             foreach (Label cardLabel in card.Labels)
                             {
                                 Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name && x.Color == cardLabel.Color);
@@ -1122,7 +1123,7 @@ namespace TrelloDotNet
                         }
                     case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndColorAndRemoveMissing:
                         {
-                            var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                            List<Label> existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
                             foreach (Label cardLabel in card.Labels)
                             {
                                 Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name && x.Color == cardLabel.Color);
@@ -1136,7 +1137,7 @@ namespace TrelloDotNet
                         }
                     case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndCreateMissing:
                         {
-                            var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                            List<Label> existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
                             foreach (Label cardLabel in card.Labels)
                             {
                                 Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name);
@@ -1156,7 +1157,7 @@ namespace TrelloDotNet
                         }
                     case MoveCardToBoardOptionsLabelOptions.MigrateToLabelsOfSameNameAndRemoveMissing:
                         {
-                            var existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
+                            List<Label> existingLabels = await GetLabelsOfBoardAsync(newBoardId, cancellationToken);
                             foreach (Label cardLabel in card.Labels)
                             {
                                 Label existingLabel = existingLabels.FirstOrDefault(x => x.Name == cardLabel.Name);
@@ -1270,6 +1271,100 @@ namespace TrelloDotNet
             }
 
             return $"{firstPayloadTrimmed.Substring(0, firstPayloadTrimmed.Length - 1)},{secondPayloadTrimmed.Substring(1)}";
+        }
+
+        /// <summary>
+        /// Set a recurring Due Date
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="options">Options for recurrence</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task SetRecurringDueDateAsync(string cardId, DueRecurrenceOptions options, CancellationToken cancellationToken = default)
+        {
+            DateTimeOffset recurrenceStart;
+            if (options.FirstDueDate.HasValue)
+            {
+                recurrenceStart = options.FirstDueDate.Value;
+                await SetDueDateOnCardAsync(cardId, recurrenceStart, cancellationToken: cancellationToken);
+            }
+            else
+            {
+                Card card = await GetCardAsync(cardId, new GetCardOptions
+                {
+                    CardFields = new CardFields(CardFieldsType.Due)
+                }, cancellationToken);
+
+                if (card.Due.HasValue)
+                {
+                    recurrenceStart = card.Due.Value;
+                }
+                else
+                {
+                    recurrenceStart = DateTimeOffset.UtcNow;
+                    await SetDueDateOnCardAsync(cardId, recurrenceStart, cancellationToken: cancellationToken);
+                }
+            }
+            string startAsString = recurrenceStart.ToString("yyyyMMddTHHmmssZ");
+            string suffix = $"{UrlPaths.Cards}/{cardId}/recurrenceRule";
+            string json;
+            switch (options.Recurrence)
+            {
+                case DueRecurrenceType.Daily:
+                    json = $"{{\"rule\":\"DTSTART:{startAsString}\\nRRULE:FREQ=DAILY\",\"triggers\":[{{\"trigger\":\"dueComplete\",\"changes\":[\"dueDateChange\"]}}]}}";
+                    break;
+                case DueRecurrenceType.Weekdays:
+                case DueRecurrenceType.Weekly:
+                    string days = options.GetDays();
+                    json = $"{{\"rule\":\"DTSTART:{startAsString}\\nRRULE:FREQ=WEEKLY;BYDAY={days}\",\"triggers\":[{{\"trigger\":\"dueComplete\",\"changes\":[\"dueDateChange\"]}}]}}";
+                    break;
+                case DueRecurrenceType.DayOfMonth:
+                    json = $"{{\"rule\":\"DTSTART:{startAsString}\\nRRULE:FREQ=MONTHLY;BYMONTHDAY={recurrenceStart.Day}\",\"triggers\":[{{\"trigger\":\"dueComplete\",\"changes\":[\"dueDateChange\"]}}]}}";
+                    break;
+                case DueRecurrenceType.XthDayOfWeekOfTheMonth:
+                    string day;
+                    switch (recurrenceStart.DayOfWeek)
+                    {
+                        case DayOfWeek.Friday:
+                            day = "FR";
+                            break;
+                        case DayOfWeek.Monday:
+                            day = "MO";
+                            break;
+                        case DayOfWeek.Saturday:
+                            day = "SA";
+                            break;
+                        case DayOfWeek.Sunday:
+                            day = "SU";
+                            break;
+                        case DayOfWeek.Thursday:
+                            day = "TH";
+                            break;
+                        case DayOfWeek.Tuesday:
+                            day = "TU";
+                            break;
+                        case DayOfWeek.Wednesday:
+                            day = "WE";
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    json = $"{{\"rule\":\"DTSTART;TZID={options.TimezoneId}:{startAsString}\\nRRULE:FREQ=MONTHLY;BYDAY={day};BYSETPOS={Convert.ToInt32(options.XthPosition)}\",\"triggers\":[{{\"trigger\":\"dueComplete\",\"changes\":[\"dueDateChange\"]}}]}}";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            await _apiRequestController.PostWithJsonPayloadToNonApi(suffix, cancellationToken, json, 0);
+        }
+
+        /// <summary>
+        /// Remove recurrence of the due date (Note: This does not remove the current due date)
+        /// </summary>
+        /// <param name="cardId">Id of the Card</param>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        public async Task RemoveRecurringDueDateAsync(string cardId, CancellationToken cancellationToken = default)
+        {
+            string suffix = $"{UrlPaths.Cards}/{cardId}/recurrenceRule";
+            await _apiRequestController.DeleteToNonApi(suffix, cancellationToken, 0);
         }
     }
 }

@@ -106,7 +106,7 @@ namespace TrelloDotNet.Model.Options.GetBoardOptions
 
             if (TypesOfBoardsToInclude != GetBoardOptionsTypesOfBoardsToInclude.All)
             {
-                var selected = Enum.GetValues(TypesOfBoardsToInclude.GetType()).Cast<Enum>().Where(TypesOfBoardsToInclude.HasFlag).ToArray();
+                Enum[] selected = Enum.GetValues(TypesOfBoardsToInclude.GetType()).Cast<Enum>().Where(TypesOfBoardsToInclude.HasFlag).ToArray();
 
                 parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Filter, string.Join(",", selected.Select(x => x.GetJsonPropertyName()))));
             }

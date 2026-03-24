@@ -63,15 +63,15 @@ namespace TrelloDotNet
         public async Task<TokenMembershipOverview> GetCurrentTokenMembershipsAsync(GetBoardOptions boardOptions, GetOrganizationOptions organizationOptions, CancellationToken cancellationToken = default)
         {
             Member member = await GetTokenMemberAsync(cancellationToken);
-            var organizations = organizationOptions == null
+            List<Organization> organizations = organizationOptions == null
                 ? await GetOrganizationsCurrentTokenCanAccessAsync(cancellationToken)
                 : await GetOrganizationsCurrentTokenCanAccessAsync(organizationOptions, cancellationToken);
 
-            var boards = boardOptions == null
+            List<Board> boards = boardOptions == null
                 ? await GetBoardsCurrentTokenCanAccessAsync(cancellationToken)
                 : await GetBoardsCurrentTokenCanAccessAsync(boardOptions, cancellationToken);
-            var organizationMemberships = new Dictionary<Organization, MembershipType>();
-            var boardMemberships = new Dictionary<Board, MembershipType>();
+            Dictionary<Organization, MembershipType> organizationMemberships = new Dictionary<Organization, MembershipType>();
+            Dictionary<Board, MembershipType> boardMemberships = new Dictionary<Board, MembershipType>();
 
             foreach (Organization organization in organizations)
             {
@@ -82,7 +82,7 @@ namespace TrelloDotNet
                     if (orgMemberShip.MemberType == MembershipType.Admin)
                     {
                         //Since user is workspace admin, they are automatically also board admin for all boards under
-                        foreach (var boardId in organization.BoardIds)
+                        foreach (string boardId in organization.BoardIds)
                         {
                             Board board = boards.FirstOrDefault(x => x.Id == boardId);
                             if (board != null)
@@ -96,7 +96,7 @@ namespace TrelloDotNet
 
             foreach (Board board in boards.Where(board => !boardMemberships.ContainsKey(board)))
             {
-                var membershipsOfBoard = await GetMembershipsOfBoardAsync(board.Id, cancellationToken);
+                List<Membership> membershipsOfBoard = await GetMembershipsOfBoardAsync(board.Id, cancellationToken);
                 Membership boardMemberShip = membershipsOfBoard.FirstOrDefault(x => x.MemberId == member.Id);
                 if (boardMemberShip != null)
                 {

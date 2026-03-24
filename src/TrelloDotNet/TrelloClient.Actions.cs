@@ -82,7 +82,7 @@ namespace TrelloDotNet
                 return await _apiRequestController.Get<List<TrelloAction>>(suffix, cancellationToken);
             }
 
-            var parameters = new List<QueryParameter>();
+            List<QueryParameter> parameters = new List<QueryParameter>();
             if (options.Filter != null)
             {
                 parameters.Add(new QueryParameter(Constants.TrelloIds.QueryParameterNames.Filter, string.Join(",", options.Filter)));

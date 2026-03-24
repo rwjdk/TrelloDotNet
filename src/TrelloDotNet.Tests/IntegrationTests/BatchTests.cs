@@ -64,7 +64,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task GetOrganizations()
     {
-        var data = await TrelloClient.GetOrganizationsAsync([fixture.OrganizationId!], cancellationToken: TestCancellationToken);
+        List<Organization>? data = await TrelloClient.GetOrganizationsAsync([fixture.OrganizationId!], cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
     }
 
@@ -73,7 +73,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     {
         await Assert.ThrowsAsync<TrelloApiException>(async () =>
         {
-            var data = await TrelloClient.GetOrganizationsAsync(["non-Exist"], cancellationToken: TestCancellationToken);
+            List<Organization>? data = await TrelloClient.GetOrganizationsAsync(["non-Exist"], cancellationToken: TestCancellationToken);
             Assert.NotEmpty(data);
         });
     }
@@ -83,7 +83,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     {
         (List list, Card card) = await AddDummyCardAndList(_boardId);
         // ReSharper disable once RedundantAssignment
-        var listData = await TrelloClient.GetListsAsync([list.Id], cancellationToken: TestCancellationToken);
+        List<List>? listData = await TrelloClient.GetListsAsync([list.Id], cancellationToken: TestCancellationToken);
         listData = await TrelloClient.GetListsAsync([list.Id], new GetListOptions
         {
             IncludeBoard = true,
@@ -96,7 +96,7 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         Assert.Equal(list.Closed, listData[0].Closed);
         Assert.Equal(list.Position, listData[0].Position);
 
-        var data = await TrelloClient.GetCardsAsync([card.Id], cancellationToken: TestCancellationToken);
+        List<Card>? data = await TrelloClient.GetCardsAsync([card.Id], cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
         Assert.Equal(card.Id, data[0].Id);
         Assert.Equal(card.Name, data[0].Name);
@@ -128,14 +128,14 @@ public class BatchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     public async Task GetMembers()
     {
         Member member = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
-        var data = await TrelloClient.GetMembersAsync([member.Id], cancellationToken: TestCancellationToken);
+        List<Member>? data = await TrelloClient.GetMembersAsync([member.Id], cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
     }
 
     [Fact]
     public async Task GetBoards()
     {
-        var data = await TrelloClient.GetBoardsAsync([fixture.BoardId!], cancellationToken: TestCancellationToken);
+        List<Board>? data = await TrelloClient.GetBoardsAsync([fixture.BoardId!], cancellationToken: TestCancellationToken);
         Assert.NotEmpty(data);
 
         data = await TrelloClient.GetBoardsAsync([fixture.BoardId!], new GetBoardOptions

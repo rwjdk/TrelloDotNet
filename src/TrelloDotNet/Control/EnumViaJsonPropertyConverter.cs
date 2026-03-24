@@ -34,10 +34,10 @@ namespace TrelloDotNet.Control
                 return default;
             }
 
-            var members = typeToConvert.GetFields();
-            foreach (var memberInfo in members)
+            FieldInfo[] members = typeToConvert.GetFields();
+            foreach (FieldInfo memberInfo in members)
             {
-                var customAttributes = memberInfo.GetCustomAttributes(typeof(JsonPropertyNameAttribute), false);
+                object[] customAttributes = memberInfo.GetCustomAttributes(typeof(JsonPropertyNameAttribute), false);
                 if (customAttributes.Length > 0 && ((JsonPropertyNameAttribute)customAttributes[0]).Name == stringValue)
                 {
                     return (T)memberInfo.GetValue(null);

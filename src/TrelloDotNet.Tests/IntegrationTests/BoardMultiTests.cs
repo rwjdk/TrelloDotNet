@@ -14,33 +14,33 @@ public class BoardMultiTests(TestFixtureWithNewBoard fixture) : TestBase, IClass
         string? secondBoardId = null;
         try
         {
-            var board = new Board("UnitTestBoard - Second Board")
+            Board board = new Board("UnitTestBoard - Second Board")
             {
                 OrganizationId = _organizationId
             };
-            var secondBoard = await TrelloClient.AddBoardAsync(board, cancellationToken: TestCancellationToken);
+            Board? secondBoard = await TrelloClient.AddBoardAsync(board, cancellationToken: TestCancellationToken);
             secondBoardId = secondBoard.Id;
 
-            var addedList = await TrelloClient.AddListAsync(new List("List on first board", _boardId), cancellationToken: TestCancellationToken);
+            List? addedList = await TrelloClient.AddListAsync(new List("List on first board", _boardId), cancellationToken: TestCancellationToken);
             await TrelloClient.AddCardAsync(new AddCardOptions(addedList.Id, "card to move between boards"), cancellationToken: TestCancellationToken);
-            var listOnPrimaryBoard = await TrelloClient.GetListsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
-            var listOnSecondaryBoard = await TrelloClient.GetListsOnBoardAsync(secondBoardId, cancellationToken: TestCancellationToken);
+            List<List>? listOnPrimaryBoard = await TrelloClient.GetListsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
+            List<List>? listOnSecondaryBoard = await TrelloClient.GetListsOnBoardAsync(secondBoardId, cancellationToken: TestCancellationToken);
             Assert.Equal(4, listOnPrimaryBoard.Count);
             Assert.Equal(3, listOnSecondaryBoard.Count);
-            var cardsOnPrimaryBoard = await TrelloClient.GetCardsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
-            var cardsOnSecondaryBoard = await TrelloClient.GetCardsOnBoardAsync(secondBoardId, cancellationToken: TestCancellationToken);
+            List<Card>? cardsOnPrimaryBoard = await TrelloClient.GetCardsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
+            List<Card>? cardsOnSecondaryBoard = await TrelloClient.GetCardsOnBoardAsync(secondBoardId, cancellationToken: TestCancellationToken);
             Assert.Single(cardsOnPrimaryBoard);
             Assert.Empty(cardsOnSecondaryBoard);
 
             await TrelloClient.MoveListToBoardAsync(addedList.Id, secondBoardId, cancellationToken: TestCancellationToken);
 
-            var listOnPrimaryBoardAfterMove = await TrelloClient.GetListsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
-            var listOnSecondaryBoardAfterMove = await TrelloClient.GetListsOnBoardAsync(secondBoardId, cancellationToken: TestCancellationToken);
+            List<List>? listOnPrimaryBoardAfterMove = await TrelloClient.GetListsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
+            List<List>? listOnSecondaryBoardAfterMove = await TrelloClient.GetListsOnBoardAsync(secondBoardId, cancellationToken: TestCancellationToken);
             Assert.Equal(3, listOnPrimaryBoardAfterMove.Count);
             Assert.Equal(4, listOnSecondaryBoardAfterMove.Count);
 
-            var cardsOnPrimaryBoardAfterMove = await TrelloClient.GetCardsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
-            var cardsOnSecondaryBoardAfterMove = await TrelloClient.GetCardsOnBoardAsync(secondBoardId, cancellationToken: TestCancellationToken);
+            List<Card>? cardsOnPrimaryBoardAfterMove = await TrelloClient.GetCardsOnBoardAsync(_boardId, cancellationToken: TestCancellationToken);
+            List<Card>? cardsOnSecondaryBoardAfterMove = await TrelloClient.GetCardsOnBoardAsync(secondBoardId, cancellationToken: TestCancellationToken);
             Assert.Empty(cardsOnPrimaryBoardAfterMove);
             Assert.Single(cardsOnSecondaryBoardAfterMove);
         }

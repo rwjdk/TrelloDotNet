@@ -13,7 +13,7 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
     [InlineData(false)]
     public async Task DueFilter(bool includeCardsThatAreMarkedAsComplete)
     {
-        var existingCards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, cancellationToken: TestCancellationToken);
+        List<Card>? existingCards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, cancellationToken: TestCancellationToken);
         foreach (Card existingCard in existingCards)
         {
             await TrelloClient.DeleteCardAsync(existingCard.Id, cancellationToken: TestCancellationToken);
@@ -29,7 +29,7 @@ public class CardsConditionDueDateTests(TestFixtureWithNewBoard fixture) : TestB
 
         // ReSharper disable once JoinDeclarationAndInitializer
         List<Card> cards;
-        var cardFields = new CardFields(CardFieldsType.Name, CardFieldsType.Due, CardFieldsType.DueComplete);
+        CardFields cardFields = new CardFields(CardFieldsType.Name, CardFieldsType.Due, CardFieldsType.DueComplete);
         //*********************************************************
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {

@@ -51,7 +51,7 @@ public class InboxTests : TestBase
         TokenMemberInbox memberInbox = await TrelloClient.GetTokenMemberInboxAsync(cancellationToken: TestCancellationToken);
         if (memberInbox != null) //Needed for now as it is a beta feature
         {
-            var cards = await TrelloClient.GetCardsInInboxAsync(cancellationToken: TestCancellationToken);
+            List<Card>? cards = await TrelloClient.GetCardsInInboxAsync(cancellationToken: TestCancellationToken);
             Assert.NotNull(cards);
             cards = await TrelloClient.GetCardsInInboxAsync(new GetInboxCardOptions
             {

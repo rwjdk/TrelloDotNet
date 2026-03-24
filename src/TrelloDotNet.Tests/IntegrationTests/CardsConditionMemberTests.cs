@@ -28,7 +28,7 @@ public class CardExtensionsTests(TestFixtureWithNewBoard fixture) : TestBase, IC
         List<Card> cards;
 
         //Special
-        var cardFields = new CardFields(CardFieldsType.Name);
+        CardFields cardFields = new CardFields(CardFieldsType.Name);
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,
@@ -280,7 +280,7 @@ public class CardExtensionsTests(TestFixtureWithNewBoard fixture) : TestBase, IC
 
         //Other *****************************************************************************************************************
 
-        var firstName = member.FullName.Split([' '], StringSplitOptions.RemoveEmptyEntries)[0];
+        string firstName = member.FullName.Split([' '], StringSplitOptions.RemoveEmptyEntries)[0];
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,

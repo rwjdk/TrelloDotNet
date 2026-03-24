@@ -10,7 +10,7 @@ public class SearchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     [Fact]
     public async Task SearchPerson()
     {
-        var searchMembersAsync = await TrelloClient.SearchMembersAsync(new SearchMemberRequest("Rasmus Wulff Jensen")
+        List<Member>? searchMembersAsync = await TrelloClient.SearchMembersAsync(new SearchMemberRequest("Rasmus Wulff Jensen")
         {
             Limit = 10,
         }, cancellationToken: TestCancellationToken);
@@ -22,7 +22,7 @@ public class SearchTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixt
     [Fact]
     public async Task Search()
     {
-        var card = await AddDummyCardAndList(_board.Id);
+        (List List, Card Card) card = await AddDummyCardAndList(_board.Id);
 
         SearchResult searchResult = await TrelloClient.SearchAsync(new SearchRequest("e")
         {

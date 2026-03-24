@@ -38,7 +38,7 @@ namespace TrelloDotNet
             }
 
 
-            var parameters = new List<QueryParameter>
+            List<QueryParameter> parameters = new List<QueryParameter>
             {
                 new QueryParameter(Constants.TrelloIds.QueryParameterNames.Query, searchRequest.SearchTerm),
                 new QueryParameter(Constants.TrelloIds.QueryParameterNames.Partial, searchRequest.PartialSearch),

@@ -15,10 +15,10 @@ public class NullGetOptionsTests
     [Fact]
     public async Task GetMethodsAllowNullOptionsWithoutAddingQueryParameters()
     {
-        var handler = new RecordingHandler();
-        using var httpClient = new HttpClient(handler);
-        var client = new TrelloClient("key", "token", httpClient: httpClient);
-        var cancellationToken = TestContext.Current.CancellationToken;
+        RecordingHandler handler = new RecordingHandler();
+        using HttpClient httpClient = new HttpClient(handler);
+        TrelloClient client = new TrelloClient("key", "token", httpClient: httpClient);
+        CancellationToken cancellationToken = TestContext.Current.CancellationToken;
 
         await client.GetBoardAsync("boardId", (GetBoardOptions)null!, cancellationToken);
         await client.GetBoardsForMemberAsync("memberId", (GetBoardOptions)null!, cancellationToken);
@@ -65,7 +65,7 @@ public class NullGetOptionsTests
             }
 
             string json = GetResponseJson(request.RequestUri);
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
@@ -79,7 +79,7 @@ public class NullGetOptionsTests
                 return "{}";
             }
 
-            var path = uri.AbsolutePath;
+            string path = uri.AbsolutePath;
 
             if (path.EndsWith("/actions", StringComparison.OrdinalIgnoreCase))
             {

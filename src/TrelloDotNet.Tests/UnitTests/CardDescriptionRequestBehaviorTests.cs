@@ -11,13 +11,13 @@ public class CardDescriptionRequestBehaviorTests
     [Fact]
     public async Task AddCardAsync_Throws_WhenDescriptionIsLongerThanMaximumAllowed()
     {
-        var handler = new RecordingHandler();
-        using var httpClient = new HttpClient(handler);
-        var client = new TrelloClient("key", "token", httpClient: httpClient);
-        var cancellationToken = TestContext.Current.CancellationToken;
+        RecordingHandler handler = new RecordingHandler();
+        using HttpClient httpClient = new HttpClient(handler);
+        TrelloClient client = new TrelloClient("key", "token", httpClient: httpClient);
+        CancellationToken cancellationToken = TestContext.Current.CancellationToken;
 
         string tooLongDescription = new string('x', 16_385);
-        var options = new AddCardOptions("listId", "card name", tooLongDescription);
+        AddCardOptions options = new AddCardOptions("listId", "card name", tooLongDescription);
 
         await Assert.ThrowsAsync<TrelloApiException>(() => client.AddCardAsync(options, cancellationToken));
         Assert.Empty(handler.Requests);
@@ -26,13 +26,13 @@ public class CardDescriptionRequestBehaviorTests
     [Fact]
     public async Task UpdateCardAsync_Throws_WhenDescriptionIsLongerThanMaximumAllowed()
     {
-        var handler = new RecordingHandler();
-        using var httpClient = new HttpClient(handler);
-        var client = new TrelloClient("key", "token", httpClient: httpClient);
-        var cancellationToken = TestContext.Current.CancellationToken;
+        RecordingHandler handler = new RecordingHandler();
+        using HttpClient httpClient = new HttpClient(handler);
+        TrelloClient client = new TrelloClient("key", "token", httpClient: httpClient);
+        CancellationToken cancellationToken = TestContext.Current.CancellationToken;
 
         string tooLongDescription = new string('x', 16_385);
-        var updates = new List<CardUpdate> { CardUpdate.Description(tooLongDescription) };
+        List<CardUpdate> updates = new List<CardUpdate> { CardUpdate.Description(tooLongDescription) };
 
         await Assert.ThrowsAsync<TrelloApiException>(() => client.UpdateCardAsync("cardId", updates, cancellationToken));
         Assert.Empty(handler.Requests);
@@ -41,13 +41,13 @@ public class CardDescriptionRequestBehaviorTests
     [Fact]
     public async Task AddCardAsync_SendsDescriptionInJsonPayload_WhenQueryStringWouldBeTooLong()
     {
-        var handler = new RecordingHandler();
-        using var httpClient = new HttpClient(handler);
-        var client = new TrelloClient("key", "token", httpClient: httpClient);
-        var cancellationToken = TestContext.Current.CancellationToken;
+        RecordingHandler handler = new RecordingHandler();
+        using HttpClient httpClient = new HttpClient(handler);
+        TrelloClient client = new TrelloClient("key", "token", httpClient: httpClient);
+        CancellationToken cancellationToken = TestContext.Current.CancellationToken;
 
         string description = new string('x', 16_380);
-        var options = new AddCardOptions("listId", "card name", description);
+        AddCardOptions options = new AddCardOptions("listId", "card name", description);
         options.Checklists = null;
         options.AttachmentFileUploads = null;
         options.AttachmentUrlLinks = null;
@@ -55,7 +55,7 @@ public class CardDescriptionRequestBehaviorTests
 
         _ = await client.AddCardAsync(options, cancellationToken);
 
-        var request = Assert.Single(handler.Requests);
+        RecordedRequest request = Assert.Single(handler.Requests);
         Assert.Equal(HttpMethod.Post, request.Method);
         Assert.DoesNotContain("desc=", request.Uri.Query, StringComparison.Ordinal);
         Assert.NotNull(request.Body);
@@ -65,13 +65,13 @@ public class CardDescriptionRequestBehaviorTests
     [Fact]
     public async Task UpdateCardAsync_SendsDescriptionInJsonPayload_WhenQueryStringWouldBeTooLong()
     {
-        var handler = new RecordingHandler();
-        using var httpClient = new HttpClient(handler);
-        var client = new TrelloClient("key", "token", httpClient: httpClient);
-        var cancellationToken = TestContext.Current.CancellationToken;
+        RecordingHandler handler = new RecordingHandler();
+        using HttpClient httpClient = new HttpClient(handler);
+        TrelloClient client = new TrelloClient("key", "token", httpClient: httpClient);
+        CancellationToken cancellationToken = TestContext.Current.CancellationToken;
 
         string description = new string('x', 16_380);
-        var updates = new List<CardUpdate>
+        List<CardUpdate> updates = new List<CardUpdate>
         {
             CardUpdate.Name("new card name"),
             CardUpdate.Description(description)
@@ -79,7 +79,7 @@ public class CardDescriptionRequestBehaviorTests
 
         _ = await client.UpdateCardAsync("cardId", updates, cancellationToken);
 
-        var request = Assert.Single(handler.Requests);
+        RecordedRequest request = Assert.Single(handler.Requests);
         Assert.Equal(HttpMethod.Put, request.Method);
         Assert.DoesNotContain("desc=", request.Uri.Query, StringComparison.Ordinal);
         Assert.Contains("name=", request.Uri.Query, StringComparison.Ordinal);

@@ -24,7 +24,7 @@ public class OrderCardsTests(TestFixtureWithNewBoard fixture) : TestBase, IClass
 
         //********************************************************************************************************
 
-        var cardFields = new CardFields(CardFieldsType.Name);
+        CardFields cardFields = new CardFields(CardFieldsType.Name);
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {
             CardFields = cardFields,

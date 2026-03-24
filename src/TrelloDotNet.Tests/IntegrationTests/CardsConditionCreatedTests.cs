@@ -24,7 +24,7 @@ public class CardsConditionCreatedTests(TestFixtureWithNewBoard fixture) : TestB
 
         // ReSharper disable once JoinDeclarationAndInitializer
         List<Card> cards;
-        var cardFields = new CardFields(CardFieldsType.Name);
+        CardFields cardFields = new CardFields(CardFieldsType.Name);
         //*********************************************************
         cards = await TrelloClient.GetCardsOnBoardAsync(_board.Id, new GetCardOptions
         {

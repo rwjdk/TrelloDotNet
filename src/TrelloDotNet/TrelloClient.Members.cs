@@ -127,8 +127,8 @@ namespace TrelloDotNet
         /// <returns>The updated card with the added members</returns>
         public async Task<Card> AddMembersToCardAsync(string cardId, CancellationToken cancellationToken = default, params string[] memberIdsToAdd)
         {
-            var card = await GetCardAsync(cardId, cancellationToken);
-            var missing = memberIdsToAdd.Where(x => !card.MemberIds.Contains(x)).ToList();
+            Card card = await GetCardAsync(cardId, cancellationToken);
+            List<string> missing = memberIdsToAdd.Where(x => !card.MemberIds.Contains(x)).ToList();
 
             if (missing.Count == 0)
             {
@@ -163,8 +163,8 @@ namespace TrelloDotNet
         /// <returns>The updated card with the members removed</returns>
         public async Task<Card> RemoveMembersFromCardAsync(string cardId, CancellationToken cancellationToken = default, params string[] memberIdsToRemove)
         {
-            var card = await GetCardAsync(cardId, cancellationToken);
-            var toRemove = memberIdsToRemove.Where(x => card.MemberIds.Contains(x)).ToList();
+            Card card = await GetCardAsync(cardId, cancellationToken);
+            List<string> toRemove = memberIdsToRemove.Where(x => card.MemberIds.Contains(x)).ToList();
             if (toRemove.Count == 0)
             {
                 return card; //Everyone not there

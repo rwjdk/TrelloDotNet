@@ -80,7 +80,7 @@ namespace TrelloDotNet.Model.Options.GetInboxCardOptions
 
         internal GetCardOptions.GetCardOptions ToCardOptions()
         {
-            var getCardOptions = new GetCardOptions.GetCardOptions
+            GetCardOptions.GetCardOptions getCardOptions = new GetCardOptions.GetCardOptions
             {
                 ActionsTypes = ActionsTypes,
                 AdditionalParameters = AdditionalParameters,

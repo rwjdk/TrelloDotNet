@@ -12,7 +12,7 @@ public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task GetBoardsCurrentTokenCanAccess()
     {
-        var boards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync(cancellationToken: TestCancellationToken);
+        List<Board>? boards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync(cancellationToken: TestCancellationToken);
         Assert.Contains(boards, x => x.Id == _board.Id);
     }
 
@@ -30,14 +30,14 @@ public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task GetOrganizationsCurrentTokenCanAccess()
     {
-        var organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync(cancellationToken: TestCancellationToken);
+        List<Organization>? organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync(cancellationToken: TestCancellationToken);
         Assert.Contains(organizations, x => x.Id == _organization.Id);
     }
 
     [Fact]
     public async Task GetOrganizationsCurrentTokenCanAccessWithOptions()
     {
-        var organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync(new GetOrganizationOptions
+        List<Organization>? organizations = await TrelloClient.GetOrganizationsCurrentTokenCanAccessAsync(new GetOrganizationOptions
         {
             OrganizationFields = new OrganizationFields(OrganizationFieldsType.Name, OrganizationFieldsType.Url)
         }, cancellationToken: TestCancellationToken);
@@ -47,7 +47,7 @@ public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
     [Fact]
     public async Task TokenInformation()
     {
-        var tokenInformation = await TrelloClient.GetTokenInformationAsync(cancellationToken: TestCancellationToken);
+        TokenInformation? tokenInformation = await TrelloClient.GetTokenInformationAsync(cancellationToken: TestCancellationToken);
         Assert.NotNull(tokenInformation);
         Assert.NotNull(tokenInformation.Created);
         Assert.Null(tokenInformation.Expires);
@@ -60,7 +60,7 @@ public class TokenTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFixtu
         Assert.True(tokenInformation.Permissions[0].Read);
         Assert.True(tokenInformation.Permissions[0].Write);
 
-        var tokenMember = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
+        Member? tokenMember = await TrelloClient.GetTokenMemberAsync(cancellationToken: TestCancellationToken);
         Assert.NotNull(tokenMember);
     }
 }

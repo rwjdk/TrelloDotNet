@@ -23,16 +23,16 @@ public abstract class TestBase
     {
         try
         {
-            var config = new ConfigurationBuilder()
+            IConfigurationRoot config = new ConfigurationBuilder()
                 .AddUserSecrets<TestBase>()
                 .Build();
 
             List<TrelloClient> clients = [];
-            var apiKey = config["TrelloApiKey"];
-            var token = config["TrelloToken"];
+            string? apiKey = config["TrelloApiKey"];
+            string? token = config["TrelloToken"];
             if (!string.IsNullOrWhiteSpace(apiKey) && !string.IsNullOrWhiteSpace(token))
             {
-                var trelloClientOptions = new TrelloClientOptions
+                TrelloClientOptions trelloClientOptions = new TrelloClientOptions
                 {
                     MaxRetryCountForTokenLimitExceeded = 10,
                     DelayInSecondsToWaitInTokenLimitExceededRetry = 3,
@@ -49,7 +49,7 @@ public abstract class TestBase
                 token = config["TrelloToken" + (i + 1)];
                 if (!string.IsNullOrWhiteSpace(apiKey) && !string.IsNullOrWhiteSpace(token))
                 {
-                    var trelloClientOptions = new TrelloClientOptions
+                    TrelloClientOptions trelloClientOptions = new TrelloClientOptions
                     {
                         MaxRetryCountForTokenLimitExceeded = 10,
                         DelayInSecondsToWaitInTokenLimitExceededRetry = 3
@@ -78,7 +78,7 @@ public abstract class TestBase
 
     protected async Task<Card> AddDummyCardToList(List list, string? name = null, string? description = null, DateTimeOffset? start = null, DateTimeOffset? due = null, bool? dueComplete = null)
     {
-        var addCardOptions = new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString(), description ?? string.Empty);
+        AddCardOptions addCardOptions = new AddCardOptions(list.Id, name ?? Guid.NewGuid().ToString(), description ?? string.Empty);
         if (start.HasValue)
         {
             addCardOptions.Start = start.Value;
@@ -106,12 +106,12 @@ public abstract class TestBase
 
     protected async Task<TemporaryBoardContext> CreateTemporaryBoardAsync(string? scenarioName = null, string? description = null)
     {
-        var organizationName = $"UnitTestOrganization-{scenarioName ?? "Temp"}-{Guid.NewGuid()}";
+        string organizationName = $"UnitTestOrganization-{scenarioName ?? "Temp"}-{Guid.NewGuid()}";
         Organization organization = await TrelloClient.AddOrganizationAsync(new Organization(organizationName), TestCancellationToken);
 
-        var boardNameSeed = scenarioName ?? "UnitTestBoard";
-        var boardName = $"{boardNameSeed}-{Guid.NewGuid()}";
-        var board = await TrelloClient.AddBoardAsync(new Board(boardName, description ?? $"BoardDescription-{boardName}")
+        string boardNameSeed = scenarioName ?? "UnitTestBoard";
+        string boardName = $"{boardNameSeed}-{Guid.NewGuid()}";
+        Board? board = await TrelloClient.AddBoardAsync(new Board(boardName, description ?? $"BoardDescription-{boardName}")
         {
             OrganizationId = organization.Id
         }, cancellationToken: TestCancellationToken);
@@ -121,14 +121,14 @@ public abstract class TestBase
 
     public void AssertTimeIsNow(DateTimeOffset? objectCreationTime)
     {
-        var beforeNow = objectCreationTime < DateTimeOffset.UtcNow.AddMinutes(1);
-        var afterAMinuteAgo = objectCreationTime > DateTimeOffset.UtcNow.AddMinutes(-1);
+        bool beforeNow = objectCreationTime < DateTimeOffset.UtcNow.AddMinutes(1);
+        bool afterAMinuteAgo = objectCreationTime > DateTimeOffset.UtcNow.AddMinutes(-1);
         Assert.True(beforeNow && afterAMinuteAgo);
     }
 
     public async Task<Board?> GetSpecialPaidSubscriptionBoard()
     {
-        var availableBoards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync(new GetBoardOptions
+        List<Board>? availableBoards = await TrelloClient.GetBoardsCurrentTokenCanAccessAsync(new GetBoardOptions
         {
             BoardFields = new BoardFields(BoardFieldsType.Name)
         }, cancellationToken: TestCancellationToken);

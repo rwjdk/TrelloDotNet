@@ -26,7 +26,7 @@ namespace TrelloDotNet
         /// <returns>The newly created Board object</returns>
         public async Task<Board> AddBoardAsync(Board board, AddBoardOptions options = null, CancellationToken cancellationToken = default)
         {
-            var parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(board).ToList();
+            List<QueryParameter> parameters = _queryParametersBuilder.GetViaQueryParameterAttributes(board).ToList();
             if (options != null)
             {
                 parameters.AddRange(_queryParametersBuilder.GetViaQueryParameterAttributes(options));
@@ -78,7 +78,7 @@ namespace TrelloDotNet
         /// <returns>The updated <see cref="Board"/>.</returns>
         public async Task<Board> UpdateBoardAsync(string boardId, List<BoardUpdate> valuesToUpdate, CancellationToken cancellationToken = default)
         {
-            var parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
+            List<QueryParameter> parameters = valuesToUpdate.Select(x => x.ToQueryParameter()).ToList();
             return await _apiRequestController.Put<Board>($"{UrlPaths.Boards}/{boardId}", cancellationToken, parameters.ToArray());
         }
 
@@ -142,7 +142,7 @@ namespace TrelloDotNet
             }
 
             options.AdjustFieldsBasedOnSelectedOptions();
-            var board = await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken, options.GetParameters());
+            Board board = await _apiRequestController.Get<Board>(GetUrlBuilder.GetBoard(boardId), cancellationToken, options.GetParameters());
             if (options.IncludeCards != GetBoardOptionsIncludeCards.None)
             {
                 board.Cards = FilterCards(board.Cards, options.CardsFilterConditions);
@@ -187,7 +187,7 @@ namespace TrelloDotNet
         /// <returns>A list of Board objects accessible to the current token</returns>
         public async Task<List<Board>> GetBoardsCurrentTokenCanAccessAsync(CancellationToken cancellationToken = default)
         {
-            var tokenMember = await GetTokenMemberAsync(cancellationToken);
+            Member tokenMember = await GetTokenMemberAsync(cancellationToken);
             return await GetBoardsForMemberAsync(tokenMember.Id, cancellationToken);
         }
 
@@ -204,7 +204,7 @@ namespace TrelloDotNet
                 return await GetBoardsCurrentTokenCanAccessAsync(cancellationToken);
             }
 
-            var tokenMember = await GetTokenMemberAsync(cancellationToken);
+            Member tokenMember = await GetTokenMemberAsync(cancellationToken);
             return await GetBoardsForMemberAsync(tokenMember.Id, options, cancellationToken);
         }
 

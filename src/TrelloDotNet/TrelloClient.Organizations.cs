@@ -95,7 +95,7 @@ namespace TrelloDotNet
         /// <returns>List of organizations accessible to the current token</returns>
         public async Task<List<Organization>> GetOrganizationsCurrentTokenCanAccessAsync(CancellationToken cancellationToken = default)
         {
-            var tokenMember = await GetTokenMemberAsync(cancellationToken);
+            Member tokenMember = await GetTokenMemberAsync(cancellationToken);
             return await GetOrganizationsForMemberAsync(tokenMember.Id, cancellationToken);
         }
 
@@ -112,7 +112,7 @@ namespace TrelloDotNet
                 return await GetOrganizationsCurrentTokenCanAccessAsync(cancellationToken);
             }
 
-            var tokenMember = await GetTokenMemberAsync(cancellationToken);
+            Member tokenMember = await GetTokenMemberAsync(cancellationToken);
             return await GetOrganizationsForMemberAsync(tokenMember.Id, options, cancellationToken);
         }
 

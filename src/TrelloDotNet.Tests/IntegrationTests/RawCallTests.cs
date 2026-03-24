@@ -65,22 +65,22 @@ public class RawCallTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFix
     public async Task RawGet()
     {
         //Raw JSON
-        var rawGet = await TrelloClient.GetAsync($"boards/{_board.Id}", cancellationToken: TestCancellationToken);
+        string? rawGet = await TrelloClient.GetAsync($"boards/{_board.Id}", cancellationToken: TestCancellationToken);
         Assert.NotNull(rawGet);
 
         //Raw
-        var rawGetBoard = await TrelloClient.GetAsync<Board>($"boards/{_board.Id}", cancellationToken: TestCancellationToken);
+        Board? rawGetBoard = await TrelloClient.GetAsync<Board>($"boards/{_board.Id}", cancellationToken: TestCancellationToken);
         Assert.Equal(_board.Id, rawGetBoard.Id);
     }
 
     [Fact]
     public async Task RawPost()
     {
-        var list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id), cancellationToken: TestCancellationToken);
-        var rawPost = await TrelloClient.PostAsync("cards", TestCancellationToken, new QueryParameter("name", "Card"), new QueryParameter("idList", list.Id));
+        List? list = await TrelloClient.AddListAsync(new List("List for Card Tests", _board.Id), cancellationToken: TestCancellationToken);
+        string? rawPost = await TrelloClient.PostAsync("cards", TestCancellationToken, new QueryParameter("name", "Card"), new QueryParameter("idList", list.Id));
         Assert.NotNull(rawPost);
 
-        var rawPostCard = await TrelloClient.PostAsync<Card>("cards", TestCancellationToken, new QueryParameter("name", "Card"), new QueryParameter("idList", list.Id));
+        Card? rawPostCard = await TrelloClient.PostAsync<Card>("cards", TestCancellationToken, new QueryParameter("name", "Card"), new QueryParameter("idList", list.Id));
         Assert.NotNull(rawPostCard.Id);
     }
 
@@ -89,10 +89,10 @@ public class RawCallTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFix
     {
         Card card = await AddDummyCard(_board.Id, "RawPut");
 
-        var rawUpdate = await TrelloClient.PutAsync($"cards/{card.Id}", TestCancellationToken, new QueryParameter("desc", "New Description"));
+        string? rawUpdate = await TrelloClient.PutAsync($"cards/{card.Id}", TestCancellationToken, new QueryParameter("desc", "New Description"));
         Assert.NotNull(rawUpdate);
 
-        var rawUpdateCard = await TrelloClient.PutAsync<Card>($"cards/{card.Id}", TestCancellationToken, new QueryParameter("desc", "New Description2"));
+        Card? rawUpdateCard = await TrelloClient.PutAsync<Card>($"cards/{card.Id}", TestCancellationToken, new QueryParameter("desc", "New Description2"));
         Assert.Equal("New Description2", rawUpdateCard.Description);
     }
 
@@ -105,7 +105,7 @@ public class RawCallTests(TestFixtureWithNewBoard fixture) : TestBase, IClassFix
         coverToAdd.PrepareForAddUpdate();
         string payload = $"{{\"cover\":{JsonSerializer.Serialize(coverToAdd)}}}";
 
-        var rawUpdate = await TrelloClient.PutAsync($"{UrlPaths.Cards}/{card.Id}", payload, cancellationToken: TestCancellationToken);
+        string? rawUpdate = await TrelloClient.PutAsync($"{UrlPaths.Cards}/{card.Id}", payload, cancellationToken: TestCancellationToken);
         Assert.NotNull(rawUpdate);
     }
 }

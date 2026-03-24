@@ -13,6 +13,7 @@ namespace TrelloDotNet.Control
     internal class ApiRequestController
     {
         private const string BaseUrl = "https://api.trello.com/1/";
+        private const string NonApiBaseUrl = "https://trello.com/1/";
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
         private readonly string _token;
@@ -36,20 +37,20 @@ namespace TrelloDotNet.Control
         internal async Task<T> Get<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
             string json = await Get(suffix, cancellationToken, 0, parameters);
-            var @object = JsonSerializer.Deserialize<T>(json);
+            T @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
         internal async Task<string> Get(string suffix, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
-            var uri = BuildUri(suffix, parameters);
+            Uri uri = BuildUri(suffix, parameters);
             HttpResponseMessage response;
-            using (var request = new HttpRequestMessage(HttpMethod.Get, uri))
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri))
             {
                 AddCredentialsToHeaderIfNeeded(request);
                 response = await _httpClient.SendAsync(request, cancellationToken);
             }
-            var responseContent = await response.Content.ReadAsStringAsync();
+            string responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -62,30 +63,31 @@ namespace TrelloDotNet.Control
         internal async Task<T> Post<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
             string json = await Post(suffix, cancellationToken, 0, parameters);
-            var @object = JsonSerializer.Deserialize<T>(json);
+            T @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
         internal async Task<T> PostWithAttachmentFileUpload<T>(string suffix, AttachmentFileUpload attachmentFile, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
             string json = await PostWithAttachmentFileUpload(suffix, attachmentFile, cancellationToken, 0, parameters);
-            var @object = JsonSerializer.Deserialize<T>(json);
+            T @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
         internal async Task<string> PostWithAttachmentFileUpload(string suffix, AttachmentFileUpload attachmentFile, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
-            var uri = BuildUri(suffix, parameters);
-            using (var multipartFormContent = new MultipartFormDataContent())
+            Uri uri = BuildUri(suffix, parameters);
+            using (MultipartFormDataContent multipartFormContent = new MultipartFormDataContent())
             {
                 multipartFormContent.Add(new StreamContent(attachmentFile.Stream), name: "file", fileName: attachmentFile.Filename);
                 HttpResponseMessage response;
-                using (var request = new HttpRequestMessage(HttpMethod.Post, uri) { Content = multipartFormContent })
+                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, uri))
                 {
+                    request.Content = multipartFormContent;
                     AddCredentialsToHeaderIfNeeded(request);
                     response = await _httpClient.SendAsync(request, cancellationToken);
                 }
-                var responseContent = await response.Content.ReadAsStringAsync();
+                string responseContent = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -98,14 +100,14 @@ namespace TrelloDotNet.Control
 
         internal async Task<string> Post(string suffix, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
-            var uri = BuildUri(suffix, parameters);
+            Uri uri = BuildUri(suffix, parameters);
             HttpResponseMessage response;
-            using (var request = new HttpRequestMessage(HttpMethod.Post, uri))
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, uri))
             {
                 AddCredentialsToHeaderIfNeeded(request);
                 response = await _httpClient.SendAsync(request, cancellationToken);
             }
-            var content = await response.Content.ReadAsStringAsync();
+            string content = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -118,20 +120,20 @@ namespace TrelloDotNet.Control
         internal async Task<T> Put<T>(string suffix, CancellationToken cancellationToken, params QueryParameter[] parameters)
         {
             string json = await Put(suffix, cancellationToken, 0, parameters);
-            var @object = JsonSerializer.Deserialize<T>(json);
+            T @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
         internal async Task<string> Put(string suffix, CancellationToken cancellationToken, int retryCount, params QueryParameter[] parameters)
         {
-            var uri = BuildUri(suffix, parameters);
+            Uri uri = BuildUri(suffix, parameters);
             HttpResponseMessage response;
-            using (var request = new HttpRequestMessage(HttpMethod.Put, uri))
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, uri))
             {
                 AddCredentialsToHeaderIfNeeded(request);
                 response = await _httpClient.SendAsync(request, cancellationToken);
             }
-            var responseContent = await response.Content.ReadAsStringAsync();
+            string responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -144,23 +146,21 @@ namespace TrelloDotNet.Control
         internal async Task<T> PutWithJsonPayload<T>(string suffix, CancellationToken cancellationToken, string payload, params QueryParameter[] parameters)
         {
             string json = await PutWithJsonPayload(suffix, cancellationToken, payload, 0, parameters);
-            var @object = JsonSerializer.Deserialize<T>(json);
+            T @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
         internal async Task<string> PutWithJsonPayload(string suffix, CancellationToken cancellationToken, string payload, int retryCount, params QueryParameter[] parameters)
         {
-            var uri = BuildUri(suffix, parameters);
+            Uri uri = BuildUri(suffix, parameters);
             HttpResponseMessage response;
-            using (var request = new HttpRequestMessage(HttpMethod.Put, uri)
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, uri))
             {
-                Content = new StringContent(payload, Encoding.UTF8, "application/json")
-            })
-            {
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
                 AddCredentialsToHeaderIfNeeded(request);
                 response = await _httpClient.SendAsync(request, cancellationToken);
             }
-            var responseContent = await response.Content.ReadAsStringAsync();
+            string responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -173,23 +173,41 @@ namespace TrelloDotNet.Control
         internal async Task<T> PostWithJsonPayload<T>(string suffix, CancellationToken cancellationToken, string payload, params QueryParameter[] parameters)
         {
             string json = await PostWithJsonPayload(suffix, cancellationToken, payload, 0, parameters);
-            var @object = JsonSerializer.Deserialize<T>(json);
+            T @object = JsonSerializer.Deserialize<T>(json);
             return @object;
         }
 
         internal async Task<string> PostWithJsonPayload(string suffix, CancellationToken cancellationToken, string payload, int retryCount, params QueryParameter[] parameters)
         {
-            var uri = BuildUri(suffix, parameters);
+            Uri uri = BuildUri(suffix, parameters);
             HttpResponseMessage response;
-            using (var request = new HttpRequestMessage(HttpMethod.Post, uri)
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, uri))
             {
-                Content = new StringContent(payload, Encoding.UTF8, "application/json")
-            })
-            {
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
                 AddCredentialsToHeaderIfNeeded(request);
                 response = await _httpClient.SendAsync(request, cancellationToken);
             }
-            var responseContent = await response.Content.ReadAsStringAsync();
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => PostWithJsonPayload(suffix, cancellationToken, payload, retry, parameters), retryCount, cancellationToken);
+            }
+
+            return responseContent; //Content is assumed JSON
+        }
+
+        internal async Task<string> PostWithJsonPayloadToNonApi(string suffix, CancellationToken cancellationToken, string payload, int retryCount, params QueryParameter[] parameters)
+        {
+            Uri uri = BuildNonApiUri(suffix, parameters);
+            HttpResponseMessage response;
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, uri))
+            {
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                AddCredentialsToHeaderIfNeeded(request);
+                response = await _httpClient.SendAsync(request, cancellationToken);
+            }
+            string responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -223,7 +241,7 @@ namespace TrelloDotNet.Control
                 return parameterString;
             }
 
-            foreach (var parameter in parameters)
+            foreach (QueryParameter parameter in parameters)
             {
                 parameterString.Append($"&{parameter.Name}={parameter.GetValueAsApiFormattedString()}");
             }
@@ -253,17 +271,55 @@ namespace TrelloDotNet.Control
             string separator = suffix.Contains("?") ? "&" : "?";
             return new Uri($"{BaseUrl}{suffix}{separator}{queryString}{additionalParameters}");
         }
+        
+        private Uri BuildNonApiUri(string suffix, params QueryParameter[] parameters)
+        {
+            string queryString = GetQueryStringCredentials();
+            string additionalParameters = GetParametersAsString(parameters).ToString();
+            if (string.IsNullOrWhiteSpace(queryString))
+            {
+                additionalParameters = additionalParameters.TrimStart('&');
+            }
+
+            if (string.IsNullOrWhiteSpace(queryString) && string.IsNullOrWhiteSpace(additionalParameters))
+            {
+                return new Uri($"{NonApiBaseUrl}{suffix}");
+            }
+
+            string separator = suffix.Contains("?") ? "&" : "?";
+            return new Uri($"{NonApiBaseUrl}{suffix}{separator}{queryString}{additionalParameters}");
+        }
+
 
         internal async Task<string> Delete(string suffix, CancellationToken cancellationToken, int retryCount)
         {
-            var uri = BuildUri(suffix);
+            Uri uri = BuildUri(suffix);
             HttpResponseMessage response;
-            using (var request = new HttpRequestMessage(HttpMethod.Delete, uri))
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, uri))
             {
                 AddCredentialsToHeaderIfNeeded(request);
                 response = await _httpClient.SendAsync(request, cancellationToken);
             }
-            var responseContent = await response.Content.ReadAsStringAsync();
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return await PreformRetryIfNeededOrThrow(uri, response.StatusCode, responseContent, retry => Delete(suffix, cancellationToken, retry), retryCount, cancellationToken);
+            }
+
+            return null;
+        }
+
+        internal async Task<string> DeleteToNonApi(string suffix, CancellationToken cancellationToken, int retryCount)
+        {
+            Uri uri = BuildNonApiUri(suffix);
+            HttpResponseMessage response;
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, uri))
+            {
+                AddCredentialsToHeaderIfNeeded(request);
+                response = await _httpClient.SendAsync(request, cancellationToken);
+            }
+            string responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.StatusCode != HttpStatusCode.OK)
             {

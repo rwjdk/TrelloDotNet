@@ -306,7 +306,7 @@ namespace TrelloDotNet.Extensions
                 throw new TrelloApiException("CustomField was not provided");
             }
 
-            var customFieldDefinition = entry.CustomFieldEntry;
+            CustomField customFieldDefinition = entry.CustomFieldEntry;
 
             cards = cards.Where(x =>
             {
@@ -322,7 +322,7 @@ namespace TrelloDotNet.Extensions
                 switch (customFieldDefinition.Type)
                 {
                     case CustomFieldType.Checkbox:
-                        var @checked = customFieldItem?.Value.Checked ?? false;
+                        bool @checked = customFieldItem?.Value.Checked ?? false;
                         switch (entry.Condition)
                         {
                             case CardsCondition.Equal:
@@ -333,7 +333,7 @@ namespace TrelloDotNet.Extensions
                                 throw new TrelloApiException($"Custom Field of Type Checkbox can't use Condition '{entry.Condition}'");
                         }
                     case CustomFieldType.Date:
-                        var date = customFieldItem?.Value.Date;
+                        DateTimeOffset? date = customFieldItem?.Value.Date;
                         switch (entry.Condition)
                         {
                             case CardsCondition.Equal:
@@ -416,7 +416,7 @@ namespace TrelloDotNet.Extensions
                                 throw new TrelloApiException($"Condition '{entry.Condition}' does not make sense to apply to a CustomField of Type List");
                         }
                     case CustomFieldType.Number:
-                        var number = customFieldItem?.Value.Number ?? decimal.MinValue;
+                        decimal number = customFieldItem?.Value.Number ?? decimal.MinValue;
                         switch (entry.Condition)
                         {
                             case CardsCondition.Equal:

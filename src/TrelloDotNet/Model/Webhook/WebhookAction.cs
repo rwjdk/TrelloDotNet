@@ -73,7 +73,7 @@ namespace TrelloDotNet.Model.Webhook
 
         internal static WebhookAction CreateDummy(TrelloClient trelloClient, WebhookActionDummyCreationScenario scenario, Board boardToSimulate = null, List listToSimulate = null, Card cardToSimulate = null)
         {
-            var webhookAction = new WebhookAction()
+            WebhookAction webhookAction = new WebhookAction()
             {
                 TrelloClient = trelloClient,
                 Data = WebhookActionData.CreateDummy(scenario, cardToSimulate, listToSimulate, boardToSimulate),
@@ -138,7 +138,7 @@ namespace TrelloDotNet.Model.Webhook
 
         internal string SummarizeEvent()
         {
-            var context = new StringBuilder();
+            StringBuilder context = new StringBuilder();
             context.AppendLine();
             context.AppendLine("Event-Context:");
             context.AppendLine($"- Type: '{Type}'");

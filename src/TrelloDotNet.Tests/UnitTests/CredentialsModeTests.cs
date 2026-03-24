@@ -9,16 +9,16 @@ public class CredentialsModeTests
     [Fact]
     public async Task GetAsync_SendsCredentialsInAuthorizationHeader_WhenHeaderModeIsSelected()
     {
-        var handler = new RecordingHandler();
-        using var httpClient = new HttpClient(handler);
-        var client = new TrelloClient("key", "token", new TrelloClientOptions
+        RecordingHandler handler = new RecordingHandler();
+        using HttpClient httpClient = new HttpClient(handler);
+        TrelloClient client = new TrelloClient("key", "token", new TrelloClientOptions
         {
             SendCredentialsMode = SendCredentialsMode.Header
         }, httpClient);
 
         _ = await client.GetAsync("members/me", cancellationToken: TestContext.Current.CancellationToken);
 
-        var request = Assert.Single(handler.Requests);
+        RecordedRequest request = Assert.Single(handler.Requests);
         Assert.Equal(string.Empty, request.Query);
         Assert.Equal("OAuth", request.AuthorizationScheme);
         Assert.Contains("oauth_consumer_key=\"key\"", request.AuthorizationParameter, StringComparison.Ordinal);
@@ -37,7 +37,7 @@ public class CredentialsModeTests
                 request.Headers.Authorization?.Parameter));
 
             const string json = "{}";
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             };
