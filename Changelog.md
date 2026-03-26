@@ -1,6 +1,13 @@
 ﻿# Changelog
 
+## 2.5.0 (26th of March 2026)
+#### TrelloClient
+- Changed card descriptions on add/update requests to always be sent in the JSON body instead of only when the query string became too long
+
+---
+
 ## 2.4.0 (24th of March 2026)
+#### TrelloClient
 - Added support for the new Recurring Due System (Warning: This seems to not be part of the official API (do not use the api.trello.com endpoint) but can still be set, but Atlassian might not promise backward compatibility / that this endpoint stay available to us)
   - `SetRecurringDueDateAsync` + `RemoveRecurringDueDateAsync`
 

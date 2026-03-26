@@ -26,7 +26,6 @@ namespace TrelloDotNet
     public partial class TrelloClient
     {
         private const int MaxCardDescriptionLength = 16_384;
-        private const int MaxQueryStringLength = 16_384;
         private const string DescriptionQueryParameterName = "desc";
 
         /// <summary>
@@ -91,7 +90,7 @@ namespace TrelloDotNet
             QueryParameter descriptionParameter = parameters.FirstOrDefault(x => x.Name == DescriptionQueryParameterName);
             EnsureDescriptionIsWithinAllowedLimit(descriptionParameter?.GetRawStringValue());
 
-            string payload = ExtractDescriptionFromQueryStringAndBuildPayloadIfNeeded(parameters);
+            string payload = ExtractDescriptionFromQueryStringAndBuildPayload(parameters);
             Card addedCard = payload == null
                 ? await _apiRequestController.Post<Card>($"{UrlPaths.Cards}", cancellationToken, parameters.ToArray())
                 : await _apiRequestController.PostWithJsonPayload<Card>($"{UrlPaths.Cards}", cancellationToken, payload, parameters.ToArray());
@@ -530,7 +529,7 @@ namespace TrelloDotNet
                 payload = GeneratePayloadForCoverUpdate(cover, parameters);
             }
 
-            string descriptionPayload = ExtractDescriptionFromQueryStringAndBuildPayloadIfNeeded(parameters);
+            string descriptionPayload = ExtractDescriptionFromQueryStringAndBuildPayload(parameters);
             if (descriptionPayload != null)
             {
                 payload = MergePayload(payload, descriptionPayload);
@@ -1233,15 +1232,10 @@ namespace TrelloDotNet
             }
         }
 
-        private string ExtractDescriptionFromQueryStringAndBuildPayloadIfNeeded(List<QueryParameter> parameters)
+        private string ExtractDescriptionFromQueryStringAndBuildPayload(List<QueryParameter> parameters)
         {
             QueryParameter descriptionParameter = parameters.FirstOrDefault(x => x.Name == DescriptionQueryParameterName);
             if (descriptionParameter == null)
-            {
-                return null;
-            }
-
-            if (_apiRequestController.GetQueryStringLength(parameters.ToArray()) <= MaxQueryStringLength)
             {
                 return null;
             }

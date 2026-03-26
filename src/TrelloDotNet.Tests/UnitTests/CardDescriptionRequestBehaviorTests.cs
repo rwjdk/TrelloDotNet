@@ -39,14 +39,14 @@ public class CardDescriptionRequestBehaviorTests
     }
 
     [Fact]
-    public async Task AddCardAsync_SendsDescriptionInJsonPayload_WhenQueryStringWouldBeTooLong()
+    public async Task AddCardAsync_SendsDescriptionInJsonPayload_WhenDescriptionIsPresent()
     {
         RecordingHandler handler = new RecordingHandler();
         using HttpClient httpClient = new HttpClient(handler);
         TrelloClient client = new TrelloClient("key", "token", httpClient: httpClient);
         CancellationToken cancellationToken = TestContext.Current.CancellationToken;
 
-        string description = new string('x', 16_380);
+        const string description = "description";
         AddCardOptions options = new AddCardOptions("listId", "card name", description);
         options.Checklists = null;
         options.AttachmentFileUploads = null;
@@ -63,14 +63,14 @@ public class CardDescriptionRequestBehaviorTests
     }
 
     [Fact]
-    public async Task UpdateCardAsync_SendsDescriptionInJsonPayload_WhenQueryStringWouldBeTooLong()
+    public async Task UpdateCardAsync_SendsDescriptionInJsonPayload_WhenDescriptionIsPresent()
     {
         RecordingHandler handler = new RecordingHandler();
         using HttpClient httpClient = new HttpClient(handler);
         TrelloClient client = new TrelloClient("key", "token", httpClient: httpClient);
         CancellationToken cancellationToken = TestContext.Current.CancellationToken;
 
-        string description = new string('x', 16_380);
+        const string description = "description";
         List<CardUpdate> updates = new List<CardUpdate>
         {
             CardUpdate.Name("new card name"),
