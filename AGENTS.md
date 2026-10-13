@@ -12,7 +12,7 @@
 - Only add XML Summaries on public things. Not internal/private/protected
 
 ## Rules for changelog
-- Each release should have a `<hr>` between them
+- Each release should have a `---` between them
 - Each release should have a version number and a date (expect if it is marked as #Unreleased)
 - Each entry should be in a section called ####Special, ####General, ####TrelloClient, ####Webhook Receiver or #### Automation Engine
 - 

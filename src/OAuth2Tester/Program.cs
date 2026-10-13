@@ -17,7 +17,7 @@ if (refreshToken == null)
 
     Console.WriteLine("Open this URL in the Browser and after login, give back the return URL");
     Console.WriteLine("---");
-    Console.WriteLine(request.AuthorizationUri);
+    Console.WriteLine(request.AuthorizationUri.AbsoluteUri);
     Console.WriteLine("---");
 
     Console.Write("Url back: ");
